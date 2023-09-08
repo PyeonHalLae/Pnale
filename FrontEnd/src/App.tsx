@@ -13,6 +13,7 @@ import PyenE from "@components/pyunE/PyenE";
 
 //김효인 라우터
 import Recipy from "@components/recipy/Recipy";
+import Recipy2 from "@components/recipy/recipy2/Recipy2";
 
 function App() {
   console.log("시작");
@@ -34,7 +35,9 @@ function App() {
         <Route path="mypage/*" element={<MyPageTest />} />
         <Route path="pyenE/*" element={<PyenE />} />
         {/* 김효인 개발 페이지*/}
-        <Route path="recipy/*" element={<Recipy />} />
+        <Route path="recipy" element={<Recipy />}>
+          <Route path="recipy2" element={<Recipy2 />} />
+        </Route>
       </Route>
 
       {/* 예외 처리 페이지*/}
