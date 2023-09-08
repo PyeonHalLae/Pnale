@@ -24,8 +24,8 @@ services: #컨테이너를 정의하는 것
       - /home/ubuntu/special_config/data/certbot/www:/var/www/certbot
     restart: unless-stopped
     depends_on:
-      - special-be
-      - special-fe
+      - special_be
+      - special_fe
     # 외부에 공개할 포트들을 선언한다.
     ports:
       - "80:80"
@@ -58,7 +58,7 @@ services: #컨테이너를 정의하는 것
   #=========================================
   # Springboot 선언
   #=========================================
-  special-be:
+  special_be:
     image: minyumanyu/special_be:latest # 도커 허브에 올리면 그것을 그대로 이용해도 된다.
     container_name: special_be
     networks:
@@ -77,7 +77,7 @@ services: #컨테이너를 정의하는 것
   #=========================================
   # react 선언
   #=========================================
-  special-fe:
+  special_fe:
     image: minyumanyu/special_fe:latest
     container_name: special_fe
     networks:
