@@ -1,0 +1,44 @@
+# 도커 컴포즈 버전 작성
+version: "3"
+
+# 도커 컴포즈로 수행할 항목을 작성하다. service, networks, volumes: 등 존재
+
+services: #컨테이너를 정의하는 것
+  special-be:
+    image: minyumanyu/special_be:latest
+    container_name: special_be
+    environment:
+      - TZ=Asia/Seoul
+    build:
+      context: ./BackEnd
+      dockerfile: Dockerfile
+    ports:
+      - "9999:9999"
+
+  special-fe:
+    image: minyumanyu/special_fe:latest
+    container_name: special_fe
+    build:
+      context: ./FrontEnd
+      dockerfile: Dockerfile
+    environment:
+      - TZ=Asia/Seoul
+    ports:
+      - "3000:5173" #호스트의 5173포트를 special_fe컨테이너의 5173포트와 매핑시킨다.
+
+#  database:
+#    container_name: special_mysql
+#    image: mysql:8.0.32
+#    restart: unless-stopped
+#    ports:
+#      - "3306:3306"
+#    environment:
+#      - MYSQL_DATABASE=convenience
+#      - MYSQL_USER=special
+#      - MYSQL_PASSWORD=specialbe-303
+#      - MYSQL_ROOT_PASSWORD=specialbe-303
+#      - TZ=Asia/Seoul
+#    command:
+#      - --character-set-server=utf8mb4
+#      - --collation-server=utf8mb4_unicode_ci
+#
