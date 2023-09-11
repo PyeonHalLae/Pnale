@@ -5,7 +5,7 @@ import NotFound from "@components/common/NotFound";
 import Navi from "@components/common/Navi";
 
 //김동민 라우터
-import Main from "@components/main/Main";
+import Main from "@components/main/MainPage";
 import SearchTest from "@components/search/SearchTest";
 //정현모 라우터
 import MyPageTest from "@components/mypage/MyPageTest";

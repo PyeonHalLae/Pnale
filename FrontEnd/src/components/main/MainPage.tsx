@@ -2,7 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { testState } from "@/recoil/kdmRecoil";
 
-const SearchTest = () => {
+const MainPage = () => {
   const [testValue, setTestValue] = useRecoilState(testState);
   const navigate = useNavigate();
 
@@ -18,20 +18,20 @@ const SearchTest = () => {
       };
     });
   };
-
-  const back = () => {
-    navigate(-1);
+  const moving = () => {
+    // 페이지 이동 처리
+    navigate("/search"); // '/search' 페이지로 이동
   };
   return (
     <>
-      <div>SearchaaTest</div>
+      <div className="bg-orange-600">Maiaaan</div>
       <button onClick={handleIncrement}>Increment</button>
-
       <div>{testValue?.test1}</div>
-      <button onClick={back}>뒤로가기</button>
+      <button onClick={moving}>페이지 이동</button>
+
       <Outlet />
     </>
   );
 };
 
-export default SearchTest;
+export default MainPage;
