@@ -1,9 +1,23 @@
-// recoil/atoms.ts
 import { atom } from "recoil";
+import { recoilPersist } from "recoil-persist";
 
-//자신이 사용할 상태들 생길때 마다 만들 기본 틀
-export const testState = atom({
-  //const 리코일이름
-  key: "testState",
-  default: { test1: 0, test2: "" }, // 상태의 타입을 지정
+const { persistAtom: persistAtom1 } = recoilPersist({
+  key: "recoil-persist-session",
+  storage: sessionStorage, // 세션 스토리지 사용
+});
+
+const { persistAtom: persistAtom2 } = recoilPersist({
+  key: "recoil-persist-local", //로컬 스토리지 사용
+});
+
+export const sessionState = atom({
+  key: "sessionState",
+  default: { test1: 0 },
+  effects_UNSTABLE: [persistAtom1],
+});
+
+export const localState = atom({
+  key: "localState",
+  default: { test2: "a" },
+  effects_UNSTABLE: [persistAtom2],
 });
