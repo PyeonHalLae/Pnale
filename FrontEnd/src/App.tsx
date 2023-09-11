@@ -8,7 +8,7 @@ import Navi from "@components/common/Navi";
 import Main from "@components/main/MainPage";
 import SearchTest from "@components/search/SearchTest";
 //정현모 라우터
-import MyPageTest from "@components/mypage/MyPageTest";
+import MyPageTest from "@components/mypage/MyPage";
 import PyenE from "@components/pyunE/PyenE";
 
 //김효인 라우터
