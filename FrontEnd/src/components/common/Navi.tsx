@@ -4,8 +4,14 @@ import { Outlet } from "react-router-dom";
 export default function Navi() {
   return (
     <div>
-      <div>헤더야 임마 페이지를 바꿔도 깜박거리지 않지</div>
       <Outlet />
+      <div>
+        <img src="/img/navi/home-gray.png" alt="" />
+        <img src="/img/navi/search-gray.png" alt="" />
+        <img src="/img/navi/trophy-gray.png" alt="" />
+        <img src="/img/navi/recipy-gray.png" alt="" />
+        <img src="/img/navi/user-gray.png" alt="" />
+      </div>
     </div>
   );
 }
