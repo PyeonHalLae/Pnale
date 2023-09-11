@@ -1,13 +1,10 @@
-import { Route, Routes } from "react-router-dom";
-import SearchTest2 from "./search2/SearchTest2";
+import { Outlet } from "react-router-dom";
 
 const SearchTest = () => {
   return (
     <>
       <div>SearchTest</div>
-      <Routes>
-        <Route path="search2" element={<SearchTest2 />} />
-      </Routes>
+      <Outlet />
     </>
   );
 };
