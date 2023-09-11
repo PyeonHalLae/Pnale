@@ -1,12 +1,12 @@
 import { Outlet } from "react-router-dom";
 
-const Recipy = () => {
+const Recipe = () => {
   return (
     <>
-      <div>Recipy</div>
+      <div>Recipe</div>
       <Outlet />
     </>
   );
 };
 
-export default Recipy;
+export default Recipe;
