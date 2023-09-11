@@ -5,5 +5,5 @@ import { atom } from "recoil";
 export const testState = atom({
   //const 리코일이름
   key: "testState",
-  default: null as null | { test1: number; test2: string }, // 상태의 타입을 지정
+  default: { test1: 0, test2: "" }, // 상태의 타입을 지정
 });
