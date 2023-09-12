@@ -1,5 +1,7 @@
-import RecipeCard from "@components/common/RecipeCard";
 import { useState } from "react";
+
+import RecipeCard from "@components/common/RecipeCard";
+import PopularRecipeRoller from "./PopularRecipeRoller";
 
 interface recipeType {
   recipeTitle: string;
@@ -13,6 +15,20 @@ interface recipeType {
 }
 
 const RecipeList = () => {
+  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([
+    {
+      recipeTitle: "string",
+      recipeImg: "string",
+      viewCnt: 1,
+      likeCnt: 1,
+      commentCnt: 1,
+      userName: "string",
+      userImg: "string",
+      createdDate: "2020.20.20",
+      // recipeId 도 받아와야함
+    },
+  ]);
+
   const [recipeList, setRecipeList] = useState<recipeType[]>([
     {
       recipeTitle: "string",
@@ -23,6 +39,7 @@ const RecipeList = () => {
       userName: "string",
       userImg: "string",
       createdDate: "2020.20.20",
+      // recipeId 도 받아와야함
     },
   ]);
   return (
@@ -31,6 +48,7 @@ const RecipeList = () => {
       <div>
         <div>인기레시피</div>
         <div>여기는 인기레시피 카드 (옆으로 넘어가게할것)</div>
+        <PopularRecipeRoller popularRecipeList={popularRecipeList} />
       </div>
       <div>
         <div>전체레시피</div>

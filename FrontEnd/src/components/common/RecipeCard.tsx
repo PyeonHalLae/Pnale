@@ -25,21 +25,23 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   // };
   return (
     <RecipyCardBox>
+      {/* 레시피 이미지 */}
       <img
         className="max-w-[8.75rem] max-h-[7.5rem] w-[8rem] h-[6.25rem] rounded-[.3125rem] m-auto"
         src={recipeInfo.recipeImg}
         alt="레시피이미지"
       />
+
       <div className="h-[6.25rem]">
-        <div className="relative top-0 text-[0.6rem] text-[#AEB0B6]">
+        <div className="relative top-0 text-[0.6rem]  text-common-text-gray-color">
           <img
             className="w-[0.75rem] h-[0.75rem] inline-block mr-[0.3rem]"
-            src="/public/img/icon/viewIconGray.png"
+            src="/img/icon/viewIconGray.png"
           />
           {recipeInfo.viewCnt}
         </div>
         <div className="text-[1.1rem]">{recipeInfo.recipeTitle}</div>
-        <div className="text-[0.8rem] text-[#AEB0B6] justify-center align-top">
+        <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top">
           by {recipeInfo.userName}
           <img
             className="w-[0.8rem] h-[0.8rem] rounded-[0.8rem] ml-2 inline-block"
@@ -47,7 +49,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
             alt="유저이미지"
           />
         </div>
-        <div className="relative text-[0.6rem] bottom-70 text-[#AEB0B6]">
+        <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
           {recipeInfo.createdDate}
         </div>
       </div>
@@ -55,12 +57,12 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
       <LikeCommentBox>
         <img
           className="w-[0.75rem] h-[0.75rem] inline-block mx-[0.3rem]"
-          src="/public/img/icon/likeIconPink.png"
+          src="img/icon/likeIconPink.png"
         />
         {recipeInfo.likeCnt}
         <img
           className="w-[0.75rem] h-[0.75rem] inline-block mx-[0.3rem]"
-          src="/public/img/icon/commentIconPink.png"
+          src="/img/icon/commentIconPink.png"
         />
         {recipeInfo.commentCnt}
       </LikeCommentBox>
