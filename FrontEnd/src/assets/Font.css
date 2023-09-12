@@ -1,0 +1,20 @@
+@font-face {
+  font-family: "G-Sans-Light";
+  font-style: normal;
+  font-weight: lighter;
+  src: url("/font/AnyConv.com__GmarketSansTTFLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: "G-Sans-Medium";
+  font-style: normal;
+  font-weight: normal;
+  src: url("/font/AnyConv.com__GmarketSansTTFMedium.woff") format("woff");
+}
+
+@font-face {
+  font-family: "G-Sans-Bold";
+  font-style: normal;
+  font-weight: bold;
+  src: url("/font/AnyConv.com__GmarketSansTTFBold.woff") format("woff");
+}
