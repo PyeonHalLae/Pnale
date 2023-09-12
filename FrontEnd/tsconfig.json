@@ -24,7 +24,8 @@
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx"],

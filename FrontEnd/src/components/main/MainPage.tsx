@@ -8,7 +8,7 @@ interface TestState {
   test2: string;
 }
 
-const SearchTest = () => {
+const MainPage = () => {
   const [testValue1, setTestValue1] = useRecoilState(sessionState);
   const [testValue2, setTestValue2] = useRecoilState(localState);
   const navigate = useNavigate();
@@ -38,20 +38,22 @@ const SearchTest = () => {
     });
   };
 
-  const back = () => {
-    navigate(-1);
+  const moving = () => {
+    // 페이지 이동 처리
+    navigate("/search"); // '/search' 페이지로 이동
   };
   return (
     <>
-      <div>SearchaaTest</div>
+      <div className="bg-orange-600">Maiaaan</div>
       <button onClick={handleIncrement}>Increment</button>
       <button onClick={handleText}>Text</button>
       <div>{testValue1?.test1}</div>
       <div>{testValue2?.test2}</div>
-      <button onClick={back}>뒤로가기</button>
+      <button onClick={moving}>페이지 이동</button>
+
       <Outlet />
     </>
   );
 };
 
-export default SearchTest;
+export default MainPage;
