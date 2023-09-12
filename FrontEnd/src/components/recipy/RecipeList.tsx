@@ -1,7 +1,7 @@
 import RecipeCard from "@components/common/RecipeCard";
 import { useState } from "react";
 
-interface RecipeType {
+interface recipeType {
   recipeTitle: string;
   recipeImg: string;
   viewCnt: number;
@@ -9,11 +9,11 @@ interface RecipeType {
   commentCnt: number;
   userName: string;
   userImg: string;
-  createdDate?: Date;
+  createdDate: string;
 }
 
 const RecipeList = () => {
-  const [recipeList, setRecipeList] = useState<RecipeType[]>([
+  const [recipeList, setRecipeList] = useState<recipeType[]>([
     {
       recipeTitle: "string",
       recipeImg: "string",
@@ -22,6 +22,7 @@ const RecipeList = () => {
       commentCnt: 1,
       userName: "string",
       userImg: "string",
+      createdDate: "2020.20.20",
     },
   ]);
   return (
@@ -36,7 +37,13 @@ const RecipeList = () => {
         <div>
           {/* {recipeList  [] && */}
           {recipeList.map((recipeItem) => (
-            <RecipeCard recipeInfo={recipeItem} />
+            <>
+              <RecipeCard recipeInfo={recipeItem} />
+              <RecipeCard recipeInfo={recipeItem} />
+              <RecipeCard recipeInfo={recipeItem} />
+              <RecipeCard recipeInfo={recipeItem} />
+              <RecipeCard recipeInfo={recipeItem} />
+            </>
           ))}
         </div>
       </div>
