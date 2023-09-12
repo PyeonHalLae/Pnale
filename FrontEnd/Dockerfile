@@ -26,7 +26,7 @@ RUN rm -rf /etc/nginx/conf.d
 COPY staticConf /etc/nginx
 
 # 위에서 생성한 앱의 빌드 산출물을 nginx의 샘플 앱이 사용하는 폴더로 이동
-COPY --from=frontend-builder /dist /usr/share/nginx/html
+COPY --from=frontend-builder /app/dist /usr/share/nginx/html
 
 # 에러가 나타나면 페이지(html파일)을 nginx로 복사한다.
 COPY ./404.html /usr/share/nginx/html
