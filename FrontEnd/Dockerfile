@@ -3,9 +3,9 @@
 FROM node:18-alpine  as frontend-builder
 
 # Set the working directory in the container
-# WORKDIR: RUN, CMD, ENTRYPOINT, ADD, COPY 에 정의된 명령어를 실행하는 작업 디렉터리 지정
 RUN mkdir /app #경로 생성 후 작업 영역을 지정한다.
 WORKDIR /app
+
 # Copy package.json and package-lock.json를 컨테이너로 복사한다.
 # RUN: 이후 depedanccy를 설치한다.
 COPY package.json /app/package.json
@@ -26,10 +26,9 @@ RUN rm -rf /etc/nginx/conf.d
 COPY staticConf /etc/nginx
 
 # 위에서 생성한 앱의 빌드 산출물을 nginx의 샘플 앱이 사용하는 폴더로 이동
-COPY --from=frontend-builder /app/dist /usr/share/nginx/html
+COPY --from=frontend-builder /dist /usr/share/nginx/html
 
 # 에러가 나타나면 페이지(html파일)을 nginx로 복사한다.
-COPY --from=frontend-builder /app/dist/ /etc/nginx/html
 COPY ./404.html /usr/share/nginx/html
 COPY ./50x.html /usr/share/nginx/html
 
