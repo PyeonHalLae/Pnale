@@ -23,7 +23,7 @@ const userInfos = {
   userImage: "/img/logo/logo-pink.png",
 };
 
-const MyPage = () => {
+const MyPageUser = () => {
   const [userInfo, setUserInfo] = useState<userInfoType>({ userName: "", userImage: "" });
 
   const [productInfo, setProductInfo] = useState<productInfoType[]>([]);
@@ -62,7 +62,7 @@ const MyPage = () => {
             </UserBox>
             <div className="flex justify-around mx-auto w-96 ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} icon={value.icon}>
+                <SideButton key={value.text + index} $icon={value.icon}>
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -78,7 +78,7 @@ const MyPage = () => {
         <div className="h-full bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage imgurl={userInfo.userImage} />
+              <UserImage $imgurl={userInfo.userImage} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
                 <span className="text-[#1E2B4F]">{userInfo.userName}</span>님<br />
                 반갑습니다!
@@ -87,7 +87,7 @@ const MyPage = () => {
             </UserBox>
             <div className="flex justify-around mx-auto w-96 ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} icon={value.icon}>
+                <SideButton key={value.text + index} $icon={value.icon}>
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -102,7 +102,7 @@ const MyPage = () => {
               <Products>
                 {productInfo.map((value, index) => (
                   <Product key={value.productName + index}>
-                    <ProductImage imgurl={value.productImage} />
+                    <ProductImage $imgurl={value.productImage} />
                     <ProductName>{value.productName}</ProductName>
                   </Product>
                 ))}
@@ -115,7 +115,7 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyPageUser;
 
 const MyPageHeader = tw.div`
 bg-white h-[300px]
@@ -136,7 +136,7 @@ const LoginBtnImage = styled.span`
   background-repeat: no-repeat;
 `;
 
-const SideButton = styled.div<{ icon: string }>`
+const SideButton = styled.div<{ $icon: string }>`
   width: 15rem;
   display: inline-block;
   text-align: center;
@@ -146,7 +146,7 @@ const SideButton = styled.div<{ icon: string }>`
     margin: 0px auto;
     border-radius: 50%;
     background-color: #d9d9d9;
-    background-image: url(${(props) => props.icon});
+    background-image: url(${(props) => props.$icon});
     background-size: 2.1875rem 2.1875rem;
     background-position: center;
     background-repeat: no-repeat;
@@ -158,11 +158,11 @@ const SideButton = styled.div<{ icon: string }>`
   }
 `;
 
-const UserImage = styled.div<{ imgurl: string }>`
+const UserImage = styled.div<{ $imgurl: string }>`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-image: url(${(props) => props.imgurl});
+  background-image: url(${(props) => props.$imgurl});
   background-size: 4.5rem 4.5rem;
   background-position: center;
   background-repeat: no-repeat;
@@ -194,11 +194,11 @@ const Product = styled.div`
   margin: 0.5rem auto 0rem auto;
 `;
 
-const ProductImage = styled.div<{ imgurl: string }>`
+const ProductImage = styled.div<{ $imgurl: string }>`
   width: 5.9375rem;
   height: 6.25rem;
   margin: 0rem auto;
-  background-image: url(${(props) => props.imgurl});
+  background-image: url(${(props) => props.$imgurl});
   background-size: 5.9375rem 6.25rem;
   background-position: center;
   background-repeat: no-repeat;
