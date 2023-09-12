@@ -1,7 +1,9 @@
-
 const MyRecipe = () => {
-  return;
-  <>MyRecipy</>;
+  return (
+    <>
+      MyRecipy
+    </>
+  )
 };
 
 export default MyRecipe;
