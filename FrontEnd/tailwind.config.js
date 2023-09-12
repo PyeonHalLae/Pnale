@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        commont: {
+        common: {
           "back-color": "#F7F7F7",
           "white-divider": "#D9D9D9",
           "bold-back-color": "#C4C4C4",
