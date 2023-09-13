@@ -19,7 +19,7 @@ interface productInfoType {
 }
 
 const userInfos = {
-  userName: "정현모",
+  userName: "",
   userImage: "/img/logo/logo-pink.png",
 };
 
@@ -39,7 +39,6 @@ const MyPageUser = () => {
       { productImage: "/img/test/image61.png", productName: "!444" },
       { productImage: "/img/test/image61.png", productName: "!555" },
       { productImage: "/img/test/image61.png", productName: "!666" },
-      { productImage: "/img/test/image61.png", productName: "!777" },
     ]);
   }, []);
 
@@ -50,7 +49,7 @@ const MyPageUser = () => {
   return (
     <>
       {userInfo.userName === null || userInfo.userName === "" ? (
-        <div className="h-full bg-white">
+        <div className="h-screen bg-white">
           <MyPageHeader>
             <UserBox>
               <div className="mt-20 ml-4">
@@ -60,7 +59,7 @@ const MyPageUser = () => {
                 <LoginBtnImage />
               </div>
             </UserBox>
-            <div className="flex justify-around mx-auto w-96 ">
+            <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
                 <SideButton key={value.text + index} $icon={value.icon}>
                   <div /> <p>{value.text}</p>
@@ -69,13 +68,13 @@ const MyPageUser = () => {
             </div>
           </MyPageHeader>
           <LikeProduct>
-            <div className="w-full h-14">
+            <div className="h-14">
               <p className="float-left mt-3 ml-3.5 text-[20px] text-[#1E2B4F]">관심상품</p>
             </div>
           </LikeProduct>
         </div>
       ) : (
-        <div className="h-full bg-white">
+        <div className="h-screen bg-white">
           <MyPageHeader>
             <UserBox>
               <UserImage $imgurl={userInfo.userImage} />
@@ -85,7 +84,7 @@ const MyPageUser = () => {
                 <div className="text-sm">로그아웃</div>
               </div>
             </UserBox>
-            <div className="flex justify-around mx-auto w-96 ">
+            <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
                 <SideButton key={value.text + index} $icon={value.icon}>
                   <div /> <p>{value.text}</p>
@@ -94,7 +93,7 @@ const MyPageUser = () => {
             </div>
           </MyPageHeader>
           <LikeProduct>
-            <div className="w-full h-14">
+            <div className="h-14">
               <p className="float-left mt-3 ml-3.5 text-[20px] text-[#1E2B4F]">관심상품</p>
               <p className="float-right mt-5 mr-4 text-[13px] text-[#AEB0B6]">더보기</p>
             </div>
@@ -122,7 +121,7 @@ bg-white h-[300px]
 `;
 
 const UserBox = tw.div`
-flex h-40 mx-auto w-96
+flex h-40 mx-auto w-[360px]
 `;
 
 const LoginBtnImage = styled.span`
