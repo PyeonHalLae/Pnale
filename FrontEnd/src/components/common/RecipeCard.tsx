@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import tw from "tailwind-styled-components";
+// import tw from "tailwind-styled-components";
 
 interface recipeType {
   recipeTitle: string;
@@ -109,11 +109,4 @@ const LikeCommentBox = styled.div`
   /* background-color: #fff; */
   /* border: 0.5px solid black; */
   color: #aeb0b6;
-`;
-
-const IconImg = styled.img<{ iconSrc: string }>`
-  display: inline-block;
-  src: ${(props) => props.iconSrc};
-  width: 0.75rem;
-  height: 0.75rem;
 `;
