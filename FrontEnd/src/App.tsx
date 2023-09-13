@@ -14,8 +14,10 @@ import PyenE from "@components/pyunE/PyenE";
 import MyProduct from "@components/mypage/MyProduct";
 
 //김효인 라우터
-import Recipy from "@components/recipy/Recipy";
+import Recipe from "@components/recipy/Recipe";
+import RecipeList from "@components/recipy/RecipeList";
 import Recipy2 from "@components/recipy/recipy2/Recipy2";
+
 import SearchTest2 from "@components/search/search2/SearchTest2";
 import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
 
@@ -47,8 +49,8 @@ function App() {
           <Route path="pyenE2" element={<PyenE2 />} />
         </Route>
         {/* 김효인 개발 페이지*/}
-        <Route path="recipy" element={<Recipy />}>
-          <Route path="recipy2" element={<Recipy2 />} />
+        <Route path="recipe" element={<Recipe />}>
+          <Route path="" element={<RecipeList />} />
         </Route>
       </Route>
 
