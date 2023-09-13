@@ -13,16 +13,16 @@ interface recipeType {
 }
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
-  // recipeInfo = {
-  //   recipeTitle: "두줄제목입니다입니다입니다입니다",
-  //   recipeImg: "/public/img/test/너굴맨레시피.jpg",
-  //   viewCnt: 1000,
-  //   likeCnt: 1000,
-  //   commentCnt: 1000,
-  //   userName: "정현모",
-  //   userImg: "/public/img/test/너굴맨레시피.jpg",
-  //   createdDate: "2020.20.20",
-  // };
+  recipeInfo = {
+    recipeTitle: "두줄제목입니다입니다입니다입니다",
+    recipeImg: "/public/img/test/너굴맨레시피.jpg",
+    viewCnt: 1000,
+    likeCnt: 1000,
+    commentCnt: 1000,
+    userName: "정현모",
+    userImg: "/public/img/test/너굴맨레시피.jpg",
+    createdDate: "2020.20.20",
+  };
   return (
     <RecipyCardBox>
       {/* 레시피 이미지 */}
@@ -36,7 +36,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
         <div className="relative top-0 text-[0.6rem]  text-common-text-gray-color">
           <img
             className="w-[0.75rem] h-[0.75rem] inline-block mr-[0.3rem]"
-            src="/img/icon/viewIconGray.png"
+            src="img/icon/viewIconGray.png"
           />
           {recipeInfo.viewCnt}
         </div>

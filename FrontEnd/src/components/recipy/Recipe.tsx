@@ -1,12 +1,7 @@
 import { Outlet } from "react-router-dom";
 
 const Recipe = () => {
-  return (
-    <>
-      <div>Recipe</div>
-      <Outlet />
-    </>
-  );
+  return <Outlet />;
 };
 
 export default Recipe;
