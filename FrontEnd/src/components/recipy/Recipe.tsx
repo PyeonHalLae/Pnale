@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-const MyPage = () => {
+const Recipe = () => {
   return <Outlet />;
 };
 
-export default MyPage;
+export default Recipe;

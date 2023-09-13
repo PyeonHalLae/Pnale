@@ -49,8 +49,11 @@ const MainPage = () => {
       <button onClick={handleText}>Text</button>
       <div>{testValue1?.test1}</div>
       <div>{testValue2?.test2}</div>
-      <button onClick={moving}>페이지 이동</button>
-
+      <button onClick={moving}>페이지 이동</button> <div className="bg-orange-600">Maiaaan</div>
+      <button onClick={handleIncrement}>Increment</button>
+      <button onClick={handleText}>Text</button>
+      <div>{testValue1?.test1}</div>
+      <div>{testValue2?.test2}</div>
       <Outlet />
     </>
   );
