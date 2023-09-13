@@ -47,7 +47,7 @@ export default function Navi() {
 
   return (
     <>
-      <div style={{ minHeight: "calc(100vh - 60px)" }}>
+      <div style={{ height: "calc(100vh - 60px)" }} className="overflow-y-scroll ">
         <Outlet />
       </div>
       <NaviParent>
@@ -124,4 +124,4 @@ const NaviText = tw.p<{ $isActive: boolean }>`
   text-sm
   text-center
   ${(props) => (props.$isActive ? "text-common-text-color" : "text-common-text-gray-color")}
-`
+`;
