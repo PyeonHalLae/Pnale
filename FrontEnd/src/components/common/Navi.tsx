@@ -57,7 +57,7 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("home")}
           />
-          <NaviText $isActive={location.pathname === "/"}>홈</NaviText>
+          <NaviText isActive={location.pathname === "/"}>홈</NaviText>
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
@@ -65,7 +65,7 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("search")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
+          <NaviText isActive={location.pathname.startsWith("/search")}>검색</NaviText>
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
@@ -73,7 +73,7 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("pyenE")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/pyenE")}>편의점</NaviText>
+          <NaviText isActive={location.pathname.startsWith("/pyenE")}>편의점</NaviText>
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
@@ -81,7 +81,7 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("recipy")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/recipy")}>레시피</NaviText>
+          <NaviText isActive={location.pathname.startsWith("/recipy")}>레시피</NaviText>
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
@@ -89,7 +89,7 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("mypage")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/mypage")}>마이</NaviText>
+          <NaviText isActive={location.pathname.startsWith("/mypage")}>마이</NaviText>
         </NaviDiv>
       </NaviParent>
     </>
@@ -120,8 +120,8 @@ const NaviIcon = tw.img`
   h-9
 `;
 
-const NaviText = tw.p<{ $isActive: boolean }>`
+const NaviText = tw.p<{ isActive: boolean }>`
   text-sm
   text-center
-  ${(props) => (props.$isActive ? "text-common-text-color" : "text-common-text-gray-color")}
-`
+  ${(props) => (props.isActive ? "text-common-text-color" : "text-common-text-gray-color")}
+`;
