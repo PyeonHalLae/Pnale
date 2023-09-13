@@ -8,8 +8,10 @@ import Navi from "@components/common/Navi";
 import Main from "@components/main/MainPage";
 import SearchTest from "@components/search/SearchTest";
 //정현모 라우터
-import MyPageTest from "@components/mypage/MyPage";
+import MyPage from "@components/mypage/MyPage";
+import MyPageUser from "@components/mypage/MyPageUser";
 import PyenE from "@components/pyunE/PyenE";
+import MyProduct from "@components/mypage/MyProduct";
 
 //김효인 라우터
 import Recipe from "@components/recipy/Recipe";
@@ -17,7 +19,6 @@ import RecipeList from "@components/recipy/RecipeList";
 import Recipy2 from "@components/recipy/recipy2/Recipy2";
 
 import SearchTest2 from "@components/search/search2/SearchTest2";
-import MyPageTest2 from "@components/mypage/mypage2/MyPageTest2";
 import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
 
 function App() {
@@ -39,9 +40,11 @@ function App() {
           <Route path="search2" element={<SearchTest2 />} />
         </Route>
         {/* 정현모 개발 페이지*/}
-        <Route path="mypage/*" element={<MyPageTest />}>
-          <Route path="mypage2" element={<MyPageTest2 />} />
+        <Route path="mypage/*" element={<MyPage />}>
+          <Route path="" element={<MyPageUser />} />
+          <Route path="product" element={<MyProduct />} />
         </Route>
+
         <Route path="pyenE/*" element={<PyenE />}>
           <Route path="pyenE2" element={<PyenE2 />} />
         </Route>
