@@ -2,7 +2,7 @@ version: "3"
 
 services: #컨테이너를 정의하는 것=
   external_nginx:
-    image: nginx:1.25.2 #사용되는 이미지
+    image: nginx:1.15-alpine #사용되는 이미지
     container_name : external_nginx
     volumes:
       - /home/ubuntu/special_config/data/nginx:/etc/nginx/conf.d
