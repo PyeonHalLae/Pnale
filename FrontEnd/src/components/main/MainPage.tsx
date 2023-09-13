@@ -2,6 +2,7 @@ import { Outlet, useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { sessionState } from "@/recoil/kdmRecoil";
 import { localState } from "@/recoil/kdmRecoil";
+import styled from "styled-components";
 
 interface TestState {
   test1: number;
@@ -53,10 +54,14 @@ const MainPage = () => {
       <button onClick={handleIncrement}>Increment</button>
       <button onClick={handleText}>Text</button>
       <div>{testValue1?.test1}</div>
-      <div>{testValue2?.test2}</div>
+      <Test>{testValue2?.test2}</Test>
       <Outlet />
     </>
   );
 };
 
 export default MainPage;
+
+const Test = styled.div`
+  color: ${(props) => props.theme.common.orange};
+`;
