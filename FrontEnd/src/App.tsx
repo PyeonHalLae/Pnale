@@ -14,9 +14,8 @@ import PyenE from "@components/pyunE/PyenE";
 import MyProduct from "@components/mypage/MyProduct";
 
 //김효인 라우터
-import Recipe from "@components/recipy/Recipe";
-import RecipeList from "@components/recipy/RecipeList";
-import Recipy2 from "@components/recipy/recipy2/Recipy2";
+import Recipe from "@components/recipe/Recipe";
+import RecipeList from "@components/recipe/RecipeList";
 
 import SearchTest2 from "@components/search/search2/SearchTest2";
 import PyenE2 from "@components/pyunE/pyunE2/PyenE2";

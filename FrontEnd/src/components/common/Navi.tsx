@@ -6,7 +6,7 @@ interface IconState {
   home: "blue" | "gray";
   search: "blue" | "gray";
   pyenE: "blue" | "gray";
-  recipy: "blue" | "gray";
+  recipe: "blue" | "gray";
   mypage: "blue" | "gray";
 }
 
@@ -18,7 +18,7 @@ export default function Navi() {
     home: location.pathname === "/" ? "blue" : "gray",
     search: location.pathname.startsWith("/search") ? "blue" : "gray",
     pyenE: location.pathname.startsWith("/pyenE") ? "blue" : "gray",
-    recipy: location.pathname.startsWith("/recipy") ? "blue" : "gray",
+    recipe: location.pathname.startsWith("/recipe") ? "blue" : "gray",
     mypage: location.pathname.startsWith("/mypage") ? "blue" : "gray",
   });
 
@@ -27,7 +27,7 @@ export default function Navi() {
       home: location.pathname === "/" ? "blue" : "gray",
       search: location.pathname.startsWith("/search") ? "blue" : "gray",
       pyenE: location.pathname.startsWith("/pyenE") ? "blue" : "gray",
-      recipy: location.pathname.startsWith("/recipy") ? "blue" : "gray",
+      recipe: location.pathname.startsWith("/recipe") ? "blue" : "gray",
       mypage: location.pathname.startsWith("/mypage") ? "blue" : "gray",
     };
     setIconState(updatedIconState);
@@ -77,11 +77,11 @@ export default function Navi() {
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
-            src={`/img/navi/recipy-${iconState.recipy}.png`}
+            src={`/img/navi/recipe-${iconState.recipe}.png`}
             alt=""
-            onClick={() => toggleIconColor("recipy")}
+            onClick={() => toggleIconColor("recipe")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/recipy")}>레시피</NaviText>
+          <NaviText $isActive={location.pathname.startsWith("/recipe")}>레시피</NaviText>
         </NaviDiv>
         <NaviDiv>
           <NaviIcon
