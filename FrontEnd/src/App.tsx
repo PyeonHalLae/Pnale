@@ -41,7 +41,7 @@ function App() {
         </Route>
         {/* 정현모 개발 페이지*/}
         <Route path="mypage/*" element={<MyPage />}>
-          <Route index element={<MyPageUser />} />
+          <Route path="" element={<MyPageUser />} />
           <Route path="product" element={<MyProduct />} />
         </Route>
 
