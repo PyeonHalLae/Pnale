@@ -1,6 +1,9 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.product.model.vo.ProductResponseDto;
+import lombok.Builder;
 import lombok.Getter;
+import net.bytebuddy.implementation.bind.annotation.BindingPriority;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -15,7 +18,7 @@ public class Product {
     Long productId;
 
     @Column(nullable = false)
-    String producetName;
+    String productName;
 
     @Column(nullable = false)
     @Lob
@@ -28,13 +31,19 @@ public class Product {
     @Lob
     String productDesc;
 
-    @Column(nullable = false)
-    String eigen;
-
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime updatedAt;
+
+    public ProductResponseDto toResponseDto(){
+        return ProductResponseDto.builder()
+                .producetName(this.productName)
+                .productImg(this.productImg)
+                .price(this.price)
+                .productDesc(this.productDesc)
+                .build();
+    }
 
 }

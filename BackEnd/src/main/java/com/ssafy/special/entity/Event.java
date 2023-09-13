@@ -22,6 +22,9 @@ public class Event {
     @Column(nullable = false, columnDefinition = "boolean default false")
     boolean isStarted;
 
+    @Column(nullable = false)
+    String eigen;
+
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
 
