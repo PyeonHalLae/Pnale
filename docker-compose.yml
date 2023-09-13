@@ -5,7 +5,7 @@ services: #컨테이너를 정의하는 것=
     image: nginx:1.15-alpine #사용되는 이미지
     container_name : external_nginx
     volumes:
-      - /home/ubuntu/special_config/data/nginx/nginx.conf:/etc/nginx/nginx.conf
+      - /home/ubuntu/special_config/data/nginx/default.conf:/etc/nginx/conf.d/default.conf
       - /home/ubuntu/special_config/data/certbot/conf:/etc/letsencrypt #nginx
       - /home/ubuntu/special_config/data/certbot/www:/var/www/certbot
     restart: unless-stopped
