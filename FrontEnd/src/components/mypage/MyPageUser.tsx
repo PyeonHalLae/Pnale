@@ -19,7 +19,7 @@ interface productInfoType {
 }
 
 const userInfos = {
-  userName: "",
+  userName: "정현모",
   userImage: "/img/logo/logo-pink.png",
 };
 
