@@ -9,13 +9,11 @@ import { BrowserRouter } from "react-router-dom";
 import { RecoilRoot } from "recoil"; // RecoilRoot를 임포트
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <RecoilRoot>
-          <App />
-        </RecoilRoot>
-      </ThemeProvider>
-    </BrowserRouter>
-  </React.StrictMode>
+  <BrowserRouter>
+    <ThemeProvider theme={theme}>
+      <RecoilRoot>
+        <App />
+      </RecoilRoot>
+    </ThemeProvider>
+  </BrowserRouter>
 );

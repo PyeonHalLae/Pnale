@@ -1,4 +1,5 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import Header from "@components/common/Header";
+import { Outlet } from "react-router-dom";
 // import { useRecoilState } from "recoil";
 // import { sessionState } from "@/recoil/kdmRecoil";
 // import { localState } from "@/recoil/kdmRecoil";
@@ -10,7 +11,6 @@ import { Outlet, useNavigate } from "react-router-dom";
 // }
 
 const MainPage = () => {
-  const navigate = useNavigate();
   // const [testValue2, setTestValue2] = useRecoilState(localState);
   // const [testValue1, setTestValue1] = useRecoilState(sessionState);
 
@@ -39,14 +39,10 @@ const MainPage = () => {
   //   });
   // };
 
-  const searchBtn = () => {
-    // 페이지 이동 처리
-    navigate("/search"); // '/search' 페이지로 이동
-  };
   return (
     <>
+      <Header />
       <Outlet />
-      <button onClick={searchBtn}>검색</button>
     </>
   );
 };
