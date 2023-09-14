@@ -4,9 +4,9 @@ import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
 
 const myPageType = [
-  { icon: "/img/btn/recipe.png", text: "레시피관리" },
-  { icon: "/img/btn/comment.png", text: "댓글 관리" },
-  { icon: "/img/btn/user.png", text: "정보 수정" },
+  { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
+  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "error" },
+  { icon: "/img/btn/user.png", text: "정보 수정", url: "error" },
 ];
 
 interface userInfoType {
@@ -87,7 +87,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    navigate(value.url);
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}

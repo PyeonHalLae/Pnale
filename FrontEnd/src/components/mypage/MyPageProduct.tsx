@@ -66,4 +66,8 @@ const HelpBtn = styled.div`
   background-repeat: no-repeat;
 `;
 
-const ProductInfos = styled.div``;
+const ProductInfos = styled.div`
+  height: calc(100% - 130px);
+  overflow: scroll;
+  overflow-x: hidden;
+`;
