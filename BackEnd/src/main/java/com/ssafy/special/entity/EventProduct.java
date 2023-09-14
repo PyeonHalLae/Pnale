@@ -1,5 +1,6 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.EventType;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -14,9 +15,6 @@ public class EventProduct {
     @OneToMany
     Product product;
 
-    @Enumerated(EnumType.STRING)
-    EventType eventType;
-
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime startDate;
 
@@ -25,6 +23,16 @@ public class EventProduct {
 
     @ColumnDefault("false")
     boolean isSaled;
+
+    @Enumerated(EnumType.STRING)
+    EventType CU;
+    @Enumerated(EnumType.STRING)
+    EventType GS;
+    @Enumerated(EnumType.STRING)
+    EventType SEVEN;
+    @Enumerated(EnumType.STRING)
+    EventType EMART;
+
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
 

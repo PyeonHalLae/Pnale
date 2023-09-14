@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/product")
-@RequiredArgsConstructor
+@RequiredArgsConstructor //해당 어노테이션
 public class ProductController {
     private final ProductService productService;
 

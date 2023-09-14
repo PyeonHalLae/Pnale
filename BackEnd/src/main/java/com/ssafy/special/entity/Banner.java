@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Event {
+public class Banner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long eventId;
