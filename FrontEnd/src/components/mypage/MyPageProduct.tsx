@@ -1,12 +1,29 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductInfo from "@/components/mypage/mypage2/ProductCard";
+import { useState } from "react";
+import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
 
 const MyProduct = () => {
   const navigate = useNavigate();
 
+  const [helpState, setHelpState] = useState<boolean>(false);
+
+  const helpStateHandler = () => {
+    setHelpState((prev) => {
+      return !prev;
+    });
+  };
+
   return (
     <>
+      {helpState && (
+        <ProductHelp
+          helpStateHandler={() => {
+            helpStateHandler();
+          }}
+        />
+      )}
       <MyProductHeader>
         <BackBtn
           onClick={() => {
@@ -15,7 +32,11 @@ const MyProduct = () => {
         />
         <div className="pt-[85px] pl-[15px]">
           <Title>관심 상품</Title>
-          <HelpBtn />
+          <HelpBtn
+            onClick={() => {
+              helpStateHandler();
+            }}
+          />
         </div>
       </MyProductHeader>
       <ProductInfos>
