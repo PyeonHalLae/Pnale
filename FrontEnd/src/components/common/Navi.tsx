@@ -51,7 +51,7 @@ export default function Navi() {
         <Outlet />
       </div>
       <NaviParent>
-        <NaviDiv>
+        <NaviDiv $isActive={location.pathname === "/"}>
           <NaviIcon
             src={`/img/navi/home-${iconState.home}.png`}
             alt=""
@@ -59,7 +59,7 @@ export default function Navi() {
           />
           <NaviText $isActive={location.pathname === "/"}>홈</NaviText>
         </NaviDiv>
-        <NaviDiv>
+        <NaviDiv $isActive={location.pathname.startsWith("/search")}>
           <NaviIcon
             src={`/img/navi/search-${iconState.search}.png`}
             alt=""
@@ -67,7 +67,7 @@ export default function Navi() {
           />
           <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
         </NaviDiv>
-        <NaviDiv>
+        <NaviDiv $isActive={location.pathname.startsWith("/pyenE")}>
           <NaviIcon
             src={`/img/navi/pyenE-${iconState.pyenE}.png`}
             alt=""
@@ -75,7 +75,7 @@ export default function Navi() {
           />
           <NaviText $isActive={location.pathname.startsWith("/pyenE")}>편의점</NaviText>
         </NaviDiv>
-        <NaviDiv>
+        <NaviDiv $isActive={location.pathname.startsWith("/recipe")}>
           <NaviIcon
             src={`/img/navi/recipe-${iconState.recipe}.png`}
             alt=""
@@ -83,7 +83,7 @@ export default function Navi() {
           />
           <NaviText $isActive={location.pathname.startsWith("/recipe")}>레시피</NaviText>
         </NaviDiv>
-        <NaviDiv>
+        <NaviDiv $isActive={location.pathname.startsWith("/mypage")}>
           <NaviIcon
             src={`/img/navi/user-${iconState.mypage}.png`}
             alt=""
@@ -102,26 +102,29 @@ const NaviParent = tw.div`
   min-w-[360px]
   w-full
   justify-center
-  gap-4
+  gap-[2em]
   sticky
   bottom-0
   bg-white
 `;
 
-const NaviDiv = tw.div`
-  w-12
+const NaviDiv = tw.div<{ $isActive: boolean }>`
+  w-11
   mb-1
-`;
+  ${(props) =>
+    props.$isActive ? "border-t-4 border-common-text-color" : "border-t-4 border-white"}
+  `;
 
 const NaviIcon = tw.img`
-  mb-1
   mx-auto
-  w-9
-  h-9
+  w-6.5
+  h-7
+mt-1.5
 `;
 
 const NaviText = tw.p<{ $isActive: boolean }>`
   text-sm
   text-center
+  mt-1
   ${(props) => (props.$isActive ? "text-common-text-color" : "text-common-text-gray-color")}
 `;

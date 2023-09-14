@@ -22,7 +22,8 @@ import MyProduct from "@components/mypage/MyProduct";
 import Recipe from "@components/recipe/Recipe";
 import RecipeList from "@components/recipe/RecipeList";
 
-import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
+//몰라몰라
+import PyenEvent from "@components/pyunE/PyenEvent";
 import NotLogin from "@components/common/NotLogin";
 
 function App() {
@@ -34,8 +35,8 @@ function App() {
         <>
           <Route element={<Navi />}>
             {/* 김동민 개발 페이지*/}
+            <Route index element={<MainPageContent />} />
             <Route path="/" element={<MainPage />}>
-              <Route index element={<MainPageContent />} />
               <Route path="search" element={<SearchMain />} />
               <Route path="search-product" element={<SearchProduct />} />
               <Route path="search-related" element={<SearchRelated />} />
@@ -46,9 +47,8 @@ function App() {
               <Route index element={<MyPageUser />} />
               <Route path="product" element={<MyProduct />} />
             </Route>
-            <Route path="pyenE/*" element={<PyenE />}>
-              <Route path="pyenE2" element={<PyenE2 />} />
-            </Route>
+            <Route path="pyenEevent" element={<PyenEvent />} />
+            <Route path="pyenE" element={<PyenE />} />
             {/* 김효인 개발 페이지*/}
             <Route path="recipe" element={<Recipe />}>
               <Route path="" element={<RecipeList />} />

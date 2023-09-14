@@ -1,8 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
+import MainProduct from "./mainProduct/MainProduct";
+import MainRecipe from "./mainRecipe/MainRecipe";
+
 const MainPageContent = () => {
+  const navigate = useNavigate();
+
   return (
     <>
-      <div>추천 레시피 영역</div>
-      <div>행사 상품 영역</div>
+      <MainRecipe />
+      <img src="/img/etc/eventBanner.png" onClick={() => navigate("/pyenEevent")}></img>
+      <MainProduct />
     </>
   );
 };
