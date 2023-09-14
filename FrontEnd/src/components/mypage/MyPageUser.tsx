@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
 
 const myPageType = [
-  { icon: "/img/btn/recipe.png", text: "레시피관리" },
-  { icon: "/img/btn/comment.png", text: "댓글 관리" },
-  { icon: "/img/btn/user.png", text: "정보 수정" },
+  { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
+  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "error" },
+  { icon: "/img/btn/user.png", text: "정보 수정", url: "error" },
 ];
 
 interface userInfoType {
@@ -19,13 +20,13 @@ interface productInfoType {
 }
 
 const userInfos = {
-  userName: "",
+  userName: "정현모",
   userImage: "/img/logo/logo-pink.png",
 };
 
 const MyPageUser = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState<userInfoType>({ userName: "", userImage: "" });
-
   const [productInfo, setProductInfo] = useState<productInfoType[]>([]);
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const MyPageUser = () => {
   return (
     <>
       {userInfo.userName === null || userInfo.userName === "" ? (
-        <div className="h-screen bg-white">
+        <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
               <div className="mt-20 ml-4">
@@ -74,7 +75,7 @@ const MyPageUser = () => {
           </LikeProduct>
         </div>
       ) : (
-        <div className="h-screen bg-white">
+        <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
               <UserImage $imgurl={userInfo.userImage} />
@@ -86,7 +87,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    navigate(value.url);
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -95,7 +102,14 @@ const MyPageUser = () => {
           <LikeProduct>
             <div className="h-14">
               <p className="float-left mt-3 ml-3.5 text-[20px] text-[#1E2B4F]">관심상품</p>
-              <p className="float-right mt-5 mr-4 text-[13px] text-[#AEB0B6]">더보기</p>
+              <p
+                className="float-right mt-5 mr-4 text-[13px] text-[#AEB0B6]"
+                onClick={() => {
+                  navigate("product");
+                }}
+              >
+                더보기
+              </p>
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>

@@ -11,7 +11,8 @@ import SearchTest from "@components/search/SearchTest";
 import MyPage from "@components/mypage/MyPage";
 import MyPageUser from "@components/mypage/MyPageUser";
 import PyenE from "@components/pyunE/PyenE";
-import MyProduct from "@components/mypage/MyProduct";
+import MyPageProduct from "@components/mypage/MyPageProduct";
+import MyPageRecipe from "@components/mypage/MyPageRecipe";
 
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
@@ -40,8 +41,9 @@ function App() {
         </Route>
         {/* 정현모 개발 페이지*/}
         <Route path="mypage/*" element={<MyPage />}>
-          <Route path="" element={<MyPageUser />} />
-          <Route path="product" element={<MyProduct />} />
+          <Route index element={<MyPageUser />} />
+          <Route path="product" element={<MyPageProduct />} />
+          <Route path="recipe" element={<MyPageRecipe />} />
         </Route>
 
         <Route path="pyenE/*" element={<PyenE />}>
