@@ -17,9 +17,11 @@ import MyPageRecipe from "@components/mypage/MyPageRecipe";
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
 import RecipeList from "@components/recipe/RecipeList";
+import RecipeCreate from "@components/recipe/RecipeCreate";
 
 import SearchTest2 from "@components/search/search2/SearchTest2";
 import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
+import RecipeDetail from "@components/recipe/RecipeDetail";
 
 function App() {
   console.log("시작");
@@ -52,6 +54,8 @@ function App() {
         {/* 김효인 개발 페이지*/}
         <Route path="recipe" element={<Recipe />}>
           <Route path="" element={<RecipeList />} />
+          <Route path="create" element={<RecipeCreate />} />
+          <Route path=":recipeId" element={<RecipeDetail />} />
         </Route>
       </Route>
 
