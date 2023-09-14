@@ -138,10 +138,10 @@ const ProductTitle = styled.div`
   width: 136px;
   font-weight: normal;
   word-wrap: break-word;
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  overflow: hidden; //숨기는거고
+  display: -webkit-box; // webkit-box다
+  -webkit-line-clamp: 2; //둘줄까지만보여라
+  -webkit-box-orient: vertical; //... 해주는거
 `;
 
 const Price = tw.div`
