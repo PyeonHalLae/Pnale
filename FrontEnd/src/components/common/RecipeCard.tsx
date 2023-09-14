@@ -74,7 +74,7 @@ export default RecipeCard;
 
 const RecipyCardBox = styled.div`
   position: relative;
-  width: 100vw;
+  min-width: 22.5rem;
   max-width: 28.125rem;
   min-height: 7.5rem;
   background-color: white;

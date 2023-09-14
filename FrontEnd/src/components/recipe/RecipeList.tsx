@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-// import PopularRecipeRoller from "./PopularRecipeRoller";
+import PopularRecipeRoller from "./PopularRecipeRoller";
 
 interface recipeType {
   recipeTitle: string;
@@ -15,33 +15,32 @@ interface recipeType {
 }
 
 const RecipeList = () => {
-  // const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>();
-  // setPopularRecipeList([
-  //   {
-  //     recipeTitle: "string",
-  //     recipeImg: "string",
-  //     viewCnt: 1,
-  //     likeCnt: 1,
-  //     commentCnt: 1,
-  //     userName: "string",
-  //     userImg: "string",
-  //     createdDate: "2020.20.20",
-  //     // recipeId 도 받아와야함
-  //   },
-  // ]);
-
+  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
 
   useEffect(() => {
     setRecipeList([
       {
-        recipeTitle: "string",
-        recipeImg: "string",
-        viewCnt: 1,
-        likeCnt: 1,
-        commentCnt: 1,
-        userName: "string",
-        userImg: "string",
+        recipeTitle: "두줄제목입니다입니다입니다입니다",
+        recipeImg: "/public/img/test/너굴맨레시피.jpg",
+        viewCnt: 1000,
+        likeCnt: 1000,
+        commentCnt: 1000,
+        userName: "정현모",
+        userImg: "/public/img/test/너굴맨레시피.jpg",
+        createdDate: "2020.20.20",
+        // recipeId 도 받아와야함
+      },
+    ]);
+    setPopularRecipeList([
+      {
+        recipeTitle: "두줄제목입니다입니다입니다입니다",
+        recipeImg: "/public/img/test/너굴맨레시피.jpg",
+        viewCnt: 1000,
+        likeCnt: 1000,
+        commentCnt: 1000,
+        userName: "정현모",
+        userImg: "/public/img/test/너굴맨레시피.jpg",
         createdDate: "2020.20.20",
         // recipeId 도 받아와야함
       },
@@ -50,12 +49,11 @@ const RecipeList = () => {
 
   return (
     <>
+      <div>로고</div>
       <div>서치바</div>
-      <div>
-        <div>인기레시피</div>
-        <div>여기는 인기레시피 카드 (옆으로 넘어가게할것)</div>
-        {/* <PopularRecipeRoller $popularRecipeList={popularRecipeList} /> */}
-      </div>
+      {/* 인기 레시피 컨테이너 */}
+      <PopularRecipeRoller popularRecipeList={popularRecipeList} />
+      {/* 전체 레시피 컨테이너 */}
       <div>
         <div>전체레시피</div>
         <div>
@@ -65,6 +63,9 @@ const RecipeList = () => {
           ))}
         </div>
       </div>
+      {/* 새 레시피 등록 버튼 */}
+      <div>더보기</div>
+      <div>새레시피 등록</div>
     </>
   );
 };
