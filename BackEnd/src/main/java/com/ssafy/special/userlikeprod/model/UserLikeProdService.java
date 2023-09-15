@@ -57,7 +57,9 @@ public class UserLikeProdService {
         //Page객체에 있는 리스트 요소중 개별 객체를 ulp라 지칭
         return data.map(ulp ->{
             //UserLikeProd엔티티를 Dto로 매핑한다.
-            return modelMapper.map(ulp, UserLikeProdResponseDto.class);
+            UserLikeProdResponseDto ulpResponse =modelMapper.map(ulp, UserLikeProdResponseDto.class);
+            //ulpResponse
+            return ulpResponse;
         });
     }
     private User getUserById(Long userId) {
