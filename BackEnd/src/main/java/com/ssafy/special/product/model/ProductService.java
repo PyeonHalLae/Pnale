@@ -1,7 +1,6 @@
 package com.ssafy.special.product.model;
 
 import com.ssafy.special.entity.Product;
-import com.ssafy.special.entity.UserLikeProd;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.CustomExceptionType;
 import com.ssafy.special.product.model.vo.ProductResponseDto;

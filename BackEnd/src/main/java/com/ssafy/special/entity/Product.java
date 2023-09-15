@@ -1,5 +1,6 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.enums.ProductCategory;
 import com.ssafy.special.product.model.vo.ProductResponseDto;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,10 @@ public class Product {
     Long price;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    ProductCategory category;
+
+    @Column(nullable = false)
     @Lob
     String productDesc;
 
@@ -42,6 +47,7 @@ public class Product {
                 .producetName(this.productName)
                 .productImg(this.productImg)
                 .price(this.price)
+                .category(this.category)
                 .productDesc(this.productDesc)
                 .build();
     }
