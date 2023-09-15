@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class Event {
+public class Banner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long eventId;
@@ -21,6 +21,9 @@ public class Event {
 
     @Column(nullable = false, columnDefinition = "boolean default false")
     boolean isStarted;
+
+    @Column(nullable = false)
+    String eigen;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;

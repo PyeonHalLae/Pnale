@@ -1,6 +1,11 @@
 package com.ssafy.special.exception;
 
-import org.springframework.web.bind.annotation.ExceptionHandler;
 
-public class CustomException {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class CustomException extends RuntimeException {
+    CustomExceptionType customExceptionType;
 }
