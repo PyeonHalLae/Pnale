@@ -8,13 +8,14 @@ interface helpStateHandlerProps {
 const ProductHelp = ({ helpStateHandler }: helpStateHandlerProps) => {
   return (
     <>
-      <CloseBtn
-        onClick={() => {
-          helpStateHandler();
-        }}
-      ></CloseBtn>
-      <HelpImg></HelpImg>
-      <Background></Background>
+      <Background>
+        <CloseBtn
+          onClick={() => {
+            helpStateHandler();
+          }}
+        ></CloseBtn>
+        <HelpImg />
+      </Background>
     </>
   );
 };
@@ -22,23 +23,32 @@ const ProductHelp = ({ helpStateHandler }: helpStateHandlerProps) => {
 export default ProductHelp;
 
 const Background = styled.div`
-  width: 100vh;
-  height: 100vh;
-  position: absolute;
-  z-index: 10;
+  min-width: 360px;
+  max-width: 450px;
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  z-index: 30;
   background-color: rgba(51, 51, 51, 0.8);
 `;
 
 const CloseBtn = styled.div`
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  z-index: 20;
-  background-image: url("/img/btn/close-btn-white");
-  background-size: 20px 20px;
+  width: 30px;
+  height: 30px;
+  float: right;
+  margin: 15px 15px 0px 0px;
+  background-image: url("/img/btn/close-btn-white.png");
+  background-size: 25px 25px;
   background-position: center;
   background-repeat: no-repeat;
-  border: 1px solid black;
 `;
 
-const HelpImg = styled.div``;
+const HelpImg = styled.div`
+  margin: 50% auto;
+  width: 350px;
+  height: 330px;
+  background-image: url("/img/help/myproduct-help.png");
+  background-size: 350px 330px;
+  background-position: center;
+  background-repeat: no-repeat;
+`;

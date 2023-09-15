@@ -27,12 +27,12 @@ const RecipeManageCard = ({
 
   recipeInfo = {
     recipeTitle: "두줄제목입니다입니다asdasdasd입sdas니asdfasdf다safdsdaasdfsdfsdf입니다",
-    recipeImg: "/public/img/test/너굴맨레시피.jpg",
+    recipeImg: "/img/test/너굴맨레시피.jpg",
     viewCnt: 1000,
     likeCnt: 1000,
     commentCnt: 1000,
     userName: "운영자",
-    userImg: "/public/img/test/너굴맨레시피.jpg",
+    userImg: "/img/test/너굴맨레시피.jpg",
     createdDate: "2020.20.20",
   };
   return (
