@@ -5,59 +5,74 @@ import NotFound from "@components/common/NotFound";
 import Navi from "@components/common/Navi";
 
 //김동민 라우터
-import Main from "@components/main/MainPage";
-import SearchTest from "@components/search/SearchTest";
+import MainPage from "@components/main/MainPage";
+import MainPageContent from "@components/main/MainPageContent";
+import SearchMain from "@components/search/SearchMain";
+import SearchProduct from "@components/search/SearchProduct";
+import SearchRelated from "@components/search/SearchRelated";
+import SearchRecipe from "@components/search/SearchRecipe";
+
 //정현모 라우터
 import MyPage from "@components/mypage/MyPage";
 import MyPageUser from "@components/mypage/MyPageUser";
 import PyenE from "@components/pyunE/PyenE";
-import MyProduct from "@components/mypage/MyProduct";
+import MyPageProduct from "@components/mypage/MyPageProduct";
+import MyPageRecipe from "@components/mypage/MyPageRecipe";
 
 //김효인 라우터
-import Recipe from "@components/recipy/Recipe";
-import RecipeList from "@components/recipy/RecipeList";
-import Recipy2 from "@components/recipy/recipy2/Recipy2";
+import Recipe from "@components/recipe/Recipe";
+import RecipeList from "@components/recipe/RecipeList";
+import RecipeCreate from "@components/recipe/RecipeCreate";
+import RecipeDetail from "@components/recipe/RecipeDetail";
 
-import SearchTest2 from "@components/search/search2/SearchTest2";
-import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
+//임시
+import PyenEvent from "@components/pyunE/PyenEvent";
+import NotLogin from "@components/common/NotLogin";
 
 function App() {
-  console.log("시작");
-  console.log(
-    "한번 실행했는데 로그가 두번 찍히는 이유는 App의 rescticMode가 있기 때문에 installHook이 발생"
-  );
-  console.log(
-    "이는 마운트를 두번 실행해도 문제가 없어야 정상적인 로직이기 때문에 안정성 검사를 하는 것과 같다."
-  );
-  console.log("지워도 상관은 없는데 일단 냅둠");
-
+  // const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const isAuthenticated = true;
   return (
     <Routes>
-      <Route element={<Navi />}>
-        {/* 김동민 개발 페이지*/}
-        <Route path="/" element={<Main />} />
-        <Route path="search/*" element={<SearchTest />}>
-          <Route path="search2" element={<SearchTest2 />} />
-        </Route>
-        {/* 정현모 개발 페이지*/}
-        <Route path="mypage/*" element={<MyPage />}>
-          <Route index element={<MyPageUser />} />
-          <Route path="product" element={<MyProduct />} />
-        </Route>
+      {isAuthenticated ? (
+        <>
+          <Route element={<Navi />}>
+            {/* 김동민 개발 페이지*/}
+            <Route index element={<MainPageContent />} />
+            <Route path="/" element={<MainPage />}>
+              <Route path="search" element={<SearchMain />} />
+              <Route path="search-product" element={<SearchProduct />} />
+              <Route path="search-related" element={<SearchRelated />} />
+              <Route path="search-recipe" element={<SearchRecipe />} />
+            </Route>
+            {/* 정현모 개발 페이지*/}
+            <Route path="mypage/*" element={<MyPage />}>
+              <Route index element={<MyPageUser />} />
+              <Route path="product" element={<MyPageProduct />} />
+              <Route path="recipe" element={<MyPageRecipe />} />
+            </Route>
 
-        <Route path="pyenE/*" element={<PyenE />}>
-          <Route path="pyenE2" element={<PyenE2 />} />
-        </Route>
-        {/* 김효인 개발 페이지*/}
-        <Route path="recipe" element={<Recipe />}>
-          <Route path="" element={<RecipeList />} />
-        </Route>
-      </Route>
+            <Route path="pyenEevent" element={<PyenEvent />} />
+            <Route path="pyenE" element={<PyenE />} />
+            {/* 김효인 개발 페이지*/}
+            <Route path="recipe" element={<Recipe />}>
+              <Route path="" element={<RecipeList />} />
+              <Route path="create" element={<RecipeCreate />} />
+              <Route path=":recipeId" element={<RecipeDetail />} />
+            </Route>
+          </Route>
 
-      {/* 예외 처리 페이지*/}
-      <Route path="*" element={<NotFound />} />
+          {/* 예외 처리 페이지*/}
+          <Route path="*" element={<NotFound />} />
+        </>
+      ) : (
+        <>
+          <Route element={<Navi />}>
+            <Route path="/" element={<NotLogin />} />
+          </Route>
+        </>
+      )}
     </Routes>
   );
 }
-
 export default App;

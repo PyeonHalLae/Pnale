@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("api/test")
+@RequestMapping("api/test1")
 public class TestController {
 
     @GetMapping()
