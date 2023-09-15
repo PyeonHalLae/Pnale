@@ -16,13 +16,16 @@ import SearchRecipe from "@components/search/SearchRecipe";
 import MyPage from "@components/mypage/MyPage";
 import MyPageUser from "@components/mypage/MyPageUser";
 import PyenE from "@components/pyunE/PyenE";
-import MyProduct from "@components/mypage/MyProduct";
+import MyPageProduct from "@components/mypage/MyPageProduct";
+import MyPageRecipe from "@components/mypage/MyPageRecipe";
 
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
 import RecipeList from "@components/recipe/RecipeList";
+import RecipeCreate from "@components/recipe/RecipeCreate";
+import RecipeDetail from "@components/recipe/RecipeDetail";
 
-//몰라몰라
+//임시
 import PyenEvent from "@components/pyunE/PyenEvent";
 import NotLogin from "@components/common/NotLogin";
 
@@ -45,13 +48,17 @@ function App() {
             {/* 정현모 개발 페이지*/}
             <Route path="mypage/*" element={<MyPage />}>
               <Route index element={<MyPageUser />} />
-              <Route path="product" element={<MyProduct />} />
+              <Route path="product" element={<MyPageProduct />} />
+              <Route path="recipe" element={<MyPageRecipe />} />
             </Route>
+
             <Route path="pyenEevent" element={<PyenEvent />} />
             <Route path="pyenE" element={<PyenE />} />
             {/* 김효인 개발 페이지*/}
             <Route path="recipe" element={<Recipe />}>
               <Route path="" element={<RecipeList />} />
+              <Route path="create" element={<RecipeCreate />} />
+              <Route path=":recipeId" element={<RecipeDetail />} />
             </Route>
           </Route>
 
@@ -68,5 +75,4 @@ function App() {
     </Routes>
   );
 }
-
 export default App;
