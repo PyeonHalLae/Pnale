@@ -5,15 +5,21 @@ import NotFound from "@components/common/NotFound";
 import Navi from "@components/common/Navi";
 
 //김동민 라우터
-import Main from "@components/main/Main";
+import Main from "@components/main/MainPage";
 import SearchTest from "@components/search/SearchTest";
 //정현모 라우터
-import MyPageTest from "@components/mypage/MyPageTest";
+import MyPage from "@components/mypage/MyPage";
+import MyPageUser from "@components/mypage/MyPageUser";
 import PyenE from "@components/pyunE/PyenE";
+import MyProduct from "@components/mypage/MyProduct";
 
 //김효인 라우터
-import Recipy from "@components/recipy/Recipy";
+import Recipe from "@components/recipy/Recipe";
+import RecipeList from "@components/recipy/RecipeList";
 import Recipy2 from "@components/recipy/recipy2/Recipy2";
+
+import SearchTest2 from "@components/search/search2/SearchTest2";
+import PyenE2 from "@components/pyunE/pyunE2/PyenE2";
 
 function App() {
   console.log("시작");
@@ -30,13 +36,21 @@ function App() {
       <Route element={<Navi />}>
         {/* 김동민 개발 페이지*/}
         <Route path="/" element={<Main />} />
-        <Route path="search/*" element={<SearchTest />} />
+        <Route path="search/*" element={<SearchTest />}>
+          <Route path="search2" element={<SearchTest2 />} />
+        </Route>
         {/* 정현모 개발 페이지*/}
-        <Route path="mypage/*" element={<MyPageTest />} />
-        <Route path="pyenE/*" element={<PyenE />} />
+        <Route path="mypage/*" element={<MyPage />}>
+          <Route index element={<MyPageUser />} />
+          <Route path="product" element={<MyProduct />} />
+        </Route>
+
+        <Route path="pyenE/*" element={<PyenE />}>
+          <Route path="pyenE2" element={<PyenE2 />} />
+        </Route>
         {/* 김효인 개발 페이지*/}
-        <Route path="recipy" element={<Recipy />}>
-          <Route path="recipy2" element={<Recipy2 />} />
+        <Route path="recipe" element={<Recipe />}>
+          <Route path="" element={<RecipeList />} />
         </Route>
       </Route>
 

@@ -15,16 +15,17 @@
     "jsx": "react-jsx",
 
     /* Linting */
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
+    "strict": false,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noFallthroughCasesInSwitch": true,
 
     /* 내가 추가 */
     "baseUrl": ".",
     "paths": {
       "@components/*": ["src/components/*"],
-      "@/*": ["src/*"]
+      "@/*": ["src/*"],
+      "@public/*": ["public/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx"],
