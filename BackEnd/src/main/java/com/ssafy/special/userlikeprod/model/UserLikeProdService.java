@@ -14,7 +14,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 
 import java.awt.print.Pageable;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +57,9 @@ public class UserLikeProdService {
         return data.map(ulp ->{
             //UserLikeProd엔티티를 Dto로 매핑한다.
             UserLikeProdResponseDto ulpResponse =modelMapper.map(ulp, UserLikeProdResponseDto.class);
-            //ulpResponse
+
+            //ulpResponse.setEventProductDto();
+            //ulpRepository에서 찾아서 modelMapper 쓰기
             return ulpResponse;
         });
     }
