@@ -4,7 +4,11 @@ const MainRecipeHeader = () => {
   return (
     <Box>
       <Divider></Divider>
-      <Recipe>편의점 추천 레시피</Recipe>
+      <Recipe>
+        편의점
+        <div className="mx-1.5 text-common-peach">추천</div>
+        레시피
+      </Recipe>
       <ReMore>더보기</ReMore>
     </Box>
   );
@@ -25,6 +29,7 @@ bg-white
 `;
 
 const Recipe = tw.span`
+flex
 text-2xl
 font-bold
 text-common-text-color
