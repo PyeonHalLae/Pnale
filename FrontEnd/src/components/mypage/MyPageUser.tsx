@@ -6,7 +6,7 @@ import tw from "tailwind-styled-components";
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
   { icon: "/img/btn/comment.png", text: "댓글 관리", url: "error" },
-  { icon: "/img/btn/user.png", text: "정보 수정", url: "error" },
+  { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
 interface userInfoType {
