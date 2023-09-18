@@ -1,6 +1,13 @@
 @font-face {
   font-family: "G-Sans-Light";
   font-style: normal;
+  font-weight: 100;
+  src: url("/font/AnyConv.com__GmarketSansTTFLight.woff") format("woff");
+}
+
+@font-face {
+  font-family: "G-Sans-Light";
+  font-style: normal;
   font-weight: lighter;
   src: url("/font/AnyConv.com__GmarketSansTTFLight.woff") format("woff");
 }

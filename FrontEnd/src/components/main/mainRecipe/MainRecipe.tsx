@@ -1,17 +1,12 @@
 import MainRecipeHeader from "./MainRecipeHeader";
+import MainRecipeContent from "./MainRecipeContent";
 
 const MainRecipe = () => {
   return (
-    <div>
+    <>
       <MainRecipeHeader />
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-    </div>
+      <MainRecipeContent />
+    </>
   );
 };
 

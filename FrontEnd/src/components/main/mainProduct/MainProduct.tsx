@@ -1,16 +1,12 @@
+import MainProductContent from "./MainProductContent";
 import MainProductHeader from "./MainProductHeader";
 
+MainProductContent;
 const MainProduct = () => {
   return (
     <div>
       <MainProductHeader />
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>asd</div>
+      <MainProductContent />
     </div>
   );
 };
