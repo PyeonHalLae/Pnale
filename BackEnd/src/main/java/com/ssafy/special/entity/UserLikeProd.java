@@ -1,6 +1,4 @@
 package com.ssafy.special.entity;
-
-import com.ssafy.special.userlikeprod.model.vo.UserLikeProdUpdateDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -54,6 +52,11 @@ public class UserLikeProd {
     }
 
     public void updateLike() {
+        this.likeStat ^= this.likeStat;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public void updateEmailReceive() {
         this.likeStat ^= this.likeStat;
         this.updatedAt = LocalDateTime.now();
     }

@@ -3,6 +3,7 @@ package com.ssafy.special.entity;
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
+import com.ssafy.special.eventproduct.model.vo.EventProductDto;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -24,7 +25,6 @@ public class EventProduct {
     @Enumerated(EnumType.STRING)
     EventPeriod  CUDate;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name="gs_type")
     EventType GSType;
@@ -40,7 +40,7 @@ public class EventProduct {
     EventPeriod  SEVENDate;
     @Enumerated(EnumType.STRING)
     @Column(name="emart_type")
-    EventType EMART;
+    EventType EMARTType;
 
     @Column(name= "cu_date")
     @Enumerated(EnumType.STRING)
@@ -51,4 +51,18 @@ public class EventProduct {
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime updatedAt;
+
+
+    public EventProductDto toDto(){
+        return EventProductDto.builder()
+                .CUType(this.CUType)
+                .CUDate(this.CUDate)
+                .GSType(this.GSType)
+                .GSDate(this.GSDate)
+                .SEVENType(this.SEVENType)
+                .SEVENDate(this.SEVENDate)
+                .EMARTType(this.EMARTType)
+                .EMARTDate(this.EMARTDate)
+                .build();
+    }
 }

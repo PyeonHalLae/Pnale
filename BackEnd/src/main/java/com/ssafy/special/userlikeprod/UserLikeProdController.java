@@ -21,10 +21,16 @@ public class UserLikeProdController {
         return ResponseEntity.ok(userLikeProdService.findAllLike(pageable, userId));
     }
 
-    @GetMapping("/{productId}/{userId}")
+    @GetMapping("/likeproduct/{productId}/{userId}")
     public ResponseEntity<?> likeProductToggle(@PathVariable Long productId,
                                                @PathVariable Long userId){
 
         return ResponseEntity.ok(userLikeProdService.likeToggle(productId, userId));
+    }
+
+    @GetMapping("/email-receive/{productId}/{userId}")
+    public ResponseEntity<?> receiveEmailToggle(@PathVariable Long productId,
+                                               @PathVariable Long userId){
+        return ResponseEntity.ok(userLikeProdService.receiveToggle(productId, userId));
     }
 }

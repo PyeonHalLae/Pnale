@@ -2,7 +2,7 @@ package com.ssafy.special.product.model;
 
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomExceptionType;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.product.model.vo.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,7 +23,7 @@ public class ProductService {
 
     public ProductResponseDto findProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(
-                ()-> new CustomException(CustomExceptionType.PRODUCT_NOT_FOUND)
+                ()-> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND)
         ).toResponseDto();
     }
 

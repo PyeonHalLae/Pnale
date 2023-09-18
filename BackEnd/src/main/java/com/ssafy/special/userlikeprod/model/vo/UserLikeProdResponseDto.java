@@ -7,6 +7,7 @@ import lombok.*;
 
 @Setter
 @Getter
+@NoArgsConstructor
 public class UserLikeProdResponseDto {
     Product product;
     boolean emailRecevie;
