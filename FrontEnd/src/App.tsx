@@ -19,6 +19,7 @@ import PyenE from "@components/pyunE/PyenE";
 import MyPageProduct from "@components/mypage/MyPageProduct";
 import MyPageRecipe from "@components/mypage/MyPageRecipe";
 import MyPageModify from "@components/mypage/MyPageModify";
+import MyPageComment from "@components/mypage/MyPageComment";
 
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
@@ -52,6 +53,7 @@ function App() {
               <Route path="product" element={<MyPageProduct />} />
               <Route path="recipe" element={<MyPageRecipe />} />
               <Route path="modify" element={<MyPageModify />} />
+              <Route path="comment" element={<MyPageComment />} />
             </Route>
 
             <Route path="pyenEevent" element={<PyenEvent />} />
