@@ -126,7 +126,7 @@ const RecipeList = () => {
         onClick={() => {
           navigate("/recipe/create");
         }}
-        src="/public/img/btn/create-recipe.png"
+        src="/img/btn/create-recipe.png"
       />
     </div>
   );
