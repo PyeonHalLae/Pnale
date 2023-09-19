@@ -1,20 +1,21 @@
 package com.ssafy.special.userlikeprod.model;
 
+import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.entity.User;
 import com.ssafy.special.entity.UserLikeProd;
+import com.ssafy.special.eventproduct.model.EventProductRepository;
 import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomExceptionType;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.product.model.ProductRepository;
 import com.ssafy.special.user.model.UserRepository;
 import com.ssafy.special.userlikeprod.model.vo.UserLikeProdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Pageable;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -29,49 +30,73 @@ public class UserLikeProdService {
     private final UserLikeProdRepository userLikeProdRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
+    private final EventProductRepository eventProductRepository;
 
     private final ModelMapper modelMapper;
 
     public Page<UserLikeProdResponseDto> findAllLike(Pageable pageable, Long userId) {
-        return getAllLike(userLikeProdRepository.findByUser_UserIdAndLikeStatTrue(userId, pageable));
+        return getAllLike(userLikeProdRepository.findByUser_UsrIdAndLikeStatTrue(userId, pageable));
     }
 
     public String likeToggle(Long productId, Long userId) {
         User findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
 
-        return userLikeProdRepository.findByUser_UserIdAndProduct_ProductId(userId, productId)
-                .map(ulp ->{ //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
+        return userLikeProdRepository.findByUser_UsrIdAndProduct_ProductId(userId, productId)
+                .map(ulp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
                     updateUserLikeProduct(ulp);
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
-                }).orElseGet( ()->{
+                }).orElseGet(() -> {
                     //객체가 존재하지 않음
                     addUserLikeProduct(findUser, findProduct);
                     return findProduct.getProductName() + "을 좋아합니다.";
                 });
     }
 
+    public String receiveToggle(Long productId, Long userId) {
+        User findUser = getUserById(userId);
+        Product findProduct = getProductById(productId);
+
+        UserLikeProd ulp = userLikeProdRepository
+                .findByUser_UsrIdAndProduct_ProductId(userId, productId)
+                .orElseThrow(()-> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
+        updateEmailReceiveStatus(ulp);
+        return ulp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";
+    }
+
     //===============================================
     //서비스 내부에서만 사용하는 메소드는 private로 제한한다.
     private Page<UserLikeProdResponseDto> getAllLike(Page<UserLikeProd> data) {
         //Page객체에 있는 리스트 요소중 개별 객체를 ulp라 지칭
-        return data.map(ulp ->{
+        return data.map(ulp -> {
             //UserLikeProd엔티티를 Dto로 매핑한다.
-            UserLikeProdResponseDto ulpResponse =modelMapper.map(ulp, UserLikeProdResponseDto.class);
-            //ulpResponse
+            UserLikeProdResponseDto ulpResponse = modelMapper.map(ulp, UserLikeProdResponseDto.class);
+
+            //상품ID에 대한 행사 상품을 찾는다
+            EventProduct eventProduct = eventProductRepository
+                    .findEventProductByProduct(ulp.getProduct())
+                    .orElseGet(EventProduct::new);
+            ulpResponse.setEventProductDto(eventProduct.toDto());
+
             return ulpResponse;
         });
     }
+
     private User getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow( () -> new CustomException(CustomExceptionType.USER_NOT_FOUND));
+        return userRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
-    private Product getProductById(Long productId){
-        return productRepository.findById(productId).orElseThrow( () -> new CustomException(CustomExceptionType.PRODUCT_NOT_FOUND));
+    private Product getProductById(Long productId) {
+        return productRepository.findById(productId).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
     }
 
     private void updateUserLikeProduct(UserLikeProd ulp) {
         ulp.updateLike();
+        userLikeProdRepository.save(ulp);
+    }
+
+    private void updateEmailReceiveStatus(UserLikeProd ulp) {
+        ulp.updateEmailReceive();
         userLikeProdRepository.save(ulp);
     }
 

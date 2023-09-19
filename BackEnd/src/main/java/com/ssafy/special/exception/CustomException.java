@@ -1,11 +1,11 @@
 package com.ssafy.special.exception;
 
-
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-@AllArgsConstructor
 @Getter
 public class CustomException extends RuntimeException {
-    CustomExceptionType customExceptionType;
+    private final CustomErrorCode customErrorCode;
+    public CustomException(CustomErrorCode customErrorCode) {
+        this.customErrorCode = customErrorCode;
+    }
 }

@@ -1,19 +1,20 @@
 package com.ssafy.special.entity;
 
-import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
-import org.hibernate.annotations.ColumnDefault;
+import com.ssafy.special.eventproduct.model.vo.EventProductDto;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
+@Entity
 public class EventProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     Long eventProductId;
 
-    @OneToMany
+    @OneToOne
+    @JoinColumn(name ="product_id")
     Product product;
 
     @Enumerated(EnumType.STRING)
@@ -24,25 +25,24 @@ public class EventProduct {
     @Enumerated(EnumType.STRING)
     EventPeriod  CUDate;
 
-
     @Enumerated(EnumType.STRING)
     @Column(name="gs_type")
     EventType GSType;
-    @Column(name= "cu_date")
+    @Column(name= "gs_date")
     @Enumerated(EnumType.STRING)
     EventPeriod  GSDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name="seven_type")
     EventType SEVENType;
-    @Column(name= "cu_date")
+    @Column(name= "seven_date")
     @Enumerated(EnumType.STRING)
     EventPeriod  SEVENDate;
     @Enumerated(EnumType.STRING)
     @Column(name="emart_type")
-    EventType EMART;
+    EventType EMARTType;
 
-    @Column(name= "cu_date")
+    @Column(name= "emart_date")
     @Enumerated(EnumType.STRING)
     EventPeriod  EMARTDate;
 
@@ -51,4 +51,18 @@ public class EventProduct {
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime updatedAt;
+
+
+    public EventProductDto toDto(){
+        return EventProductDto.builder()
+                .CUType(this.CUType)
+                .CUDate(this.CUDate)
+                .GSType(this.GSType)
+                .GSDate(this.GSDate)
+                .SEVENType(this.SEVENType)
+                .SEVENDate(this.SEVENDate)
+                .EMARTType(this.EMARTType)
+                .EMARTDate(this.EMARTDate)
+                .build();
+    }
 }
