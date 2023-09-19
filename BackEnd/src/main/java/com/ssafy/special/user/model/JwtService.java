@@ -37,12 +37,12 @@ public class JwtService {
 
     private final UserRepository userRepository;
 
-    public String createAccessToken(Long usrId){
+    public String createAccessToken(Long userId){
         Date now = new Date();
         return JWT.create()
                 .withSubject("AccessToken")
                 .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod))
-                .withClaim("usrId", usrId)
+                .withClaim("userId", userId)
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -68,12 +68,18 @@ public class JwtService {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken){
         response.setStatus(HttpServletResponse.SC_OK);
 
+        Cookie accessCookie = new Cookie("accessToken", accessToken);
+        accessCookie.setMaxAge(1800000);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setPath("/");
+
         Cookie refreshCookie = new Cookie("refreshToken", accessToken);
         refreshCookie.setMaxAge(1209600000);
         refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/");
 
         response.addCookie(refreshCookie);
-        response.setHeader(accessCookie, accessToken);
+        response.setStatus(HttpServletResponse.SC_OK);
     }
 
     public Optional<String> getRefreshToken(HttpServletRequest request) {
@@ -101,12 +107,12 @@ public class JwtService {
         return Optional.empty();
     }
 
-    public Optional<Long> getUsrId(String accessToken){
+    public Optional<Long> getUserId(String accessToken){
         try{
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
                     .build()
                     .verify(accessToken)
-                    .getClaim("usrId")
+                    .getClaim("userId")
                     .asLong());
         } catch (Exception e) {
             return Optional.empty();
@@ -115,7 +121,7 @@ public class JwtService {
 
     @Transactional
     public void updateRefreshToken(Long usrId, String refreshToken) {
-        userRepository.findByUsrId(usrId)
+        userRepository.findByUserId(usrId)
                 .ifPresentOrElse(
                         user -> user.updateRefreshToken(refreshToken),
                         () -> new Exception("일치하는 회원이 없습니다.")

@@ -2,8 +2,7 @@ package com.ssafy.special.user.model;
 
 import com.ssafy.special.entity.User;
 import com.ssafy.special.enums.SocialType;
-import com.ssafy.special.user.model.vo.CustomOAuth2User;
-import com.ssafy.special.user.model.vo.OAuthAttributes;
+import com.ssafy.special.user.model.vo.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
@@ -24,22 +23,13 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final UserRepository userRepository;
 
-    /**
-     * DefaultOAuth2UserService 객체를 생성하여, loadUser(userRequest)를 통해 DefaultOAuth2User 객체를 생성 후 반환
-     * DefaultOAuth2UserService의 loadUser()는 소셜 로그인 API의 사용자 정보 제공 URI로 요청을 보내서
-     * 사용자 정보를 얻은 후, 이를 통해 DefaultOAuth2User 객체를 생성 후 반환한다.
-     * 결과적으로, OAuth2User는 OAuth 서비스에서 가져온 유저 정보를 담고 있는 유저
-     */
+
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("오예!!!");
+
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2User = delegate.loadUser(userRequest);
-        /**
-         * userRequest에서 registrationId 추출 후 registrationId으로 SocialType 저장
-         * http://localhost:8080/oauth2/authorization/kakao에서 kakao가 registrationId
-         * userNameAttributeName은 이후에 nameAttributeKey로 설정된다.
-         */
+
         String registrationId = userRequest.getClientRegistration().getRegistrationId().toUpperCase();
 
         SocialType socialType = getSocialType(registrationId);
@@ -47,16 +37,21 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
                 .getUserNameAttributeName();
 
 
-        OAuthAttributes attributes = OAuthAttributes.of(socialType, userNameAttributeName, oAuth2User.getAttributes());
+        System.out.println(oAuth2User.getAttributes());
 
-        System.out.println(attributes.getOAuth2UserInfo().getId());
+        OAuth2UserInfo oAuth2UserInfo;
+        if(socialType.name().equals("KAKAO")){
+            oAuth2UserInfo = new KakaoOAuth2UserInfo(oAuth2User.getAttributes());
+        } else {
+            oAuth2UserInfo = new GoogleOAuth2UserInfo(oAuth2User.getAttributes());
+        }
 
 
-        User user = saveOrFind(attributes, socialType);
+        User user = saveOrFind(oAuth2UserInfo, socialType);
 
 
         return new CustomOAuth2User(Collections.singleton(new SimpleGrantedAuthority(user.getRole().getKey())),
-                oAuth2User.getAttributes(), attributes.getNameAttributeKey(), user.getUsrId());
+                oAuth2User.getAttributes(), userNameAttributeName, user.getUserId());
     }
 
     private SocialType getSocialType(String registrationId){
@@ -66,12 +61,11 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         return SocialType.GOOGLE;
     }
 
-    private User saveOrFind(OAuthAttributes attributes, SocialType socialType){
-        String loginId = socialType.name() + "_" + attributes.getOAuth2UserInfo().getId();
+    private User saveOrFind(OAuth2UserInfo userInfo, SocialType socialType){
+        String loginId = socialType.name() + "_" + userInfo.getId();
         User user = userRepository.findByLoginId(loginId).orElse(null);
         if(user == null){
-            System.out.println("간다라박");
-            return userRepository.save(attributes.toEntity(loginId, socialType));
+            return userRepository.save(userInfo.toEntity(loginId, socialType));
         }
         return user;
     }

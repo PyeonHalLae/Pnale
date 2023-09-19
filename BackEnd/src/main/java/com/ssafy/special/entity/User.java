@@ -21,7 +21,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long usrId;
+    Long userId;
 
     @Column(nullable = false)
     String loginId;
@@ -31,7 +31,7 @@ public class User {
 
     @Column
     @Lob
-    String usrImg;
+    String userImg;
 
     @Enumerated(EnumType.STRING)
     RoleType role;
@@ -39,7 +39,7 @@ public class User {
     @Enumerated(EnumType.STRING)
     SocialType social;
 
-    @Column(nullable = false, columnDefinition = "varchar(255)")
+    @Column(columnDefinition = "varchar(255)")
     String email;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable=false, updatable=false)
@@ -63,6 +63,13 @@ public class User {
     @OneToMany(mappedBy = "writer")
     private List<Recipe> writeRecipes = new LinkedList<>();
 
+    public User updateUserInfo(String userImg, String nickname, LocalDateTime updatedAt, boolean mailReceive){
+        this.userImg = userImg;
+        this.nickname = nickname;
+        this.updatedAt = updatedAt;
+        this.mailReceive = mailReceive;
+        return this;
+    }
     public User updateRefreshToken(String refreshToken){
         this.refreshToken=refreshToken;
         return this;
