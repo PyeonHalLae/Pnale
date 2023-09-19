@@ -2,6 +2,7 @@ package com.ssafy.special.product;
 
 import com.ssafy.special.product.model.ProductService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 
+@Slf4j
 @RestController
 @RequestMapping("/api/product")
 @RequiredArgsConstructor //해당 어노테이션
@@ -20,6 +22,7 @@ public class ProductController {
 
     @GetMapping("")
     public ResponseEntity<?> getAllProducts(Pageable pageable){
+        log.info("{}", pageable );
         return ResponseEntity.ok(productService.findAllProducts(pageable));
     }
     @GetMapping("/{productId}")

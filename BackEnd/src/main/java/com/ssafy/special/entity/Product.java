@@ -44,6 +44,7 @@ public class Product {
 
     public ProductResponseDto toResponseDto(){
         return ProductResponseDto.builder()
+                .productId(this.productId)
                 .producetName(this.productName)
                 .productImg(this.productImg)
                 .price(this.price)
