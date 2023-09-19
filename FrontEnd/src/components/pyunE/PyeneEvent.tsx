@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 
-const Pyene = () => {
+const PyeneEvent = () => {
   return <Outlet />;
 };
 
-export default Pyene;
+export default PyeneEvent;
