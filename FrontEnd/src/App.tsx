@@ -8,9 +8,9 @@ import Navi from "@components/common/Navi";
 import MainPage from "@components/main/MainPage";
 import MainPageContent from "@components/main/MainPageContent";
 import SearchMain from "@components/search/SearchMain";
-import SearchProduct from "@components/search/SearchProduct";
-import SearchRelated from "@components/search/SearchRelated";
-import SearchRecipe from "@components/search/SearchRecipe";
+import MoreProduct from "@components/search/detail/MoreProduct";
+import MoreRelated from "@components/search/detail/MoreRelated";
+import MoreRecipe from "@components/search/detail/MoreRecipe";
 
 //정현모 라우터
 import MyPage from "@components/mypage/MyPage";
@@ -46,9 +46,9 @@ function App() {
             <Route index element={<MainPageContent />} />
             <Route path="/" element={<MainPage />}>
               <Route path="search" element={<SearchMain />} />
-              <Route path="search-product" element={<SearchProduct />} />
-              <Route path="search-related" element={<SearchRelated />} />
-              <Route path="search-recipe" element={<SearchRecipe />} />
+              <Route path="search-product" element={<MoreProduct />} />
+              <Route path="search-related" element={<MoreRelated />} />
+              <Route path="search-recipe" element={<MoreRecipe />} />
             </Route>
             {/* 정현모 개발 페이지*/}
             <Route path="mypage/*" element={<MyPage />}>
