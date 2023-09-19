@@ -1,8 +1,6 @@
 package com.ssafy.special.product.model;
 
 import com.ssafy.special.entity.Product;
-import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.product.model.vo.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,9 +20,7 @@ public class ProductService {
     }
 
     public ProductResponseDto findProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(
-                ()-> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND)
-        ).toResponseDto();
+        return productRepository.findById(productId).orElseThrow(()-> new RuntimeException("이현욱 잘못")).toResponseDto();
     }
 
     //Page<Product>를 Page<ProductResponseDto>로 변환

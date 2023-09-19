@@ -57,7 +57,7 @@ public class SecurityConfig {
                 // OAuth 로그인
                 .and()
                 .oauth2Login()
-                .loginPage("/api/login")
+                .loginPage("/api/loginpage")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint()

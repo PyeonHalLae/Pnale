@@ -1,5 +1,9 @@
 package com.ssafy.special.user.model.vo;
 
+import com.ssafy.special.entity.User;
+import com.ssafy.special.enums.RoleType;
+import com.ssafy.special.enums.SocialType;
+
 import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
@@ -32,7 +36,7 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
         boolean hasEmail = (boolean) account.get("has_email");
 
         if (account == null || !hasEmail) {
-            return "dfsf";
+            return null;
         }
 
         return (String) account.get("email");
@@ -49,6 +53,5 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
 
         return (String) profile.get("thumbnail_image_url");
     }
-    //제발
 }
 
