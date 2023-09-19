@@ -1,25 +1,29 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-const CommentCard = () => {
+interface commentInfoType {
+  commentTitle: string;
+  commentDetail: string;
+  commentDate: string;
+  commentId: number;
+}
+
+const CommentCard = ({ commentInfo }: { commentInfo: commentInfoType }) => {
   return (
     <>
       <BackSize>
         <MenuBtn></MenuBtn>
         <TitleBox>
-          <Title>인생 짜빠구리 만드는 방법 입니다 그렇게asdfsdasdsdfaasdf</Title>
+          <Title>{commentInfo.commentTitle}</Title>
         </TitleBox>
         <MainBox>
           <DetailBox>
             <Field>내 댓글:</Field>
-            <Content>
-              너무 맛있어서 놀랐어요 진짜 쩔요 대박이예요 여기는 그냥 제인생의 전부였어요 맞아요
-              그렇다고 알빠예요? 이렇게멋진하늘을볼수asdfsdf
-            </Content>
+            <Content>{commentInfo.commentDetail}</Content>
           </DetailBox>
           <DetailBox>
             <Field>작성 일:</Field>
-            <Content>2021.11.05</Content>
+            <Content>{commentInfo.commentDate}</Content>
           </DetailBox>
         </MainBox>
       </BackSize>
