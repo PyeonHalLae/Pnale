@@ -87,7 +87,7 @@ const BackGround = tw.div`
 `;
 
 const ModifyHeader = tw.div`
-    h-[81px]
+    h-[5.0625rem]
 `;
 
 const ModifyMain = tw.div`
@@ -97,35 +97,35 @@ const ModifyMain = tw.div`
 
 const BackBtn = styled.div`
   float: left;
-  width: 11px;
-  height: 21px;
-  margin-left: 20px;
-  margin-top: 30px;
+  width: 0.6875rem;
+  height: 1.3125rem;
+  margin-left: 1.25rem;
+  margin-top: 1.875rem;
   background-image: url("/img/btn/left-btn.png");
-  background-size: 11px 21px;
+  background-size: 0.6875rem 1.3125rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
 const Title = tw.div`
     mx-auto
-    text-[25px]
+    text-[1.5625rem]
     text-center
     text-common-text-color
 `;
 
 const ProfileImg = styled.div`
-  margin: 32px auto 0px auto;
-  width: 128px;
-  height: 128px;
+  margin: 2rem auto 0rem auto;
+  width: 8rem;
+  height: 8rem;
   /* border: 1px solid black; */
   position: relative;
   img {
-    margin: 3px auto;
-    width: 122px;
-    height: 122px;
-    border: 1px solid #d9d9d9;
-    border-radius: 50px;
+    margin: 0.1875rem auto;
+    width: 7.625rem;
+    height: 7.625rem;
+    border: 0.0625rem solid #d9d9d9;
+    border-radius: 3.125rem;
     object-fit: cover;
   }
 `;
@@ -136,11 +136,11 @@ const HiddenInput = styled.input`
 
 const ImgChangBtn = styled.div`
   position: absolute;
-  bottom: 4px;
-  right: -5px;
-  margin-top: calc(100% - 38px);
-  width: 40px;
-  height: 35px;
+  bottom: 0.25rem;
+  right: -0.3125rem;
+  margin-top: calc(100% - 2.375rem);
+  width: 2.5rem;
+  height: 2.1875rem;
   background-image: url("/img/btn/profile-chang-btn.png");
   background-size: contain;
   background-position: center;
@@ -149,16 +149,16 @@ const ImgChangBtn = styled.div`
 
 const NameBox = styled.div`
   width: 100%;
-  height: 50px;
-  margin-top: 70px;
+  height: 3.125rem;
+  margin-top: 4.375rem;
   text-align: center;
   input {
     color: #003366;
     text-align: center;
-    font-size: 25px;
-    width: 200px;
-    padding-bottom: 10px;
-    border-bottom: 3px solid #d9d9d9;
+    font-size: 1.5625rem;
+    width: 12.5rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 0.1875rem solid #d9d9d9;
   }
 `;
 
@@ -168,26 +168,26 @@ const EmailCheckBox = tw.div`
 `;
 
 const EmailInfo = styled.div`
-  height: 50px;
+  height: 3.125rem;
   display: flex;
   justify-content: center;
 `;
 
 const TypeImg = styled.div`
-  height: 40px;
-  width: 40px;
+  height: 2.5rem;
+  width: 2.5rem;
   background-image: url("/img/test/너굴맨레시피.jpg");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
-  margin: auto 10px;
-  border-radius: 5px;
+  margin: auto 0.625rem;
+  border-radius: 0.3125rem;
 `;
 
 const EmailText = styled.div`
-  height: 40px;
-  margin: auto 0px;
-  line-height: 40px;
+  height: 2.5rem;
+  margin: auto 0rem;
+  line-height: 2.5rem;
   color: #003366;
 `;
 
@@ -195,43 +195,43 @@ const EmailAgree = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  height: 24px;
-  margin-top: 10px;
+  height: 1.5rem;
+  margin-top: 0.625rem;
   input {
-    width: 20px;
-    height: 20px;
-    margin-top: 3.5px;
-    margin-left: 10px;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin-top: 0.2188rem;
+    margin-left: 0.625rem;
   }
 `;
 
 const AgreeText = tw.div`
-  text-[20px]
+  text-[1.25rem]
   text-common-text-color
 `;
 
 const EmailGuide = tw.div`
   text-center
-  text-[14px]
-  w-[350px]
+  text-[0.875rem]
+  w-[21.875rem]
   mt-4
   text-common-text-gray-color
   mx-auto
 `;
 
 const SubmitBtn = styled.div`
-  width: 270px;
-  height: 66px;
+  width: 16.875rem;
+  height: 4.125rem;
   background-image: url("/img/btn/modify-btn.png");
-  background-size: 270px 66px;
+  background-size: 16.875rem 4.125rem;
   background-repeat: no-repeat;
   background-position: center;
-  margin: 100px auto 0px auto;
+  margin: 6.25rem auto 0rem auto;
 `;
 
 const LeaveAccount = tw.div`
-w-[100px]
-text-[18px]
+w-[6.25rem]
+text-[1.125rem]
 text-center
 mx-auto
 mt-6
