@@ -20,7 +20,7 @@ public class UserLikeProd {
     //유저는 여러 개의 상품을 관심 상품으로 등록할 수 있다(유저 : 상품 = 1 : N)
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="usr_id")
     User user;
 
     @ManyToOne
@@ -52,12 +52,12 @@ public class UserLikeProd {
     }
 
     public void updateLike() {
-        this.likeStat ^= this.likeStat;
+        this.likeStat = !this.likeStat;
         this.updatedAt = LocalDateTime.now();
     }
 
     public void updateEmailReceive() {
-        this.likeStat ^= this.likeStat;
+        this.emailRecevie = !this.emailRecevie;
         this.updatedAt = LocalDateTime.now();
     }
 }

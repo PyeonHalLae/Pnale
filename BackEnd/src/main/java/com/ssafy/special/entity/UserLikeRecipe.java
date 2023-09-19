@@ -14,7 +14,7 @@ public class UserLikeRecipe {
     Long likeRecipeId;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
+    @JoinColumn(name="usr_id")
     User user;
     @ManyToOne
     @JoinColumn(name="recipe_id")

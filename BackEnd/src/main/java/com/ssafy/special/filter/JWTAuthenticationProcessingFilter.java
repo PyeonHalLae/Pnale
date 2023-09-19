@@ -4,6 +4,7 @@ import com.ssafy.special.entity.User;
 import com.ssafy.special.user.model.JwtService;
 import com.ssafy.special.user.model.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
@@ -32,6 +33,7 @@ import java.io.IOException;
  *
  */
 
+@Slf4j
 @RequiredArgsConstructor
 public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
     private static final String NO_CHECK_URL = "oauth";
@@ -44,31 +46,31 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         if (request.getRequestURI().contains(NO_CHECK_URL)) {
-            System.out.println(request.getRequestURI());
-            System.out.println("이게바로");
+            log.info(request.getRequestURI());
+            log.info("이게바로");
             filterChain.doFilter(request, response); // "/login" 요청이 들어오면, 다음 필터 호출
             return; // return으로 이후 현재 필터 진행 막기 (안해주면 아래로 내려가서 계속 필터 진행시킴)
         }
-        System.out.println("인증 시작");
+        log.info("인증 시작");
         // 사용자 요청 헤더에서 RefreshToken 추출
         // -> RefreshToken이 없거나 유효하지 않다면(DB에 저장된 RefreshToken과 다르다면) null을 반환
         // 사용자의 요청 헤더에 RefreshToken이 있는 경우는, AccessToken이 만료되어 요청한 경우밖에 없다.
         // 따라서, 위의 경우를 제외하면 추출한 refreshToken은 모두 null
 
         if(jwtService.getRefreshToken(request).isPresent()) {
-            System.out.println(jwtService.getRefreshToken(request));
+            log.info("{}", jwtService.getRefreshToken(request));
         }
         String refreshToken = jwtService.getRefreshToken(request)
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
 
-        System.out.println(refreshToken);
+        log.info(refreshToken);
 
         // 리프레시 토큰이 요청 헤더에 존재했다면, 사용자가 AccessToken이 만료되어서
         // RefreshToken까지 보낸 것이므로 리프레시 토큰이 DB의 리프레시 토큰과 일치하는지 판단 후,
         // 일치한다면 AccessToken을 재발급해준다.
         if (refreshToken != null) {
-            System.out.println("존재");
+            log.info("존재");
             checkRefreshTokenAndReIssueAccessToken(response, refreshToken);
         }
 
@@ -76,7 +78,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
         // AccessToken이 없거나 유효하지 않다면, 인증 객체가 담기지 않은 상태로 다음 필터로 넘어가기 때문에 403 에러 발생
         // AccessToken이 유효하다면, 인증 객체가 담긴 상태로 다음 필터로 넘어가기 때문에 인증 성공
         else {
-            System.out.println("비존재");
+            log.info("비존재");
             checkAccessTokenAndAuthentication(request, response, filterChain);
         }
     }
