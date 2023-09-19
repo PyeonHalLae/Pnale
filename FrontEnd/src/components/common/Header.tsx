@@ -24,6 +24,7 @@ mx-auto
 w-full
 h-[55px]
 flex
+bg-white
 `;
 
 const BackBtn = tw.img`
