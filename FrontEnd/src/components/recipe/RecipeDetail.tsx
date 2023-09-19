@@ -1,10 +1,10 @@
-import CommentBox from "./RecipeDetail/CommentBox";
+import CommentBox from "./recipeDetail/CommentBox";
 import { useParams } from "react-router-dom";
-import RecipeDetailContent from "./RecipeDetail/RecipeDetailContent";
-import RelatedVideo from "./RecipeDetail/RelatedVideo";
-import IngredientsList from "./RecipeDetail/IngredientsList";
+import RecipeDetailContent from "./recipeDetail/RecipeDetailContent";
+import RelatedVideo from "./recipeDetail/RelatedVideo";
+import IngredientsList from "./recipeDetail/IngredientsList";
 import tw from "tailwind-styled-components";
-import RecipeDetailHeader from "./RecipeDetail/RecipeDetailHeader";
+import RecipeDetailHeader from "./recipeDetail/RecipeDetailHeader";
 
 const RecipeDetail = () => {
   const { recipeId } = useParams();
