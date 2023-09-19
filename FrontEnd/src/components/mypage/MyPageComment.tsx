@@ -7,7 +7,7 @@ import CommentCard from "@/components/mypage/mypage2/CommentCard";
 import { useState } from "react";
 import { useEffect } from "react";
 
-interface commentType {
+interface commentInfoType {
   commentTitle: string;
   commentDetail: string;
   commentDate: string;
@@ -15,7 +15,7 @@ interface commentType {
 }
 
 const MyPageComment = () => {
-  const [CommentList, setCommentList] = useState<commentType[]>([]);
+  const [CommentList, setCommentList] = useState<commentInfoType[]>([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -66,7 +66,7 @@ const MyPageComment = () => {
           />
         ))} */}
         {CommentList.map((commentItme, index) => (
-          <CommentCard key={commentItme.commentId + index} />
+          <CommentCard key={commentItme.commentId + index} commentInfo={commentItme} />
         ))}
       </MyCommentMain>
     </>

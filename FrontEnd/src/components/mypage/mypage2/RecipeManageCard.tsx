@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-interface recipeType {
+interface recipeInfoType {
   recipeTitle: string;
   recipeImg: string;
   viewCnt: number;
@@ -13,28 +13,13 @@ interface recipeType {
   createdDate: string;
 }
 
-const RecipeManageCard = ({
+function RecipeManageCard({
   recipeInfo,
   myRecipeType,
 }: {
-  recipeInfo: recipeType;
+  recipeInfo: recipeInfoType;
   myRecipeType: string;
-}) => {
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  // useEffect(() => {
-  //   setIsAdmin(false);
-  // }, []);
-
-  recipeInfo = {
-    recipeTitle: "두줄제목입니다입니다asdasdasd입sdas니asdfasdf다safdsdaasdfsdfsdf입니다",
-    recipeImg: "/img/test/너굴맨레시피.jpg",
-    viewCnt: 1000,
-    likeCnt: 1000,
-    commentCnt: 1000,
-    userName: "운영자",
-    userImg: "/img/test/너굴맨레시피.jpg",
-    createdDate: "2020.20.20",
-  };
+}) {
   return (
     <Container>
       {/* 레시피 이미지 */}
@@ -87,7 +72,7 @@ const RecipeManageCard = ({
       </LikeCommentBox>
     </Container>
   );
-};
+}
 
 export default RecipeManageCard;
 

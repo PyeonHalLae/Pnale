@@ -4,7 +4,7 @@ import tw from "tailwind-styled-components";
 import { useState, useEffect } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
 
-interface recipeType {
+interface recipeInfoType {
   recipeTitle: string;
   recipeImg: string;
   viewCnt: number;
@@ -21,7 +21,7 @@ const MyPageRecipe = () => {
   const [myRecipeState, setMyRecipeState] = useState<boolean>(true);
   const [likeRecipeState, setLikeRecipeState] = useState<boolean>(false);
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
-  const [recipeList, setRecipeList] = useState<recipeType[]>([]);
+  const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
   useEffect(() => {
     setRecipeList([
