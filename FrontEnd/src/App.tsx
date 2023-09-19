@@ -15,10 +15,15 @@ import SearchRecipe from "@components/search/SearchRecipe";
 //정현모 라우터
 import MyPage from "@components/mypage/MyPage";
 import MyPageUser from "@components/mypage/MyPageUser";
-import PyenE from "@components/pyunE/PyenE";
 import MyPageProduct from "@components/mypage/MyPageProduct";
 import MyPageRecipe from "@components/mypage/MyPageRecipe";
 import MyPageModify from "@components/mypage/MyPageModify";
+import MyPageComment from "@components/mypage/MyPageComment";
+import Pyene from "@/components/pyunE/Pyene";
+import PyeneShop from "@components/pyunE/PyeneShop";
+import PyeneEvent from "@components/pyunE/PyeneEvent";
+import PyeneEventList from "@components/pyunE/PyeneEventList";
+import PyeneEventDetail from "@components/pyunE/PyeneEventDetail";
 
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
@@ -27,7 +32,6 @@ import RecipeCreate from "@components/recipe/RecipeCreate";
 import RecipeDetail from "@components/recipe/RecipeDetail";
 
 //임시
-import PyenEvent from "@components/pyunE/PyenEvent";
 import NotLogin from "@components/common/NotLogin";
 
 function App() {
@@ -52,10 +56,18 @@ function App() {
               <Route path="product" element={<MyPageProduct />} />
               <Route path="recipe" element={<MyPageRecipe />} />
               <Route path="modify" element={<MyPageModify />} />
+              <Route path="comment" element={<MyPageComment />} />
             </Route>
 
-            <Route path="pyenEevent" element={<PyenEvent />} />
-            <Route path="pyenE" element={<PyenE />} />
+            {/* 편의점 페이지 */}
+            <Route path="pyenE/*" element={<Pyene />}>
+              <Route index element={<PyeneShop />} />
+              <Route path="event/*" element={<PyeneEvent />}>
+                <Route index element={<PyeneEventList />} />
+                <Route path="detail" element={<PyeneEventDetail />} />
+              </Route>
+            </Route>
+
             {/* 김효인 개발 페이지*/}
             <Route path="recipe" element={<Recipe />}>
               <Route path="" element={<RecipeList />} />

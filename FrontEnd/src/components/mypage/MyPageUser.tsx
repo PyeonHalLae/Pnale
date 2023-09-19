@@ -5,7 +5,7 @@ import tw from "tailwind-styled-components";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
-  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "error" },
+  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "comment" },
   { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
@@ -131,11 +131,11 @@ const MyPageUser = () => {
 export default MyPageUser;
 
 const MyPageHeader = tw.div`
-bg-white h-[300px]
+bg-white h-[18.75rem]
 `;
 
 const UserBox = tw.div`
-flex h-40 mx-auto w-[360px]
+flex h-40 mx-auto w-[22.5rem]
 `;
 
 const LoginBtnImage = styled.span`

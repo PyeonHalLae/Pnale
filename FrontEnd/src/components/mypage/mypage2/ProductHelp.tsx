@@ -23,8 +23,8 @@ const ProductHelp = ({ helpStateHandler }: helpStateHandlerProps) => {
 export default ProductHelp;
 
 const Background = styled.div`
-  min-width: 360px;
-  max-width: 450px;
+  min-width: 22.5rem;
+  max-width: 28.125rem;
   width: 100%;
   height: 100%;
   position: fixed;
@@ -33,22 +33,22 @@ const Background = styled.div`
 `;
 
 const CloseBtn = styled.div`
-  width: 30px;
-  height: 30px;
+  width: 1.875rem;
+  height: 1.875rem;
   float: right;
-  margin: 15px 15px 0px 0px;
+  margin: 0.9375rem 0.9375rem 0rem 0rem;
   background-image: url("/img/btn/close-btn-white.png");
-  background-size: 25px 25px;
+  background-size: 1.5625rem 1.5625rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
 const HelpImg = styled.div`
   margin: 50% auto;
-  width: 350px;
-  height: 330px;
+  width: 21.875rem;
+  height: 20.625rem;
   background-image: url("/img/help/myproduct-help.png");
-  background-size: 350px 330px;
+  background-size: 21.875rem 20.625rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
