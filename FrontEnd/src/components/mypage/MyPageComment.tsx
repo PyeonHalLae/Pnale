@@ -76,39 +76,39 @@ const MyPageComment = () => {
 export default MyPageComment;
 
 const MyCommentHeader = tw.div`
-  h-[150px] bg-white
+  h-[9.375rem] bg-white
 `;
 
 const BackBtn = styled.div`
   float: left;
-  width: 11px;
-  height: 21px;
-  margin-left: 20px;
-  margin-top: 30px;
+  width: 0.6875rem;
+  height: 1.3125rem;
+  margin-left: 1.25rem;
+  margin-top: 1.875rem;
   background-image: url("/img/btn/left-btn.png");
-  background-size: 11px 21px;
+  background-size: 0.6875rem 1.3125rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
 const Title = tw.div`
-  pt-[70px] pl-[15px]
-  text-[25px]
-  h-[30px]
+  pt-[4.375rem] pl-[0.9375rem]
+  text-[1.5625rem]
+  h-[1.875rem]
   text-common-text-color
 `;
 
 const SideBtn = tw.div`
   flex
-  mt-[50px]
-  text-[16px]
+  mt-[3.125rem]
+  text-[1rem]
   text-common-text-color
-  ml-[5px]
+  ml-[0.3125rem]
 `;
 
 const MyCommentBtn = tw.div`
-  ml-[10px]
-  h-[32.2px]  
+  ml-[0.625rem]
+  h-[2.0125rem]  
   border-common-text-color
   border-b-4
   w-16
@@ -117,6 +117,6 @@ const MyCommentBtn = tw.div`
 
 const MyCommentMain = tw.div`
   overflow-scroll
-  h-[calc(100%-150px)]
+  h-[calc(100%-9.375rem)]
 
 `;

@@ -53,42 +53,42 @@ export default MyProduct;
 
 const MyProductHeader = styled.div`
   background-color: white;
-  height: 130px;
+  height: 8.125rem;
   position: sticky;
-  top: 0px;
+  top: 0rem;
 `;
 
 const BackBtn = styled.div`
   float: left;
-  width: 11px;
-  height: 21px;
-  margin-left: 20px;
-  margin-top: 30px;
+  width: 0.6875rem;
+  height: 1.3125rem;
+  margin-left: 1.25rem;
+  margin-top: 1.875rem;
   background-image: url("/img/btn/left-btn.png");
-  background-size: 11px 21px;
+  background-size: 0.6875rem 1.3125rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
 const Title = styled.div`
   display: inline-block;
-  font-size: 30px;
-  height: 40px;
+  font-size: 1.875rem;
+  height: 2.5rem;
   color: #1e2b4f;
 `;
 
 const HelpBtn = styled.div`
   display: inline-block;
-  width: 30px;
-  height: 26px;
+  width: 1.875rem;
+  height: 1.625rem;
   background-image: url("/img/btn/help-btn.png");
-  background-size: 20px 20px;
+  background-size: 1.25rem 1.25rem;
   background-position: center;
   background-repeat: no-repeat;
 `;
 
 const ProductInfos = styled.div`
-  height: calc(100% - 130px);
+  height: calc(100% - 8.125rem);
   overflow: scroll;
   overflow-x: hidden;
 `;
