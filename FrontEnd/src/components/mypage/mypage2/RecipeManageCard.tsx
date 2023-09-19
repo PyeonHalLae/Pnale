@@ -138,7 +138,7 @@ const LikeCommentIcon = tw(ViewIcon)`
 
 const Title = styled.div`
   font-size: 1rem;
-  width: 220px;
+  width: 13.75rem;
   word-wrap: break-word;
   overflow: hidden;
   display: -webkit-box;
@@ -148,10 +148,10 @@ const Title = styled.div`
 
 const MenuBtn = styled.div<{ $imgurl: string }>`
   float: right;
-  margin-right: 10px;
-  margin-top: -2px;
-  width: 15px;
-  height: 15px;
+  margin-right: 0.625rem;
+  margin-top: -0.125rem;
+  width: 0.9375rem;
+  height: 0.9375rem;
   background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-size: contain;
