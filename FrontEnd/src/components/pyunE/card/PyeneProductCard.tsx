@@ -1,14 +1,24 @@
 // import React from 'react'
 
+// import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 const PyeneProductCard = () => {
+  // const [dumState, setDumState] = useState<boolean>();
+
+  // useEffect(() => {
+  //   setDumState(false);
+  // }, []);
+
+  const dumState = true;
+
   return (
     <>
       <BackSize>
         <ImageBox>
           <ProductImg src="/img/test/image61.png" />
+          {dumState && <ProductDumImg src="/img/test/image61.png" />}
           <ProductEventImg src="/img/icons/best-product-icon.png" />
         </ImageBox>
         <InfoBox>
@@ -122,4 +132,13 @@ const Price = tw.div`
   font-bold
   inline-block
   mr-[2px]
+`;
+
+const ProductDumImg = styled.img`
+  position: absolute;
+  border: 2px dashed #5fc6ff;
+  width: 45px;
+  height: 50px;
+  bottom: 3px;
+  right: 3px;
 `;

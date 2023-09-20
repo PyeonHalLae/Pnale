@@ -72,7 +72,7 @@ const PyeneProductList = () => {
 export default PyeneProductList;
 
 const ProductListHeader = tw.div`
-  mt-[21px] border-b-[1px] border-common-text-gray-color h-[28px]
+  mt-[10px] border-b-[1px] border-common-text-gray-color h-[28px]
 `;
 
 const SideBtn = tw.div`
@@ -84,18 +84,18 @@ const SideBtn = tw.div`
 
 const EventProductBtn = tw.div`
   ml-[0.625rem]
-  w-[85px]
+  w-[90px]
   h-[29px]  
-  text-[18px]
+  text-[20px]
   text-center
   border-common-text-color
   `;
 
 const MonopolyBtn = tw.div`
   ml-[0.9375rem]
-  w-[85px]
+  w-[90px]
   h-[29px]  
-  text-[18px]
+  text-[20px]
   text-center
   border-common-text-color
 `;
