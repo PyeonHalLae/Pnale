@@ -4,6 +4,8 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
+import PyeneProductCard from "../card/PyeneProductCard";
+
 const settings = {
   slide: "div",
   dots: true,
@@ -17,14 +19,14 @@ const settings = {
 const PyeneThereItemList = () => {
   return (
     <>
-      <Slider {...settings} className="w-[calc(100%-20px)] h-[165px] mt-[18px] mx-auto">
-        <div>aasdf</div>
-        <div>aasdf</div>
-        <div>aasdf</div>
-        <div>aasdf</div>
-        <div>aasdf</div>
-        <div>aasdf</div>
-        <div>aasdf</div>
+      <Slider {...settings} className="w-[calc(100%-40px)] h-[170px] mt-[18px] mx-auto border">
+        <PyeneProductCard />
+        <PyeneProductCard />
+        <PyeneProductCard />
+        <PyeneProductCard />
+        <PyeneProductCard />
+        <PyeneProductCard />
+        <PyeneProductCard />
       </Slider>
     </>
   );
