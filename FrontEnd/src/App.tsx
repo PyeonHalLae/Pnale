@@ -19,7 +19,7 @@ import MyPageProduct from "@components/mypage/MyPageProduct";
 import MyPageRecipe from "@components/mypage/MyPageRecipe";
 import MyPageModify from "@components/mypage/MyPageModify";
 import MyPageComment from "@components/mypage/MyPageComment";
-import Pyene from "@/components/pyunE/Pyene";
+import Pyene from "@components/pyunE/Pyene";
 import PyeneShop from "@components/pyunE/PyeneShop";
 import PyeneEvent from "@components/pyunE/PyeneEvent";
 import PyeneEventList from "@components/pyunE/PyeneEventList";
@@ -61,8 +61,8 @@ function App() {
 
             {/* 편의점 페이지 */}
             <Route path="pyenE/*" element={<Pyene />}>
-              <Route index element={<PyeneShop />} />
-              <Route path="event/*" element={<PyeneEvent />}>
+              <Route path=":pyenType" element={<PyeneShop />} />
+              <Route path=":pyenType/event/*" element={<PyeneEvent />}>
                 <Route index element={<PyeneEventList />} />
                 <Route path="detail" element={<PyeneEventDetail />} />
               </Route>
