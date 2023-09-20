@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-import PopularRecipeRoller from "./PopularRecipeRoller";
+import PopularRecipeRoller from "./RecipeList/PopularRecipeRoller";
+
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 
@@ -126,7 +127,7 @@ const RecipeList = () => {
         onClick={() => {
           navigate("/recipe/create");
         }}
-        src="/public/img/btn/create-recipe.png"
+        src="/img/btn/create-recipe.png"
       />
     </div>
   );
