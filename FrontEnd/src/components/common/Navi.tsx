@@ -99,11 +99,12 @@ export default function Navi() {
 const NaviParent = tw.div`
   flex
   h-[60px]
-  min-w-[360px]
+  max-w-[450px]
+  min-w-[350px]
   w-full
   justify-center
   gap-[2em]
-  sticky
+  fixed
   bottom-0
   bg-white
 `;
