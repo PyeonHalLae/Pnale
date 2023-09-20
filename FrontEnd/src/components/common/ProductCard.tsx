@@ -34,9 +34,7 @@ const ProductCard = () => {
 export default ProductCard;
 
 const Card = tw.div`
-border-common-back-color
-border-2
-shadow-roun
+shadow-[0px_0px_2px_#0000003f]
 `;
 
 const ImageArea = tw.div`
