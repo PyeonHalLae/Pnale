@@ -19,7 +19,7 @@ const settings = {
 const PyeneThereItemList = () => {
   return (
     <>
-      <Slider {...settings} className="w-[calc(100%-34px)] h-[182px] mt-[18px] mx-auto">
+      <Slider {...settings} className="w-[calc(100%-34px)] h-[190px] mt-[18px] mx-auto">
         <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />
