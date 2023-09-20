@@ -84,16 +84,18 @@ const SideBtn = tw.div`
 
 const EventProductBtn = tw.div`
   ml-[0.625rem]
-  w-[74px]
+  w-[85px]
   h-[29px]  
+  text-[18px]
   text-center
   border-common-text-color
   `;
 
 const MonopolyBtn = tw.div`
   ml-[0.9375rem]
-  w-[74px]
+  w-[85px]
   h-[29px]  
+  text-[18px]
   text-center
   border-common-text-color
 `;
@@ -123,30 +125,30 @@ const FilterBtn = tw.div`
   relative
   flex
   rounded-2xl
-  w-[75px]
-  h-[24px]
+  w-[80px]
+  h-[28px]
   text-center
   bg-common-text-color
   justify-center
 `;
 
 const FilterBtnText = tw.div`
-  text-[14px]
+  text-[15px]
   text-white
   font-bold
   my-auto
 `;
 
 const FilterImg = tw.img`
-  w-[14px]
-  h-[14px]
+  w-[15px]
+  h-[15px]
   my-auto
   ml-[2px]
 `;
 
 const FilterCntBox = tw.div`
-  w-[13px]
-  h-[13px]
+  w-[15px]
+  h-[15px]
   bg-common-orange
   rounded-lg
   absolute
@@ -156,7 +158,7 @@ const FilterCntBox = tw.div`
 `;
 
 const FilterCnt = styled.div`
-  font-size: 10px;
+  font-size: 11px;
   font-weight: bold;
   color: white;
 `;
