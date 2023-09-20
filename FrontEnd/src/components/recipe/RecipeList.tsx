@@ -5,6 +5,7 @@ import PopularRecipeRoller from "./recipeListComponent/PopularRecipeRoller";
 
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
+import Header from "@components/common/Header";
 
 interface recipeType {
   recipeTitle: string;
@@ -59,60 +60,45 @@ const RecipeList = () => {
   }, []);
 
   return (
-    <div className="relative">
-      <div>로고</div>
-      <div>서치바</div>
-      <div>
-        <ContentTitle>
-          <TitleTextPeach>인기</TitleTextPeach>
-          <TitleText>레시피</TitleText>
-        </ContentTitle>
-        {/* 인기 레시피 컨테이너 */}
-        <PopularRecipeRoller popularRecipeList={popularRecipeList} />
-      </div>
+    <div className="relative min-w-[22.5rem]">
+      {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
+      <Header />
+
+      <ContentTitle>
+        <TitleTextPeach>인기</TitleTextPeach>
+        <TitleText>레시피</TitleText>
+      </ContentTitle>
+      {/* 인기 레시피 컨테이너 */}
+      <PopularRecipeRoller popularRecipeList={popularRecipeList} />
 
       {/* 전체 레시피 컨테이너 */}
-      <div>
-        <ContentTitle>
-          <TitleTextOrange>전체 </TitleTextOrange>
-          <TitleText>레시피</TitleText>
 
-          <SortSelectBox
-            value={listSortBy}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setListSortBy(() => {
-                return e.target.value;
-              });
-            }}
-          >
-            <option value="latest">최신순</option>
-            <option value="popular">인기순</option>
-          </SortSelectBox>
-        </ContentTitle>
-        <div>
-          {/* 5개씩 늘어날 것. */}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard
-              // onClick={navigateHandler(recipeItem.recipeId)}
-              key={recipeItem.recipeTitle + index}
-              recipeInfo={recipeItem}
-            />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-        </div>
-      </div>
+      <ContentTitle>
+        <TitleTextOrange>전체 </TitleTextOrange>
+        <TitleText>레시피</TitleText>
+
+        <SortSelectBox
+          value={listSortBy}
+          onChange={(e) => {
+            console.log(e.target.value);
+            setListSortBy(() => {
+              return e.target.value;
+            });
+          }}
+        >
+          <option value="latest">최신순</option>
+          <option value="popular">인기순</option>
+        </SortSelectBox>
+      </ContentTitle>
+      {/* 5개씩 늘어날 것. */}
+      {recipeList.map((recipeItem, index) => (
+        <RecipeCard
+          // onClick={navigateHandler(recipeItem.recipeId)}
+          key={recipeItem.recipeTitle + index}
+          recipeInfo={recipeItem}
+        />
+      ))}
+
       {/* 새 레시피 등록 버튼 */}
       <ViewMoreBtnBox>
         <ViewMoreBtn

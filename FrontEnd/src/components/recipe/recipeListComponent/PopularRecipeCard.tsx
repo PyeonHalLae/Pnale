@@ -112,8 +112,8 @@ const Title = styled.div`
 
 const Img = styled.img`
   grid-area: Img;
-  width: 11.875rem;
-  height: 8.75rem;
+  width: 12.75rem;
+  height: 10.5rem;
   margin: auto;
   src: ${(props) => props.src};
   border-radius: 0.9375rem;
@@ -151,6 +151,7 @@ const Content = styled.div`
 const Intro = styled.div`
   color: rgb(174 176 182);
   font-size: 0.75rem;
+  font-weight: lighter;
   grid-area: Intro;
   height: 2rem;
   margin-left: 1.125rem;
