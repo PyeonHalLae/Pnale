@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-import PopularRecipeRoller from "./RecipeList/PopularRecipeRoller";
+import PopularRecipeRoller from "./recipeListComponent/PopularRecipeRoller";
 
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
