@@ -3,7 +3,6 @@ package com.ssafy.special.enums;
 public enum EventPeriod {
     JAN, JAN_1, JAN_2, JAN_3, JAN_4, JAN_5,
     FEB, FEB_1, FEB_2, FEB_3, FEB_4, FEB_5,
-
     MAR, MAR_1, MAR_2, MAR_3, MAR_4, MAR_5,
     APR, APR_1, APR_2, APR_3, APR_4, APR_5,
     MAY, MAY_1, MAY_2, MAY_3, MAY_4, MAY_5,
