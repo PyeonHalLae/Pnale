@@ -77,12 +77,14 @@ function App() {
           </Route>
 
           {/* 예외 처리 페이지*/}
-          <Route path="*" element={<NotFound />} />
+          <Route element={<Navi />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </>
       ) : (
         <>
           <Route element={<Navi />}>
-            <Route path="/" element={<NotLogin />} />
+            <Route path="*" element={<NotLogin />} />
           </Route>
         </>
       )}
