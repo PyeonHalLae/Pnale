@@ -8,7 +8,7 @@ const CommentInput = () => {
   // 댓글 내용 입력
   const inputChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
-    console.log(commentContent);
+    // console.log(e.target);
   };
 
   // 작성하기 버튼 클릭
@@ -19,9 +19,11 @@ const CommentInput = () => {
   return (
     <Container>
       <NameBox>작성자 명</NameBox>
-      <InputBox onChange={inputChangeHandler} placeholder="내용을 입력하세요">
-        {commentContent}
-      </InputBox>
+      <InputBox
+        onChange={inputChangeHandler}
+        placeholder="내용을 입력하세요"
+        value={commentContent}
+      />
       <div className="flex flex-row-reverse">
         <CreateBtn onClick={commentCreateHandler}>
           <div>작성하기</div>
