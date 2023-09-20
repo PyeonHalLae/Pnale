@@ -80,13 +80,13 @@ const PyeneBestBox = tw.div`
   flex;
   bg-white
   w-full
-  h-[270px]
+  h-[280px]
   border
 `;
 
 const PyeneNewBox = tw.div`
   w-full
-  h-[270px]
+  h-[280px]
   mt-[6px]
   bg-[#FB9B7730]
   `;
@@ -94,14 +94,14 @@ const PyeneNewBox = tw.div`
 const PyeneProductBox = tw.div`
   bg-white
   w-full
-  h-[720px]
+  h-[730px]
   mt-[6px]
 `;
 
 const PyeneDirectBox = tw.div`
 bg-white
   w-full
-  h-[190px]
+  h-[200px]
   mt-[6px]
 `;
 
