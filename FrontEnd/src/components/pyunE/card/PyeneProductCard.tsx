@@ -16,7 +16,7 @@ const PyeneProductCard = () => {
             <Category>스낵</Category>
             <LikeBtn />
           </div>
-          <Title>안녕하세요 이거는 이거입니다 그럴걸요</Title>
+          <Title>안녕하세요 이거는 이거입니다 그럴걸요인데요맞아요그래요</Title>
           <PriceBox>
             <Price>2000</Price>
             <span>원</span>
@@ -87,10 +87,10 @@ const LikeBtn = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: 15px 15px;
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   float: right;
-  margin: 3px 4px 2px 0px;
+  margin: 2px 4px 2px 0px;
 `;
 
 const Title = styled.div`
@@ -100,6 +100,11 @@ const Title = styled.div`
   width: calc(100% - 10px);
   color: #1e2b4f;
   height: 27px;
+  word-wrap: break-word;
+  overflow: hidden; //숨기는거고
+  display: -webkit-box; // webkit-box다
+  -webkit-line-clamp: 2; //둘줄까지만보여라
+  -webkit-box-orient: vertical; //... 해주는거 - tw 할경우 "line-clamp-2" 로 4줄생략가능
 `;
 
 const PriceBox = tw.div`
