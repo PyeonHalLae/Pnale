@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-
+import Modal from "react-modal";
 //공통 라우더
 import NotFound from "@components/common/NotFound";
 import Navi from "@components/common/Navi";
@@ -35,6 +35,8 @@ import RecipeDetail from "@components/recipe/RecipeDetail";
 import NotLogin from "@components/common/NotLogin";
 
 function App() {
+  Modal.setAppElement("#root");
+
   // const [isAuthenticated, setIsAuthenticated] = useState(true);
   const isAuthenticated = true;
   return (
