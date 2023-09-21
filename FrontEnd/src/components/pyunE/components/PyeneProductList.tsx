@@ -4,47 +4,43 @@ import tw from "tailwind-styled-components";
 
 import PyeneNineItemList from "./PyeneNineItemList";
 import styled from "styled-components";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+import PyeneFilter from "./PyeneFilter";
 
 const PyeneProductList = () => {
-  const [eventState, setEventState] = useState<boolean>(true);
-  const [monopolyState, setMonopolyState] = useState<boolean>(false);
   const [productListType, setProductListType] = useState<string>("EVENT");
+  const [modalState, setModalState] = useState<boolean>(true);
   // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
-  const OnEventHandler = () => {
-    if (!eventState) {
-      setProductListType("EVENT");
-      setEventState(true);
-      setMonopolyState(false);
+  const ModalHandler = () => {
+    setModalState(!modalState);
+  };
 
-      console.log(productListType);
-      //엑시오스 들어갈 예정
+  const OnEventHandler = () => {
+    if (productListType !== "EVENT") {
+      setProductListType("EVENT");
     }
   };
 
   const OnMonopolyHandler = () => {
-    if (!monopolyState) {
+    if (productListType !== "MONOPOLY") {
       setProductListType("MONOPOLY");
-      setEventState(false);
-      setMonopolyState(true);
-      console.log(productListType);
-      //엑시오스 들어갈 예정
     }
   };
 
   return (
     <>
+      {modalState && <PyeneFilter ModalHandler={ModalHandler} />}
       <ProductListHeader>
         <SideBtn>
           <EventProductBtn
-            className={`${eventState ? "border-b-[3px]" : "border-b-0"}`}
+            className={`${productListType === "EVENT" ? "border-b-[3px]" : "border-b-0"}`}
             onClick={OnEventHandler}
           >
             행사 상품
           </EventProductBtn>
           <MonopolyBtn
-            className={`${monopolyState ? "border-b-[3px]" : "border-b-0"}`}
+            className={`${productListType === "MONOPOLY" ? "border-b-[3px]" : "border-b-0"}`}
             onClick={OnMonopolyHandler}
           >
             독점상품
@@ -54,7 +50,7 @@ const PyeneProductList = () => {
       <ProductListMain>
         <FilterBox>
           <FilterText>필터 선택:</FilterText>
-          <FilterBtn>
+          <FilterBtn onClick={ModalHandler}>
             <FilterBtnText>필터</FilterBtnText>
             <FilterCntBox>
               <FilterCnt>5</FilterCnt>
@@ -62,7 +58,7 @@ const PyeneProductList = () => {
             <FilterImg src="/img/icons/filter-icon.png" />
           </FilterBtn>
         </FilterBox>
-        <PyeneNineItemList />
+        <PyeneNineItemList $productListType={productListType} />
       </ProductListMain>
     </>
   );
@@ -136,6 +132,7 @@ const FilterBtnText = tw.div`
   text-white
   font-bold
   my-auto
+
 `;
 
 const FilterImg = tw.img`
@@ -154,6 +151,7 @@ const FilterCntBox = tw.div`
   z-10
   top-[1px]
   right-[10px]
+  
 `;
 
 const FilterCnt = styled.div`
