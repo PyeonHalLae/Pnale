@@ -4,6 +4,7 @@ import tw from "tailwind-styled-components";
 
 import PyeneNineItemList from "./PyeneNineItemList";
 import styled from "styled-components";
+import { useEffect } from "react";
 
 const PyeneProductList = () => {
   const [eventState, setEventState] = useState<boolean>(true);
@@ -11,20 +12,22 @@ const PyeneProductList = () => {
   const [productListType, setProductListType] = useState<string>("EVENT");
   // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
-  const OnMyRecipe = () => {
+  const OnEventHandler = () => {
     if (!eventState) {
+      setProductListType("EVENT");
       setEventState(true);
       setMonopolyState(false);
-      setProductListType("EVENT");
+
+      console.log(productListType);
       //엑시오스 들어갈 예정
     }
   };
 
-  const OnLikeRecipe = () => {
+  const OnMonopolyHandler = () => {
     if (!monopolyState) {
+      setProductListType("MONOPOLY");
       setEventState(false);
       setMonopolyState(true);
-      setProductListType("MONOPOLY");
       console.log(productListType);
       //엑시오스 들어갈 예정
     }
@@ -36,17 +39,13 @@ const PyeneProductList = () => {
         <SideBtn>
           <EventProductBtn
             className={`${eventState ? "border-b-[3px]" : "border-b-0"}`}
-            onClick={() => {
-              OnMyRecipe();
-            }}
+            onClick={OnEventHandler}
           >
             행사 상품
           </EventProductBtn>
           <MonopolyBtn
             className={`${monopolyState ? "border-b-[3px]" : "border-b-0"}`}
-            onClick={() => {
-              OnLikeRecipe();
-            }}
+            onClick={OnMonopolyHandler}
           >
             독점상품
           </MonopolyBtn>
