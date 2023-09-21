@@ -11,10 +11,10 @@ import java.time.LocalDateTime;
 public class Banner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long eventId;
+    Long bannerId;
 
     @Column(nullable = false)
-    String eventName;
+    String BannerName;
 
     @Enumerated(EnumType.STRING)
     CorpType corpType;

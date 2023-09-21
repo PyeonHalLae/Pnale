@@ -5,19 +5,20 @@ import com.ssafy.special.entity.Product;
 import com.ssafy.special.eventproduct.model.vo.EventProductDto;
 import lombok.*;
 
+import javax.persistence.Column;
+
 @Setter
 @Getter
 @NoArgsConstructor
 public class UserLikeProdResponseDto {
-    Product product;
+    Long UserLikeProdId;
     boolean emailRecevie;
-
-    EventProductDto eventProductDto;
+    boolean likeStat;
 
     @Builder
-    public UserLikeProdResponseDto(Product product, boolean emailRecevie, EventProductDto eventProductDto) {
-        this.product = product;
+    public UserLikeProdResponseDto(Long userLikeProdId, boolean emailRecevie, boolean likeStat) {
+        UserLikeProdId = userLikeProdId;
         this.emailRecevie = emailRecevie;
-        this.eventProductDto = eventProductDto;
+        this.likeStat = likeStat;
     }
 }

@@ -3,11 +3,13 @@ package com.ssafy.special.entity;
 import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
 import com.ssafy.special.eventproduct.model.vo.EventProductDto;
+import lombok.Getter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class EventProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

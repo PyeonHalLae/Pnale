@@ -10,6 +10,7 @@ import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.CustomErrorCode;
 
 import com.ssafy.special.product.model.ProductRepository;
+import com.ssafy.special.product.model.ProductService;
 import com.ssafy.special.user.model.UserRepository;
 import com.ssafy.special.userlikeprod.model.vo.UserLikeProdResponseDto;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,7 @@ public class UserLikeProdService {
     //R   작업 : Repository 사용.
 
     //Service들
+    private final ProductService productService;
 
     //Repository들
     private final UserLikeProdRepository userLikeProdRepository;
@@ -80,7 +82,7 @@ public class UserLikeProdService {
             EventProduct eventProduct = eventProductRepository
                     .findEventProductByProduct(ulp.getProduct())
                     .orElseGet(EventProduct::new);
-            ulpResponse.setEventProductDto(eventProduct.toDto());
+            //ulpResponse.setEventProductDto(eventProduct.toDto());
 
             return ulpResponse;
         });

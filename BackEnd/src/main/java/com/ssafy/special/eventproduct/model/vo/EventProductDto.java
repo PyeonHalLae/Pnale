@@ -1,6 +1,9 @@
 package com.ssafy.special.eventproduct.model.vo;
+
 import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
+import com.ssafy.special.product.model.vo.ProductResponseDto;
+import com.ssafy.special.userlikeprod.model.vo.UserLikeProdResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,22 +14,27 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class EventProductDto {
-    EventType CUType;
 
+    ProductResponseDto productResponseDto;
+    UserLikeProdResponseDto userLikeProdResponseDto;
+
+    EventType CUType;
     EventPeriod CUDate;
 
     EventType GSType;
-    EventPeriod  GSDate;
+    EventPeriod GSDate;
 
     EventType SEVENType;
-    EventPeriod  SEVENDate;
+    EventPeriod SEVENDate;
 
     EventType EMARTType;
+    EventPeriod EMARTDate;
 
-    EventPeriod  EMARTDate;
 
     @Builder
-    public EventProductDto(EventType CUType, EventPeriod CUDate, EventType GSType, EventPeriod GSDate, EventType SEVENType, EventPeriod SEVENDate, EventType EMARTType, EventPeriod EMARTDate) {
+    public EventProductDto(ProductResponseDto productResponseDto, UserLikeProdResponseDto userLikeProdResponseDto, EventType CUType, EventPeriod CUDate, EventType GSType, EventPeriod GSDate, EventType SEVENType, EventPeriod SEVENDate, EventType EMARTType, EventPeriod EMARTDate) {
+        this.productResponseDto = productResponseDto;
+        this.userLikeProdResponseDto = userLikeProdResponseDto;
         this.CUType = CUType;
         this.CUDate = CUDate;
         this.GSType = GSType;

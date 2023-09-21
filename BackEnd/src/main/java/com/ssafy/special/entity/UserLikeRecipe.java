@@ -16,11 +16,12 @@ public class UserLikeRecipe {
     @ManyToOne
     @JoinColumn(name="user_id")
     User user;
+
     @ManyToOne
     @JoinColumn(name="recipe_id")
     Recipe recipe;
 
-    @ColumnDefault("false")
+    @Column(columnDefinition = "default ")
     boolean isDeleted;
 
     @Column(columnDefinition = "TIMESTAMP")
