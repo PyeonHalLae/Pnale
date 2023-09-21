@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface UserLikeProdRepository extends JpaRepository<UserLikeProd, Long> {
-    Optional<UserLikeProd> findByUser_UsrIdAndProduct_ProductId(Long userId, Long productId);
+    Optional<UserLikeProd> findByUser_UserIdAndProduct_ProductId(Long userId, Long productId);
 
-    Page<UserLikeProd> findByUser_UsrIdAndLikeStatTrue(Long userId, Pageable pageable);
+    Page<UserLikeProd> findByUser_UserIdAndLikeStatTrue(Long userId, Pageable pageable);
 }

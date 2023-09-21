@@ -19,6 +19,11 @@ public class ProductService {
         return getProductPages(productRepository.findAll(pageable));
     }
 
+    public Page<ProductResponseDto> findAllProductsForSignUser(Pageable pageable, Long userId) {
+
+        return null;
+    }
+
     public ProductResponseDto findProduct(Long productId) {
         return productRepository.findById(productId).orElseThrow(()-> new RuntimeException("이현욱 잘못")).toResponseDto();
     }

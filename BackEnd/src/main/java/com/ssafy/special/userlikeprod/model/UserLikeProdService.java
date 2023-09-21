@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
@@ -37,14 +38,14 @@ public class UserLikeProdService {
     private final ModelMapper modelMapper;
 
     public Page<UserLikeProdResponseDto> findAllLike(Pageable pageable, Long userId) {
-        return getAllLike(userLikeProdRepository.findByUser_UsrIdAndLikeStatTrue(userId, pageable));
+        return getAllLike(userLikeProdRepository.findByUser_UserIdAndLikeStatTrue(userId, pageable));
     }
 
     public String likeToggle(Long productId, Long userId) {
         User findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
 
-        return userLikeProdRepository.findByUser_UsrIdAndProduct_ProductId(userId, productId)
+        return userLikeProdRepository.findByUser_UserIdAndProduct_ProductId(userId, productId)
                 .map(ulp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
                     updateUserLikeProduct(ulp);
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
@@ -53,6 +54,7 @@ public class UserLikeProdService {
                     addUserLikeProduct(findUser, findProduct);
                     return findProduct.getProductName() + "을 좋아합니다.";
                 });
+
     }
 
     public String receiveToggle(Long productId, Long userId) {
@@ -60,7 +62,7 @@ public class UserLikeProdService {
         Product findProduct = getProductById(productId);
 
         UserLikeProd ulp = userLikeProdRepository
-                .findByUser_UsrIdAndProduct_ProductId(userId, productId)
+                .findByUser_UserIdAndProduct_ProductId(userId, productId)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
         updateEmailReceiveStatus(ulp);
         return ulp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";

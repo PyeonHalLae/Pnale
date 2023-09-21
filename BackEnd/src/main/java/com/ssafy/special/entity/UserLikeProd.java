@@ -21,7 +21,7 @@ public class UserLikeProd {
     //유저는 여러 개의 상품을 관심 상품으로 등록할 수 있다(유저 : 상품 = 1 : N)
 
     @ManyToOne
-    @JoinColumn(name="usr_id")
+    @JoinColumn(name="user_id")
     User user;
 
     @ManyToOne
