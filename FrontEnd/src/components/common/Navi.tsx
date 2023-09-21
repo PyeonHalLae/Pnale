@@ -69,7 +69,7 @@ export default function Navi() {
           <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
         </NaviDiv>
         {/* 편의점 메인 버튼 */}
-        <NaviPE />
+        <NaviPE iconState={iconState.pyenE} iconState={iconState.pyenE} />
         {/* 편의점 메인 버튼 */}
         <NaviDiv $isActive={location.pathname.startsWith("/recipe")}>
           <NaviIcon
