@@ -21,6 +21,8 @@ const RecipeArea = () => {
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
 
   useEffect(() => {
+    console.log(popularRecipeList);
+
     setRecipeList([
       {
         recipeTitle:

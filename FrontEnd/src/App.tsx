@@ -1,5 +1,5 @@
 import { Route, Routes } from "react-router-dom";
-
+import Modal from "react-modal";
 //공통 라우더
 import NotFound from "@components/common/NotFound";
 import Navi from "@components/common/Navi";
@@ -36,6 +36,8 @@ import NotLogin from "@components/common/NotLogin";
 import RecipeSearch from "./components/recipe/RecipeSearch";
 
 function App() {
+  Modal.setAppElement("#root");
+
   // const [isAuthenticated, setIsAuthenticated] = useState(true);
   const isAuthenticated = true;
   return (
@@ -79,12 +81,14 @@ function App() {
           </Route>
 
           {/* 예외 처리 페이지*/}
-          <Route path="*" element={<NotFound />} />
+          <Route element={<Navi />}>
+            <Route path="*" element={<NotFound />} />
+          </Route>
         </>
       ) : (
         <>
           <Route element={<Navi />}>
-            <Route path="/" element={<NotLogin />} />
+            <Route path="*" element={<NotLogin />} />
           </Route>
         </>
       )}

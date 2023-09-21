@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
+import NaviPE from "./NaviPE";
 
 interface IconState {
   home: "blue" | "gray";
@@ -67,14 +68,9 @@ export default function Navi() {
           />
           <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/pyenE")}>
-          <NaviIcon
-            src={`/img/navi/pyenE-${iconState.pyenE}.png`}
-            alt=""
-            onClick={() => toggleIconColor("pyenE")}
-          />
-          <NaviText $isActive={location.pathname.startsWith("/pyenE")}>편의점</NaviText>
-        </NaviDiv>
+        {/* 편의점 메인 버튼 */}
+        <NaviPE />
+        {/* 편의점 메인 버튼 */}
         <NaviDiv $isActive={location.pathname.startsWith("/recipe")}>
           <NaviIcon
             src={`/img/navi/recipe-${iconState.recipe}.png`}
@@ -99,11 +95,12 @@ export default function Navi() {
 const NaviParent = tw.div`
   flex
   h-[60px]
-  min-w-[360px]
+  max-w-[450px]
+  min-w-[350px]
   w-full
   justify-center
   gap-[2em]
-  sticky
+  fixed
   bottom-0
   bg-white
 `;

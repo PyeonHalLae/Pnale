@@ -9,7 +9,7 @@ import PyeneProductCard from "../card/PyeneProductCard";
 const settings = {
   slide: "div",
   dots: true,
-  infinite: true,
+  infinite: false,
   speed: 500,
   slidesToShow: 3,
   slidesToScroll: 3,
@@ -19,7 +19,9 @@ const settings = {
 const PyeneThereItemList = () => {
   return (
     <>
-      <Slider {...settings} className="w-[calc(100%-40px)] h-[170px] mt-[18px] mx-auto border">
+      <Slider {...settings} className="w-[calc(100%-34px)] h-[190px] mt-[18px] mx-auto">
+        <PyeneProductCard />
+        <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />

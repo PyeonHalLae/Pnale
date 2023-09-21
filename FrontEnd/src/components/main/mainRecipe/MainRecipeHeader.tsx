@@ -46,4 +46,5 @@ bottom-0
 right-0
 text-base
 text-common-peach
+font-bold
 `;

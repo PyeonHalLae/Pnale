@@ -8,6 +8,7 @@ import styled from "styled-components";
 
 import PyeneThereItemList from "./components/PyeneThereItemList";
 import PyeneProductList from "./components/PyeneProductList";
+import PyeneDirectList from "./components/PyeneDirectList";
 
 // interface productInfoType {}
 
@@ -63,6 +64,7 @@ const PyeneShop = () => {
         <DirectText $pyeneColor={pyeneText}>
           <span>편의점</span>바로가기
         </DirectText>
+        <PyeneDirectList />
       </PyeneDirectBox>
     </>
   );
@@ -80,13 +82,13 @@ const PyeneBestBox = tw.div`
   flex;
   bg-white
   w-full
-  h-[270px]
+  h-[310px]
   border
 `;
 
 const PyeneNewBox = tw.div`
   w-full
-  h-[270px]
+  h-[310px]
   mt-[6px]
   bg-[#FB9B7730]
   `;
@@ -94,23 +96,23 @@ const PyeneNewBox = tw.div`
 const PyeneProductBox = tw.div`
   bg-white
   w-full
-  h-[720px]
+  h-[820px]
   mt-[6px]
 `;
 
 const PyeneDirectBox = tw.div`
 bg-white
   w-full
-  h-[190px]
+  h-[210px]
   mt-[6px]
 `;
 
 const SideTitle = styled.div<{ $pyeneColor: string }>`
   display: flex;
-  font-size: 20px;
-  padding: 14px 0px 0px 9px;
+  font-size: 27px;
+  padding: 17px 0px 0px 9px;
   img {
-    height: 30px;
+    height: 37px;
     border-top: 3px solid ${(props) => props.$pyeneColor};
     padding-top: 5px;
   }
