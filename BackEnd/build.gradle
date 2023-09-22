@@ -32,6 +32,7 @@ dependencies {
     //JPA
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
     //Spring Security
     implementation 'com.auth0:java-jwt:4.2.1'
