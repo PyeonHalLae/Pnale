@@ -7,6 +7,7 @@ import lombok.Getter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -41,6 +42,12 @@ public class Product {
 
     @Column(columnDefinition = "bigint default 0")
     Long hit;
+
+    @Column(columnDefinition = "DATE", insertable=false, updatable=false)
+    LocalDate createdAt;
+
+    @Column(columnDefinition = "DATE", insertable=false)
+    LocalDate updatedAt;
 
     public ProductResponseDto toResponseDto(){
         return ProductResponseDto.builder()
