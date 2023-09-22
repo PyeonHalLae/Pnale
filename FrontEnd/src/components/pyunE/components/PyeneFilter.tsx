@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import { preProductView, EventFilterDefault } from "@/recoil/pyeneRecoil";
+import { useRecoilState, useResetRecoilState } from "recoil";
 
 interface ModalHandlerProps {
   ModalHandler: () => void;
@@ -15,15 +17,6 @@ interface FilterType {
 }
 
 const SortFilterList = [{ name: "이름순" }, { name: "가격낮은순" }, { name: "가격높은순" }];
-
-const EventFilterList: FilterType[] = [
-  { name: "1 + 1", state: false, engName: "OPO" },
-  { name: "2 + 1", state: false, engName: "TPO" },
-  { name: "3 + 1", state: false, engName: "THPO" },
-  { name: "할인", state: false, engName: "DISC" },
-  { name: "덤 증정", state: false, engName: "MORE" },
-  { name: "기타", state: false, engName: "" },
-];
 
 const CategoryMealList: FilterType[] = [
   { name: "도시락", state: false, engName: "" },
@@ -81,8 +74,19 @@ const PyeneFilter = ({
   ModalHandler,
   $productListType,
 }: ModalHandlerProps & { $productListType: string }) => {
+  //recoil 사용 선언부
+  const [preProductViewType, setPreProductViewType] = useRecoilState(preProductView);
+
+  //defult 값만 받아오는 경우
+  const [eventDefault, setEventDefault] = useRecoilState(EventFilterDefault);
+  //복제..
+  const [eventFilter, setEventFilter] = useState<FilterType[]>([...eventDefault.data]);
+
+  //recoil default로 리셋
+  const eventClear = useResetRecoilState(EventFilterDefault);
+
   const [sortIndex, setSortIndex] = useState<number>(0);
-  const [eventFilter, setEventFilter] = useState<FilterType[]>(EventFilterList);
+
   const [mealFilter, setMealFilter] = useState<FilterType[]>(CategoryMealList);
   const [cookFilter, setCookFilter] = useState<FilterType[]>(CategoryCookList);
   const [snackFilter, setSnackFilter] = useState<FilterType[]>(CategorySnackList);
@@ -99,11 +103,12 @@ const PyeneFilter = ({
     console.log("여기 필터야!");
     console.log(prveProductListType.current);
     console.log($productListType);
-    if (prveProductListType.current !== $productListType) {
-      prveProductListType.current = $productListType;
+    if (preProductViewType.type !== $productListType) {
+      setPreProductViewType({ type: $productListType });
       console.log("변경 인식");
       setSortIndex(0);
-      setEventFilter(EventFilterList);
+
+      eventClear();
       setMealFilter(CategoryMealList);
       setCookFilter(CategoryCookList);
       setSnackFilter(CategorySnackList);
@@ -127,6 +132,10 @@ const PyeneFilter = ({
   const EventIndexHandler = (value: FilterType, index: number) => {
     if (eventAllFilter) setEventAllFilter(false);
     const updateEventFilter = [...eventFilter];
+    // console.log(index);
+    // console.log(value.state);
+    // console.log(updateEventFilter);
+    // console.log(updateEventFilter[index]);
     updateEventFilter[index].state = !value.state;
     setEventFilter(updateEventFilter);
   };
@@ -208,11 +217,13 @@ const PyeneFilter = ({
               </AllMain>
             </SideHeader>
             <SideMain>
-              {EventFilterList.map((value, index) => (
+              {eventFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
-                  onClick={() => EventIndexHandler(value, index)}
+                  onClick={() => {
+                    EventIndexHandler(value, index);
+                  }}
                 >
                   {value.name}
                 </div>
