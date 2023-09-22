@@ -1,4 +1,4 @@
-package com.ssafy.special.user.model.vo;
+package com.ssafy.special.member.model.vo;
 
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.enums.RoleType;

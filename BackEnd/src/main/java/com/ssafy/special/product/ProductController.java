@@ -25,9 +25,7 @@ public class ProductController {
     //제품 상세 보기
     @GetMapping("/{productId}")
     public DataResponse<?> getProduct(@PathVariable Long productId) {
-        DataResponse<ProductResponseDto> response = new DataResponse<>(200, "상품 상세 정보를 반환합니다.");
-        response.setData(productService.findProduct(productId));
-        return response;
+        return new DataResponse<ProductResponseDto>(200, "상품 상세 정보를 반환합니다.", productService.findProduct(productId));
     }
 
     //행사 상품 전체 보기

@@ -1,26 +1,22 @@
 package com.ssafy.special.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.special.enums.RoleType;
 import com.ssafy.special.filter.JWTAuthenticationProcessingFilter;
-import com.ssafy.special.user.handler.OAuth2LoginFailureHandler;
-import com.ssafy.special.user.handler.OAuth2LoginSuccessHandler;
-import com.ssafy.special.user.model.JwtService;
-import com.ssafy.special.user.model.CustomOAuth2UserService;
-import com.ssafy.special.user.model.UserRepository;
+import com.ssafy.special.member.handler.OAuth2LoginFailureHandler;
+import com.ssafy.special.member.handler.OAuth2LoginSuccessHandler;
+import com.ssafy.special.member.model.JwtService;
+import com.ssafy.special.member.model.CustomOAuth2UserService;
+import com.ssafy.special.member.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.logout.LogoutFilter;
-
-import java.lang.reflect.Executable;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity
@@ -30,7 +26,7 @@ public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
     private final JwtService jwtService;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
     private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
 
@@ -48,8 +44,10 @@ public class SecurityConfig {
                 .headers().frameOptions().disable()
                 .and()
                 .authorizeRequests()
-                // 인증
-                .antMatchers("/api/main").authenticated()
+                .antMatchers(HttpMethod.POST).authenticated()
+                .antMatchers(HttpMethod.DELETE).authenticated()
+                .antMatchers(HttpMethod.PATCH).authenticated()
+                .antMatchers(HttpMethod.OPTIONS).permitAll()
                 // 인가
                 .antMatchers("/admin/**").hasAuthority(RoleType.ADMIN.name())
                 .anyRequest().permitAll()
@@ -57,19 +55,20 @@ public class SecurityConfig {
                 // OAuth 로그인
                 .and()
                 .oauth2Login()
-                .loginPage("/api/loginpage")
+                .loginPage("/api/login/needLogin")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint()
                 .userService(customOAuth2UserService)
         ;
-        http.addFilterBefore(jwtAuthenticationProcessingFilter(), LogoutFilter.class);
+        http.addFilterBefore(jwtAuthenticationProcessingFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
     public JWTAuthenticationProcessingFilter jwtAuthenticationProcessingFilter() {
-        return new JWTAuthenticationProcessingFilter(jwtService, userRepository);
+        return new JWTAuthenticationProcessingFilter(jwtService, memberRepository);
     }
+
 
 }

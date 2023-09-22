@@ -1,4 +1,4 @@
-package com.ssafy.special.user.model.vo;
+package com.ssafy.special.member.model.vo;
 
 import lombok.*;
 
@@ -6,9 +6,8 @@ import lombok.*;
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-public class UserUpdateDTO {
-    private Long userId;
+public class MemberUpdateDTO {
     private String nickname;
     private boolean emailRecieve;
-    private String userImg;
+    private String memberImg;
 }

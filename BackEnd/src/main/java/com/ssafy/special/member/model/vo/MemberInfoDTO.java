@@ -1,16 +1,15 @@
-package com.ssafy.special.user.model.vo;
+package com.ssafy.special.member.model.vo;
 
-import com.ssafy.special.enums.SocialType;
 import lombok.*;
 
 @Getter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
-public class UserInfoDTO {
-    private Long userId;
+public class MemberInfoDTO {
+    private Long memberId;
     private String nickname;
     private String socialType;
     private String email;
-    private String userImg;
+    private String memberImg;
 }

@@ -1,8 +1,7 @@
-package com.ssafy.special.user.model;
+package com.ssafy.special.member.model;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
-import com.ssafy.special.user.model.UserRepository;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,25 +23,20 @@ public class JwtService {
     private String secretKey;
 
     @Value("${jwt.access.expiration}")
-    private Long accessTokenExpirationPeriod;
+    private Integer accessPeriod;
 
     @Value("${jwt.refresh.expiration}")
-    private Long refreshTokenExpirationPeriod;
+    private Integer refreshPeriod;
 
-    @Value("${jwt.access.header}")
-    private String accessCookie;
 
-    @Value("${jwt.refresh.header}")
-    private String refreshCookie;
+    private final MemberRepository memberRepository;
 
-    private final UserRepository userRepository;
-
-    public String createAccessToken(Long userId){
+    public String createAccessToken(Long memberId){
         Date now = new Date();
         return JWT.create()
                 .withSubject("AccessToken")
-                .withExpiresAt(new Date(now.getTime() + accessTokenExpirationPeriod))
-                .withClaim("userId", userId)
+                .withExpiresAt(new Date(now.getTime() + accessPeriod))
+                .withClaim("memberId", memberId)
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -51,7 +45,7 @@ public class JwtService {
         Date now = new Date();
         return JWT.create()
                 .withSubject("RefreshToken")
-                .withExpiresAt(new Date(now.getTime() + refreshTokenExpirationPeriod))
+                .withExpiresAt(new Date(now.getTime() + refreshPeriod))
                 .sign(Algorithm.HMAC512(secretKey));
     }
 
@@ -69,17 +63,37 @@ public class JwtService {
         response.setStatus(HttpServletResponse.SC_OK);
 
         Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setMaxAge(1800000);
+        accessCookie.setMaxAge(accessPeriod); //1800000
         accessCookie.setHttpOnly(true);
-        accessCookie.setPath("/");
+        accessCookie.setPath("/api");
 
-        Cookie refreshCookie = new Cookie("refreshToken", accessToken);
-        refreshCookie.setMaxAge(1209600000);
+        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
+        refreshCookie.setMaxAge(refreshPeriod); //1209600000
         refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/");
+        refreshCookie.setPath("/api/auth");
 
+        response.addCookie(accessCookie);
         response.addCookie(refreshCookie);
+    }
+
+    @Transactional
+    public void sendDeletedToken(Long memberId, HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
+
+        Cookie accessCookie = new Cookie("accessToken", "");
+        accessCookie.setMaxAge(0);
+        accessCookie.setHttpOnly(true);
+        accessCookie.setPath("/api");
+
+        Cookie refreshCookie = new Cookie("refreshToken", "");
+        refreshCookie.setMaxAge(0);
+        refreshCookie.setHttpOnly(true);
+        refreshCookie.setPath("/api/auth");
+
+        response.addCookie(accessCookie);
+        response.addCookie(refreshCookie);
+
+        updateRefreshToken(memberId, "");
     }
 
     public Optional<String> getRefreshToken(HttpServletRequest request) {
@@ -107,12 +121,12 @@ public class JwtService {
         return Optional.empty();
     }
 
-    public Optional<Long> getUserId(String accessToken){
+    public Optional<Long> getMemberId(String accessToken){
         try{
             return Optional.ofNullable(JWT.require(Algorithm.HMAC512(secretKey))
                     .build()
                     .verify(accessToken)
-                    .getClaim("userId")
+                    .getClaim("memberId")
                     .asLong());
         } catch (Exception e) {
             return Optional.empty();
@@ -120,10 +134,10 @@ public class JwtService {
     }
 
     @Transactional
-    public void updateRefreshToken(Long usrId, String refreshToken) {
-        userRepository.findByMemberId(usrId)
+    public void updateRefreshToken(Long memberId, String refreshToken) {
+        memberRepository.findByMemberId(memberId)
                 .ifPresentOrElse(
-                        user -> user.updateRefreshToken(refreshToken),
+                        member -> member.updateRefreshToken(refreshToken),
                         () -> new Exception("일치하는 회원이 없습니다.")
                 );
     }
