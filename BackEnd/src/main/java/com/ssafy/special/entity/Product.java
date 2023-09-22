@@ -20,7 +20,6 @@ public class Product {
     @Column(nullable = false)
     String productName;
 
-    @Column(nullable = false)
     @Lob
     String productImg;
 
@@ -31,7 +30,6 @@ public class Product {
     @Enumerated(EnumType.STRING)
     ProductCategory category;
 
-    @Column(nullable = false)
     @Lob
     String productDesc;
 

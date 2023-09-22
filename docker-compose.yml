@@ -92,8 +92,11 @@ services: #컨테이너를 정의하는 것
     expose: # expose 컨테이너 내부에서 도커 컨테이너에게 열어주는 포트
       - "5173"
     # ports: 외부 nginx를 적용해 호스트에 직접 접근할 필요가 없기 때문에 port가 아닌 expose로 변겨한다.
-    #  - "3000:5173" #호스트의 5173포트를 special_fe컨테이너의 5173포트와 매핑시킨다.
-    # - "3000"
+    #  - "3000:5173" #
+    
+    #=========================================
+  # react 선언
+  #=========================================
   special_mysql:
     image: mysql:8.0.34
     volumes:
@@ -102,8 +105,8 @@ services: #컨테이너를 정의하는 것
       - special_network
     environment:
       - TZ=Asia/Seoul
-    port:
-      - "1006"
+    ports:
+      - "4906"
     expose:
       - "3306"
     
