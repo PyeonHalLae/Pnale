@@ -1,6 +1,6 @@
 package com.ssafy.special.user.model.vo;
 
-import com.ssafy.special.entity.User;
+import com.ssafy.special.entity.Member;
 import com.ssafy.special.enums.RoleType;
 import com.ssafy.special.enums.SocialType;
 import lombok.AllArgsConstructor;
@@ -22,11 +22,11 @@ public abstract class OAuth2UserInfo {
     public abstract String getImage();
 
     // User 엔티티를 만드는 메서드
-    public User toEntity(String loginId, SocialType socialType){
-        return User.builder()
+    public Member toEntity(String loginId, SocialType socialType){
+        return Member.builder()
                 .loginId(loginId)
                 .nickname(getNickname())
-                .userImg(getImage())
+                .memberImg(getImage())
                 .role(RoleType.USER)
                 .email(getEmail())
                 .social(socialType)

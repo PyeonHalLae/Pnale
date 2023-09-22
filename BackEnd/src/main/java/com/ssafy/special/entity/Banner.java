@@ -19,7 +19,7 @@ public class Banner {
     @Enumerated(EnumType.STRING)
     CorpType corpType;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     boolean isStarted;
 
     @Column(nullable = false)

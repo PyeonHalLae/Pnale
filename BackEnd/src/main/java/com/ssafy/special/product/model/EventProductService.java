@@ -1,8 +1,8 @@
-package com.ssafy.special.eventproduct.model;
+package com.ssafy.special.product.model;
 
 import com.ssafy.special.entity.EventProduct;
-import com.ssafy.special.eventproduct.model.vo.EventProductDto;
 
+import com.ssafy.special.product.model.vo.EventProductDto;
 import com.ssafy.special.product.model.vo.ProductResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;

@@ -1,9 +1,5 @@
 package com.ssafy.special.user.model.vo;
 
-import com.ssafy.special.entity.User;
-import com.ssafy.special.enums.RoleType;
-import com.ssafy.special.enums.SocialType;
-
 import java.util.Map;
 
 public class KakaoOAuth2UserInfo extends OAuth2UserInfo {

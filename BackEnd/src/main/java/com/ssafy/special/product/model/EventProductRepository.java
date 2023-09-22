@@ -1,4 +1,4 @@
-package com.ssafy.special.eventproduct.model;
+package com.ssafy.special.product.model;
 
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Product;

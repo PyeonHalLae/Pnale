@@ -1,4 +1,4 @@
-package com.ssafy.special.controller;
+package com.ssafy.special;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;

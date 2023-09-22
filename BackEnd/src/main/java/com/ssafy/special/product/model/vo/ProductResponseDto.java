@@ -25,11 +25,11 @@ public class ProductResponseDto {
     ProductCategory category;
     String productDesc;
     CorpType pb;
-    Long like;
+    Long recommand;
     Long hit;
 
     @Builder
-    public ProductResponseDto(Long productId, String productName, String productImg, Long price, ProductCategory category, String productDesc, CorpType pb, Long like, Long hit) {
+    public ProductResponseDto(Long productId, String productName, String productImg, Long price, ProductCategory category, String productDesc, CorpType pb, Long recommand, Long hit) {
         this.productId = productId;
         this.productName = productName;
         this.productImg = productImg;
@@ -37,7 +37,7 @@ public class ProductResponseDto {
         this.category = category;
         this.productDesc = productDesc;
         this.pb = pb;
-        this.like = like;
+        this.recommand = recommand;
         this.hit = hit;
     }
 }

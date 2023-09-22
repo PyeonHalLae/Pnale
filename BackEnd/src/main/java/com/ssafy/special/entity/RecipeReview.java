@@ -16,7 +16,7 @@ public class RecipeReview {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private Member user;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)

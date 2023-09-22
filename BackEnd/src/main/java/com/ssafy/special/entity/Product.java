@@ -24,7 +24,7 @@ public class Product {
     @Lob
     String productImg;
 
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "bigint default 0")
     Long price;
 
     @Column(nullable = false)
@@ -38,17 +38,11 @@ public class Product {
     @Enumerated(EnumType.STRING)
     CorpType pb;
 
-    @Column(columnDefinition = "default 0")
-    Long like;
+    @Column(columnDefinition = "bigint default 0")
+    Long recommand;
 
-    @Column(columnDefinition = "default 0")
+    @Column(columnDefinition = "bigint default 0")
     Long hit;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime createdAt;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime updatedAt;
 
     public ProductResponseDto toResponseDto(){
         return ProductResponseDto.builder()
@@ -58,7 +52,7 @@ public class Product {
                 .price(this.price)
                 .category(this.category)
                 .productDesc(this.productDesc)
-                .like(this.like)
+                .recommand(this.recommand)
                 .pb(this.pb)
                 .hit(this.hit)
                 .build();

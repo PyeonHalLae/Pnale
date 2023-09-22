@@ -1,6 +1,6 @@
 package com.ssafy.special.filter;
 
-import com.ssafy.special.entity.User;
+import com.ssafy.special.entity.Member;
 import com.ssafy.special.user.model.JwtService;
 import com.ssafy.special.user.model.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -94,7 +94,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
         userRepository.findByRefreshToken(refreshToken)
                 .ifPresent(user -> {
                     String reIssuedRefreshToken = reIssueRefreshToken(user);
-                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getUserId()),
+                    jwtService.sendAccessAndRefreshToken(response, jwtService.createAccessToken(user.getMemberId()),
                             reIssuedRefreshToken);
                 });
     }
@@ -104,7 +104,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
      * jwtService.createRefreshToken()으로 리프레시 토큰 재발급 후
      * DB에 재발급한 리프레시 토큰 업데이트 후 Flush
      */
-    private String reIssueRefreshToken(User user) {
+    private String reIssueRefreshToken(Member user) {
         String reIssuedRefreshToken = jwtService.createRefreshToken();
         user.updateRefreshToken(reIssuedRefreshToken);
         userRepository.saveAndFlush(user);
@@ -124,7 +124,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
         jwtService.getAccessToken(request)
                 .filter(jwtService::isTokenValid)
                 .ifPresent(accessToken -> jwtService.getUserId(accessToken)
-                        .ifPresent(userId -> userRepository.findByUserId(userId)
+                        .ifPresent(userId -> userRepository.findByMemberId(userId)
                                 .ifPresent(this::saveAuthentication)));
 
         filterChain.doFilter(request, response);
@@ -145,7 +145,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
      * SecurityContextHolder.getContext()로 SecurityContext를 꺼낸 후,
      * setAuthentication()을 이용하여 위에서 만든 Authentication 객체에 대한 인증 허가 처리
      */
-    public void saveAuthentication(User myUser) {
+    public void saveAuthentication(Member myUser) {
 
         UserDetails userDetailsUser = org.springframework.security.core.userdetails.User.builder()
                 .username(myUser.getLoginId())

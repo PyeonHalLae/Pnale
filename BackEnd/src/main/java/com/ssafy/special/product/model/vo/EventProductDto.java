@@ -1,13 +1,13 @@
-package com.ssafy.special.eventproduct.model.vo;
+package com.ssafy.special.product.model.vo;
 
-import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
-import com.ssafy.special.product.model.vo.ProductResponseDto;
-import com.ssafy.special.userlikeprod.model.vo.UserLikeProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.time.LocalDate;
 
 
 @Getter
@@ -16,23 +16,24 @@ import lombok.Setter;
 public class EventProductDto {
 
     ProductResponseDto productResponseDto;
-    UserLikeProdResponseDto userLikeProdResponseDto;
+    UserPickProdResponseDto userLikeProdResponseDto;
 
     EventType CUType;
-    EventPeriod CUDate;
+    LocalDate CUDate;
 
     EventType GSType;
-    EventPeriod GSDate;
+    LocalDate GSDate;
 
     EventType SEVENType;
-    EventPeriod SEVENDate;
+    LocalDate SEVENDate;
 
     EventType EMARTType;
-    EventPeriod EMARTDate;
+    LocalDate EMARTDate;
 
 
     @Builder
-    public EventProductDto(ProductResponseDto productResponseDto, UserLikeProdResponseDto userLikeProdResponseDto, EventType CUType, EventPeriod CUDate, EventType GSType, EventPeriod GSDate, EventType SEVENType, EventPeriod SEVENDate, EventType EMARTType, EventPeriod EMARTDate) {
+
+    public EventProductDto(ProductResponseDto productResponseDto, UserPickProdResponseDto userLikeProdResponseDto, EventType CUType, LocalDate CUDate, EventType GSType, LocalDate GSDate, EventType SEVENType, LocalDate SEVENDate, EventType EMARTType, LocalDate EMARTDate) {
         this.productResponseDto = productResponseDto;
         this.userLikeProdResponseDto = userLikeProdResponseDto;
         this.CUType = CUType;

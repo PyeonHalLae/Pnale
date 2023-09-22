@@ -1,27 +1,26 @@
 package com.ssafy.special.entity;
 
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
-public class UserLikeRecipe {
+public class MemberPickRecipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long likeRecipeId;
+    Long pickRecipeId;
 
     @ManyToOne
-    @JoinColumn(name="user_id")
-    User user;
+    @JoinColumn(name="member_id")
+    Member member;
 
     @ManyToOne
     @JoinColumn(name="recipe_id")
     Recipe recipe;
 
-    @Column(columnDefinition = "default ")
+    @Column(columnDefinition = "tinyint(1) default 0")
     boolean isDeleted;
 
     @Column(columnDefinition = "TIMESTAMP")
