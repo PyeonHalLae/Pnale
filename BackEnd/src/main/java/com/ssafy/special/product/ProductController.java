@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @Slf4j
 @RestController
@@ -29,6 +31,12 @@ public class ProductController {
         //else if(유저 로그인 안했을 떄 ){}
         response.setData(eventProductService.findAllEventProducts(pageable));
         return response;
+    }
+
+    //추천 상품 반환
+    @GetMapping("/recommand")
+    public DataResponse<?> getRecommandProducts(@PageableDefault(size = 4) Pageable pageable){
+        return new DataResponse<>(200, "추천 상품 4개를 반환합니다.", productService.findRecommandProducts(pageable));
     }
 
     //제품 상세 보기

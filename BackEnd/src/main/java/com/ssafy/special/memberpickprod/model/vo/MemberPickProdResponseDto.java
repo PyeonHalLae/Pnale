@@ -5,13 +5,13 @@ import lombok.*;
 @Setter
 @Getter
 @NoArgsConstructor
-public class UserPickProdResponseDto {
+public class MemberPickProdResponseDto {
     Long UserLikeProdId;
     boolean emailRecevie;
     boolean likeStat;
 
     @Builder
-    public UserPickProdResponseDto(Long userLikeProdId, boolean emailRecevie, boolean likeStat) {
+    public MemberPickProdResponseDto(Long userLikeProdId, boolean emailRecevie, boolean likeStat) {
         UserLikeProdId = userLikeProdId;
         this.emailRecevie = emailRecevie;
         this.likeStat = likeStat;

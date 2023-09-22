@@ -3,7 +3,7 @@ package com.ssafy.special.memberpickprod;
 import com.ssafy.special.exception.CustomResponse;
 import com.ssafy.special.exception.DataResponse;
 import com.ssafy.special.memberpickprod.model.MemberPickProdService;
-import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.MemberPickProdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +22,7 @@ public class MemberPickProdController {
     @GetMapping("/{memberId}")
     public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, Pageable pageable){
 
-        DataResponse<Page<UserPickProdResponseDto>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
+        DataResponse<Page<MemberPickProdResponseDto>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
         response.setData(memberPickProdService.findAllPick(pageable, memberId));
         return response;
     }

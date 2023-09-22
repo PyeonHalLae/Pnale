@@ -1,7 +1,6 @@
 package com.ssafy.special.product.model.vo;
 
 import com.ssafy.special.enums.EventType;
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,15 +8,10 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-
 @Getter
 @Setter
 @NoArgsConstructor
-public class EventProductDto {
-
-    ProductResponseDto productResponseDto;
-    MemberPickProdResponseDto userLikeProdResponseDto;
-
+public class EventInfoDto {
     EventType CUType;
     LocalDate CUDate;
 
@@ -30,12 +24,8 @@ public class EventProductDto {
     EventType EMARTType;
     LocalDate EMARTDate;
 
-
     @Builder
-
-    public EventProductDto(ProductResponseDto productResponseDto, MemberPickProdResponseDto userLikeProdResponseDto, EventType CUType, LocalDate CUDate, EventType GSType, LocalDate GSDate, EventType SEVENType, LocalDate SEVENDate, EventType EMARTType, LocalDate EMARTDate) {
-        this.productResponseDto = productResponseDto;
-        this.userLikeProdResponseDto = userLikeProdResponseDto;
+    public EventInfoDto(EventType CUType, LocalDate CUDate, EventType GSType, LocalDate GSDate, EventType SEVENType, LocalDate SEVENDate, EventType EMARTType, LocalDate EMARTDate) {
         this.CUType = CUType;
         this.CUDate = CUDate;
         this.GSType = GSType;

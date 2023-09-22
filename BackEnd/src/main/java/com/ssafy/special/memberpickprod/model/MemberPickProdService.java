@@ -12,7 +12,7 @@ import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.product.model.ProductRepository;
 import com.ssafy.special.product.model.ProductService;
 import com.ssafy.special.member.model.MemberRepository;
-import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.MemberPickProdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -38,7 +38,7 @@ public class MemberPickProdService {
 
     private final ModelMapper modelMapper;
 
-    public Page<UserPickProdResponseDto> findAllPick(Pageable pageable, Long userId) {
+    public Page<MemberPickProdResponseDto> findAllPick(Pageable pageable, Long userId) {
         return getAllLike(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
 
     }
@@ -74,11 +74,11 @@ public class MemberPickProdService {
 
     //===============================================
     //서비스 내부에서만 사용하는 메소드는 private로 제한한다.
-    private Page<UserPickProdResponseDto> getAllLike(Page<MemberPickProd> data) {
+    private Page<MemberPickProdResponseDto> getAllLike(Page<MemberPickProd> data) {
         //Page객체에 있는 리스트 요소중 개별 객체를 upp라 지칭
         return data.map(upp -> {
             //UserLikeProd엔티티를 Dto로 매핑한다.
-            UserPickProdResponseDto uppResponse = modelMapper.map(upp, UserPickProdResponseDto.class);
+            MemberPickProdResponseDto uppResponse = modelMapper.map(upp, MemberPickProdResponseDto.class);
 
             //상품ID에 대한 행사 상품을 찾는다
             EventProduct eventProduct = eventProductRepository
