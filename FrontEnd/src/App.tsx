@@ -33,6 +33,7 @@ import RecipeDetail from "@components/recipe/RecipeDetail";
 
 //임시
 import NotLogin from "@components/common/NotLogin";
+import RecipeSearch from "./components/recipe/RecipeSearch";
 
 function App() {
   Modal.setAppElement("#root");
@@ -74,6 +75,7 @@ function App() {
             <Route path="recipe" element={<Recipe />}>
               <Route path="" element={<RecipeList />} />
               <Route path="create" element={<RecipeCreate />} />
+              <Route path="search" element={<RecipeSearch />} />
               <Route path=":recipeId" element={<RecipeDetail />} />
             </Route>
           </Route>
