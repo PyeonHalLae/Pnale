@@ -21,13 +21,6 @@ public class ProductController {
     private final ProductService productService;
     private final EventProductService eventProductService;
 
-
-    //제품 상세 보기
-    @GetMapping("/{productId}")
-    public DataResponse<?> getProduct(@PathVariable Long productId) {
-        return new DataResponse<ProductResponseDto>(200, "상품 상세 정보를 반환합니다.", productService.findProduct(productId));
-    }
-
     //행사 상품 전체 보기
     @GetMapping("")
     public DataResponse<?> getAllEventProducts(@PageableDefault(size = 12) Pageable pageable){
@@ -35,6 +28,14 @@ public class ProductController {
         //if(유저 로그인 했을 떄){}
         //else if(유저 로그인 안했을 떄 ){}
         response.setData(eventProductService.findAllEventProducts(pageable));
+        return response;
+    }
+
+    //제품 상세 보기
+    @GetMapping("/{productId}")
+    public DataResponse<?> getProduct(@PathVariable Long productId) {
+        DataResponse<ProductResponseDto> response = new DataResponse<>(200, "상품 상세 정보를 반환합니다.");
+        response.setData(productService.findProduct(productId));
         return response;
     }
 }

@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberPickProdController {
     private final MemberPickProdService memberPickProdService;
 
-    @GetMapping("/{userId}")
-    public DataResponse<?> getUserPickProducts(@PathVariable Long userId, Pageable pageable){
+    @GetMapping("/{memberId}")
+    public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, Pageable pageable){
 
         DataResponse<Page<UserPickProdResponseDto>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
-        response.setData(memberPickProdService.findAllPick(pageable, userId));
+        response.setData(memberPickProdService.findAllPick(pageable, memberId));
         return response;
     }
 

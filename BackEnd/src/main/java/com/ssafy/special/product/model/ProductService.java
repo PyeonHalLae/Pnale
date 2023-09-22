@@ -25,7 +25,9 @@ public class ProductService {
     }
 
     public ProductResponseDto findProduct(Long productId) {
-        return productRepository.findById(productId).orElseThrow(()-> new RuntimeException("이현욱 잘못")).toResponseDto();
+        return modelMapper.map(
+                productRepository.findById(productId).orElseThrow(()-> new RuntimeException("이현욱 잘못")),
+                ProductResponseDto.class);
     }
 
     //Page<Product>를 Page<ProductResponseDto>로 변환
