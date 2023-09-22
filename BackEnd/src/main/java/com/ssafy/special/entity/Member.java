@@ -62,16 +62,16 @@ public class Member {
     @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private List<Recipe> writeRecipes = new LinkedList<>();
 
-    public Member updatememberInfo(String memberImg, String nickname, LocalDateTime updatedAt, boolean mailReceive){
+    public Member updateMemberInfo(String memberImg, String nickname, boolean mailReceive){
         this.memberImg = memberImg;
         this.nickname = nickname;
-        this.updatedAt = updatedAt;
+        this.updatedAt = LocalDateTime.now();
         this.mailReceive = mailReceive;
         return this;
     }
-    public Member updateRefreshToken(String refreshToken){
+
+    public void updateRefreshToken(String refreshToken){
         this.refreshToken=refreshToken;
-        return this;
     }
 
 }

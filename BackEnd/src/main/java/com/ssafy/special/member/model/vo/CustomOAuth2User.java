@@ -1,6 +1,5 @@
-package com.ssafy.special.user.model.vo;
+package com.ssafy.special.member.model.vo;
 
-import com.ssafy.special.enums.RoleType;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;

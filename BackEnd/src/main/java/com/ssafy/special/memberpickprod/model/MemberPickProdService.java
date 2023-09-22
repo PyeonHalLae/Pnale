@@ -11,7 +11,7 @@ import com.ssafy.special.exception.CustomErrorCode;
 
 import com.ssafy.special.product.model.ProductRepository;
 import com.ssafy.special.product.model.ProductService;
-import com.ssafy.special.user.model.UserRepository;
+import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -33,13 +33,14 @@ public class MemberPickProdService {
     //Repository들
     private final MemberPickProdRepository memberPickProdRepository;
     private final ProductRepository productRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final EventProductRepository eventProductRepository;
 
     private final ModelMapper modelMapper;
 
     public Page<UserPickProdResponseDto> findAllPick(Pageable pageable, Long userId) {
         return getAllLike(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
+
     }
 
     public String pickToggle(Long productId, Long userId) {
@@ -49,6 +50,7 @@ public class MemberPickProdService {
         return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(userId, productId)
                 .map(upp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
                     updateUserLikeProduct(upp);
+
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
@@ -64,6 +66,7 @@ public class MemberPickProdService {
 
         MemberPickProd upp = memberPickProdRepository
                 .findByMember_MemberIdAndProduct_ProductId(userId, productId)
+
                 .orElseThrow(()-> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
         updateEmailReceiveStatus(upp);
         return upp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";
@@ -88,7 +91,7 @@ public class MemberPickProdService {
     }
 
     private Member getUserById(Long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return memberRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
     private Product getProductById(Long productId) {
