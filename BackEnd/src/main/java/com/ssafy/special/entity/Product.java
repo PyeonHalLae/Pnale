@@ -1,10 +1,9 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.ProductCategory;
 import com.ssafy.special.product.model.vo.ProductResponseDto;
-import lombok.Builder;
 import lombok.Getter;
-import net.bytebuddy.implementation.bind.annotation.BindingPriority;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
@@ -25,7 +24,7 @@ public class Product {
     @Lob
     String productImg;
 
-    @ColumnDefault("0")
+    @Column(columnDefinition = "bigint default 0")
     Long price;
 
     @Column(nullable = false)
@@ -36,20 +35,26 @@ public class Product {
     @Lob
     String productDesc;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime createdAt;
+    @Enumerated(EnumType.STRING)
+    CorpType pb;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime updatedAt;
+    @Column(columnDefinition = "bigint default 0")
+    Long recommand;
+
+    @Column(columnDefinition = "bigint default 0")
+    Long hit;
 
     public ProductResponseDto toResponseDto(){
         return ProductResponseDto.builder()
                 .productId(this.productId)
-                .producetName(this.productName)
+                .productName(this.productName)
                 .productImg(this.productImg)
                 .price(this.price)
                 .category(this.category)
                 .productDesc(this.productDesc)
+                .recommand(this.recommand)
+                .pb(this.pb)
+                .hit(this.hit)
                 .build();
     }
 

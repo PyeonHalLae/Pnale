@@ -11,15 +11,15 @@ import java.time.LocalDateTime;
 public class Banner {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long eventId;
+    Long bannerId;
 
     @Column(nullable = false)
-    String eventName;
+    String BannerName;
 
     @Enumerated(EnumType.STRING)
     CorpType corpType;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
+    @Column(columnDefinition = "tinyint(1) default 0")
     boolean isStarted;
 
     @Column(nullable = false)

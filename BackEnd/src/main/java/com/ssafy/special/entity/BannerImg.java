@@ -9,7 +9,7 @@ public class BannerImg {
     Long eventImgId;
 
     @ManyToOne
-    @JoinColumn(name = "event_id")
+    @JoinColumn(name = "banner_id")
     Banner event;
 
     @Lob

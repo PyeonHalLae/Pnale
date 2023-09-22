@@ -1,12 +1,10 @@
 package com.ssafy.special.user.model;
 
-import com.ssafy.special.entity.User;
-import com.ssafy.special.user.model.vo.UserInfoDTO;
+import com.ssafy.special.entity.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -25,10 +23,10 @@ public class UserService {
 //
 //    }
 
-    public User getLoginUserByLoginId(String loginId){
+    public Member getLoginUserByLoginId(String loginId){
         if(loginId == null) return null;
 
-        Optional<User> optionalUser = userRepository.findByLoginId(loginId);
+        Optional<Member> optionalUser = userRepository.findByLoginId(loginId);
         return optionalUser.orElse(null);
     }
 }

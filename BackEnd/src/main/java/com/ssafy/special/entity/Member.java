@@ -3,7 +3,6 @@ package com.ssafy.special.entity;
 import com.ssafy.special.enums.SocialType;
 import com.ssafy.special.enums.RoleType;
 import lombok.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -18,10 +17,10 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class User {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long userId;
+    Long memberId;
 
     @Column(nullable = false)
     String loginId;
@@ -29,9 +28,9 @@ public class User {
     @Column
     String nickname;
 
-    @Column
+    @Column(name="member_img")
     @Lob
-    String userImg;
+    String memberImg;
 
     @Enumerated(EnumType.STRING)
     RoleType role;
@@ -42,35 +41,35 @@ public class User {
     @Column(columnDefinition = "varchar(255)")
     String email;
 
+    @Column(columnDefinition = "tinyint(1) default 0")
+    boolean mailReceive;
+
+    @Column
+    String refreshToken;
+
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP", insertable=false, updatable=false)
     LocalDateTime createdAt;
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",  insertable=false, updatable=true)
     LocalDateTime updatedAt;
 
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    boolean mailReceive;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private Set<MemberPickProd> likeProducts = new HashSet<>();
 
-    @Column
-    String refreshToken;
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
 
-    @OneToMany(mappedBy = "user")
-    private Set<UserLikeProd> likeProducts = new HashSet<>();
-
-    @OneToMany(mappedBy = "user")
-    private List<UserLikeRecipe> likeRecipes = new LinkedList<>();
-
-    @OneToMany(mappedBy = "writer")
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private List<Recipe> writeRecipes = new LinkedList<>();
 
-    public User updateUserInfo(String userImg, String nickname, LocalDateTime updatedAt, boolean mailReceive){
-        this.userImg = userImg;
+    public Member updatememberInfo(String memberImg, String nickname, LocalDateTime updatedAt, boolean mailReceive){
+        this.memberImg = memberImg;
         this.nickname = nickname;
         this.updatedAt = updatedAt;
         this.mailReceive = mailReceive;
         return this;
     }
-    public User updateRefreshToken(String refreshToken){
+    public Member updateRefreshToken(String refreshToken){
         this.refreshToken=refreshToken;
         return this;
     }

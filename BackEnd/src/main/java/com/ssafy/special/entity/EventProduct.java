@@ -1,13 +1,15 @@
 package com.ssafy.special.entity;
 
-import com.ssafy.special.enums.EventPeriod;
 import com.ssafy.special.enums.EventType;
-import com.ssafy.special.eventproduct.model.vo.EventProductDto;
+import com.ssafy.special.product.model.vo.EventProductDto;
+import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 public class EventProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,37 +22,29 @@ public class EventProduct {
     @Enumerated(EnumType.STRING)
     @Column(name="cu_type")
     EventType CUType;
-
     @Column(name= "cu_date")
-    @Enumerated(EnumType.STRING)
-    EventPeriod  CUDate;
+    LocalDate CUDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name="gs_type")
     EventType GSType;
     @Column(name= "gs_date")
-    @Enumerated(EnumType.STRING)
-    EventPeriod  GSDate;
+    LocalDate  GSDate;
 
     @Enumerated(EnumType.STRING)
     @Column(name="seven_type")
     EventType SEVENType;
     @Column(name= "seven_date")
-    @Enumerated(EnumType.STRING)
-    EventPeriod  SEVENDate;
+    LocalDate  SEVENDate;
+
     @Enumerated(EnumType.STRING)
     @Column(name="emart_type")
     EventType EMARTType;
-
     @Column(name= "emart_date")
-    @Enumerated(EnumType.STRING)
-    EventPeriod  EMARTDate;
+    LocalDate  EMARTDate;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime updatedAt;
 
 
     public EventProductDto toDto(){

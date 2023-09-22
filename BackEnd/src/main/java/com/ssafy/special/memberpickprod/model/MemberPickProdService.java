@@ -1,53 +1,54 @@
-package com.ssafy.special.userlikeprod.model;
+package com.ssafy.special.memberpickprod.model;
 
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Product;
-import com.ssafy.special.entity.User;
-import com.ssafy.special.entity.UserLikeProd;
+import com.ssafy.special.entity.Member;
+import com.ssafy.special.entity.MemberPickProd;
 
-import com.ssafy.special.eventproduct.model.EventProductRepository;
+import com.ssafy.special.product.model.EventProductRepository;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.CustomErrorCode;
 
 import com.ssafy.special.product.model.ProductRepository;
+import com.ssafy.special.product.model.ProductService;
 import com.ssafy.special.user.model.UserRepository;
-import com.ssafy.special.userlikeprod.model.vo.UserLikeProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 
 @Service
 @RequiredArgsConstructor
-public class UserLikeProdService {
+public class MemberPickProdService {
     // 각 서비스에서 타 서비스를 호출 할 수 밖에 없다. 그렇기 때문에 각 컨벤션을 정의한다.
     //CUD 작업 : service 호출
     //R   작업 : Repository 사용.
 
     //Service들
+    private final ProductService productService;
 
     //Repository들
-    private final UserLikeProdRepository userLikeProdRepository;
+    private final MemberPickProdRepository memberPickProdRepository;
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final EventProductRepository eventProductRepository;
 
     private final ModelMapper modelMapper;
 
-    public Page<UserLikeProdResponseDto> findAllLike(Pageable pageable, Long userId) {
-        return getAllLike(userLikeProdRepository.findByUser_UserIdAndLikeStatTrue(userId, pageable));
+    public Page<UserPickProdResponseDto> findAllPick(Pageable pageable, Long userId) {
+        return getAllLike(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
     }
 
-    public String likeToggle(Long productId, Long userId) {
-        User findUser = getUserById(userId);
+    public String pickToggle(Long productId, Long userId) {
+        Member findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
 
-        return userLikeProdRepository.findByUser_UserIdAndProduct_ProductId(userId, productId)
-                .map(ulp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
-                    updateUserLikeProduct(ulp);
+        return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(userId, productId)
+                .map(upp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
+                    updateUserLikeProduct(upp);
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
@@ -58,35 +59,35 @@ public class UserLikeProdService {
     }
 
     public String receiveToggle(Long productId, Long userId) {
-        User findUser = getUserById(userId);
+        Member findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
 
-        UserLikeProd ulp = userLikeProdRepository
-                .findByUser_UserIdAndProduct_ProductId(userId, productId)
+        MemberPickProd upp = memberPickProdRepository
+                .findByMember_MemberIdAndProduct_ProductId(userId, productId)
                 .orElseThrow(()-> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
-        updateEmailReceiveStatus(ulp);
-        return ulp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";
+        updateEmailReceiveStatus(upp);
+        return upp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";
     }
 
     //===============================================
     //서비스 내부에서만 사용하는 메소드는 private로 제한한다.
-    private Page<UserLikeProdResponseDto> getAllLike(Page<UserLikeProd> data) {
-        //Page객체에 있는 리스트 요소중 개별 객체를 ulp라 지칭
-        return data.map(ulp -> {
+    private Page<UserPickProdResponseDto> getAllLike(Page<MemberPickProd> data) {
+        //Page객체에 있는 리스트 요소중 개별 객체를 upp라 지칭
+        return data.map(upp -> {
             //UserLikeProd엔티티를 Dto로 매핑한다.
-            UserLikeProdResponseDto ulpResponse = modelMapper.map(ulp, UserLikeProdResponseDto.class);
+            UserPickProdResponseDto uppResponse = modelMapper.map(upp, UserPickProdResponseDto.class);
 
             //상품ID에 대한 행사 상품을 찾는다
             EventProduct eventProduct = eventProductRepository
-                    .findEventProductByProduct(ulp.getProduct())
+                    .findEventProductByProduct(upp.getProduct())
                     .orElseGet(EventProduct::new);
-            ulpResponse.setEventProductDto(eventProduct.toDto());
+            //uppResponse.setEventProductDto(eventProduct.toDto());
 
-            return ulpResponse;
+            return uppResponse;
         });
     }
 
-    private User getUserById(Long userId) {
+    private Member getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
@@ -94,24 +95,24 @@ public class UserLikeProdService {
         return productRepository.findById(productId).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    private void updateUserLikeProduct(UserLikeProd ulp) {
-        ulp.updateLike();
-        userLikeProdRepository.save(ulp);
+    private void updateUserLikeProduct(MemberPickProd upp) {
+        upp.updateLike();
+        memberPickProdRepository.save(upp);
     }
 
-    private void updateEmailReceiveStatus(UserLikeProd ulp) {
-        ulp.updateEmailReceive();
-        userLikeProdRepository.save(ulp);
+    private void updateEmailReceiveStatus(MemberPickProd upp) {
+        upp.updateEmailReceive();
+        memberPickProdRepository.save(upp);
     }
 
-    private void addUserLikeProduct(User user, Product product) {
+    private void addUserLikeProduct(Member member, Product product) {
         //빌더 패턴을 적용해 객체를 생성한다.
-        UserLikeProd ulp = UserLikeProd.builder()
-                .user(user)
+        MemberPickProd upp = MemberPickProd.builder()
+                .member(member)
                 .product(product)
                 .build();
 
         //DB에 저장한다.
-        userLikeProdRepository.save(ulp);
+        memberPickProdRepository.save(upp);
     }
 }

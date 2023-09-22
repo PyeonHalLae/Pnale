@@ -15,7 +15,7 @@ public class Recipe {
 
     @ManyToOne
     @JoinColumn(name="writer_id")
-    User writer;
+    Member writer;
 
     @Column(nullable = false)
     String recipeName;
@@ -27,10 +27,10 @@ public class Recipe {
     @Column(nullable = false)
     String recipeDesc;
 
-    @ColumnDefault("0")
+    @Column(columnDefinition = "bigint default 0")
     Long views;
 
-    @ColumnDefault("0")
+    @Column(columnDefinition = "bigint default 0")
     Long likes;
 
     @Column(nullable = false, columnDefinition = "boolean default false")
