@@ -22,6 +22,7 @@ const RelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
           line-clamp-1 
           mb-[.625rem] 
           p-[.25rem]
+          py-[.1rem]
           border-[0.05rem]
           rounded-[0.5rem]
           border-common-bold-back-color
@@ -52,9 +53,9 @@ bg-white my-[.625rem]
 `;
 
 const Header = tw.div`
-p-[1rem] text-[1.5rem] text-common-text-color
+py-[1rem] px-[1.875rem] text-[1.25rem] text-common-text-color
 `;
 
 const VideoBox = tw.div`
-p-[1rem] pt-0
+pb-[1rem] px-[1.875rem]
 `;
