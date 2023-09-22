@@ -1,7 +1,7 @@
 // import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import CommentCard from "./CommentCard";
-import CommentInput from "./CommentInput";
+import RecipeCommentCard from "./RecipeCommentCard";
+import RecipeCommentInput from "./RecipeCommentInput";
 import { useEffect, useState } from "react";
 
 interface commentType {
@@ -12,7 +12,7 @@ interface commentType {
   commentId: number;
 }
 
-const CommentBox = () => {
+const RecipeCommentBox = () => {
   const [commentList, setCommentList] = useState<commentType[]>([]);
   useEffect(() => {
     setCommentList([
@@ -33,21 +33,23 @@ const CommentBox = () => {
         {/* 댓글 리스트 length 넣어야함 */}
         <div className="inline-block ml-[0.625rem] text-common-orange">{commentList.length}</div>
       </CommentBoxHeader>
+
       {commentList.map((commentItem, index) => (
-        <CommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
       ))}
       {commentList.map((commentItem, index) => (
-        <CommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
       ))}
       {commentList.map((commentItem, index) => (
-        <CommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
       ))}
       {commentList.map((commentItem, index) => (
-        <CommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
       ))}
       {commentList.map((commentItem, index) => (
-        <CommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
       ))}
+
       <ViewMoreBtnBox>
         <ViewMoreBtn
           onClick={() => {
@@ -57,12 +59,13 @@ const CommentBox = () => {
           더보기 V
         </ViewMoreBtn>
       </ViewMoreBtnBox>
-      <CommentInput />
+
+      <RecipeCommentInput />
     </Container>
   );
 };
 
-export default CommentBox;
+export default RecipeCommentBox;
 
 const Container = tw.div`
 h-auto w-[100%] bg-white text-common-text-color

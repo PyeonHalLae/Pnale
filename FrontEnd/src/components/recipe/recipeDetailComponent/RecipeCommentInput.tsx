@@ -2,7 +2,7 @@ import tw from "tailwind-styled-components";
 import { useState } from "react";
 // import { useEffect } from "react";
 
-const CommentInput = () => {
+const RecipeCommentInput = () => {
   const [commentContent, setCommentContent] = useState("");
 
   // 댓글 내용 입력
@@ -33,7 +33,7 @@ const CommentInput = () => {
   );
 };
 
-export default CommentInput;
+export default RecipeCommentInput;
 
 const Container = tw.div`
 min-h-[5rem] mx-[1.875rem] p-[0.5rem] pb-[3rem]
