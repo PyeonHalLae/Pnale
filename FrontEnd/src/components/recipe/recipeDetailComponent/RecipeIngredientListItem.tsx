@@ -1,8 +1,15 @@
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 
+import RecipeIngredientModalContent from "./RecipeIngredientModalContent";
+import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
+// import { useRecoilValue } from "recoil";
+// import { ingredientState } from "@/recoil/khiRecoil";
+
 const RecipeIngredientListItem = () => {
   const [isChangable, setIsChangable] = useState<boolean>();
+  const [isModalActive, setIsModalActive] = useState<boolean>(false);
+  // const keyword = useRecoilValue(ingredientState);
 
   useEffect(() => {
     setIsChangable(true);
@@ -10,13 +17,31 @@ const RecipeIngredientListItem = () => {
 
   return (
     <Container>
+      {isModalActive && (
+        <RecipeCommonModal
+          setModal={setIsModalActive}
+          width="20"
+          height="32"
+          element={<RecipeIngredientModalContent />}
+        />
+      )}
       <IngredientInfo>
         <OrderNumBox>1.</OrderNumBox>
 
         <NameBox>짜파게티</NameBox>
 
         <ChangeBtnBox>
-          {isChangable ? <ChangBtn>변경하기</ChangBtn> : <ChangeBtnWhite>변경불가</ChangeBtnWhite>}
+          {isChangable ? (
+            <ChangBtn
+              onClick={() => {
+                setIsModalActive(true);
+              }}
+            >
+              변경하기
+            </ChangBtn>
+          ) : (
+            <ChangeBtnWhite>변경불가</ChangeBtnWhite>
+          )}
         </ChangeBtnBox>
 
         <PriceBox>1,000원</PriceBox>
