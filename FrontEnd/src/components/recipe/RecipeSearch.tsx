@@ -3,18 +3,7 @@ import tw from "tailwind-styled-components";
 import { useState, useEffect } from "react";
 import RecipeCard from "@components/common/RecipeCard";
 import { useNavigate } from "react-router-dom";
-
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
+import { recipeType } from "@/model/commonType";
 
 const RecipeSearch = () => {
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
@@ -117,5 +106,5 @@ const ViewMoreBtn = tw.button`
 `;
 
 const CreateBtn = tw.img`
-  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[1.75rem]
+  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[calc(50%-11rem)]
 `;

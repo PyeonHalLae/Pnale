@@ -2,18 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
+import { recipeType } from "@/model/commonType";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   // const [isAdmin, setIsAdmin] = useState<boolean>();

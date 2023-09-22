@@ -1,8 +1,8 @@
-import CommentBox from "./recipeDetailComponent/CommentBox";
+import RecipeCommentBox from "./recipeDetailComponent/RecipeCommentBox";
 import { useParams } from "react-router-dom";
 import RecipeDetailContent from "./recipeDetailComponent/RecipeDetailContent";
 import RelatedVideo from "./recipeDetailComponent/RelatedVideo";
-import IngredientsList from "./recipeDetailComponent/IngredientsList";
+import RecipeIngredientList from "./recipeDetailComponent/RecipeIngredientList";
 import tw from "tailwind-styled-components";
 import RecipeDetailHeader from "./recipeDetailComponent/RecipeDetailHeader";
 
@@ -14,10 +14,10 @@ const RecipeDetail = () => {
       <PageHeader> 삭제 수정 버튼이 들어가야함 </PageHeader>
       <MainImg />
       <RecipeDetailHeader mainImgUrl={"/img/test/너굴맨레시피.jpg"} />
-      <IngredientsList />
+      <RecipeIngredientList />
       <RelatedVideo videoUrl="https://www.youtube.com/watch?v=oCduiXGcWdw" />
       <RecipeDetailContent content="이거이거 ㅎ" />
-      <CommentBox />
+      <RecipeCommentBox />
     </div>
   );
 };

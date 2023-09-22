@@ -3,21 +3,13 @@ import { useEffect, useState } from "react";
 import RecipeCard from "@components/common/RecipeCard";
 import PopularRecipeRoller from "./recipeListComponent/PopularRecipeRoller";
 
+// 레시피 카드
+import { recipeType } from "@/model/commonType";
+
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import Header from "@components/common/Header";
 
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
 const RecipeList = () => {
@@ -60,7 +52,7 @@ const RecipeList = () => {
   }, []);
 
   return (
-    <div className="relative min-w-[22.5rem]">
+    <div className="relative min-w-[22.5rem] max-w-[28.125rem]">
       {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
       <Header />
 
@@ -154,5 +146,5 @@ const ViewMoreBtn = tw.button`
 `;
 
 const CreateBtn = tw.img`
-  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[1.75rem]
+  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[calc(50%-11rem)]
 `;
