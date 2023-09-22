@@ -8,9 +8,8 @@ const NaviPE = (iconState) => {
 
   const moveToPyenType = (type) => {
     navi(`/pyenE/${type}`);
-    console.log(type);
+    setMenuOpen(!menuOpen);
   };
-  console.log(iconState);
 
   return (
     <nav className="menu">

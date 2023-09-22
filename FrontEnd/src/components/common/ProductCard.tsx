@@ -1,7 +1,14 @@
+import { mainCard } from "@/model/commonType";
 import React from "react";
 import tw from "tailwind-styled-components";
 
-const ProductCard = () => {
+type ProductCardProps = {
+  data: mainCard;
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
+  console.log(data);
+
   return (
     <Card>
       <ImageArea>
@@ -22,7 +29,7 @@ const ProductCard = () => {
           />
         </div>
         <p className="mx-1.5 text-sm max-w-130 line-clamp-1">
-          포스틱포테토칩스윙칭알리이랑구라아랒랑다앟
+          {data.productResponseDto.productName}
         </p>
         <Price>2,000</Price>
         <span className="mr-4">원</span>
