@@ -15,6 +15,17 @@
   transition: transform ease-out 200ms;
   transition: transform ease-out 200ms, -webkit-transform ease-out 200ms;
 }
+
+.menu-item-back {
+  position: absolute;
+  display: flex;
+  -webkit-transform: translate3d(0, 0, 0);
+  transform: translate3d(0, 0, 0);
+  -webkit-transition: -webkit-transform ease-out 200ms;
+  transition: -webkit-transform ease-out 200ms;
+  transition: transform ease-out 200ms;
+  transition: transform ease-out 200ms, -webkit-transform ease-out 200ms;
+}
 .menu-open-button {
   display: flex;
   background: #ff6b6b;
@@ -35,14 +46,6 @@
 
 .menu-open {
   display: none;
-}
-.menu-open-button {
-  background-image: "/public/img/navi/pyenE-gray.png";
-}
-.menu-item:nth-child(3) {
-  -webkit-transition-duration: 180ms;
-  transition-duration: 180ms;
-  transform: scale(0.5, 0.5);
 }
 
 .menu-item:nth-child(4) {
@@ -127,16 +130,16 @@
   transform: translate3d(110px, -30px, 0);
 }
 
-.menu-open:checked ~ .menu-item:nth-child(3) {
-  background-color: #39393979;
-  border-radius: 100%;
+.menu-open:checked ~ .menu-item-back {
   position: absolute;
+  background-color: rgba(247, 247, 247, 0.25);
+  width: 100vw;
   max-width: 450px;
-  min-width: 350px;
-  max-height: 450px;
-  min-height: 350px;
-  transition-duration: 480ms;
-  -webkit-transition-duration: 280ms;
-  -webkit-transform: translate3d(-135px, -100px, 0);
-  transform: translate3d(-135px, -100px, 0);
+  height: 100vh;
+  /* transition-duration: 6080ms; */
+  /* -webkit-transition-duration: 6080ms; */
+  /* -webkit-transform: translate3d(-135px, -100px, 0); */
+  top: calc(-100vh + 60px);
+  left: 0px;
+  backdrop-filter: blur(2px);
 }
