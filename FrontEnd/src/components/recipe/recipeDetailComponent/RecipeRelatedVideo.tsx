@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 
-const RelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
+const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
   // const ThuUrl = videoUrl
   //   .replace("https://youtu.be/", "")
   //   .replace("https://www.youtube.com/embed/", "")
@@ -46,7 +46,7 @@ const RelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
   );
 };
 
-export default RelatedVideo;
+export default RecipeRelatedVideo;
 
 const Container = tw.div`
 bg-white my-[.625rem]
