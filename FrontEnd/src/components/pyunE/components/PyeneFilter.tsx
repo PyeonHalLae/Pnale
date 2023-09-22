@@ -1,6 +1,6 @@
 // import React from 'react'
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -8,85 +8,79 @@ interface ModalHandlerProps {
   ModalHandler: () => void;
 }
 
-
 interface FilterType {
-  name : string
-  state : boolean
-  engName : string
+  name: string;
+  state: boolean;
+  engName: string;
 }
 
-const SortFilterList = [
-  { name : "이름순" },
-  { name : "가격낮은순"},
-  { name : "가격높은순"}
- ]
+const SortFilterList = [{ name: "이름순" }, { name: "가격낮은순" }, { name: "가격높은순" }];
 
-const EventFilterList : FilterType[] = [
-  {name : "1 + 1" , state : false , engName : "OPO"},
-  {name : "2 + 1" , state : false , engName : "TPO"},
-  {name : "3 + 1", state : false, engName: "THPO"},
-  {name : "할인", state : false , engName : "DISC"},
-  {name : "덤 증정", state : false , engName : "MORE"},
-  {name : "기타", state : false , engName : ""}
-]
+const EventFilterList: FilterType[] = [
+  { name: "1 + 1", state: false, engName: "OPO" },
+  { name: "2 + 1", state: false, engName: "TPO" },
+  { name: "3 + 1", state: false, engName: "THPO" },
+  { name: "할인", state: false, engName: "DISC" },
+  { name: "덤 증정", state: false, engName: "MORE" },
+  { name: "기타", state: false, engName: "" },
+];
 
-const CategoryMealList : FilterType[] = [
-  {name : "도시락" , state : false , engName : ""},
-  {name : "샌드위치" , state : false , engName : ""},
-  {name : "햄버거" , state : false , engName : ""},
-  {name : "주먹밥" , state : false , engName : ""},
-  {name : "김밥" , state : false , engName : ""}
-]
+const CategoryMealList: FilterType[] = [
+  { name: "도시락", state: false, engName: "" },
+  { name: "샌드위치", state: false, engName: "" },
+  { name: "햄버거", state: false, engName: "" },
+  { name: "주먹밥", state: false, engName: "" },
+  { name: "김밥", state: false, engName: "" },
+];
 
-const CategoryCookList : FilterType[] = [
-  {name : "즉석튀김" , state : false , engName : ""},
-  {name : "즉석베이커리" , state : false , engName : ""},
-  {name : "즉석커피" , state : false , engName : ""},
-  {name : "즉석식품" , state : false , engName : ""},
-]
+const CategoryCookList: FilterType[] = [
+  { name: "즉석튀김", state: false, engName: "" },
+  { name: "즉석베이커리", state: false, engName: "" },
+  { name: "즉석커피", state: false, engName: "" },
+  { name: "즉석식품", state: false, engName: "" },
+];
 
+const CategorySnackList: FilterType[] = [
+  { name: "스낵", state: false, engName: "" },
+  { name: "비스캣", state: false, engName: "" },
+  { name: "빵", state: false, engName: "" },
+  { name: "디저트", state: false, engName: "" },
+  { name: "캔디", state: false, engName: "" },
+  { name: "초콜릿", state: false, engName: "" },
+  { name: "껌", state: false, engName: "" },
+  { name: "젤리", state: false, engName: "" },
+];
 
-const CategorySnackList : FilterType[] = [
-  {name : "스낵" , state : false , engName : ""},
-  {name : "비스캣" , state : false , engName : ""},
-  {name : "빵" , state : false , engName : ""},
-  {name : "디저트" , state : false , engName : ""},
-  {name : "캔디" , state : false , engName : ""},
-  {name : "초콜릿" , state : false , engName : ""},
-  {name : "껌" , state : false , engName : ""},
-  {name : "젤리" , state : false , engName : ""}
-]
+const CategoryFoodList: FilterType[] = [
+  { name: "가공식품", state: false, engName: "" },
+  { name: "안주류", state: false, engName: "" },
+  { name: "식재료", state: false, engName: "" },
+  { name: "밀키트", state: false, engName: "" },
+  { name: "조미료", state: false, engName: "" },
+  { name: "소스", state: false, engName: "" },
+  { name: "과일", state: false, engName: "" },
+  { name: "차", state: false, engName: "" },
+];
 
-const CategoryFoodList : FilterType[] = [
-  {name : "가공식품" , state : false , engName : ""},
-  {name : "안주류" , state : false , engName : ""},
-  {name : "식재료" , state : false , engName : ""},
-  {name : "밀키트" , state : false , engName : ""},
-  {name : "조미료" , state : false , engName : ""},
-  {name : "소스" , state : false , engName : ""},
-  {name : "과일" , state : false , engName : ""},
-  {name : "차" , state : false , engName : ""}
-]
+const CategoryDrinkList: FilterType[] = [
+  { name: "음료", state: false, engName: "" },
+  { name: "아이스드링크", state: false, engName: "" },
+  { name: "유제품", state: false, engName: "" },
+  { name: "아이스크림", state: false, engName: "" },
+];
 
+const CategoryLifeList: FilterType[] = [
+  { name: "의학용품", state: false, engName: "" },
+  { name: "생활용품", state: false, engName: "" },
+  { name: "펫용품", state: false, engName: "" },
+  { name: "취미", state: false, engName: "" },
+  { name: "레저", state: false, engName: "" },
+];
 
-const CategoryDrinkList : FilterType[] = [
-  {name : "음료" , state : false , engName : ""},
-  {name : "아이스드링크" , state : false , engName : ""},
-  {name : "유제품" , state : false , engName : ""},
-  {name : "아이스크림" , state : false , engName : ""},
-]
-
-
-const CategoryLifeList : FilterType[] = [
-  {name : "의학용품" , state : false , engName : ""},
-  {name : "생활용품" , state : false , engName : ""},
-  {name : "펫용품" , state : false , engName : ""},
-  {name : "취미" , state : false , engName : ""},
-  {name : "레저" , state : false , engName : ""}
-]
-
-
-const PyeneFilter = ({ ModalHandler }: ModalHandlerProps) => {
+const PyeneFilter = ({
+  ModalHandler,
+  $productListType,
+}: ModalHandlerProps & { $productListType: string }) => {
   const [sortIndex, setSortIndex] = useState<number>(0);
   const [eventFilter, setEventFilter] = useState<FilterType[]>(EventFilterList);
   const [mealFilter, setMealFilter] = useState<FilterType[]>(CategoryMealList);
@@ -99,6 +93,26 @@ const PyeneFilter = ({ ModalHandler }: ModalHandlerProps) => {
   const [eventAllFilter, setEventAllFilter] = useState<boolean>(true);
   const [categoryAllFilter, setCategoryAllFilter] = useState<boolean>(true);
 
+  const prveProductListType = useRef<string>($productListType);
+
+  useEffect(() => {
+    console.log("여기 필터야!");
+    console.log(prveProductListType.current);
+    console.log($productListType);
+    if (prveProductListType.current !== $productListType) {
+      prveProductListType.current = $productListType;
+      console.log("변경 인식");
+      setSortIndex(0);
+      setEventFilter(EventFilterList);
+      setMealFilter(CategoryMealList);
+      setCookFilter(CategoryCookList);
+      setSnackFilter(CategorySnackList);
+      setFoodFilter(CategoryFoodList);
+      setDrinkFilter(CategoryDrinkList);
+      setLifeFilter(CategoryLifeList);
+    }
+  }, [$productListType]);
+
   const sortIndexHandler = useCallback(
     (index: number) => {
       if (sortIndex === index) {
@@ -109,77 +123,55 @@ const PyeneFilter = ({ ModalHandler }: ModalHandlerProps) => {
     },
     [sortIndex]
   );
-  
-  const EventIndexHandler = (value:FilterType, index:number) => {
-    if(eventAllFilter) setEventAllFilter(false)
+
+  const EventIndexHandler = (value: FilterType, index: number) => {
+    if (eventAllFilter) setEventAllFilter(false);
     const updateEventFilter = [...eventFilter];
-    updateEventFilter[index].state = !value.state
-    setEventFilter(updateEventFilter)
+    updateEventFilter[index].state = !value.state;
+    setEventFilter(updateEventFilter);
   };
 
-  const MealIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const MealIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateMealFilter = [...mealFilter];
-    updateMealFilter[index].state = !value.state
-    setMealFilter(updateMealFilter)
+    updateMealFilter[index].state = !value.state;
+    setMealFilter(updateMealFilter);
   };
 
-  const CookIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const CookIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateCookFilter = [...cookFilter];
-    updateCookFilter[index].state = !value.state
-    setCookFilter(updateCookFilter)
+    updateCookFilter[index].state = !value.state;
+    setCookFilter(updateCookFilter);
   };
 
-  const SnackIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const SnackIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateSnackFilter = [...snackFilter];
-    updateSnackFilter[index].state = !value.state
-    setSnackFilter(updateSnackFilter)
+    updateSnackFilter[index].state = !value.state;
+    setSnackFilter(updateSnackFilter);
   };
 
-  const FoodIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const FoodIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateFoodFilter = [...foodFilter];
-    updateFoodFilter[index].state = !value.state
-    setFoodFilter(updateFoodFilter)
+    updateFoodFilter[index].state = !value.state;
+    setFoodFilter(updateFoodFilter);
   };
 
-  const DrinkIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const DrinkIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateDrinkFilter = [...drinkFilter];
-    updateDrinkFilter[index].state = !value.state
-    setDrinkFilter(updateDrinkFilter)
+    updateDrinkFilter[index].state = !value.state;
+    setDrinkFilter(updateDrinkFilter);
   };
 
-  const LifeIndexHandler = (value:FilterType, index:number) => {
-    if(categoryAllFilter) setCategoryAllFilter(false)
+  const LifeIndexHandler = (value: FilterType, index: number) => {
+    if (categoryAllFilter) setCategoryAllFilter(false);
     const updateLifeFilter = [...lifeFilter];
-    updateLifeFilter[index].state = !value.state
-    setLifeFilter(updateLifeFilter)
+    updateLifeFilter[index].state = !value.state;
+    setLifeFilter(updateLifeFilter);
   };
-
-  const CategoryClear = () => {
-    setCategoryAllFilter(true)
-    const clearMealFilter = [...CategoryMealList];
-    const clearCookFilter = [...CategoryCookList];
-    const clearSnackFilter = [...CategorySnackList];
-    const clearFoodFilter = [...CategoryFoodList];
-    const clearDrinkFilter = [...CategoryDrinkList];
-    const clearLifeFilter = [...CategoryLifeList];
-    setMealFilter(clearMealFilter)
-    setCookFilter(clearCookFilter)
-    setSnackFilter(clearSnackFilter)
-    setFoodFilter(clearFoodFilter)
-    setDrinkFilter(clearDrinkFilter)
-    setLifeFilter(clearLifeFilter)
-  }
-
-  const EventClear = () => {
-    setEventAllFilter(false)
-    const clearEventFilter = [...EventFilterList];
-    setEventFilter(clearEventFilter)
-  }
 
   return (
     <>
@@ -196,76 +188,112 @@ const PyeneFilter = ({ ModalHandler }: ModalHandlerProps) => {
               <SideInfo>기본값 : 이름순</SideInfo>
             </SideHeader>
             <SideMain>
-              {
-                SortFilterList.map((value, index) => (
-                  <div key={value.name + index}  className={sortIndex === index ? "active" : ""} onClick={()=> sortIndexHandler(index)}>{value.name}</div>
-                ))
-              }
+              {SortFilterList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={sortIndex === index ? "active" : ""}
+                  onClick={() => sortIndexHandler(index)}
+                >
+                  {value.name}
+                </div>
+              ))}
             </SideMain>
           </SortBox>
           <EventBox>
             <SideHeader>
-                <SideTitle>행사선택</SideTitle>
-                <SideInfo>기본값 : 전체</SideInfo>
-                <AllMain onClick={() => EventClear()}><div className={eventAllFilter ? "active" : ""}>전체</div></AllMain>
+              <SideTitle>행사선택</SideTitle>
+              <SideInfo>기본값 : 전체</SideInfo>
+              <AllMain>
+                <div className={eventAllFilter ? "active" : ""}>전체</div>
+              </AllMain>
             </SideHeader>
             <SideMain>
-              {
-                EventFilterList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>EventIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {EventFilterList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => EventIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
             </SideMain>
           </EventBox>
           <CategoryBox>
             <SideHeader>
-                <SideTitle>카테고리</SideTitle>
-                <SideInfo>기본값 : 전체</SideInfo>
-                <AllMain onClick={()=>CategoryClear()}><div className={categoryAllFilter ? "active" : ""}>전체</div></AllMain>
+              <SideTitle>카테고리</SideTitle>
+              <SideInfo>기본값 : 전체</SideInfo>
+              <AllMain>
+                <div className={categoryAllFilter ? "active" : ""}>전체</div>
+              </AllMain>
             </SideHeader>
             <SideMain>
               <SideCategory>간편 식사</SideCategory>
-              {
-                CategoryMealList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>MealIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {CategoryMealList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => MealIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
               <SideCategory>즉석 조리</SideCategory>
-              {
-                CategoryCookList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>CookIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {CategoryCookList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => CookIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
               <SideCategory>과자류</SideCategory>
-              {
-                CategorySnackList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>SnackIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {CategorySnackList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => SnackIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
               <SideCategory>식품</SideCategory>
-              {
-                CategoryFoodList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>FoodIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {CategoryFoodList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => FoodIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
               <SideCategory>음료/아이스크림</SideCategory>
-              {
-                CategoryDrinkList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>DrinkIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
-               <SideCategory>생활용품</SideCategory>
-              {
-                CategoryLifeList.map((value, index) => (
-                  <div key={value.name + index} className={value.state ? "active" : ""} onClick={()=>LifeIndexHandler(value, index) }>{value.name}</div>
-                ))
-              }
+              {CategoryDrinkList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => DrinkIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
+              <SideCategory>생활용품</SideCategory>
+              {CategoryLifeList.map((value, index) => (
+                <div
+                  key={value.name + index}
+                  className={value.state ? "active" : ""}
+                  onClick={() => LifeIndexHandler(value, index)}
+                >
+                  {value.name}
+                </div>
+              ))}
             </SideMain>
           </CategoryBox>
         </FilterMainBox>
         <FilterSaveBox>
-            <ClearBtn>초기화</ClearBtn>
-            <ApplyBtn>적용하기</ApplyBtn>
+          <ClearBtn>초기화</ClearBtn>
+          <ApplyBtn>적용하기</ApplyBtn>
         </FilterSaveBox>
       </FilterBox>
     </>
@@ -304,6 +332,8 @@ const TitleBox = tw.div`
   bg-white
   h-[52px]
   border-b-2
+  min-w-[350xp]
+  max-w-[450px]
   border-common-white-divider
   rounded-[15px_15px_0px_0px]
   flex
@@ -342,8 +372,8 @@ const SideMain = styled.div`
   height: auto;
   display: flex;
   flex-wrap: wrap;
-  row-gap:8px;
-  margin-bottom:30px;
+  row-gap: 8px;
+  margin-bottom: 30px;
   div {
     font-size: 13px;
     padding: 5px 15px;
@@ -391,7 +421,7 @@ const ClearBtn = tw.div`
   py-[10px]
   mr-4
   mt-4
-`
+`;
 
 const ApplyBtn = tw.div`
   w-[150px]
@@ -407,14 +437,13 @@ const ApplyBtn = tw.div`
   py-[10px]
   ml-4
   mt-4
-`
-
+`;
 
 const AllMain = styled.div`
   position: absolute;
-  right:10px;
+  right: 10px;
   display: flex;
-  z-index:10;
+  z-index: 10;
   div {
     font-size: 13px;
     padding: 5px 15px;

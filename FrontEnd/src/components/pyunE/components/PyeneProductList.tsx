@@ -30,7 +30,7 @@ const PyeneProductList = () => {
 
   return (
     <>
-      {modalState && <PyeneFilter ModalHandler={ModalHandler} />}
+      {modalState && <PyeneFilter ModalHandler={ModalHandler} $productListType={productListType} />}
       <ProductListHeader>
         <SideBtn>
           <EventProductBtn
