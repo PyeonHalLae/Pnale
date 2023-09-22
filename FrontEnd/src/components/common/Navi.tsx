@@ -37,7 +37,7 @@ export default function Navi() {
   const toggleIconColor = (iconName: keyof IconState) => {
     setIconState((prevState) => ({
       ...prevState,
-      [iconName]: "gray",
+      [iconName]: "blue",
     }));
     if (iconName === "home") {
       navigate("/");
@@ -52,40 +52,43 @@ export default function Navi() {
         <Outlet />
       </div>
       <NaviParent>
-        <NaviDiv $isActive={location.pathname === "/"}>
+        <NaviDiv $isActive={iconState.home === "blue"}>
           <NaviIcon
             src={`/img/navi/home-${iconState.home}.png`}
             alt=""
             onClick={() => toggleIconColor("home")}
           />
-          <NaviText $isActive={location.pathname === "/"}>홈</NaviText>
+          <NaviText $isActive={iconState.home === "blue"}>홈</NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/search")}>
+
+        <NaviDiv $isActive={iconState.search === "blue"}>
           <NaviIcon
             src={`/img/navi/search-${iconState.search}.png`}
             alt=""
             onClick={() => toggleIconColor("search")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
+          <NaviText $isActive={iconState.search === "blue"}>검색</NaviText>
         </NaviDiv>
+
         {/* 편의점 메인 버튼 */}
-        <NaviPE />
+        <NaviPE iconState={iconState.pyenE} />
         {/* 편의점 메인 버튼 */}
-        <NaviDiv $isActive={location.pathname.startsWith("/recipe")}>
+        <NaviDiv $isActive={iconState.recipe === "blue"}>
           <NaviIcon
             src={`/img/navi/recipe-${iconState.recipe}.png`}
             alt=""
             onClick={() => toggleIconColor("recipe")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/recipe")}>레시피</NaviText>
+          <NaviText $isActive={iconState.recipe === "blue"}>레시피</NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/mypage")}>
+
+        <NaviDiv $isActive={iconState.mypage === "blue"}>
           <NaviIcon
             src={`/img/navi/user-${iconState.mypage}.png`}
             alt=""
             onClick={() => toggleIconColor("mypage")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/mypage")}>마이</NaviText>
+          <NaviText $isActive={iconState.mypage === "blue"}>마이</NaviText>
         </NaviDiv>
       </NaviParent>
     </>
