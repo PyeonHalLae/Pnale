@@ -1,17 +1,16 @@
 import React, { useState } from "react";
 import "@/components/common/Navi.css";
-import Modal from "react-modal";
-const NaviPE = () => {
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+import { useNavigate } from "react-router-dom";
 
-  // 모달을 열고 닫는 함수
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+const NaviPE = (iconState) => {
+  const navi = useNavigate();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const closeModal = () => {
-    setModalIsOpen(false);
+  const moveToPyenType = (type) => {
+    navi(`/pyenE/${type}`);
+    console.log(type);
   };
+  console.log(iconState);
 
   return (
     <nav className="menu">
@@ -20,57 +19,28 @@ const NaviPE = () => {
         className="menu-open"
         name="menu-open"
         id="menu-open"
-        checked={modalIsOpen}
-        onChange={() => openModal()}
+        checked={menuOpen}
+        onChange={() => setMenuOpen(!menuOpen)}
       />
-      <label className="menu-open-button" htmlFor="menu-open">
-        <img src="/img/navi/pyenE-gray.png" alt="" />
-      </label>
-
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={closeModal}
-        style={{
-          overlay: {
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: "rgba(255, 255, 255, 0.75)",
-          },
-          content: {
-            position: "relative",
-            top: "40px",
-            left: "40px",
-            right: "40px",
-            bottom: "40px",
-            border: "1px solid rgba(255, 255, 255, 0.75)",
-            background: "rgba(255, 106, 106, 0.75)",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            borderRadius: "4px",
-            outline: "none",
-            padding: "20px",
-          },
-        }}
-      >
-        {/* 모달 안에 넣을 UI */}
-        <div>
-          <a href="#" className="menu-item">
-            <img src="/img/navi/CU_btn.png" alt="" />
-          </a>
-          <a href="#" className="menu-item">
-            <img src="/img/navi/SEVEN_btn.png" alt="" />
-          </a>
-          <a href="#" className="menu-item">
-            <img src="/img/navi/GS_btn.png" alt="" />
-          </a>
-          <a href="#" className="menu-item">
-            <img src="/img/navi/EMART_btn.png" alt="" />
-          </a>
-        </div>
-      </Modal>
+      <label
+        // src={`/img/navi/search-${iconState.search}.png`}
+        className="menu-open-button"
+        htmlFor="menu-open"
+        style={{ backgroundColor: `${iconState}` }}
+      ></label>
+      <a className="menu-item-back"></a>
+      <button className="menu-item" id="CU" onClick={() => moveToPyenType("CU")}>
+        <img src="/img/navi/CU_btn.png" alt="" id="CU" />
+      </button>
+      <button className="menu-item" id="SEVEN" onClick={() => moveToPyenType("SEVEN")}>
+        <img src="/img/navi/SEVEN_btn.png" alt="" id="SEVEN" />
+      </button>
+      <button className="menu-item" id="GS" onClick={() => moveToPyenType("GS")}>
+        <img src="/img/navi/GS_btn.png" alt="" id="GS" />
+      </button>
+      <button className="menu-item" id="EMART" onClick={() => moveToPyenType("EMART")}>
+        <img src="/img/navi/EMART_btn.png" alt="" id="EMART" />
+      </button>
     </nav>
   );
 };
