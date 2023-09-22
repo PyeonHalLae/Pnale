@@ -9,7 +9,7 @@ import PyeneFilter from "./PyeneFilter";
 
 const PyeneProductList = () => {
   const [productListType, setProductListType] = useState<string>("EVENT");
-  const [modalState, setModalState] = useState<boolean>(true);
+  const [modalState, setModalState] = useState<boolean>(false);
   // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
   const ModalHandler = () => {
@@ -30,7 +30,7 @@ const PyeneProductList = () => {
 
   return (
     <>
-      {modalState && <PyeneFilter ModalHandler={ModalHandler} />}
+      {modalState && <PyeneFilter ModalHandler={ModalHandler} $productListType={productListType} />}
       <ProductListHeader>
         <SideBtn>
           <EventProductBtn
