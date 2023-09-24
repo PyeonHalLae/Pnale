@@ -1,19 +1,38 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
+import { useState } from "react";
+
 const Header = () => {
   const navigate = useNavigate();
+  const [isActive, setIsActive] = useState(false);
+  const [inputValue, setInputValue] = useState("");
 
   const backBtn = () => {
     navigate(-1);
   };
 
+  const toggleSearch = () => {
+    setIsActive((prevIsActive) => !prevIsActive);
+  };
+
+  const handleInputChange = (e) => {
+    setInputValue(e.target.value);
+  };
+
   return (
-    <SearchBar>
-      <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
-      <Input type="text" placeholder="코카콜라라고 검색해보세요." />
-      <SubtractBtn src="/img/btn/subtract.png" onClick={backBtn} />
-      <SearchBtn src="/img/btn/search-blue.png" />
-    </SearchBar>
+    <>
+      <SearchBar className={isActive ? "active" : ""}>
+        <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
+        <Input
+          type="text"
+          placeholder="코카콜라라고 검색해보세요."
+          value={inputValue}
+          onChange={handleInputChange}
+        />
+        <SubtractBtn src="/img/btn/subtract.png" onClick={backBtn} />
+        <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
+      </SearchBar>
+    </>
   );
 };
 

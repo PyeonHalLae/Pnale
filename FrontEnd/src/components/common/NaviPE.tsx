@@ -8,9 +8,8 @@ const NaviPE = (iconState) => {
 
   const moveToPyenType = (type) => {
     navi(`/pyenE/${type}`);
-    console.log(type);
+    setMenuOpen(!menuOpen);
   };
-  console.log(iconState);
 
   return (
     <nav className="menu">
@@ -27,8 +26,10 @@ const NaviPE = (iconState) => {
         className="menu-open-button"
         htmlFor="menu-open"
         style={{ backgroundColor: `${iconState}` }}
-      ></label>
-      <a className="menu-item-back"></a>
+      >
+        <img src="/img/navi/pyenE-gray.png" alt="편의점 가기" className="p-5" />
+      </label>
+      <a className="menu-item-back" onClick={() => setMenuOpen(!menuOpen)}></a>
       <button className="menu-item" id="CU" onClick={() => moveToPyenType("CU")}>
         <img src="/img/navi/CU_btn.png" alt="" id="CU" />
       </button>
