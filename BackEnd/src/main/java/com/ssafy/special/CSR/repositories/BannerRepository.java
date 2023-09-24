@@ -1,4 +1,4 @@
-package com.ssafy.special.banner.model;
+package com.ssafy.special.CSR.repositories;
 
 import com.ssafy.special.entity.Banner;
 import org.springframework.data.jpa.repository.JpaRepository;

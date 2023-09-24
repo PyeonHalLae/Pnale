@@ -1,9 +1,9 @@
-package com.ssafy.special.recipe;
+package com.ssafy.special.CSR.controllers;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/recipe")
-public class RecipeController {
+@RequestMapping("/api/event")
+public class BannerController {
 }

@@ -1,6 +1,6 @@
-package com.ssafy.special.product.model.vo;
+package com.ssafy.special.CSR.dtos.product;
 
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
+import com.ssafy.special.CSR.dtos.memberpick.MemberPickProdInfoDto;
 import lombok.*;
 
 
