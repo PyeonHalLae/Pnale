@@ -22,7 +22,7 @@ import java.util.Map;
 public class MemberPickProdController {
     private final MemberPickProdService memberPickProdService;
 
-    @GetMapping("/pick/{memberId}")
+    @GetMapping("/{memberId}")
     public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, @PageableDefault(size = 9) Pageable pageable){
         DataResponse<Page<Map<String,Object>>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
         response.setData(memberPickProdService.findAllPick(pageable, memberId));
