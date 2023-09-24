@@ -1,16 +1,50 @@
 // import React from 'react'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
-
-import PyeneNineItemList from "./PyeneNineItemList";
 import styled from "styled-components";
-// import { useEffect } from "react";
-import PyeneFilter from "./PyeneFilter";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import * as pyeneRecoil from "@/recoil/pyeneRecoil";
 
-const PyeneProductList = () => {
+import PyeneShopProductNineView from "./PyeneShopProductNineView";
+import PyeneShopProductFilter from "./PyeneShopProductFilter";
+
+const PyeneShopProductList = () => {
+  //recoil 상품 Type 을 위한 값
+  const [preProductViewType, setPreProductViewType] = useRecoilState(pyeneRecoil.preProductView);
+  const filterCnt = useRecoilValue(pyeneRecoil.FilterCnt);
+
+  //recoil 필터 초기화
+  const resetSort = useResetRecoilState(pyeneRecoil.SortFilterDefault);
+  const resetEvent = useResetRecoilState(pyeneRecoil.EventFilterDefault);
+  const resetMeal = useResetRecoilState(pyeneRecoil.CategoryMealDefault);
+  const resetCook = useResetRecoilState(pyeneRecoil.CategoryCookDefault);
+  const resetSnack = useResetRecoilState(pyeneRecoil.CategorySnackDefault);
+  const resetFood = useResetRecoilState(pyeneRecoil.CategoryFoodDefault);
+  const resetDrink = useResetRecoilState(pyeneRecoil.CategoryDrinkDefault);
+  const resetLife = useResetRecoilState(pyeneRecoil.CategoryLifeDefault);
+  const resetAllEventState = useResetRecoilState(pyeneRecoil.AllEventDefault);
+  const resetAllCategoryState = useResetRecoilState(pyeneRecoil.AllCategoryDefault);
+
   const [productListType, setProductListType] = useState<string>("EVENT");
   const [modalState, setModalState] = useState<boolean>(false);
   // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
+
+  useEffect(() => {
+    if (preProductViewType.type !== productListType) {
+      //필터값 초기화
+      setPreProductViewType({ type: productListType });
+      resetSort();
+      resetEvent();
+      resetMeal();
+      resetCook();
+      resetSnack();
+      resetFood();
+      resetDrink();
+      resetLife();
+      resetAllEventState();
+      resetAllCategoryState();
+    }
+  }, [productListType]);
 
   const ModalHandler = () => {
     setModalState(!modalState);
@@ -30,7 +64,7 @@ const PyeneProductList = () => {
 
   return (
     <>
-      {modalState && <PyeneFilter ModalHandler={ModalHandler} $productListType={productListType} />}
+      {modalState && <PyeneShopProductFilter ModalHandler={ModalHandler} />}
       <ProductListHeader>
         <SideBtn>
           <EventProductBtn
@@ -50,21 +84,23 @@ const PyeneProductList = () => {
       <ProductListMain>
         <FilterBox>
           <FilterText>필터 선택:</FilterText>
-          <FilterBtn onClick={ModalHandler}>
+          <FilterBtn $filterState={filterCnt > 0 ? true : false} onClick={ModalHandler}>
             <FilterBtnText>필터</FilterBtnText>
-            <FilterCntBox>
-              <FilterCnt>5</FilterCnt>
-            </FilterCntBox>
+            {filterCnt !== 0 && (
+              <FilterCntBox>
+                <FilterCnt>{filterCnt}</FilterCnt>
+              </FilterCntBox>
+            )}
             <FilterImg src="/img/icons/filter-icon.png" />
           </FilterBtn>
         </FilterBox>
-        <PyeneNineItemList $productListType={productListType} />
+        <PyeneShopProductNineView $productListType={productListType} />
       </ProductListMain>
     </>
   );
 };
 
-export default PyeneProductList;
+export default PyeneShopProductList;
 
 const ProductListHeader = tw.div`
   mt-[10px] border-b-[1px] border-common-text-gray-color h-[28px]
@@ -116,14 +152,14 @@ const FilterText = tw.div`
   pt-1
 `;
 
-const FilterBtn = tw.div`
+const FilterBtn = tw.div<{ $filterState: boolean }>`
   relative
   flex
   rounded-2xl
   w-[80px]
   h-[28px]
   text-center
-  bg-common-text-color
+  ${(props) => (props.$filterState ? "bg-common-text-color" : "bg-common-bold-back-color")}
   justify-center
 `;
 
