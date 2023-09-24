@@ -2,13 +2,11 @@ package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.ProductCategory;
-import com.ssafy.special.product.model.vo.ProductResponseDto;
+import com.ssafy.special.product.model.vo.ProductInfoDto;
 import lombok.Getter;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -49,8 +47,8 @@ public class Product {
     @Column(columnDefinition = "DATE", insertable=false)
     LocalDate updatedAt;
 
-    public ProductResponseDto toResponseDto(){
-        return ProductResponseDto.builder()
+    public ProductInfoDto toInfoDto(){
+        return ProductInfoDto.builder()
                 .productId(this.productId)
                 .productName(this.productName)
                 .productImg(this.productImg)

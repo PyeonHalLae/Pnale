@@ -1,33 +1,28 @@
 package com.ssafy.special.product.model.vo;
 
-import com.ssafy.special.entity.Member;
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.ProductCategory;
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdResponseDto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Getter
 @Setter
+@Getter //JSON 직렬화를 위해서 Dto에 Getter가 필요하다
 @NoArgsConstructor
-public class RecommandProduct {
+public class ProductInfoDto {
     Long productId;
     String productName;
     String productImg;
+    String productDesc;
     Long price;
     ProductCategory category;
-    String productDesc;
     CorpType pb;
     Long recommand;
     Long hit;
 
-    EventInfoDto eventInfoDto;
-    MemberPickProdResponseDto memberPickProdResponseDto;
-
     @Builder
-    public RecommandProduct(Long productId, String productName, String productImg, Long price, ProductCategory category, String productDesc, CorpType pb, Long recommand, Long hit, EventInfoDto eventInfoDto) {
+    public ProductInfoDto(Long productId, String productName, String productImg, Long price, ProductCategory category, String productDesc, CorpType pb, Long recommand, Long hit) {
         this.productId = productId;
         this.productName = productName;
         this.productImg = productImg;
@@ -37,6 +32,5 @@ public class RecommandProduct {
         this.pb = pb;
         this.recommand = recommand;
         this.hit = hit;
-        this.eventInfoDto = eventInfoDto;
     }
 }

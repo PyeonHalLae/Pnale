@@ -12,12 +12,17 @@ import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.product.model.ProductRepository;
 import com.ssafy.special.product.model.ProductService;
 import com.ssafy.special.member.model.MemberRepository;
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
+import com.ssafy.special.product.model.vo.EventInfoDto;
+import com.ssafy.special.product.model.vo.EventProductDto;
+import com.ssafy.special.product.model.vo.ProductInfoDto;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -36,9 +41,8 @@ public class MemberPickProdService {
     private final MemberRepository memberRepository;
     private final EventProductRepository eventProductRepository;
 
-    private final ModelMapper modelMapper;
 
-    public Page<MemberPickProdResponseDto> findAllPick(Pageable pageable, Long userId) {
+    public Page<Map<String, Object>> findAllPick(Pageable pageable, Long userId) {
         return getAllLike(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
 
     }
@@ -55,9 +59,8 @@ public class MemberPickProdService {
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
                     addUserLikeProduct(findUser, findProduct);
-                    return findProduct.getProductName() + "을 좋아합니다.";
+                    return findProduct.getProductName() + "가 좋아요 목록에 추가되었습니다.";
                 });
-
     }
 
     public String receiveToggle(Long productId, Long userId) {
@@ -66,27 +69,26 @@ public class MemberPickProdService {
 
         MemberPickProd upp = memberPickProdRepository
                 .findByMember_MemberIdAndProduct_ProductId(userId, productId)
-
                 .orElseThrow(()-> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
         updateEmailReceiveStatus(upp);
-        return upp.getProduct().getProductName() + "의 상품 정보를 업데이트 했습니다.";
+        return upp.getProduct().getProductName() + "의 이메일 수신 여부 정보를 업데이트 했습니다.";
     }
 
     //===============================================
     //서비스 내부에서만 사용하는 메소드는 private로 제한한다.
-    private Page<MemberPickProdResponseDto> getAllLike(Page<MemberPickProd> data) {
+    private Page<Map<String,Object>> getAllLike(Page<Object[]> data) {
         //Page객체에 있는 리스트 요소중 개별 객체를 upp라 지칭
         return data.map(upp -> {
-            //UserLikeProd엔티티를 Dto로 매핑한다.
-            MemberPickProdResponseDto uppResponse = modelMapper.map(upp, MemberPickProdResponseDto.class);
+            Product pd = (Product) upp[0];
+            EventProduct ed = (EventProduct) upp[1];
+            MemberPickProd mpp = (MemberPickProd) upp[2];
 
-            //상품ID에 대한 행사 상품을 찾는다
-            EventProduct eventProduct = eventProductRepository
-                    .findEventProductByProduct(upp.getProduct())
-                    .orElseGet(EventProduct::new);
-            //uppResponse.setEventProductDto(eventProduct.toDto());
+            Map<String, Object> response = new HashMap<>();
+            response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
+            response.put("event", (ed != null) ? ed.toInfoDto() : EventInfoDto.builder().build());
+            response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
 
-            return uppResponse;
+            return response;
         });
     }
 

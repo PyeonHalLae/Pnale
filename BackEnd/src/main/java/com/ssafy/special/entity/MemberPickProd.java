@@ -1,5 +1,6 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -58,5 +59,13 @@ public class MemberPickProd {
     public void updateEmailReceive() {
         this.isReceived = !this.isReceived;
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public MemberPickProdInfoDto toInfoDto(){
+        return MemberPickProdInfoDto.builder()
+                .pickProdId(this.pickProdId)
+                .isReceived(this.isReceived)
+                .likeStat(this.likeStat)
+                .build();
     }
 }

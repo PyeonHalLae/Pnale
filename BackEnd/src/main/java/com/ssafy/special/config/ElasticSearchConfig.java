@@ -24,10 +24,18 @@ public class ElasticSearchConfig extends AbstractElasticsearchConfiguration {
     @Value("${elasticsearch.port}")
     private Integer port;
 
+    @Value("${esdata.user}")
+    private String id;
+
+    @Value("${esdata.keys}")
+    private String keys;
+
+
     @Override
     public RestHighLevelClient elasticsearchClient() {
         ClientConfiguration clientConfiguration = ClientConfiguration.builder()
                 .connectedTo(hostname + ":" + port)
+                .withBasicAuth(id, keys)
                 .build();
         return RestClients.create(clientConfiguration).rest();
     }

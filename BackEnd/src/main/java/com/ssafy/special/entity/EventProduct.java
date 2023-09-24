@@ -1,6 +1,7 @@
 package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.EventType;
+import com.ssafy.special.product.model.vo.EventInfoDto;
 import com.ssafy.special.product.model.vo.EventProductDto;
 import lombok.Getter;
 
@@ -47,8 +48,8 @@ public class EventProduct {
     LocalDateTime createdAt;
 
 
-    public EventProductDto toDto(){
-        return EventProductDto.builder()
+    public EventInfoDto toInfoDto(){
+        return EventInfoDto.builder()
                 .CUType(this.CUType)
                 .CUDate(this.CUDate)
                 .GSType(this.GSType)
