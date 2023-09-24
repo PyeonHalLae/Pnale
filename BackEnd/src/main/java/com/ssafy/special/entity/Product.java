@@ -2,7 +2,7 @@ package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.enums.ProductCategory;
-import com.ssafy.special.product.model.vo.ProductInfoDto;
+import com.ssafy.special.CSR.dtos.product.ProductInfoDto;
 import lombok.Getter;
 
 import javax.persistence.*;

@@ -1,4 +1,4 @@
-package com.ssafy.special.product.model.vo;
+package com.ssafy.special.CSR.dtos.product;
 
 import com.ssafy.special.enums.EventType;
 import lombok.Builder;

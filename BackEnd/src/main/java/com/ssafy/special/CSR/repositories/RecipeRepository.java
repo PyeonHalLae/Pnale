@@ -1,4 +1,4 @@
-package com.ssafy.special.recipe.model;
+package com.ssafy.special.CSR.repositories;
 
 import com.ssafy.special.entity.Recipe;
 import org.springframework.data.jpa.repository.JpaRepository;

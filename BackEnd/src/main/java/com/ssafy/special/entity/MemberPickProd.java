@@ -1,6 +1,6 @@
 package com.ssafy.special.entity;
 
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
+import com.ssafy.special.CSR.dtos.memberpick.MemberPickProdInfoDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

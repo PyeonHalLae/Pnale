@@ -1,21 +1,19 @@
-package com.ssafy.special.memberpickprod.model;
+package com.ssafy.special.CSR.services;
 
+import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.entity.MemberPickProd;
 
-import com.ssafy.special.product.model.EventProductRepository;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.CustomErrorCode;
 
-import com.ssafy.special.product.model.ProductRepository;
-import com.ssafy.special.product.model.ProductService;
+import com.ssafy.special.CSR.repositories.ProductRepository;
 import com.ssafy.special.member.model.MemberRepository;
-import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
-import com.ssafy.special.product.model.vo.EventInfoDto;
-import com.ssafy.special.product.model.vo.EventProductDto;
-import com.ssafy.special.product.model.vo.ProductInfoDto;
+import com.ssafy.special.CSR.dtos.memberpick.MemberPickProdInfoDto;
+import com.ssafy.special.CSR.dtos.product.EventInfoDto;
+import com.ssafy.special.CSR.dtos.product.ProductInfoDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,12 +37,10 @@ public class MemberPickProdService {
     private final MemberPickProdRepository memberPickProdRepository;
     private final ProductRepository productRepository;
     private final MemberRepository memberRepository;
-    private final EventProductRepository eventProductRepository;
 
 
     public Page<Map<String, Object>> findAllPick(Pageable pageable, Long userId) {
-        return getAllLike(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
-
+        return getAllLike(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
     }
 
     public String pickToggle(Long productId, Long userId) {

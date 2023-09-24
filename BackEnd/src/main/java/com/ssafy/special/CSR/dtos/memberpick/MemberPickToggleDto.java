@@ -1,4 +1,4 @@
-package com.ssafy.special.memberpickprod.model.vo;
+package com.ssafy.special.CSR.dtos.memberpick;
 
 import lombok.*;
 

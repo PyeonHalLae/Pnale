@@ -1,8 +1,7 @@
 package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.EventType;
-import com.ssafy.special.product.model.vo.EventInfoDto;
-import com.ssafy.special.product.model.vo.EventProductDto;
+import com.ssafy.special.CSR.dtos.product.EventInfoDto;
 import lombok.Getter;
 
 import javax.persistence.*;

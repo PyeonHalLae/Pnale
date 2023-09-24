@@ -1,4 +1,4 @@
-package com.ssafy.special.member;
+package com.ssafy.special.CSR.controllers;
 
 
 
@@ -72,7 +72,6 @@ public class MemberController {
 
         return new CustomResponse(200, "비로그인");
     }
-
 
     @PatchMapping("/update")
     public CustomResponse updateUserInfo(HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) {
