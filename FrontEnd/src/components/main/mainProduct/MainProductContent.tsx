@@ -15,7 +15,7 @@ const MainProductContent = () => {
     <div className="grid grid-cols-2 p-3 bg-white gap-y-3 gap-x-3">
       {sale.map((info, index) => (
         <ProductCard key={index + "_" + info.productResponseDto.productId} data={info} />
-      ))}{" "}
+      ))}
     </div>
   );
 };
