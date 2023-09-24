@@ -66,7 +66,7 @@ function App() {
               <Route path=":pyenType" element={<PyeneShop />} />
               <Route path=":pyenType/event/*" element={<PyeneEvent />}>
                 <Route index element={<PyeneEventList />} />
-                <Route path="detail" element={<PyeneEventDetail />} />
+                <Route path=":eventId" element={<PyeneEventDetail />} />
               </Route>
             </Route>
 
