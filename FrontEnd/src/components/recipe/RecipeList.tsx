@@ -8,7 +8,7 @@ import { recipeType } from "@/model/commonType";
 
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
-import Header from "@components/common/Header";
+import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
 
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
@@ -54,7 +54,7 @@ const RecipeList = () => {
   return (
     <div className="relative min-w-[22.5rem] max-w-[28.125rem]">
       {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
-      <Header />
+      <RecipeListHeaderBar />
 
       <ContentTitle>
         <TitleTextPeach>인기</TitleTextPeach>
