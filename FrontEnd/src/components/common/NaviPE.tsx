@@ -27,7 +27,7 @@ const NaviPE = (iconState) => {
         htmlFor="menu-open"
         style={{ backgroundColor: `${iconState}` }}
       ></label>
-      <a className="menu-item-back"></a>
+      <a className="menu-item-back" onClick={() => setMenuOpen(!menuOpen)}></a>
       <button className="menu-item" id="CU" onClick={() => moveToPyenType("CU")}>
         <img src="/img/navi/CU_btn.png" alt="" id="CU" />
       </button>

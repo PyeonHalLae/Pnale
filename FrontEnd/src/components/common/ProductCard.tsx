@@ -13,7 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     <Card>
       <ImageArea>
         <img
-          src="/img/test/testProduct.png"
+          src={data.productResponseDto.productImg}
           alt="제품사진"
           className="px-4.5 py-3 border-black boder-2"
         />
@@ -21,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
       </ImageArea>
       <TextArea>
         <div className="flex">
-          <Categori>스낵</Categori>
+          <Categori>{data.productResponseDto.category}</Categori>
           <img
             src="/img/icons/filledStar.png"
             alt="즐겨찾기"
@@ -29,9 +29,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
           />
         </div>
         <p className="mx-1.5 text-sm max-w-130 line-clamp-1">
-          {data.productResponseDto.productName}
+          {data.productResponseDto.productName.slice(
+            data.productResponseDto.productName.indexOf(")") + 1
+          )}
         </p>
-        <Price>2,000</Price>
+        <Price>{data.productResponseDto.price}</Price>
         <span className="mr-4">원</span>
       </TextArea>
     </Card>
