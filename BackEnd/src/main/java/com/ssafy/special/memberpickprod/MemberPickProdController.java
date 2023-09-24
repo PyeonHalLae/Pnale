@@ -30,9 +30,9 @@ public class MemberPickProdController {
     }
 
     @PostMapping("/pick")
-    public CustomResponse pickProductToggle(@ModelAttribute MemberPickToggleDto requestData){
+    public CustomResponse pickProductToggle(@RequestBody Map<String, Long> requestData){
         log.info("{}", requestData);
-        return new CustomResponse(200, memberPickProdService.pickToggle(requestData.getProductId(), requestData.getMemberId()));
+        return new CustomResponse(200, memberPickProdService.pickToggle(requestData.get("productId"), requestData.get("memberId")));
     }
 
 //    @GetMapping("/pick/{memberId}")
@@ -43,7 +43,7 @@ public class MemberPickProdController {
 //    }
 
     @PostMapping("/receive")
-    public CustomResponse receiveEmailToggle(@ModelAttribute MemberPickToggleDto requestData){
-        return new CustomResponse(200, memberPickProdService.receiveToggle(requestData.getProductId(), requestData.getMemberId()));
+    public CustomResponse receiveEmailToggle(@RequestBody Map<String, Long> requestData){
+        return new CustomResponse(200, memberPickProdService.receiveToggle(requestData.get("productId"), requestData.get("memberId")));
     }
 }
