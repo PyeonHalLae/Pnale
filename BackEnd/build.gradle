@@ -45,8 +45,7 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-bom:1.11.228'
     implementation 'com.amazonaws:aws-java-sdk-s3'
 
-    // ModelMapper
-    implementation 'org.modelmapper:modelmapper:2.4.2'
+
 }
 
 tasks.named('test') {

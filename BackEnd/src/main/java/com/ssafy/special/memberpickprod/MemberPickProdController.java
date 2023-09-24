@@ -3,39 +3,47 @@ package com.ssafy.special.memberpickprod;
 import com.ssafy.special.exception.CustomResponse;
 import com.ssafy.special.exception.DataResponse;
 import com.ssafy.special.memberpickprod.model.MemberPickProdService;
-import com.ssafy.special.memberpickprod.model.vo.UserPickProdResponseDto;
+import com.ssafy.special.memberpickprod.model.vo.MemberPickProdInfoDto;
+import com.ssafy.special.memberpickprod.model.vo.MemberPickToggleDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 
 @RestController
-@RequestMapping(value ={"/api/pick_prod", "api/auth/pick_prod"} )
+@RequestMapping(value ={"/api/pick_prod", "/api/auth/pick_prod"} )
 @RequiredArgsConstructor
+@Slf4j
 public class MemberPickProdController {
     private final MemberPickProdService memberPickProdService;
 
-    @GetMapping("/{memberId}")
-    public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, Pageable pageable){
-
-        DataResponse<Page<UserPickProdResponseDto>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
+    @GetMapping("/pick/{memberId}")
+    public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, @PageableDefault(size = 9) Pageable pageable){
+        DataResponse<Page<Map<String,Object>>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
         response.setData(memberPickProdService.findAllPick(pageable, memberId));
         return response;
     }
 
-    @GetMapping("/pick/{productId}/{userId}")
-    public CustomResponse pickProductToggle(@PathVariable Long productId,
-                                            @PathVariable Long userId){
-        return new CustomResponse(200, memberPickProdService.pickToggle(productId, userId));
+    @PostMapping("/pick")
+    public CustomResponse pickProductToggle(@ModelAttribute MemberPickToggleDto requestData){
+        log.info("{}", requestData);
+        return new CustomResponse(200, memberPickProdService.pickToggle(requestData.getProductId(), requestData.getMemberId()));
     }
 
-    @GetMapping("/email-receive/{productId}/{userId}")
-    public CustomResponse receiveEmailToggle(@PathVariable Long productId,
-                                               @PathVariable Long userId){
-        return new CustomResponse(200, memberPickProdService.receiveToggle(productId, userId));
+//    @GetMapping("/pick/{memberId}")
+//    public DataResponse<?> getUserPickProducts(@PathVariable Long memberId, @PageableDefault(size = 9) Pageable pageable){
+//        DataResponse<Page<Map<String,Object>>> response = new DataResponse<>(200, "유저가 찜한 상품 정보를 반환합니다.");
+//        response.setData(memberPickProdService.findAllPick(pageable, memberId));
+//        return response;
+//    }
+
+    @PostMapping("/receive")
+    public CustomResponse receiveEmailToggle(@ModelAttribute MemberPickToggleDto requestData){
+        return new CustomResponse(200, memberPickProdService.receiveToggle(requestData.getProductId(), requestData.getMemberId()));
     }
 }

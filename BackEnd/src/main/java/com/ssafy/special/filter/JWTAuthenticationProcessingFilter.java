@@ -18,7 +18,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
 @RequiredArgsConstructor
 public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
     private static final String NO_CHECK_URL = "oauth";
@@ -49,7 +48,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
 
-        
+
         // 리프레시 토큰이 유효할 경우, AccessToken을 새롭게 추가하면서 메서드를 진행합니다.
         if (refreshToken != null) {
             checkRefreshTokenAndReIssueAccessToken(request, response, refreshToken);
@@ -115,4 +114,5 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
     }
+
 }
