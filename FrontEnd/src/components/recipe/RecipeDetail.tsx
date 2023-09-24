@@ -5,14 +5,14 @@ import RecipeDetailContent from "./recipeDetailComponent/RecipeDetailContent";
 import RecipeRelatedVideo from "./recipeDetailComponent/RecipeRelatedVideo";
 import RecipeIngredientList from "./recipeDetailComponent/RecipeIngredientList";
 import RecipeDetailHeader from "./recipeDetailComponent/RecipeDetailHeader";
+import RecipeDetailHeaderBar from "./recipeDetailComponent/RecipeDetailHeaderBar";
 
 const RecipeDetail = () => {
   const { recipeId } = useParams();
 
   return (
     <div>
-      {recipeId}
-      <div> 삭제 수정 버튼이 들어가야함 </div>
+      <RecipeDetailHeaderBar />
 
       <RecipeDetailHeader mainImgUrl={"/img/test/너굴맨레시피.jpg"} />
 
@@ -23,6 +23,7 @@ const RecipeDetail = () => {
       <RecipeDetailContent content="이거이거 ㅎ" />
 
       <RecipeCommentBox />
+      {recipeId}
     </div>
   );
 };
