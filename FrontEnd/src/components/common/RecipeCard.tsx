@@ -2,18 +2,7 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
+import { recipeType } from "@/model/commonType";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   // const [isAdmin, setIsAdmin] = useState<boolean>();
@@ -24,7 +13,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
-    navigate(`${recipeId}`);
+    navigate(`/recipe/${recipeId}`);
   };
 
   recipeInfo = {
@@ -96,7 +85,7 @@ const Container = tw.div`
 `;
 
 const RecipeImg = tw.img`
-  max-w-[8.75rem] max-h-[7.5rem] w-[8rem] h-[6.25rem] rounded-[.3125rem] m-auto col-span-2
+  w-[7.5rem] h-[6.42rem] rounded-[.3125rem] m-auto col-span-2
 `;
 
 const ContentBox = tw.div`

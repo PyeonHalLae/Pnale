@@ -2,13 +2,13 @@ import tw from "tailwind-styled-components";
 import { useState } from "react";
 // import { useEffect } from "react";
 
-const CommentInput = () => {
+const RecipeCommentInput = () => {
   const [commentContent, setCommentContent] = useState("");
 
   // 댓글 내용 입력
   const inputChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
-    console.log(commentContent);
+    // console.log(e.target);
   };
 
   // 작성하기 버튼 클릭
@@ -19,9 +19,11 @@ const CommentInput = () => {
   return (
     <Container>
       <NameBox>작성자 명</NameBox>
-      <InputBox onChange={inputChangeHandler} placeholder="내용을 입력하세요">
-        {commentContent}
-      </InputBox>
+      <InputBox
+        onChange={inputChangeHandler}
+        placeholder="내용을 입력하세요"
+        value={commentContent}
+      />
       <div className="flex flex-row-reverse">
         <CreateBtn onClick={commentCreateHandler}>
           <div>작성하기</div>
@@ -31,7 +33,7 @@ const CommentInput = () => {
   );
 };
 
-export default CommentInput;
+export default RecipeCommentInput;
 
 const Container = tw.div`
 min-h-[5rem] mx-[1.875rem] p-[0.5rem] pb-[3rem]
