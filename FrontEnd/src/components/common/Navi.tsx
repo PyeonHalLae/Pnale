@@ -51,7 +51,7 @@ export default function Navi() {
       <div style={{ height: "calc(100vh - 60px)" }} className="overflow-y-scroll ">
         <Outlet />
       </div>
-      <NaviParent>
+      <NaviParent className="z-50">
         <NaviDiv $isActive={iconState.home === "blue"}>
           <NaviIcon
             src={`/img/navi/home-${iconState.home}.png`}
