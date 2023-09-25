@@ -5,7 +5,6 @@ import react from "@vitejs/plugin-react";
 export default defineConfig({
   plugins: [react()],
   server: {
-    //
     //https: true,
     proxy: {
       "/api": {
@@ -21,6 +20,7 @@ export default defineConfig({
       { find: "@components", replacement: "/src/components" },
       { find: "@", replacement: "/src" },
       { find: "@public", replacement: "/public" },
+      { find: "@model", replacement: "/src/model" },
     ],
   },
 });

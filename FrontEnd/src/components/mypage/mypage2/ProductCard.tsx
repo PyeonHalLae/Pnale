@@ -195,6 +195,7 @@ const MailBtn = styled.div<{ $mailState: string }>`
 const EventInfo = tw.div`
   w-[35%]
   my-auto
+
 `;
 
 const EventImg = styled.div<{ $imgurl: string }>`

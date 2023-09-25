@@ -1,30 +1,65 @@
-// import React from 'react'
-// import tw from "tailwind-styled-components";
 import tw from "tailwind-styled-components";
-import PyeneProductCard from "../card/PyeneProductCard";
 import { useRef, useState } from "react";
 import { useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { FilterInfo, FilterInfoType } from "@/recoil/pyeneRecoil";
+
+import PyeneProductCard from "../card/PyeneProductCard";
+
+// interface ProductType {
+//   productInfo: {
+//     productId: number;
+//     productName: string;
+//     productImg: string;
+//     productDesc: null | string;
+//     price: number;
+//     category: string;
+//     pb: null;
+//     recommand: null;
+//     hit: number | null;
+//   };
+//   userLikeProd: {
+//     pickProdId: null;
+//     likeStat: boolean;
+//     received: boolean;
+//   };
+//   evnetInfo: {
+//     cutype: string | null;
+//     cudate: string | null;
+//     gstype: string | null;
+//     gsdate: string | null;
+//     seventype: string | null;
+//     sevendate: string | null;
+//     emarttype: string | null;
+//     emartdate: string | null;
+//   };
+// }
 
 /* eslint-disable */
 const showPageCnt: number = 5;
 
-const PyeneNineItemList = ({ $productListType }: { $productListType: string }) => {
+const PyeneShopProductNineView = ({ $productListType }: { $productListType: string }) => {
+  //useSate
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
-
+  //useREf
   const prevProductListType = useRef<string>("EVENT");
+  const prevFilterInfo = useRef<FilterInfoType | null>();
+  //recoil
+  const getFilterInfo = useRecoilValue(FilterInfo);
 
+  //페이지 변경 핸들러
   const PageChangeHandler = (page: number) => {
     setCurrentPage(page);
   };
-
+  //처음 화면으로 이동
   const FirstMoveHandler = () => {
     setCurrentPage(1);
   };
-
+  //마지막 페이지로 이동
   const LastMoveHandler = () => {
     setCurrentPage(totalPage);
   };
@@ -40,6 +75,25 @@ const PyeneNineItemList = ({ $productListType }: { $productListType: string }) =
     setPageNumbers(newPageNumbers);
   };
 
+  // 엑시오스 요청
+  const AxiosHandler = () => {
+    if ($productListType === "EVENT") {
+      axios.get("/api/product/none").then((res) => {
+        console.log("EVENT 서버 호출 ", currentPage);
+        const pageAble = res.data.data.pageable;
+        setTotalPage(pageAble.pageSize);
+        PageNationSettion();
+      });
+    } else if ($productListType === "MONOPOLY") {
+      axios.get("/api/product/none").then((res) => {
+        console.log("독점 서버 호출 ", currentPage);
+        const pageAble = res.data.data.pageable;
+        setTotalPage(pageAble.pageSize);
+        PageNationSettion();
+      });
+    }
+  };
+
   //페이지 네이션 세팅(토탈값)
   useEffect(() => {
     if (totalPage !== undefined) {
@@ -47,7 +101,6 @@ const PyeneNineItemList = ({ $productListType }: { $productListType: string }) =
     }
   }, [totalPage]);
 
-  //서버에서 정보 받아옴
   useEffect(() => {
     const fetchData = async () => {
       if (currentPage === 0) return;
@@ -56,26 +109,27 @@ const PyeneNineItemList = ({ $productListType }: { $productListType: string }) =
         await setCurrentPage(0);
         setCurrentPage(1);
       } else {
-        if ($productListType === "EVENT") {
-          axios.get("/api/product/none").then((res) => {
-            console.log("EVENT 서버 호출 ", currentPage);
-            const pageAble = res.data.data.pageable;
-            setTotalPage(pageAble.pageSize);
-            PageNationSettion();
-          });
-        } else if ($productListType === "MONOPOLY") {
-          axios.get("/api/product/none").then((res) => {
-            console.log("독점 서버 호출 ", currentPage);
-            const pageAble = res.data.data.pageable;
-            setTotalPage(pageAble.pageSize);
-            PageNationSettion();
-          });
+        if (getFilterInfo !== prevFilterInfo.current) {
+          prevFilterInfo.current = getFilterInfo;
+          return;
         }
+        console.log(getFilterInfo, "필터정보");
+        //엑시오스 요청
+        AxiosHandler();
       }
     };
 
     fetchData();
   }, [currentPage, $productListType]);
+
+  //필터가 변경되었다면 다시 요청
+  useEffect(() => {
+    if (prevProductListType.current === $productListType) {
+      console.log(getFilterInfo, "수정됬으면 필터정보");
+      //엑시오스 요청
+      AxiosHandler();
+    }
+  }, [getFilterInfo]);
 
   return (
     <>
@@ -108,7 +162,7 @@ const PyeneNineItemList = ({ $productListType }: { $productListType: string }) =
   );
 };
 
-export default PyeneNineItemList;
+export default PyeneShopProductNineView;
 
 const PaginateBox = tw.div`flex gap-3 justify-center w-[calc(100%-30px)] my-[30px]`;
 

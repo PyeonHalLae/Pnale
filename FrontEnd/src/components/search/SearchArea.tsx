@@ -1,9 +1,19 @@
 import ProductCard from "@components/common/ProductCard";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { mainCard } from "@model/commonType";
 
 const SearchArea = () => {
   const navigate = useNavigate();
+  const [sale, setSale] = useState<mainCard[]>([]);
+
+  useEffect(() => {
+    axios.get("/api/product?page=0").then((res) => {
+      const saleRes = res.data.data.content.slice(0, 4);
+      setSale(saleRes);
+    });
+  }, []);
 
   return (
     <div className="bg-white ">
@@ -20,10 +30,9 @@ const SearchArea = () => {
         </button>
       </div>
       <div className="grid grid-cols-2 p-2 gap-y-3 gap-x-3">
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
-        <ProductCard />
+        {sale.map((info, index) => (
+          <ProductCard key={index + "_" + info.productResponseDto.productId} data={info} />
+        ))}
       </div>
     </div>
   );
