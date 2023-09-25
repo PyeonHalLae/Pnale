@@ -19,6 +19,13 @@ public class Goods {
     private String eventDate;
     private String category;
 
-    // getters, setters, constructors, 등 필요한 메서드 추가
+    public ESResultDto toDto(){
+        return ESResultDto.builder()
+                .id(this.id)
+                .name(this.name)
+                .category(this.category)
+                .build();
+    }
+
 
 }

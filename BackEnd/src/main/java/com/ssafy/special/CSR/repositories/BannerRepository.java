@@ -15,7 +15,8 @@ import java.util.List;
 @Repository
 public interface BannerRepository extends JpaRepository<Banner, Long> {
     @Query("SELECT b FROM Banner b " +
-            "WHERE b.startDate <= :today AND b.endDate >= :today AND b.corpType = :corpType")
+            "WHERE b.startDate <= :today AND b.endDate >= :today AND b.corpType = :corpType " +
+            "ORDER BY b.startDate DESC ")
     List<Banner> findVaildBanner(Pageable pageable,
                                  @Param("today") LocalDate today,
                                  @Param("corpType")CorpType corpType);
