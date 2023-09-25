@@ -17,9 +17,9 @@ public class GoodsController {
 
     private final GoodsService GoodsService;
     @PostMapping("/search")
-    public ResponseEntity<List<Goods>> searchByName(@RequestBody Map<String, Object> map){
+    public ResponseEntity<List<Goods>> searchByName(@RequestBody() Map<String, Object> map){
         String name = (String)map.get("name");
-        System.out.println(name);
+        log.info("{}", name);
         Integer tem = GoodsService.findGoodsByName(name).size();
         if (tem >= 30) {
             return ResponseEntity.ok(GoodsService.findGoodsByName(name).subList(0, 30));

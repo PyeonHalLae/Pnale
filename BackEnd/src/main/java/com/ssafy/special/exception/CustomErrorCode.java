@@ -6,12 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum CustomErrorCode {
-    /*
-        code : 에러 카테고리
-        message : 메세지 내용
-    */
-
+    //
     PRODUCT_NOT_FOUND(1000, "해당 상품 정보를 찾을 수 없습니다."),
+    CONV_DATA_NOT_FOUND(1001, "해당 편의점 정보를 찾을 수 없습니다."),
 
     //USER LIKE PRODUCT 관련
     ULP_NOT_FOUND(2000, "해당 상품에 유저 좋아요 정보를 찾을 수 없습니다."),

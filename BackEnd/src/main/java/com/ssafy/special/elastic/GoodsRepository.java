@@ -1,6 +1,5 @@
 package com.ssafy.special.elastic;
 
-import com.ssafy.special.entity.Product;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 

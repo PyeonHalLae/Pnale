@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 //.antMatchers(HttpMethod.POST).authenticated()
                 //.antMatchers(HttpMethod.DELETE).authenticated()
+                //.antMatchers(HttpMethod.DELETE).authenticated()
                 //.antMatchers(HttpMethod.PATCH).authenticated()
                 //.antMatchers(HttpMethod.OPTIONS).permitAll()
                 // 인가
