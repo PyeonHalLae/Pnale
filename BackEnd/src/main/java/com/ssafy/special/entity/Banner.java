@@ -5,6 +5,7 @@ import com.ssafy.special.enums.CorpType;
 import lombok.Getter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,10 +19,13 @@ public class Banner {
     String bannerName;
 
     @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime startDate;
+    LocalDate startDate;
 
     @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime endDate;
+    LocalDate endDate;
+
+    @Enumerated(EnumType.STRING)
+    CorpType corpType;
 
     @Lob
     String thumbnailImg;
@@ -33,7 +37,14 @@ public class Banner {
     LocalDateTime createdAt;
 
     public BannerDto toDto(){
-        return BannerDto.builder().build();
+        return BannerDto.builder()
+                .bannerId(this.bannerId)
+                .bannerName(this.bannerName)
+                .startDate(this.startDate)
+                .endDate(this.endDate)
+                .thumbnailImg(this.thumbnailImg)
+                .fullImg(this.fullImg)
+                .build();
     }
 
 }

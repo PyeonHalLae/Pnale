@@ -4,8 +4,11 @@ import com.ssafy.special.CSR.repositories.BannerRepository;
 import com.ssafy.special.CSR.repositories.ProductRepository;
 import com.ssafy.special.ResponseUtil;
 import com.ssafy.special.enums.CorpType;
+import com.ssafy.special.exception.CustomErrorCode;
+import com.ssafy.special.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
@@ -25,28 +28,46 @@ public class ConvService {
 
     //=======================================================
     public Map<String, Object> findCorpData(Pageable pageable, CorpType corpType) {
-        Map<String, Object> response = new HashMap<>();
+        return  getData(pageable, corpType);
+    }
 
-        response.put("banners", bannerService.findCorpBanner(pageable, corpType));
-        //베스트 상품 ALL,CU면서 Reco > 0 ->  9개
-        response.put("bestProduct", findCorpBestProduct(pageable, corpType));
-        //new 상품 ALL, CU isNew = 1 인거 9개
-        response.put("newProduct", findCorpNewProduct(pageable, corpType));
-        //편의점 행사 상품 상품 ALL, CU -> 페이지
-        response.put("eventProduct", findCorpEventProduct(pageable, corpType));
+    private Map<String, Object> getData(Pageable pageable, CorpType corpType){
+        Map<String, Object> response = new HashMap<>();
+        response.put("banners", bannerService.findCorpBanner(PageRequest.of(0, 5), corpType));
+        response.put("bestProduct", findBestProduct(pageable, corpType));
+        response.put("newProduct", findNewProduct(pageable, corpType));
+        response.put("eventProduct", findEventProduct(pageable, corpType));
         return response;
     }
 
-    public Page<Map<String, Object>> findCorpBestProduct(Pageable pageable, CorpType corpType){
-        return ResponseUtil.getPageProducts(productRepository.findCorpBestProduct(pageable, CorpType.ALL, corpType));
+    public Page<Map<String, Object>> findBestProduct(Pageable pageable, CorpType corpType){
+        switch (corpType) {
+            case CU: return ResponseUtil.getPageProducts(productRepository.findCUBestProduct(pageable, CorpType.ALL, corpType));
+            case GS: return ResponseUtil.getPageProducts(productRepository.findGSBestProduct(pageable, CorpType.ALL, corpType));
+            case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENBestProduct(pageable, CorpType.ALL, corpType));
+            case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTBestProduct(pageable, CorpType.ALL, corpType));
+            default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
+        }
     }
 
-    public Page<Map<String, Object>> findCorpNewProduct(Pageable pageable,CorpType corpType){
-        return ResponseUtil.getPageProducts(productRepository.findCorpNewProduct(pageable, CorpType.ALL, corpType));
+    public Page<Map<String, Object>> findNewProduct(Pageable pageable,CorpType corpType){
+        switch (corpType) {
+            case CU: return ResponseUtil.getPageProducts(productRepository.findCUNewProduct(pageable, CorpType.ALL, corpType));
+            case GS: return ResponseUtil.getPageProducts(productRepository.findGSNewProduct(pageable, CorpType.ALL, corpType));
+            case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENNewProduct(pageable, CorpType.ALL, corpType));
+            case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTNewProduct(pageable, CorpType.ALL, corpType));
+            default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
+        }
     }
 
-    public Page<Map<String, Object>> findCorpEventProduct(Pageable pageable,CorpType corpType){
-        return ResponseUtil.getPageProducts(productRepository.findCorpEventProduct(pageable, CorpType.ALL, corpType));
+    public Page<Map<String, Object>> findEventProduct(Pageable pageable,CorpType corpType){
+        switch (corpType) {
+            case CU: return ResponseUtil.getPageProducts(productRepository.findCUEventProduct(pageable, CorpType.ALL, corpType));
+            case GS: return ResponseUtil.getPageProducts(productRepository.findGSEventProduct(pageable, CorpType.ALL, corpType));
+            case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENEventProduct(pageable, CorpType.ALL, corpType));
+            case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTEventProduct(pageable, CorpType.ALL, corpType));
+            default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
+        }
     }
 
 }

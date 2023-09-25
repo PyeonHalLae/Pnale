@@ -34,32 +34,103 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "WHERE p.productId = :productId")
     Object[] findRecommandProduct(@Param("productId") Long productId);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
+    //============ CU =============
+    @Query("SELECT p, ep, mpp FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.pb in ( :all, :corp) ")
-    Page<Object[]> findCorpEventProduct(Pageable pageable,
+            "WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
+    Page<Object[]> findCUEventProduct(Pageable pageable,
                                       @Param("all") CorpType all,
                                       @Param("corp") CorpType corpType);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
+    @Query("SELECT p, ep, mpp FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.pb in ( :all, :corp) " +
-            "AND p.recommand > 0")
-    Page<Object[]> findCorpBestProduct(Pageable pageable,
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.CUType is not null")
+    Page<Object[]> findCUBestProduct(Pageable pageable,
                                      @Param("all") CorpType all,
                                      @Param("corp") CorpType corpType);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
+    @Query("SELECT p, ep, mpp FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.pb in ( :all, :corp) " +
-            "AND p.isNew = true")
-    Page<Object[]> findCorpNewProduct(Pageable pageable,
+            "WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.CUType is not null")
+    Page<Object[]> findCUNewProduct(Pageable pageable,
+                                    @Param("all") CorpType all,
+                                    @Param("corp") CorpType corpType);
+
+    //============ GS =============
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND ep.GSType is not null ")
+    Page<Object[]> findGSEventProduct(Pageable pageable,
+                                      @Param("all") CorpType all,
+                                      @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.GSType is not null")
+    Page<Object[]> findGSBestProduct(Pageable pageable,
+                                     @Param("all") CorpType all,
+                                     @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.GSType is not null")
+    Page<Object[]> findGSNewProduct(Pageable pageable,
+                                    @Param("all") CorpType all,
+                                    @Param("corp") CorpType corpType);
+
+    //============ SEVEN =============
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND ep.SEVENType is not null ")
+    Page<Object[]> findSEVENEventProduct(Pageable pageable,
+                                      @Param("all") CorpType all,
+                                      @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.SEVENType is not null")
+    Page<Object[]> findSEVENBestProduct(Pageable pageable,
+                                     @Param("all") CorpType all,
+                                     @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.SEVENType is not null")
+    Page<Object[]> findSEVENNewProduct(Pageable pageable,
+                                    @Param("all") CorpType all,
+                                    @Param("corp") CorpType corpType);
+
+    //============ EMART =============
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND ep.EMARTType is not null ")
+    Page<Object[]> findEMARTEventProduct(Pageable pageable,
+                                      @Param("all") CorpType all,
+                                      @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.EMARTType is not null")
+    Page<Object[]> findEMARTBestProduct(Pageable pageable,
+                                     @Param("all") CorpType all,
+                                     @Param("corp") CorpType corpType);
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.EMARTType is not null")
+    Page<Object[]> findEMARTNewProduct(Pageable pageable,
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
 

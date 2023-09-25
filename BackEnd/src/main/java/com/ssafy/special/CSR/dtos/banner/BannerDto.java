@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Getter
@@ -15,20 +16,21 @@ import java.time.LocalDateTime;
 public class BannerDto {
     Long bannerId;
     String bannerName;
-    LocalDateTime startDate;
-    LocalDateTime endDate;
-    CorpType eigen;
-    String thumbnameImg;
+    LocalDate startDate;
+    LocalDate endDate;
+    CorpType corpType;
+    String thumbnailImg;
     String fullImg;
 
     @Builder
-    public BannerDto(Long bannerId, String bannerName, LocalDateTime startDate, LocalDateTime endDate, CorpType eigen, String thumbnameImg, String fullImg) {
+
+    public BannerDto(Long bannerId, String bannerName, LocalDate startDate, LocalDate endDate, CorpType corpType, String thumbnailImg, String fullImg) {
         this.bannerId = bannerId;
         this.bannerName = bannerName;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.eigen = eigen;
-        this.thumbnameImg = thumbnameImg;
+        this.corpType = corpType;
+        this.thumbnailImg = thumbnailImg;
         this.fullImg = fullImg;
     }
 }
