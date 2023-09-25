@@ -134,6 +134,7 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   return (
     <>
       <div className="grid grid-cols-3 gap-y-3">
+        {/* <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />
@@ -141,8 +142,7 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
         <PyeneProductCard />
         <PyeneProductCard />
         <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
+        <PyeneProductCard /> */}
       </div>
       <PaginateBox>
         <FirstMoveBtn onClick={FirstMoveHandler}>&lt;&lt;</FirstMoveBtn>
