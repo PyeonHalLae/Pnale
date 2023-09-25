@@ -1,5 +1,12 @@
-// 제품 공통 카드의 할인 정보
-export type mainCard = {
+//제품 공통 카드 메인
+export type Main = {
+  event: MainEvent;
+  product: MainProduct;
+  userLike: MainUserLike;
+};
+
+// 제품 공통 카드의 할인 정보;
+export type MainEvent = {
   cudate: string;
   cutype: string;
   emartdate: string;
@@ -8,23 +15,27 @@ export type mainCard = {
   gstype: string;
   sevendate: string;
   seventype: string;
-  productResponseDto: productResponseDto;
-  userLikeProdResponseDto: null | string; // 실제 타입에 따라 수정
 };
 // 제품 공통 카드의 제품정보
-export type productResponseDto = {
-  productId: number;
-  productName: string;
-  productImg: string;
-  price: number;
+export type MainProduct = {
   category: string;
   hit: number;
   pb: string | null;
+  price: number;
   productDesc: string | null;
+  productId: number;
+  productImg: string;
+  productName: string;
   recommand: number;
   // 다른 필드들도 여기에 추가
 };
 
+// 제품 공통 카드의 유저 좋아요
+export type MainUserLike = {
+  likeStat: boolean;
+  pickProdId?: string;
+  received: boolean;
+};
 // 레시피 카드 타입
 export type recipeType = {
   recipeTitle: string;

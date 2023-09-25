@@ -1,9 +1,9 @@
-import { mainCard } from "@/model/commonType";
+import { Main } from "@/model/commonType";
 import React from "react";
 import tw from "tailwind-styled-components";
 
 type ProductCardProps = {
-  data: mainCard;
+  data: Main;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
@@ -13,7 +13,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
     <Card>
       <ImageArea>
         <img
-          src={data.productResponseDto.productImg}
+          src={data.product.productImg}
           alt="제품사진"
           className="px-4.5 py-3 border-black boder-2"
         />
@@ -21,7 +21,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
       </ImageArea>
       <TextArea>
         <div className="flex">
-          <Categori>{data.productResponseDto.category}</Categori>
+          <Categori>{data.product.category}</Categori>
           <img
             src="/img/icons/filledStar.png"
             alt="즐겨찾기"
@@ -29,11 +29,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
           />
         </div>
         <p className="mx-1.5 text-sm max-w-130 line-clamp-1">
-          {data.productResponseDto.productName.slice(
-            data.productResponseDto.productName.indexOf(")") + 1
-          )}
+          {data.product.productName.slice(data.product.productName.indexOf(")") + 1)}
         </p>
-        <Price>{data.productResponseDto.price}</Price>
+        <Price>{data.product.price}</Price>
         <span className="mr-4">원</span>
       </TextArea>
     </Card>
