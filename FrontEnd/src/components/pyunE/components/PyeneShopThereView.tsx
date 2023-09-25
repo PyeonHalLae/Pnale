@@ -16,7 +16,7 @@ const settings = {
   arrows: false,
 };
 
-const PyeneThereItemList = () => {
+const PyeneShopThreeView = () => {
   return (
     <>
       <Slider {...settings} className="w-[calc(100%-34px)] h-[190px] mt-[18px] mx-auto">
@@ -34,4 +34,4 @@ const PyeneThereItemList = () => {
   );
 };
 
-export default PyeneThereItemList;
+export default PyeneShopThreeView;

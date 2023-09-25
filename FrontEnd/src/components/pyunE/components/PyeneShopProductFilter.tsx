@@ -1,8 +1,10 @@
 // import React from 'react'
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import * as pyeneRecoil from "@/recoil/pyeneRecoil";
+import { useRecoilState } from "recoil";
 
 interface ModalHandlerProps {
   ModalHandler: () => void;
@@ -16,102 +18,49 @@ interface FilterType {
 
 const SortFilterList = [{ name: "이름순" }, { name: "가격낮은순" }, { name: "가격높은순" }];
 
-const EventFilterList: FilterType[] = [
-  { name: "1 + 1", state: false, engName: "OPO" },
-  { name: "2 + 1", state: false, engName: "TPO" },
-  { name: "3 + 1", state: false, engName: "THPO" },
-  { name: "할인", state: false, engName: "DISC" },
-  { name: "덤 증정", state: false, engName: "MORE" },
-  { name: "기타", state: false, engName: "" },
-];
+const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
+  //recoil defult 받아오기 경우
+  const [sortDefault, setSortDefault] = useRecoilState(pyeneRecoil.SortFilterDefault);
+  const [eventDefault, setEventDefault] = useRecoilState(pyeneRecoil.EventFilterDefault);
+  const [mealDefault, setMealDefault] = useRecoilState(pyeneRecoil.CategoryMealDefault);
+  const [cookDefault, setCookDefault] = useRecoilState(pyeneRecoil.CategoryCookDefault);
+  const [snackDefault, setSnackDefault] = useRecoilState(pyeneRecoil.CategorySnackDefault);
+  const [foodDefault, setFoodDefault] = useRecoilState(pyeneRecoil.CategoryFoodDefault);
+  const [drinkDefault, setDrinkDefault] = useRecoilState(pyeneRecoil.CategoryDrinkDefault);
+  const [lifeDefault, setLifeDefault] = useRecoilState(pyeneRecoil.CategoryLifeDefault);
+  const [eventAllDefault, setEventAllDefault] = useRecoilState(pyeneRecoil.AllEventDefault);
+  const [categoryAllDefault, setCategoryAllDefault] = useRecoilState(
+    pyeneRecoil.AllCategoryDefault
+  );
 
-const CategoryMealList: FilterType[] = [
-  { name: "도시락", state: false, engName: "" },
-  { name: "샌드위치", state: false, engName: "" },
-  { name: "햄버거", state: false, engName: "" },
-  { name: "주먹밥", state: false, engName: "" },
-  { name: "김밥", state: false, engName: "" },
-];
+  //복제
+  const [eventFilter, setEventFilter] = useState<FilterType[]>(eventDefault.data);
+  const [mealFilter, setMealFilter] = useState<FilterType[]>(mealDefault.data);
+  const [cookFilter, setCookFilter] = useState<FilterType[]>(cookDefault.data);
+  const [snackFilter, setSnackFilter] = useState<FilterType[]>(snackDefault.data);
+  const [foodFilter, setFoodFilter] = useState<FilterType[]>(foodDefault.data);
+  const [drinkFilter, setDrinkFilter] = useState<FilterType[]>(drinkDefault.data);
+  const [lifeFilter, setLifeFilter] = useState<FilterType[]>(lifeDefault.data);
 
-const CategoryCookList: FilterType[] = [
-  { name: "즉석튀김", state: false, engName: "" },
-  { name: "즉석베이커리", state: false, engName: "" },
-  { name: "즉석커피", state: false, engName: "" },
-  { name: "즉석식품", state: false, engName: "" },
-];
+  //정렬 관련
+  const [sortIndex, setSortIndex] = useState<number>(sortDefault);
 
-const CategorySnackList: FilterType[] = [
-  { name: "스낵", state: false, engName: "" },
-  { name: "비스캣", state: false, engName: "" },
-  { name: "빵", state: false, engName: "" },
-  { name: "디저트", state: false, engName: "" },
-  { name: "캔디", state: false, engName: "" },
-  { name: "초콜릿", state: false, engName: "" },
-  { name: "껌", state: false, engName: "" },
-  { name: "젤리", state: false, engName: "" },
-];
-
-const CategoryFoodList: FilterType[] = [
-  { name: "가공식품", state: false, engName: "" },
-  { name: "안주류", state: false, engName: "" },
-  { name: "식재료", state: false, engName: "" },
-  { name: "밀키트", state: false, engName: "" },
-  { name: "조미료", state: false, engName: "" },
-  { name: "소스", state: false, engName: "" },
-  { name: "과일", state: false, engName: "" },
-  { name: "차", state: false, engName: "" },
-];
-
-const CategoryDrinkList: FilterType[] = [
-  { name: "음료", state: false, engName: "" },
-  { name: "아이스드링크", state: false, engName: "" },
-  { name: "유제품", state: false, engName: "" },
-  { name: "아이스크림", state: false, engName: "" },
-];
-
-const CategoryLifeList: FilterType[] = [
-  { name: "의학용품", state: false, engName: "" },
-  { name: "생활용품", state: false, engName: "" },
-  { name: "펫용품", state: false, engName: "" },
-  { name: "취미", state: false, engName: "" },
-  { name: "레저", state: false, engName: "" },
-];
-
-const PyeneFilter = ({
-  ModalHandler,
-  $productListType,
-}: ModalHandlerProps & { $productListType: string }) => {
-  const [sortIndex, setSortIndex] = useState<number>(0);
-  const [eventFilter, setEventFilter] = useState<FilterType[]>(EventFilterList);
-  const [mealFilter, setMealFilter] = useState<FilterType[]>(CategoryMealList);
-  const [cookFilter, setCookFilter] = useState<FilterType[]>(CategoryCookList);
-  const [snackFilter, setSnackFilter] = useState<FilterType[]>(CategorySnackList);
-  const [foodFilter, setFoodFilter] = useState<FilterType[]>(CategoryFoodList);
-  const [drinkFilter, setDrinkFilter] = useState<FilterType[]>(CategoryDrinkList);
-  const [lifeFilter, setLifeFilter] = useState<FilterType[]>(CategoryLifeList);
-
-  const [eventAllFilter, setEventAllFilter] = useState<boolean>(true);
-  const [categoryAllFilter, setCategoryAllFilter] = useState<boolean>(true);
-
-  const prveProductListType = useRef<string>($productListType);
+  //전체 선택 초기화 등
+  const [eventAllFilter, setEventAllFilter] = useState<boolean>(eventAllDefault);
+  const [categoryAllFilter, setCategoryAllFilter] = useState<boolean>(categoryAllDefault);
 
   useEffect(() => {
-    console.log("여기 필터야!");
-    console.log(prveProductListType.current);
-    console.log($productListType);
-    if (prveProductListType.current !== $productListType) {
-      prveProductListType.current = $productListType;
-      console.log("변경 인식");
-      setSortIndex(0);
-      setEventFilter(EventFilterList);
-      setMealFilter(CategoryMealList);
-      setCookFilter(CategoryCookList);
-      setSnackFilter(CategorySnackList);
-      setFoodFilter(CategoryFoodList);
-      setDrinkFilter(CategoryDrinkList);
-      setLifeFilter(CategoryLifeList);
-    }
-  }, [$productListType]);
+    setSortDefault(sortDefault);
+    setEventFilter(eventDefault.data);
+    setMealFilter(mealDefault.data);
+    setCookFilter(cookDefault.data);
+    setSnackFilter(snackDefault.data);
+    setFoodFilter(foodDefault.data);
+    setDrinkFilter(drinkDefault.data);
+    setLifeFilter(lifeDefault.data);
+    setEventAllFilter(eventAllDefault);
+    setCategoryAllFilter(categoryAllDefault);
+  }, []);
 
   const sortIndexHandler = useCallback(
     (index: number) => {
@@ -127,50 +76,92 @@ const PyeneFilter = ({
   const EventIndexHandler = (value: FilterType, index: number) => {
     if (eventAllFilter) setEventAllFilter(false);
     const updateEventFilter = [...eventFilter];
-    updateEventFilter[index].state = !value.state;
+    updateEventFilter[index] = { ...value, state: !value.state };
     setEventFilter(updateEventFilter);
   };
 
   const MealIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateMealFilter = [...mealFilter];
-    updateMealFilter[index].state = !value.state;
+    updateMealFilter[index] = { ...value, state: !value.state };
     setMealFilter(updateMealFilter);
   };
 
   const CookIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateCookFilter = [...cookFilter];
-    updateCookFilter[index].state = !value.state;
+    updateCookFilter[index] = { ...value, state: !value.state };
     setCookFilter(updateCookFilter);
   };
 
   const SnackIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateSnackFilter = [...snackFilter];
-    updateSnackFilter[index].state = !value.state;
+    updateSnackFilter[index] = { ...value, state: !value.state };
     setSnackFilter(updateSnackFilter);
   };
 
   const FoodIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateFoodFilter = [...foodFilter];
-    updateFoodFilter[index].state = !value.state;
+    updateFoodFilter[index] = { ...value, state: !value.state };
     setFoodFilter(updateFoodFilter);
   };
 
   const DrinkIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateDrinkFilter = [...drinkFilter];
-    updateDrinkFilter[index].state = !value.state;
+    updateDrinkFilter[index] = { ...value, state: !value.state };
     setDrinkFilter(updateDrinkFilter);
   };
 
   const LifeIndexHandler = (value: FilterType, index: number) => {
     if (categoryAllFilter) setCategoryAllFilter(false);
     const updateLifeFilter = [...lifeFilter];
-    updateLifeFilter[index].state = !value.state;
+    updateLifeFilter[index] = { ...value, state: !value.state };
     setLifeFilter(updateLifeFilter);
+  };
+
+  const AllEventHandler = async () => {
+    setEventAllFilter(true);
+    const updateEventFilter = await eventFilter.map((filter) => ({ ...filter, state: false }));
+    setEventFilter(updateEventFilter);
+  };
+
+  const AllCategoryHandler = async () => {
+    setCategoryAllFilter(true);
+    const updateMealFilter = await mealFilter.map((filter) => ({ ...filter, state: false }));
+    const updateCookFilter = await cookFilter.map((filter) => ({ ...filter, state: false }));
+    const updateSnackFilter = await snackFilter.map((filter) => ({ ...filter, state: false }));
+    const updateFoodFilter = await foodFilter.map((filter) => ({ ...filter, state: false }));
+    const updateDrinkFilter = await drinkFilter.map((filter) => ({ ...filter, state: false }));
+    const updateLifeFilter = await lifeFilter.map((filter) => ({ ...filter, state: false }));
+    setMealFilter(updateMealFilter);
+    setCookFilter(updateCookFilter);
+    setSnackFilter(updateSnackFilter);
+    setFoodFilter(updateFoodFilter);
+    setDrinkFilter(updateDrinkFilter);
+    setLifeFilter(updateLifeFilter);
+  };
+
+  const ResetFilterHandler = async () => {
+    setSortIndex(0);
+    await AllEventHandler();
+    await AllCategoryHandler();
+  };
+
+  const SaveFilterHandler = () => {
+    setCategoryAllDefault(categoryAllFilter);
+    setEventAllDefault(eventAllFilter);
+    setSortDefault(sortIndex);
+    setEventDefault({ data: eventFilter });
+    setMealDefault({ data: mealFilter });
+    setCookDefault({ data: cookFilter });
+    setSnackDefault({ data: snackFilter });
+    setFoodDefault({ data: foodFilter });
+    setDrinkDefault({ data: drinkFilter });
+    setLifeDefault({ data: lifeFilter });
+    ModalHandler();
   };
 
   return (
@@ -203,16 +194,18 @@ const PyeneFilter = ({
             <SideHeader>
               <SideTitle>행사선택</SideTitle>
               <SideInfo>기본값 : 전체</SideInfo>
-              <AllMain>
+              <AllMain onClick={AllEventHandler}>
                 <div className={eventAllFilter ? "active" : ""}>전체</div>
               </AllMain>
             </SideHeader>
             <SideMain>
-              {EventFilterList.map((value, index) => (
+              {eventFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
-                  onClick={() => EventIndexHandler(value, index)}
+                  onClick={() => {
+                    EventIndexHandler(value, index);
+                  }}
                 >
                   {value.name}
                 </div>
@@ -223,13 +216,13 @@ const PyeneFilter = ({
             <SideHeader>
               <SideTitle>카테고리</SideTitle>
               <SideInfo>기본값 : 전체</SideInfo>
-              <AllMain>
+              <AllMain onClick={AllCategoryHandler}>
                 <div className={categoryAllFilter ? "active" : ""}>전체</div>
               </AllMain>
             </SideHeader>
             <SideMain>
               <SideCategory>간편 식사</SideCategory>
-              {CategoryMealList.map((value, index) => (
+              {mealFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -239,7 +232,7 @@ const PyeneFilter = ({
                 </div>
               ))}
               <SideCategory>즉석 조리</SideCategory>
-              {CategoryCookList.map((value, index) => (
+              {cookFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -249,7 +242,7 @@ const PyeneFilter = ({
                 </div>
               ))}
               <SideCategory>과자류</SideCategory>
-              {CategorySnackList.map((value, index) => (
+              {snackFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -259,7 +252,7 @@ const PyeneFilter = ({
                 </div>
               ))}
               <SideCategory>식품</SideCategory>
-              {CategoryFoodList.map((value, index) => (
+              {foodFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -269,7 +262,7 @@ const PyeneFilter = ({
                 </div>
               ))}
               <SideCategory>음료/아이스크림</SideCategory>
-              {CategoryDrinkList.map((value, index) => (
+              {drinkFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -279,7 +272,7 @@ const PyeneFilter = ({
                 </div>
               ))}
               <SideCategory>생활용품</SideCategory>
-              {CategoryLifeList.map((value, index) => (
+              {lifeFilter.map((value, index) => (
                 <div
                   key={value.name + index}
                   className={value.state ? "active" : ""}
@@ -292,15 +285,15 @@ const PyeneFilter = ({
           </CategoryBox>
         </FilterMainBox>
         <FilterSaveBox>
-          <ClearBtn>초기화</ClearBtn>
-          <ApplyBtn>적용하기</ApplyBtn>
+          <ClearBtn onClick={() => ResetFilterHandler()}>초기화</ClearBtn>
+          <ApplyBtn onClick={() => SaveFilterHandler()}>적용하기</ApplyBtn>
         </FilterSaveBox>
       </FilterBox>
     </>
   );
 };
 
-export default PyeneFilter;
+export default PyeneShopProductFilter;
 
 const BackSide = tw.div`
   fixed
@@ -324,6 +317,8 @@ const FilterBox = tw.div`
   rounded-[15px_15px_0px_0px]
   z-30
   overflow-y-scroll
+  transition: transform 0.3s ease-in-out; /* translateY 애니메이션 추가 */
+  transform: translateY(100%); /* 초기 위치 설정 (아래에서 위로 올라오는 애니메이션을 위해 100%로 설정) */
 `;
 
 const TitleBox = tw.div`
@@ -409,7 +404,7 @@ const FilterSaveBox = tw.div`
 `;
 
 const ClearBtn = tw.div`
-  w-[90px]
+  w-[85px]
   h-[45px]
   border-common-text-color
   border-[1px]

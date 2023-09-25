@@ -2,13 +2,14 @@
 import Header from "@components/common/Header";
 import { useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
 
-import PyeneThereItemList from "./components/PyeneThereItemList";
-import PyeneProductList from "./components/PyeneProductList";
-import PyeneDirectList from "./components/PyeneDirectList";
+import PyeneShopThreeView from "./components/PyeneShopThereView";
+import PyeneShopProduct from "./components/PyeneShopProduct";
+import PyeneShopDirectList from "./components/PyeneShopDirectList";
+import PyeneShopBanner from "./components/PyeneShopBanner";
 
 // interface productInfoType {}
 
@@ -21,10 +22,18 @@ const colorMap = {
 
 const PyeneShop = () => {
   const { pyenType } = useParams<string>();
+  const [pyeneText, setPyeneText] = useState<string>();
+  const pyeneHeader = useRef<HTMLDivElement>(null);
+
   // const [bestList, setBestList] = useState<productInfoType>([]);
   // const [newList, setNewList] = useState<productInfoType[]>([]);
   // const [productList, setProductList] = useState<productInfoType[]>([]);
-  const [pyeneText, setPyeneText] = useState<string>();
+
+  const scrollToHeader = () => {
+    if (pyeneHeader.current) {
+      pyeneHeader.current.scrollIntoView();
+    }
+  };
 
   useEffect(() => {
     setPyeneText(colorMap[pyenType]);
@@ -33,8 +42,10 @@ const PyeneShop = () => {
 
   return (
     <>
-      <Header />
-      <PyeneHeader></PyeneHeader>
+      <PyeneHeader ref={pyeneHeader}>
+        <Header />
+        <PyeneShopBanner />
+      </PyeneHeader>
       <PyeneBestBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
         <SideTitle $pyeneColor={pyeneText}>
@@ -42,7 +53,7 @@ const PyeneShop = () => {
           <div>베스트</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneThereItemList />
+        <PyeneShopThreeView />
       </PyeneBestBox>
       <PyeneNewBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
@@ -51,20 +62,20 @@ const PyeneShop = () => {
           <div>NEW</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneThereItemList />
+        <PyeneShopThreeView />
       </PyeneNewBox>
       <PyeneProductBox>
         <SideTitle $pyeneColor={pyeneText}>
           <img src={`/img/icons/${pyenType}-icon.png`} />
           <div>상품</div>
         </SideTitle>
-        <PyeneProductList />
+        <PyeneShopProduct />
       </PyeneProductBox>
       <PyeneDirectBox>
         <DirectText $pyeneColor={pyeneText}>
           <span>편의점</span>바로가기
         </DirectText>
-        <PyeneDirectList />
+        <PyeneShopDirectList scrollHeader={scrollToHeader()} />
       </PyeneDirectBox>
     </>
   );
@@ -75,7 +86,7 @@ export default PyeneShop;
 const PyeneHeader = tw.div`
   bg-white
   w-full
-  h-44
+  h-[230px]
 `;
 
 const PyeneBestBox = tw.div`
