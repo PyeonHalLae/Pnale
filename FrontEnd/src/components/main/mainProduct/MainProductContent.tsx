@@ -15,7 +15,11 @@ const MainProductContent = () => {
   return (
     <div className="grid grid-cols-2 p-3 bg-white gap-y-3 gap-x-3">
       {sale.map((info, index) => (
-        <ProductCard key={index + "_" + info.product.productId} product={info} />
+        <ProductCard
+          key={index + "-" + info.product.productId + "-search"}
+          id={index + "-" + info.product.productId + "-search"}
+          product={info}
+        />
       ))}
     </div>
   );

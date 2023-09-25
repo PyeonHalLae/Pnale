@@ -2,18 +2,16 @@ import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { mainCard } from "@model/commonType";
+import { Main } from "@model/commonType";
 
 const SearchArea = () => {
   const navigate = useNavigate();
-  const [sale, setSale] = useState<mainCard[]>([]);
+  const [search, setSearch] = useState<Main[]>([]);
 
   useEffect(() => {
     axios.get("/api/product/main").then((res) => {
-      console.log(res);
-
-      // const saleRes = res.data.data.content.slice(0, 4);
-      // setSale(saleRes);
+      const saleRes = res.data.data.recommands;
+      setSearch(saleRes);
     });
   }, []);
 
@@ -32,8 +30,12 @@ const SearchArea = () => {
         </button>
       </div>
       <div className="grid grid-cols-2 p-2 gap-y-3 gap-x-3">
-        {sale.map((info, index) => (
-          <ProductCard key={index + "_" + info.productResponseDto.productId} data={info} />
+        {search.map((info, index) => (
+          <ProductCard
+            key={index + "-" + info.product.productId}
+            id={index + "-" + info.product.productId}
+            product={info}
+          />
         ))}
       </div>
     </div>

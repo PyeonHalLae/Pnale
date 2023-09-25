@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
+import { ProductCardProps } from "@components/common/ProductCard";
+import { loadImage } from "@model/exportFucKDM";
 
-const RelatedCard = () => {
+type RelatedCardProps = ProductCardProps;
+
+const RelatedCard: React.FC<RelatedCardProps> = ({ product, id }) => {
+  useEffect(() => {
+    loadImage(product.product.productImg, id);
+  }, [product.product.productImg, id]);
+
   return (
     <Card>
-      <img src="/img/test/relatedProduct.png" alt="연관상품" />
-      <Text>포칩 테토칩 포테토칩포테토칩</Text>
-      <Price>2,000원</Price>
+      <div id={`${id}`} className="flex p-1.5 m-auto"></div>
+      <Text>{product.product.productName.slice(product.product.productName.indexOf(")") + 1)}</Text>
+      <Price>{product.product.price}원</Price>
     </Card>
   );
 };
