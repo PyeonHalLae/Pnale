@@ -313,7 +313,7 @@ const FilterBox = tw.div`
   min-w-[350xp]
   max-w-[450px]
   h-[80%]
-  bottom-0
+  bottom-[60px]
   rounded-[15px_15px_0px_0px]
   z-30
   overflow-y-scroll
@@ -332,7 +332,7 @@ const TitleBox = tw.div`
   border-common-white-divider
   rounded-[15px_15px_0px_0px]
   flex
-  z-30
+  z-20
 `;
 
 const Title = tw.div`
@@ -352,7 +352,7 @@ const CloseBtn = styled.img`
   top: 8px;
 `;
 
-const FilterMainBox = tw.div`mt-[70px] mb-[20px]`;
+const FilterMainBox = tw.div`mt-[52px] overflow-scroll h-[calc(85%-20px)]`;
 
 const SortBox = tw.div`mt-3 ml-[22px]`;
 
@@ -394,7 +394,7 @@ const SideCategory = tw.p`text-[12px] text-common-bold-back-color w-full border-
 const FilterSaveBox = tw.div`
   sticky
   w-full
-  h-[75px]
+  h-[90px]
   bottom-0
   border-common-white-divider
   border-t-[1px]
@@ -435,8 +435,6 @@ const ApplyBtn = tw.div`
 `;
 
 const AllMain = styled.div`
-  position: absolute;
-  right: 10px;
   display: flex;
   z-index: 10;
   div {
