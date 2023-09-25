@@ -1,6 +1,7 @@
 package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
+import com.ssafy.special.ResponseUtil;
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.entity.MemberPickProd;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,10 +35,11 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final MemberPickProdRepository memberPickProdRepository;
 
+
     //=============================================================
     //페이지별 전체 행사상품 반환
     public Page<Map<String, Object>> findAllEventProducts(Pageable pageable) {
-        return getPageProducts(productRepository.findAllProducts(pageable));
+        return ResponseUtil.getPageProducts(productRepository.findAllProducts(pageable));
     }
 
     //레시피 정보와 추천 상품 반환
@@ -45,21 +48,22 @@ public class ProductService {
 
         mainData.put("recipes", null);
         mainData.put("recommands",
-                getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4))));
+                ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4))));
         return mainData;
     }
 
     //추천상품 반환
     public List<Map<String, Object>> findRecommandProducts() {
-        return getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4)));
+        return ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4)));
     }
 
     //제품 상세 보기
     public Map<String, Object> findProductById(Long productId) {
-        return getProduct(productRepository.findRecommandProduct(productId));
+        return ResponseUtil.toResponseData(productRepository.findRecommandProduct(productId));
     }
 
     //상품 좋아요
+    @Transactional
     public String pickToggle(Long productId, Long userId) {
         Member findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
@@ -76,6 +80,7 @@ public class ProductService {
                 });
     }
     //이메일 수신체크
+    @Transactional
     public String receiveToggle(Long productId, Long userId) {
         Member findUser = getUserById(userId);
         Product findProduct = getProductById(productId);
@@ -89,7 +94,7 @@ public class ProductService {
 
 
     public Page<Map<String, Object>> findAllPick(Pageable pageable, Long userId) {//유저가 좋아요 한 것 반
-        return getAllLike(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
+        return ResponseUtil.getPageProducts(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
     }
     public Map<String, Object> findSearchDate(Long productId) {
         Map<String, Object> searchData = new HashMap<>();
@@ -101,43 +106,6 @@ public class ProductService {
 
 
     //==============================================
-    private Page<Map<String, Object>> getPageProducts(Page<Object[]> data) {
-        return data.map(this::getProduct);
-    }
-
-    private List<Map<String, Object>> getListProducts(List<Object[]> resultSets) {
-        return resultSets.stream()
-                .map(this::getProduct)
-                .collect(Collectors.toList());
-    }
-
-    private Map<String, Object> getProduct(Object[] resultSet) {
-        Product pd = (Product) resultSet[0];
-        EventProduct ed = (EventProduct) resultSet[1];
-        MemberPickProd mpp = (MemberPickProd) resultSet[2];
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
-        response.put("event", (ed != null) ? ed.toInfoDto() : EventInfoDto.builder().build());
-        response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
-        return response;
-    }
-
-    private Page<Map<String, Object>> getAllLike(Page<Object[]> data) {
-        //Page객체에 있는 리스트 요소중 개별 객체를 upp라 지칭
-        return data.map(upp -> {
-            Product pd = (Product) upp[0];
-            EventProduct ed = (EventProduct) upp[1];
-            MemberPickProd mpp = (MemberPickProd) upp[2];
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
-            response.put("event", (ed != null) ? ed.toInfoDto() : EventInfoDto.builder().build());
-            response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
-
-            return response;
-        });
-    }
 
     private Member getUserById(Long userId) {
         return memberRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));

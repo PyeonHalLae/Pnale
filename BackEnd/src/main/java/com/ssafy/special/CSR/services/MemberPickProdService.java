@@ -1,6 +1,7 @@
 package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
+import com.ssafy.special.ResponseUtil;
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.entity.Member;
@@ -40,7 +41,7 @@ public class MemberPickProdService {
 
 
     public Page<Map<String, Object>> findAllPick(Pageable pageable, Long userId) {
-        return getAllLike(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
+        return ResponseUtil.getPageProducts(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
     }
 
     public String pickToggle(Long productId, Long userId) {
@@ -71,22 +72,6 @@ public class MemberPickProdService {
     }
 
     //===============================================
-    //서비스 내부에서만 사용하는 메소드는 private로 제한한다.
-    private Page<Map<String,Object>> getAllLike(Page<Object[]> data) {
-        //Page객체에 있는 리스트 요소중 개별 객체를 upp라 지칭
-        return data.map(upp -> {
-            Product pd = (Product) upp[0];
-            EventProduct ed = (EventProduct) upp[1];
-            MemberPickProd mpp = (MemberPickProd) upp[2];
-
-            Map<String, Object> response = new HashMap<>();
-            response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
-            response.put("event", (ed != null) ? ed.toInfoDto() : EventInfoDto.builder().build());
-            response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
-
-            return response;
-        });
-    }
 
     private Member getUserById(Long userId) {
         return memberRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));

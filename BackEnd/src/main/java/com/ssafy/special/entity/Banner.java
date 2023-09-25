@@ -1,5 +1,6 @@
 package com.ssafy.special.entity;
 
+import com.ssafy.special.CSR.dtos.banner.BannerDto;
 import com.ssafy.special.enums.CorpType;
 import lombok.Getter;
 
@@ -14,21 +15,25 @@ public class Banner {
     Long bannerId;
 
     @Column(nullable = false)
-    String BannerName;
+    String bannerName;
 
-    @Enumerated(EnumType.STRING)
-    CorpType corpType;
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime startDate;
 
-    @Column(columnDefinition = "tinyint(1) default 0")
-    boolean isStarted;
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime endDate;
 
-    @Column(nullable = false)
-    String eigen;
+    @Lob
+    String thumbnailImg;
+
+    @Lob
+    String fullImg;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
 
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime updatedAt;
+    public BannerDto toDto(){
+        return BannerDto.builder().build();
+    }
 
 }

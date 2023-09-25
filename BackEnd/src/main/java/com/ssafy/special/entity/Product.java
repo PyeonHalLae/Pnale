@@ -35,6 +35,9 @@ public class Product {
     @Enumerated(EnumType.STRING)
     CorpType pb;
 
+    @Column(columnDefinition = "tinyInt(1) default 0")
+    boolean isNew;
+
     @Column(columnDefinition = "bigint default 0")
     Long recommand;
 
