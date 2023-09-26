@@ -22,10 +22,4 @@ public class MemberPickRecipe {
 
     @Column(columnDefinition = "tinyint(1) default 0")
     boolean isDeleted;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime createdAt;
-
-    @Column(columnDefinition = "TIMESTAMP")
-    LocalDateTime updatedAt;
 }
