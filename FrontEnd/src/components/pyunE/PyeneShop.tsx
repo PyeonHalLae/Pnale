@@ -12,7 +12,7 @@ import PyeneShopProduct from "./components/PyeneShopProduct";
 import PyeneShopDirectList from "./components/PyeneShopDirectList";
 import PyeneShopBanner from "./components/PyeneShopBanner";
 
-import { Main } from "@/model/commonType";
+import { ProductComp } from "@/model/commonType";
 
 interface bannerType {
   bannerId: number;
@@ -36,9 +36,9 @@ const PyeneShop = () => {
   const [pyeneText, setPyeneText] = useState<string>();
   const pyeneHeader = useRef<HTMLDivElement>(null);
 
-  const [bestList, setBestList] = useState<Main[]>([]);
-  const [newList, setNewList] = useState<Main[]>([]);
-  const [productList, setProductList] = useState<Main[]>([]);
+  const [bestList, setBestList] = useState<ProductComp[]>([]);
+  const [newList, setNewList] = useState<ProductComp[]>([]);
+  const [productList, setProductList] = useState<ProductComp[]>([]);
   const [bannerList, setBannerList] = useState<bannerType[]>([]);
 
   const scrollToHeader = () => {
@@ -59,8 +59,7 @@ const PyeneShop = () => {
           setNewList(data.newProduct.content);
           setProductList(data.eventProduct.content);
           console.log("엑시오스 요청 완료");
-          console.log(bannerList);
-          console.log(productList);
+          console.log(productList, "최상단");
         }
       });
     };
@@ -73,7 +72,7 @@ const PyeneShop = () => {
     <>
       <PyeneHeader ref={pyeneHeader}>
         <Header />
-        <PyeneShopBanner />
+        <PyeneShopBanner $bannerList={bannerList} />
       </PyeneHeader>
       <PyeneBestBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>

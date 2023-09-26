@@ -5,9 +5,10 @@ import styled from "styled-components";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import * as pyeneRecoil from "@/recoil/pyeneRecoil";
 
-import PyeneShopProductNineView from "./PyeneShopProductNineView";
+// import PyeneShopProductNineView from "./PyeneShopProductNineView";
 import PyeneShopProductFilter from "./PyeneShopProductFilter";
 import { useParams } from "react-router-dom";
+// import { ProductComp } from "@/model/commonType";
 
 const PyeneShopProductList = () => {
   //recoil 상품 Type 을 위한 값
@@ -32,21 +33,18 @@ const PyeneShopProductList = () => {
 
   const refPyenType = useRef<string>();
   const { pyenType } = useParams();
-  // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
+  //필터 초기화 전용
   useEffect(() => {
     if (preProductViewType.type !== productListType) {
       //필터값 초기화
       setPreProductViewType({ type: productListType });
       ClearFilterHandler();
-      console.log("필터 초기화 편의점 리스트타입");
     }
     if (refPyenType.current !== pyenType) {
       refPyenType.current = pyenType;
       ClearFilterHandler();
-      console.log("필터 초기화 편타입");
     }
-    console.log(filterInfo);
   }, [productListType, pyenType]);
 
   const ClearFilterHandler = () => {
@@ -116,7 +114,7 @@ const PyeneShopProductList = () => {
         {filterInfo.category && (
           <>
             <FilterListBox>
-              {filterInfo.category.map(
+              {filterInfo.activeAll.map(
                 (value, index) =>
                   index < 10 && (
                     <FilterListBtn key={index}>
@@ -127,7 +125,7 @@ const PyeneShopProductList = () => {
             </FilterListBox>
           </>
         )}
-        <PyeneShopProductNineView $productListType={productListType} />
+        {/* <PyeneShopProductNineView $productListType={productListType} /> */}
       </ProductListMain>
     </>
   );
@@ -229,8 +227,8 @@ const FilterCnt = styled.div`
 `;
 
 const FilterHelpTextBox = tw.div`
-  w-[calc(100vh-520px)]
-  ml-0
+  w-[calc(100%-550px)]
+  ml-2
   mt-3
   whitespace-nowrap
 `;
