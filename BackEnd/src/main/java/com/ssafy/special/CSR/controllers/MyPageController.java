@@ -36,7 +36,7 @@ public class MyPageController {
     @GetMapping("/pick_recipe/{memberId}")
     public DataResponse<?> getUserPickRecipes(@PathVariable Long memberId, @PageableDefault(size = 9) Pageable pageable){
         DataResponse<Page<Map<String,Object>>> response = new DataResponse<>(200, "유저가 찜한 레시피들을 반환합니다.");
-        response.setData(recipeService.findAllPick(pageable, memberId));
+        // response.setData(recipeService.findAllPick(pageable, memberId));
         return response;
     }
 

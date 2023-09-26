@@ -32,11 +32,11 @@ public class RecipeService {
     public RecipeRecommendDTO getRecommendData(Long memberId){
         Recipe recipe = recipeRepository.findRecipeByWeightedValue().get(0);
         List<String> ingredients = recipeIngredientService.getIngredientNamesByRecipe(recipe);
-        boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId()).orElse(false);
+        boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipe()).orElse(false);
         return RecipeRecommendDTO.builder()
-                .rcpId(recipe.getRecipeId())
+                .rcpId(recipe.getRecipe())
                 .rcpName(recipe.getRecipeName())
-                .member(recipe.getWriterId().toViewDTO())
+                .member(recipe.getWriter().toViewDTO())
                 .ingredients(ingredients)
                 .rcpTemp(recipe.getRecipeSimple())
                 .likeCnt(recipe.getLikes())
@@ -63,7 +63,7 @@ public class RecipeService {
         return recipes
                 .stream()
                 .map(recipe -> {
-                    Boolean isDeleted = memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId()).orElse(false);
+                    Boolean isDeleted = memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipe()).orElse(false);
                     return recipe.toListDto(isDeleted);
                 })
                 .collect(Collectors.toList());

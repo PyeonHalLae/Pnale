@@ -59,10 +59,10 @@ public class Member {
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private Set<MemberPickProd> likeProducts = new HashSet<>();
 
-    @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
     private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
 
-    @OneToMany(mappedBy = "writerId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
     private List<Recipe> writeRecipes = new LinkedList<>();
 
 
