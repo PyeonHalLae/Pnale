@@ -60,7 +60,6 @@ public class ElasticService {
     }
 
     public Page<Recipe> findRelateRecipe(Pageable pageable, Long productId) {
-        //return ResponseUtil.getPageProducts(recipeRepository.f(pageable, productId));
         return recipeRepository.findRecipeByProductId(pageable, productId);
     }
 }

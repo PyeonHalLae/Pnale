@@ -33,16 +33,15 @@ public class ElasticController {
     @PostMapping("/result")
     public DataResponse<?> getNameResult(@PageableDefault(size = 9) Pageable pageable,
                                          @RequestBody ESRequestDto request) {
-        for(Long id : request.getIds()) log.info("{}", id);
+
         return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findIdsResult(pageable, request.getIds() ));
     }
 
 
     @PostMapping("/product")
     public DataResponse<?> getResultProduct(@PageableDefault(size = 12) Pageable pageable,
-                                            @RequestBody Map<String, Object> map){
-        List<Long> productIds = (List<Long>) map.get("ids");
-        return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findResultProducts(pageable, productIds));
+                                            @RequestBody ESRequestDto request){
+        return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findResultProducts(pageable, request.getIds()));
     }
 
     @GetMapping("/rel_recipe/{productId}")
