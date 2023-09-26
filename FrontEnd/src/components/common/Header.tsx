@@ -1,19 +1,21 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
+import axios from "axios";
+import { useRecoilState } from "recoil";
+import { searchInputData } from "@recoil/kdmRecoil";
 
 const Header = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
-  const [inputValue, setInputValue] = useState("");
-  const [recommandTag, setRecommandTag] = useState([]);
+  const [name, setName] = useRecoilState(searchInputData);
 
   const backBtn = () => {
     navigate(-1);
   };
 
   const reset = () => {
-    setInputValue("");
+    setName({ ...name, input: "" });
   };
   const toggleSearch = () => {
     setIsActive((prevIsActive) => !prevIsActive);
@@ -21,16 +23,29 @@ const Header = () => {
   };
 
   const handleInputChange = (e) => {
-    setInputValue(e.target.value);
+    setName({ ...name, input: e.target.value });
   };
 
   useEffect(() => {
-    setRecommandTag((pre) => {
-      const newData = [...pre, inputValue];
-      return newData;
-    });
-    console.log("inputValue", inputValue);
-  }, [inputValue]);
+    reset();
+  }, []);
+
+  useEffect(() => {
+    const searchTag = async () => {
+      console.log("요청 보낸다", name);
+      try {
+        const response = await axios.post("/api/search", {
+          name: name.input,
+        });
+        console.log("요청 성공:", response.data);
+      } catch (error) {
+        console.error("요청 실패:", error);
+      }
+    };
+    if (name.input !== "") {
+      searchTag();
+    }
+  }, [name]);
 
   return (
     <>
@@ -39,17 +54,17 @@ const Header = () => {
         <Input
           type="text"
           placeholder="코카콜라라고 검색해보세요."
-          value={inputValue}
+          value={name.input}
           onChange={handleInputChange}
         />
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
         <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
       </SearchBar>
-      <div className="absolute w-full bg-slate-400 max-w-[450px]">
+      {/* <div className="absolute w-full bg-slate-400 max-w-[450px]">
         {recommandTag.map((index) => (
           <div>{index}</div>
         ))}
-      </div>
+      </div> */}
     </>
   );
 };
@@ -62,6 +77,7 @@ w-full
 h-[55px]
 flex
 bg-white
+animate-moveToRight
 `;
 
 const BackBtn = tw.img`
