@@ -1,13 +1,14 @@
+import { ProductComp } from "@/model/commonType";
 import RelatedCard from "@components/common/RelatedCard";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 
 const RelatedArea = () => {
   const navigate = useNavigate();
 
-  const [related, setRelated] = useState<Main[]>([]);
+  const [related, setRelated] = useState<ProductComp[]>([]);
 
   useEffect(() => {
     axios.get("/api/product/main").then((res) => {

@@ -1,10 +1,10 @@
-import { Main } from "@/model/commonType";
+import { ProductComp } from "@/model/commonType";
 import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { loadImage } from "@model/exportFucKDM";
 
 export type ProductCardProps = {
-  product: Main;
+  product: ProductComp;
   id: string;
 };
 
@@ -55,9 +55,11 @@ shadow-[0px_0px_2px_#0000003f]
 `;
 
 const ImageArea = tw.div`
+p-2
 m-auto
-border-2 border-black
-`;
+h-[22vh]
+justify-center
+flex`;
 
 const TextArea = tw.div`
 relative

@@ -1,10 +1,10 @@
 import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Main } from "@model/commonType";
+import { ProductComp } from "@model/commonType";
 
 const MainProductContent = () => {
-  const [sale, setSale] = useState<Main[]>([]);
+  const [sale, setSale] = useState<ProductComp[]>([]);
 
   useEffect(() => {
     axios.get("/api/product/main").then((res) => {

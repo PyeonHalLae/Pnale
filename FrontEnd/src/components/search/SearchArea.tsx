@@ -2,11 +2,11 @@ import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Main } from "@model/commonType";
+import { ProductComp } from "@model/commonType";
 
 const SearchArea = () => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState<Main[]>([]);
+  const [search, setSearch] = useState<ProductComp[]>([]);
 
   useEffect(() => {
     axios.get("/api/product/main").then((res) => {
