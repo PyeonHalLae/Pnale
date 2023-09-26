@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -25,7 +26,7 @@ public class ConvService {
 
     //=======================================================
     public Map<String, Object> findCorpData(Pageable pageable, CorpType corpType) {
-        return  getData(pageable, corpType);
+        return getData(pageable, corpType);
     }
 
     private Map<String, Object> getData(Pageable pageable, CorpType corpType){
@@ -33,7 +34,7 @@ public class ConvService {
         response.put("banners", bannerService.findCorpBanner(PageRequest.of(0, 5), corpType));
         response.put("bestProduct", findBestProduct(pageable, corpType));
         response.put("newProduct", findNewProduct(pageable, corpType));
-        response.put("eventProduct", findEventProduct(pageable, corpType));
+        //response.put("eventProduct", findEventProduct(pageable, corpType));
         return response;
     }
 
@@ -57,7 +58,8 @@ public class ConvService {
         }
     }
 
-    public Page<Map<String, Object>> findEventProduct(Pageable pageable,CorpType corpType){
+    //public Page<Map<String, Object>> findEventProduct(Pageable pageable, Map<String, Object> data){
+    public Page<Map<String, Object>> findEventProduct(Pageable pageable, CorpType corpType){
         switch (corpType) {
             case CU: return ResponseUtil.getPageProducts(productRepository.findCUEventProduct(pageable, CorpType.ALL, corpType));
             case GS: return ResponseUtil.getPageProducts(productRepository.findGSEventProduct(pageable, CorpType.ALL, corpType));
@@ -67,4 +69,7 @@ public class ConvService {
         }
     }
 
+    public Page<Map<String,Object>> findEventProductByFilter(Pageable pageable, Map<String, Object> data) {
+        return null;
+    }
 }

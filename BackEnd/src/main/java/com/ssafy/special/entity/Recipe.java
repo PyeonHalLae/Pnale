@@ -17,7 +17,7 @@ public class Recipe {
 
     @ManyToOne
     @JoinColumn(name="writer_id")
-    Member writer;
+    Member member;
 
     @Column(nullable = false)
     String recipeName;
@@ -57,7 +57,7 @@ public class Recipe {
         return RecipeListDTO.builder()
                 .rcpId(this.recipe)
                 .rcpName(this.recipeName)
-                .member(this.writer.toViewDTO())
+                .member(this.member.toViewDTO())
                 .createdAt(this.createdAt)
                 .replyCnt(this.replyCnt)
                 .likeCnt(this.likes)

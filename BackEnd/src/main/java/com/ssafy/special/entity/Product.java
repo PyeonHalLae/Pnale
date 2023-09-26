@@ -47,8 +47,6 @@ public class Product {
     @Column(columnDefinition = "bigint default 0")
     Long hit;
 
-    @Lob
-
     @Column(columnDefinition = "DATE", insertable=false, updatable=false)
     LocalDate createdAt;
 

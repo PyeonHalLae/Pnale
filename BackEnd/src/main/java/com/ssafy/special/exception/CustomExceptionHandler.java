@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(CustomException.class)
-    public CustomResponse handleException(CustomException e){
-        return CustomResponse.builder()
-                .code(e.getCustomErrorCode().getCode())
-                .message(e.getCustomErrorCode().getMessage())
-                .build();
-    }
+//    @ExceptionHandler(CustomException.class)
+//    public CustomResponse handleException(CustomException e){
+//        return CustomResponse.builder()
+//                .code(e.getCustomErrorCode().getCode())
+//                .message(e.getCustomErrorCode().getMessage())
+//                .build();
+//    }
 
 }

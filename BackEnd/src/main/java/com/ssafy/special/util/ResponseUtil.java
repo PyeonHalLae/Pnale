@@ -6,6 +6,7 @@ import com.ssafy.special.CSR.dtos.product.ProductInfoDto;
 import com.ssafy.special.entity.EventProduct;
 import com.ssafy.special.entity.MemberPickProd;
 import com.ssafy.special.entity.Product;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class ResponseUtil {
     public static Map<String, Object> toResponseData(Object[] resultSet) {
         Product pd = (Product) resultSet[0];
@@ -29,6 +31,7 @@ public class ResponseUtil {
     }
 
     public static Page<Map<String, Object>> getPageProducts(Page<Object[]> data) {
+        log.info("여기서 버그나나?");
         return data.map(ResponseUtil::toResponseData);
     }
 

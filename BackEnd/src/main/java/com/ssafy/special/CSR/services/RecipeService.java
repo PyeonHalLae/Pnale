@@ -1,21 +1,15 @@
 package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.RecipeIngredientRepository;
-import com.ssafy.special.CSR.repositories.RecipeIngredientService;
 import com.ssafy.special.CSR.repositories.RecipeRepository;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 import com.ssafy.special.CSR.repositories.S3Repository;
 import com.ssafy.special.CSR.repositories.vo.RecipeListDTO;
 import com.ssafy.special.CSR.repositories.vo.RecipeRecommendDTO;
 import com.ssafy.special.entity.Recipe;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,7 +30,7 @@ public class RecipeService {
         return RecipeRecommendDTO.builder()
                 .rcpId(recipe.getRecipe())
                 .rcpName(recipe.getRecipeName())
-                .member(recipe.getWriter().toViewDTO())
+                .member(recipe.getMember().toViewDTO())
                 .ingredients(ingredients)
                 .rcpTemp(recipe.getRecipeSimple())
                 .likeCnt(recipe.getLikes())
