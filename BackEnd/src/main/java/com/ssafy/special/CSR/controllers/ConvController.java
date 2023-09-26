@@ -45,8 +45,8 @@ public class ConvController {
     public DataResponse<?> getEventProduct(@PageableDefault(size = 9) Pageable pageable,
                                          @PathVariable("corpType") CorpType corpType){
         log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.",
-                convService.findEventProduct(pageable, corpType));
+        return null;
+        //return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.", convService.findEventProduct(pageable, corpType));
     }
 //    @GetMapping("/pb/{corpType}")
 //    public DataResponse<?> getPBProduct(@PageableDefault(size = 9) Pageable pageable,
@@ -55,9 +55,11 @@ public class ConvController {
 //        return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
 //                convService.findCorpData(pageable, corpType));
 //    }
+
     @PostMapping("/filter")
-    public DataResponse<?> getDetailData(@RequestBody Map<String, Object> data, Pageable pageable){
-        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.");
+    public DataResponse<?> getDetailData(@PageableDefault(size =9 ) Pageable pageable,
+                                         @RequestBody Map<String, Object> data){
+        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findEventProduct(pageable, data));
     }
 
 

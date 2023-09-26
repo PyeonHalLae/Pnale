@@ -1,4 +1,4 @@
-package com.ssafy.special.elastic;
+package com.ssafy.special.CSR.dtos.search;
 
 import lombok.Builder;
 import lombok.Getter;

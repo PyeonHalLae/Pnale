@@ -1,7 +1,10 @@
-package com.ssafy.special.elastic;
+package com.ssafy.special.CSR.services;
 
+import com.ssafy.special.CSR.dtos.search.ESResultDto;
+import com.ssafy.special.CSR.repositories.ElasticRepository;
 import com.ssafy.special.CSR.repositories.ProductRepository;
 import com.ssafy.special.CSR.repositories.RecipeRepository;
+import com.ssafy.special.entity.Elastic;
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.enums.ProductCategory;
 import com.ssafy.special.exception.CustomErrorCode;
@@ -19,18 +22,18 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class GoodsService {
-    private final GoodsRepository GoodsRepository;
+public class ElasticService {
+    private final ElasticRepository GoodsRepository;
     private final ProductRepository productRepository;
     private final RecipeRepository recipeRepository;
 
-    public Goods saveProduct(Goods goods) {
+    public Elastic saveProduct(Elastic goods) {
         return GoodsRepository.save(goods);
     }
 
     public List<ESResultDto> findSeachList(Pageable pageable, String name) {
         return GoodsRepository.findByName(pageable, name)
-                .stream().map(Goods::toDto).collect(Collectors.toList());
+                .stream().map(Elastic::toDto).collect(Collectors.toList());
     }
 
     public Map<String, Object> findNameResult(Pageable pageable, List<Long> productIds) {

@@ -33,7 +33,7 @@ public class ConvService {
         response.put("banners", bannerService.findCorpBanner(PageRequest.of(0, 5), corpType));
         response.put("bestProduct", findBestProduct(pageable, corpType));
         response.put("newProduct", findNewProduct(pageable, corpType));
-        response.put("eventProduct", findEventProduct(pageable, corpType));
+        //response.put("eventProduct", findEventProduct(pageable, corpType));
         return response;
     }
 
@@ -57,7 +57,10 @@ public class ConvService {
         }
     }
 
-    public Page<Map<String, Object>> findEventProduct(Pageable pageable,CorpType corpType){
+    public Page<Map<String, Object>> findEventProduct(Pageable pageable, Map<String, Object> data){
+
+
+        CorpType corpType = (CorpType) data.get("corpType");
         switch (corpType) {
             case CU: return ResponseUtil.getPageProducts(productRepository.findCUEventProduct(pageable, CorpType.ALL, corpType));
             case GS: return ResponseUtil.getPageProducts(productRepository.findGSEventProduct(pageable, CorpType.ALL, corpType));

@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p, ep, mpp FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.CUType is not null")
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0")
     Page<Object[]> findCUBestProduct(Pageable pageable,
                                      @Param("all") CorpType all,
                                      @Param("corp") CorpType corpType);
