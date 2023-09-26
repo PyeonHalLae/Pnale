@@ -30,14 +30,14 @@ public class ConvController {
     public DataResponse<?> getBestProduct(@PageableDefault(size = 9) Pageable pageable,
                                        @PathVariable("corpType") CorpType corpType){
         log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
+        return new DataResponse<>(200, corpType.name() + "의 Best상품들을 반환합니다.",
                 convService.findBestProduct(pageable, corpType));
     }
     @GetMapping("/new/{corpType}")
     public DataResponse<?> getNewProduct(@PageableDefault(size = 9) Pageable pageable,
                                        @PathVariable("corpType") CorpType corpType){
         log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
+        return new DataResponse<>(200, corpType.name() + "의 신상품을 반환합니다.",
                 convService.findNewProduct(pageable, corpType));
     }
 
@@ -45,7 +45,7 @@ public class ConvController {
     public DataResponse<?> getEventProduct(@PageableDefault(size = 9) Pageable pageable,
                                          @PathVariable("corpType") CorpType corpType){
         log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
+        return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.",
                 convService.findEventProduct(pageable, corpType));
     }
 //    @GetMapping("/pb/{corpType}")

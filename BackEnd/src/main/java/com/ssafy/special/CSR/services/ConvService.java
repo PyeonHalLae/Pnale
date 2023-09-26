@@ -2,7 +2,7 @@ package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.BannerRepository;
 import com.ssafy.special.CSR.repositories.ProductRepository;
-import com.ssafy.special.ResponseUtil;
+import com.ssafy.special.util.ResponseUtil;
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
@@ -10,13 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

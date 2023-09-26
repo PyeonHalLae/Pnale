@@ -1,15 +1,11 @@
 package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
-import com.ssafy.special.ResponseUtil;
-import com.ssafy.special.entity.EventProduct;
+import com.ssafy.special.util.ResponseUtil;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.entity.MemberPickProd;
 import com.ssafy.special.entity.Product;
-import com.ssafy.special.CSR.dtos.memberpick.MemberPickProdInfoDto;
 import com.ssafy.special.CSR.repositories.ProductRepository;
-import com.ssafy.special.CSR.dtos.product.EventInfoDto;
-import com.ssafy.special.CSR.dtos.product.ProductInfoDto;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
@@ -23,7 +19,6 @@ import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
