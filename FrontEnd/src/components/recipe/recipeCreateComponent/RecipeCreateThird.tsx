@@ -1,16 +1,22 @@
-import { useState, Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { RecipeEditor } from "../recipeCommonComponent/RecipeEditor";
 import tw from "tailwind-styled-components";
+import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
+import CancelBtn from "./CancelBtn";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
+  recipeForm: recipeFormType;
+  contents: string;
+  setContents: Dispatch<SetStateAction<string>>;
 }
 
-const RecipeCreateThird = ({ stepHandler }: Props) => {
-  const [contents, setContents] = useState("");
+const RecipeCreateThird = ({ stepHandler, contents, setContents, recipeForm }: Props) => {
+  console.log(recipeForm);
 
   return (
     <Container>
+      <CancelBtn />
       <RecipeEditor contents={contents} setContents={setContents} />
       <button
         onClick={() => {
@@ -25,14 +31,15 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
             stepHandler("2");
           }}
         >
-          dd
+          이전으로
         </WhiteBtn>
+
         <BlueBtn
           onClick={() => {
             stepHandler("3");
           }}
         >
-          dd
+          작성완료
         </BlueBtn>
       </BtnBox>
     </Container>
@@ -45,58 +52,14 @@ const Container = tw.div`
 flex
 flex-col
 w-[100%]
+px-[2.5rem]
 justify-center
 items-center
-`;
-
-const FormBox = tw.div`
-mb-[1.5rem]
-w-[100%]
-`;
-
-const FormTitle = tw.div`
-text-[1.25rem]
-text-common-text-color
-`;
-
-const ImgBox = tw.img`
-w-[100%]
-h-[15.25rem]
-`;
-
-const TitleBox = tw.textarea`
-text-[1.5rem]
-w-[100%]
-bg-common-back-color
-border-b-2
-break-all
-`;
-
-const IntroBox = tw.textarea`
-w-[100%]
-bg-common-back-color
-border-b-2
-break-all
-`;
-
-const RelatedUrlBox = tw.input`
-w-[100%]
-h-[1.8125rem]
-text-[.75rem] 
-line-clamp-1 
-mb-[.625rem] 
-p-[.25rem]
-py-[.1rem]
-border-[0.05rem]
-rounded-[0.625rem]
-border-common-bold-back-color
-bg-common-back-color"
 `;
 
 const BtnBox = tw.div`
 flex
 w-[100%]
-p-[2.5rem]
 relative
 itmes-center
 justify-between
@@ -113,7 +76,7 @@ py-[.75rem]
 bg-common-text-color
 text-white
 text-[0.9375rem]
-shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)]
+shadow
 `;
 
 const WhiteBtn = tw.div`
@@ -127,5 +90,5 @@ py-[.75rem]
 bg-white
 text-common-text-color
 text-[0.9375rem]
-shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)]
+shadow
 `;

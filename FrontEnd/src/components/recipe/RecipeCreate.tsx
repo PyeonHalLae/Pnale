@@ -8,15 +8,15 @@ import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
 import { recipeFormType } from "./recipeCommonComponent/recipeFormType";
 
 const RecipeCreate = () => {
-  const [step, setStep] = useState("1");
+  const [step, setStep] = useState<string>("1");
   const [recipeForm, setRecipeForm] = useState<recipeFormType>({
     recipeTitle: "",
-    recipeImg: "",
     intro: "",
     relatedUrl: "",
-    ingredients: [],
-    contents: "",
+    products: [],
   });
+  const [contents, setContents] = useState<string>("");
+  const [recipeImg, setRecipeImg] = useState<string>("");
 
   const FormChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -34,7 +34,8 @@ const RecipeCreate = () => {
       <RecipeCreateFirst
         stepHandler={stepHandler}
         recipeForm={recipeForm}
-        setRecipeForm={setRecipeForm}
+        recipeImg={recipeImg}
+        setRecipeImg={setRecipeImg}
         FormChangeHandler={FormChangeHandler}
       ></RecipeCreateFirst>
     ),
@@ -49,7 +50,8 @@ const RecipeCreate = () => {
       <RecipeCreateThird
         stepHandler={stepHandler}
         recipeForm={recipeForm}
-        FormChangeHandler={FormChangeHandler}
+        contents={contents}
+        setContents={setContents}
       ></RecipeCreateThird>
     ),
   };

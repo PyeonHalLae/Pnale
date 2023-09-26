@@ -1,27 +1,66 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import tw from "tailwind-styled-components";
+import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
+import CancelBtn from "./CancelBtn";
+import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
+import RecipeProductsModalContent from "./../recipeCommonComponent/RecipeProductsModalContent";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
+  recipeForm: recipeFormType;
+  FormChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
-const RecipeCreateSecond = ({ stepHandler }: Props) => {
+
+const RecipeCreateSecond = ({ stepHandler, recipeForm }: Props) => {
+  const [isModalActive, setIsModalActive] = useState<boolean>(false);
+
   return (
     <Container>
-      RecipeCreateSecond
+      <CancelBtn />
+      <ProductsBox>
+        {isModalActive && (
+          <RecipeCommonModal
+            setModal={setIsModalActive}
+            width="22.5"
+            height="36"
+            element={<RecipeProductsModalContent />}
+          />
+        )}
+        <ProductBoxTitle>재료 등록</ProductBoxTitle>
+        <ProductTableColName>
+          <div className="w-[calc(100%-5rem)] flex justify-center items-center">
+            <div>재료명</div>
+          </div>
+          <div className="w-[5rem] flex justify-center items-center">
+            <div>변경가능</div>
+          </div>
+        </ProductTableColName>
+        {recipeForm.products.map((product) => {
+          return <div>{product.productId}</div>;
+        })}
+        <ProductAddBtn
+          onClick={() => {
+            setIsModalActive(true);
+          }}
+        >
+          + 재료 추가하기
+        </ProductAddBtn>
+      </ProductsBox>
+
       <BtnBox>
         <WhiteBtn
           onClick={() => {
             stepHandler("1");
           }}
         >
-          dd
+          이전으로
         </WhiteBtn>
         <BlueBtn
           onClick={() => {
             stepHandler("3");
           }}
         >
-          dd
+          다음으로
         </BlueBtn>
       </BtnBox>
     </Container>
@@ -36,48 +75,36 @@ px-[2.5rem]
 w-[100%]
 `;
 
-const FormBox = tw.div`
-mb-[1.5rem]
+const ProductsBox = tw.div`
 w-[100%]
-`;
-
-const FormTitle = tw.div`
-text-[1.25rem]
-text-common-text-color
-`;
-
-const ImgBox = tw.img`
-w-[100%]
-h-[15.25rem]
-`;
-
-const TitleBox = tw.textarea`
-text-[1.5rem]
-w-[100%]
-bg-common-back-color
-border-b-2
-break-all
-`;
-
-const IntroBox = tw.textarea`
-w-[100%]
-bg-common-back-color
-border-b-2
-break-all
-`;
-
-const RelatedUrlBox = tw.input`
-w-[100%]
-h-[1.8125rem]
-text-[.75rem] 
-line-clamp-1 
-mb-[.625rem] 
-p-[.25rem]
-py-[.1rem]
-border-[0.05rem]
+h-[34.375rem]
+bg-white
+my-[3rem]
 rounded-[0.625rem]
-border-common-bold-back-color
-bg-common-back-color"
+shadow
+`;
+
+const ProductBoxTitle = tw.div`
+text-[1.5625rem]
+text-common-text-color
+py-[1.25rem]
+text-center
+`;
+
+const ProductTableColName = tw.div`
+flex
+text-[0.9375rem];
+text-common-text-color
+font-bold
+mb-[.625rem]
+border-b-2
+`;
+
+const ProductAddBtn = tw.div`
+text-[0.9375rem];
+text-common-text-color
+py-[1rem];
+text-center
 `;
 
 const BtnBox = tw.div`
@@ -99,7 +126,7 @@ py-[.75rem]
 bg-common-text-color
 text-white
 text-[0.9375rem]
-shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)]
+shadow
 `;
 
 const WhiteBtn = tw.div`
@@ -113,5 +140,5 @@ py-[.75rem]
 bg-white
 text-common-text-color
 text-[0.9375rem]
-shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)]
+shadow
 `;
