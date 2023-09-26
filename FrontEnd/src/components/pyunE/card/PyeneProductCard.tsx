@@ -4,31 +4,56 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-const PyeneProductCard = () => {
-  // const [dumState, setDumState] = useState<boolean>();
+import { Main, MainProduct } from "@/model/commonType";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
-  // useEffect(() => {
-  //   setDumState(false);
-  // }, []);
+interface pyeneProductEventType {
+  type: string;
+  date: string;
+}
 
-  const dumState = true;
+const pyeneTypeMap = {
+  CU: "cu",
+  GS: "gs",
+  SEVEN: "seven",
+  EMART: "emart",
+};
+
+const PyeneProductCard = ({ $productInfo }: { $productInfo: Main }) => {
+  const [eventInfo, setEventInfo] = useState<pyeneProductEventType>();
+  const { pyeneType } = useParams();
+  const dumState = false;
+
+  useEffect(() => {
+    // const eventInfoDefault =  $productInfo.event;
+    const pyeneEventInfo: pyeneProductEventType = {
+      type: $productInfo.event[pyeneTypeMap[pyeneType] + "type"],
+      date: $productInfo.event[pyeneTypeMap[pyeneType] + "date"],
+    };
+    setEventInfo(pyeneEventInfo);
+  }, []);
 
   return (
     <>
       <BackSize>
         <ImageBox>
-          <ProductImg src="/img/test/image61.png" />
+          <ProductImg src={$productInfo.product.productImg} />
           {dumState && <ProductDumImg src="/img/test/image61.png" />}
-          <ProductEventImg src="/img/icons/best-product-icon.png" />
+          {eventInfo ? (
+            <ProductEventImg src="/img/icons/best-product-icon.png" />
+          ) : (
+            <ProductEventImg src="/img/icons/best-product-icon.png" />
+          )}
         </ImageBox>
         <InfoBox>
           <div className="h-6">
-            <Category>스낵</Category>
+            <Category>{$productInfo.product.category}</Category>
             <LikeBtn />
           </div>
-          <Title>안녕하세요 이거는 이거입니다 그럴걸요인데요맞아요그래요</Title>
+          <Title>{$productInfo.product.productName}</Title>
           <PriceBox>
-            <Price>2000</Price>
+            <Price>{$productInfo.product.price}</Price>
             <span>원</span>
           </PriceBox>
         </InfoBox>
@@ -89,6 +114,7 @@ const Category = styled.span`
   border: 1px solid #1e2b4f;
   border-radius: 0.1875rem;
   color: #1e2b4f;
+  padding: 1px 6px;
   font-size: 10px;
 `;
 
