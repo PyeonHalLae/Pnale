@@ -56,14 +56,14 @@ public class Member {
     LocalDateTime updatedAt;
 
 
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    private Set<MemberPickProd> likeProducts = new HashSet<>();
-
-    @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY)
-    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
-
-    @OneToMany(mappedBy = "writerId", fetch = FetchType.LAZY)
-    private List<Recipe> writeRecipes = new LinkedList<>();
+//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+//    private Set<MemberPickProd> likeProducts = new HashSet<>();
+//
+//    @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY)
+//    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
+//
+//    @OneToMany(mappedBy = "writerId", fetch = FetchType.LAZY)
+//    private List<Recipe> writeRecipes = new LinkedList<>();
 
 
     public MemberViewDTO toViewDTO(){
