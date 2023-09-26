@@ -128,6 +128,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
 
+
+    @Query("SELECT p, ep, mpp FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.pb = :corpType ")
+    Page<Object[]> findPbProduct(Pageable pageable,
+                                   @Param("corpType") CorpType corpType);
+
     //============ 상품 검색
     @Query("SELECT p, ep, mpp " +
             "FROM Product p " +

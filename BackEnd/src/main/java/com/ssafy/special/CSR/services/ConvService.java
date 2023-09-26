@@ -69,6 +69,10 @@ public class ConvService {
         }
     }
 
+    public Page<Map<String, Object>> findPbProduct(Pageable pageable, CorpType corpType){
+        return ResponseUtil.getPageProducts(productRepository.findPbProduct(pageable, corpType));
+    }
+
     public Page<Map<String,Object>> findEventProductByFilter(Pageable pageable, Map<String, Object> data) {
         return null;
     }

@@ -45,7 +45,7 @@ public class ConvController {
     @GetMapping("/pb/{corpType}")
     public DataResponse<?> getPBProduct(@PageableDefault(size = 9) Pageable pageable,
                                          @PathVariable("corpType") CorpType corpType){
-        return new DataResponse<>(200, corpType.name() + "의 PB(독점) 상품을 반환합니다.", convService.findCorpData(pageable, corpType));
+        return new DataResponse<>(200, corpType.name() + "의 PB(독점) 상품을 반환합니다.", convService.findPbProduct(pageable, corpType));
     }
 
     @PostMapping("/event")
