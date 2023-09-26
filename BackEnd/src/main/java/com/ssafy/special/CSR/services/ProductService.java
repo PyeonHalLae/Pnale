@@ -52,11 +52,6 @@ public class ProductService {
         return ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4)));
     }
 
-    //제품 상세 보기
-    public Map<String, Object> findProductById(Long productId) {
-        return ResponseUtil.toResponseData(productRepository.findRecommandProduct(productId));
-    }
-
     //상품 좋아요
     @Transactional
     public String pickToggle(Long productId, Long userId) {

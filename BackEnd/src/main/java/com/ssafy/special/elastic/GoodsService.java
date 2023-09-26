@@ -1,7 +1,14 @@
 package com.ssafy.special.elastic;
 
 import com.ssafy.special.CSR.repositories.ProductRepository;
+import com.ssafy.special.CSR.repositories.RecipeRepository;
+import com.ssafy.special.entity.Product;
+import com.ssafy.special.enums.ProductCategory;
+import com.ssafy.special.exception.CustomErrorCode;
+import com.ssafy.special.exception.CustomException;
+import com.ssafy.special.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +22,7 @@ import java.util.stream.Collectors;
 public class GoodsService {
     private final GoodsRepository GoodsRepository;
     private final ProductRepository productRepository;
+    private final RecipeRepository recipeRepository;
 
     public Goods saveProduct(Goods goods) {
         return GoodsRepository.save(goods);
@@ -25,23 +33,26 @@ public class GoodsService {
                 .stream().map(Goods::toDto).collect(Collectors.toList());
     }
 
-    public Map<String, Object> findNameResult(Pageable pageable, String name) {
+    public Map<String, Object> findNameResult(Pageable pageable, List<Long> productIds) {
+        Product p = productRepository.findById(productIds.get(0)).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
+
         Map<String, Object> response = new HashMap<>();
-        //response.put("search", ResponseUtil.getPageProducts(productRepository.));
-        response.put("relate", null);
-        response.put("recipes", null);
+        response.put("search", findResultProducts(Pageable.ofSize(4), productIds));
+        response.put("relate", findRelateProduct(pageable, p.getCategory()));
+        response.put("recipes", recipeRepository.findTop3ByOrderByCreatedAtDesc(pageable));
         return response;
     }
 
-    public Object findResultProduct(Pageable pageable, String name) {
-        return null;
+    public Page<Map<String, Object>> findResultProducts(Pageable pageable, List<Long> productIds) {
+        return ResponseUtil.getPageProducts(productRepository.findSearchProducts(pageable, productIds));
     }
 
-    public Object findRelateProduct(Pageable pageable, String name) {
-        return null;
+    public Page<Map<String, Object>> findRelateProduct(Pageable pageable, ProductCategory category) {
+        return ResponseUtil.getPageProducts(productRepository.findRelateProduct(pageable, category));
     }
 
-    public Object findRelateRecipe(Pageable pageable, String name) {
+    public Page<Map<String, Object>> findRelateRecipe(Pageable pageable, String name) {
+        //return ResponseUtil.getPageProducts(recipeRepository.findRelateProduct(pageable, name));
         return null;
     }
 }
