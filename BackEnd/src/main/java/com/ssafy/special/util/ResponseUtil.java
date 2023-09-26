@@ -1,4 +1,4 @@
-package com.ssafy.special;
+package com.ssafy.special.util;
 
 import com.ssafy.special.CSR.dtos.memberpick.MemberPickProdInfoDto;
 import com.ssafy.special.CSR.dtos.product.EventInfoDto;

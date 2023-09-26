@@ -1,7 +1,6 @@
 package com.ssafy.special.elastic;
 
 import com.ssafy.special.CSR.repositories.ProductRepository;
-import com.ssafy.special.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
