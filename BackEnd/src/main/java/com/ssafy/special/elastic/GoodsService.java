@@ -1,6 +1,7 @@
 package com.ssafy.special.elastic;
 
 import com.ssafy.special.CSR.repositories.ProductRepository;
+import com.ssafy.special.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,23 @@ public class GoodsService {
                 .stream().map(Goods::toDto).collect(Collectors.toList());
     }
 
-    public Map<String, Object> findSearchResult(Pageable pageable, String name) {
+    public Map<String, Object> findNameResult(Pageable pageable, String name) {
         Map<String, Object> response = new HashMap<>();
-        response.put("search", null);
+        //response.put("search", ResponseUtil.getPageProducts(productRepository.));
         response.put("relate", null);
         response.put("recipes", null);
         return response;
+    }
+
+    public Object findResultProduct(Pageable pageable, String name) {
+        return null;
+    }
+
+    public Object findRelateProduct(Pageable pageable, String name) {
+        return null;
+    }
+
+    public Object findRelateRecipe(Pageable pageable, String name) {
+        return null;
     }
 }

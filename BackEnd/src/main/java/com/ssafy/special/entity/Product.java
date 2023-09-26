@@ -22,15 +22,18 @@ public class Product {
     @Lob
     String productImg;
 
+    @Lob
+    String moreImg;
+
     @Column(columnDefinition = "bigint default 0")
     Long price;
+
+    @Column(columnDefinition = "bigint default 0")
+    Long salePrice;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     ProductCategory category;
-
-    @Lob
-    String productDesc;
 
     @Enumerated(EnumType.STRING)
     CorpType pb;
@@ -44,6 +47,8 @@ public class Product {
     @Column(columnDefinition = "bigint default 0")
     Long hit;
 
+    @Lob
+
     @Column(columnDefinition = "DATE", insertable=false, updatable=false)
     LocalDate createdAt;
 
@@ -55,9 +60,10 @@ public class Product {
                 .productId(this.productId)
                 .productName(this.productName)
                 .productImg(this.productImg)
+                .moreImg(this.moreImg)
                 .price(this.price)
+                .salePrice(this.salePrice)
                 .category(this.category)
-                .productDesc(this.productDesc)
                 .recommand(this.recommand)
                 .pb(this.pb)
                 .hit(this.hit)
