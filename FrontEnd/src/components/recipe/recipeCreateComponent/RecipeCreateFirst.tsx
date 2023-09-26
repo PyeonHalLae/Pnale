@@ -7,12 +7,16 @@ interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
   recipeForm: recipeFormType;
   setRecipeForm: Dispatch<SetStateAction<recipeFormType>>;
-  FormChangeHandler: 
 }
 
-const RecipeCreateFirst = ({ stepHandler, recipeForm, setRecipeFrom, FormChangeHandler }: Props) => {
+const RecipeCreateFirst = ({
+  stepHandler,
+  recipeForm,
+  setRecipeFrom,
+  FormChangeHandler,
+}: Props) => {
   const navigate = useNavigate();
-  const {recipeImg, recipeTitle, intro} = recipeForm;
+  const { recipeImg, recipeTitle, intro } = recipeForm;
 
   const cancleBtn = () => {
     navigate("/recipe");
@@ -33,17 +37,34 @@ const RecipeCreateFirst = ({ stepHandler, recipeForm, setRecipeFrom, FormChangeH
 
       <FormBox>
         <FormTitle>제목</FormTitle>
-        <TitleBox rows={1} value={recipeTitle} name="recipeTitle" onChange={FormChangeHandler} placeholder="제목을 입력해주세요."></TitleBox>
+        <TitleBox
+          rows={1}
+          value={recipeTitle}
+          name="recipeTitle"
+          onChange={FormChangeHandler}
+          placeholder="제목을 입력해주세요."
+        ></TitleBox>
       </FormBox>
 
       <FormBox>
         <FormTitle>간단 설명</FormTitle>
-        <IntroBox rows={1} value={intro} name="intro" onChange={FormChangeHandler} placeholder="레시피 간단 설명을 작성해주세요."></IntroBox>
+        <IntroBox
+          rows={1}
+          value={intro}
+          name="intro"
+          onChange={FormChangeHandler}
+          placeholder="레시피 간단 설명을 작성해주세요."
+        ></IntroBox>
       </FormBox>
 
       <FormBox>
         <FormTitle>관련 영상 추가</FormTitle>
-        <RelatedUrlBox type="text" name="relatedUrl" onChange={FormChangeHandler} placeholder="URL을 입력해주세요"></RelatedUrlBox>
+        <RelatedUrlBox
+          type="text"
+          name="relatedUrl"
+          onChange={FormChangeHandler}
+          placeholder="URL을 입력해주세요"
+        ></RelatedUrlBox>
       </FormBox>
 
       <BtnBox>
