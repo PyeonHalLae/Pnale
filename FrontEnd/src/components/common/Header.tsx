@@ -1,23 +1,36 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const [inputValue, setInputValue] = useState("");
+  const [recommandTag, setRecommandTag] = useState([]);
 
   const backBtn = () => {
     navigate(-1);
   };
 
+  const reset = () => {
+    setInputValue("");
+  };
   const toggleSearch = () => {
     setIsActive((prevIsActive) => !prevIsActive);
+    navigate("/search");
   };
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
+
+  useEffect(() => {
+    setRecommandTag((pre) => {
+      const newData = [...pre, inputValue];
+      return newData;
+    });
+    console.log("inputValue", inputValue);
+  }, [inputValue]);
 
   return (
     <>
@@ -29,9 +42,14 @@ const Header = () => {
           value={inputValue}
           onChange={handleInputChange}
         />
-        <SubtractBtn src="/img/btn/subtract.png" onClick={backBtn} />
+        <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
         <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
       </SearchBar>
+      <div className="absolute w-full bg-slate-400 max-w-[450px]">
+        {recommandTag.map((index) => (
+          <div>{index}</div>
+        ))}
+      </div>
     </>
   );
 };
