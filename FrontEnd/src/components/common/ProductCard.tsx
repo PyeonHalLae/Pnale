@@ -1,27 +1,45 @@
-import { mainCard } from "@/model/commonType";
-import React from "react";
+import { Main, MainEvent } from "@/model/commonType";
+import React, { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 
 type ProductCardProps = {
-  data: mainCard;
+  product: Main;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
-  console.log(data);
+const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
+  const [eventData, setEventData] = useState<MainEvent>();
+
+  useEffect(() => {
+    console.log("event", product.event);
+    setEventData(product.event);
+  }, []);
 
   return (
     <Card>
       <ImageArea>
         <img
-          src={data.productResponseDto.productImg}
+          src={product.product.productImg}
           alt="제품사진"
-          className="px-4.5 py-3 border-black boder-2"
+          className="px-4.5 py-3 border-black boder-2 m-auto h-[200px]"
         />
-        <div className="mb-1.5 px-1.5 border-2 border-black">스티커 구간</div>
+        <div className="flex p-1.5 m-auto">
+          {product.event.cutype !== null && (
+            <StickerImg src={`/img/sticker/main/CU-${product.event.cutype}.png`}></StickerImg>
+          )}
+          {product.event.emarttype !== null && (
+            <StickerImg src={`/img/sticker/main/EMART-${product.event.emarttype}.png`}></StickerImg>
+          )}
+          {product.event.gstype !== null && (
+            <StickerImg src={`/img/sticker/main/GS-${product.event.gstype}.png`}></StickerImg>
+          )}
+          {product.event.seventype !== null && (
+            <StickerImg src={`/img/sticker/main/SEVEN-${product.event.seventype}.png`}></StickerImg>
+          )}
+        </div>
       </ImageArea>
       <TextArea>
         <div className="flex">
-          <Categori>{data.productResponseDto.category}</Categori>
+          <Categori>{product.product.category}</Categori>
           <img
             src="/img/icons/filledStar.png"
             alt="즐겨찾기"
@@ -29,11 +47,9 @@ const ProductCard: React.FC<ProductCardProps> = ({ data }) => {
           />
         </div>
         <p className="mx-1.5 text-sm max-w-130 line-clamp-1">
-          {data.productResponseDto.productName.slice(
-            data.productResponseDto.productName.indexOf(")") + 1
-          )}
+          {product.product.productName.slice(product.product.productName.indexOf(")") + 1)}
         </p>
-        <Price>{data.productResponseDto.price}</Price>
+        <Price>{product.product.price}</Price>
         <span className="mr-4">원</span>
       </TextArea>
     </Card>
@@ -53,6 +69,11 @@ const TextArea = tw.div`
 relative
 bg-common-back-color
 text-common-text-color
+`;
+
+const StickerImg = tw.img`
+mr-1.5
+w-[23%]
 `;
 
 const Categori = tw.p`

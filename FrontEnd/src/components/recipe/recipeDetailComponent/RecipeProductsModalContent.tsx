@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-const RecipeIngredientModalContent = () => {
+const RecipeProductsModalContent = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [productList, setProductList] = useState<string[]>([]);
   const [selectedProd, setSelectedProd] = useState<string>("");
@@ -37,7 +37,7 @@ const RecipeIngredientModalContent = () => {
           <ListItem selected={true}>전체</ListItem>
         </CategoryListBox>
 
-        <IngredientListBox>
+        <ProductsListBox>
           {productList &&
             productList.map((productItem: string) => (
               <ListItem
@@ -50,7 +50,7 @@ const RecipeIngredientModalContent = () => {
                 {productItem}
               </ListItem>
             ))}
-        </IngredientListBox>
+        </ProductsListBox>
       </SearchResultBox>
       <BtnBox>
         <ChoiceBtn
@@ -65,7 +65,7 @@ const RecipeIngredientModalContent = () => {
   );
 };
 
-export default RecipeIngredientModalContent;
+export default RecipeProductsModalContent;
 
 const Title = tw.div`
 ml-[0.875rem]
@@ -101,7 +101,7 @@ h-[100%]
 border-[1px]
 overflow-scroll
 `;
-const IngredientListBox = tw.div`
+const ProductsListBox = tw.div`
 w-[calc(100%-5rem)]
 h-[100%]
 border-[1px]

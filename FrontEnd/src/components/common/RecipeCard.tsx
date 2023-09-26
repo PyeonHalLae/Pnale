@@ -45,6 +45,8 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           {recipeInfo.viewCnt}
         </ViewCountBox>
 
+        <ManageBtn src="/img/btn/menu-btn.png" />
+
         {/* 레시피 제목 */}
         <RecipeTitleBox>{recipeInfo.recipeTitle}</RecipeTitleBox>
 
@@ -81,7 +83,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 export default RecipeCard;
 
 const Container = tw.div`
-  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.5rem] bg-white grid grid-cols-5 my-[.625rem] items-center;
+  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center;
 `;
 
 const RecipeImg = tw.img`
@@ -89,11 +91,23 @@ const RecipeImg = tw.img`
 `;
 
 const ContentBox = tw.div`
-  h-[6.25rem] col-span-3 my-[0.5rem]
+  relative 
+  h-[6.25rem] 
+  col-span-3 
+  my-[0.5rem]
 `;
 
 const ViewCountBox = tw.div`
-relative top-0 text-[0.6rem]  text-common-text-gray-color
+text-[0.6rem]  
+text-common-text-gray-color
+`;
+
+const ManageBtn = tw.img`
+absolute
+top-0
+right-2
+w-[1rem]
+inline-block
 `;
 
 const RecipeTitleBox = styled.div`

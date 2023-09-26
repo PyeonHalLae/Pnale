@@ -1,12 +1,12 @@
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 
-import RecipeIngredientModalContent from "./RecipeIngredientModalContent";
+import RecipeIngredientModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
 // import { useRecoilValue } from "recoil";
 // import { ingredientState } from "@/recoil/khiRecoil";
 
-const RecipeIngredientListItem = () => {
+const RecipeProductsListItem = () => {
   const [isChangable, setIsChangable] = useState<boolean>();
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
   // const keyword = useRecoilValue(ingredientState);
@@ -25,7 +25,7 @@ const RecipeIngredientListItem = () => {
           element={<RecipeIngredientModalContent />}
         />
       )}
-      <IngredientInfo>
+      <ProductInfo>
         <OrderNumBox>1.</OrderNumBox>
 
         <NameBox>짜파게티</NameBox>
@@ -45,21 +45,21 @@ const RecipeIngredientListItem = () => {
         </ChangeBtnBox>
 
         <PriceBox>1,000원</PriceBox>
-      </IngredientInfo>
+      </ProductInfo>
 
       <StickerBox>스티커들어감</StickerBox>
     </Container>
   );
 };
 
-export default RecipeIngredientListItem;
+export default RecipeProductsListItem;
 
 const Container = tw.div`
 text-[0.75rem]
 mx-[0.5rem]
 my-[.3125rem]
 `;
-const IngredientInfo = tw.div`
+const ProductInfo = tw.div`
 flex 
 items-center 
 text-center

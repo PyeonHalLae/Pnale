@@ -1,8 +1,8 @@
 // import { useState } from "react";
-import ReicpeIngredientListItem from "./RecipeIngredientListItem";
+import RecipeProductsListItem from "./RecipeProductsListItem";
 import tw from "tailwind-styled-components";
 
-const RecipeIngredientList = () => {
+const RecipeProductsList = () => {
   // const ingredients, setin
 
   return (
@@ -11,8 +11,8 @@ const RecipeIngredientList = () => {
         <span className="text-common-peach">재료</span> <span>리스트</span>
       </Title>
 
-      <ReicpeIngredientListItem />
-      <ReicpeIngredientListItem />
+      <RecipeProductsListItem />
+      <RecipeProductsListItem />
 
       <TotalPriceBox>
         <div className="w-[4rem]">3,400원</div>
@@ -22,7 +22,7 @@ const RecipeIngredientList = () => {
   );
 };
 
-export default RecipeIngredientList;
+export default RecipeProductsList;
 
 const Container = tw.div`
 bg-white 

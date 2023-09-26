@@ -52,7 +52,7 @@ const RecipeList = () => {
   }, []);
 
   return (
-    <div className="relative min-w-[22.5rem] max-w-[28.125rem]">
+    <Container>
       {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
       <RecipeListHeaderBar />
 
@@ -60,6 +60,7 @@ const RecipeList = () => {
         <TitleTextPeach>인기</TitleTextPeach>
         <TitleText>레시피</TitleText>
       </ContentTitle>
+
       {/* 인기 레시피 컨테이너 */}
       <PopularRecipeRoller popularRecipeList={popularRecipeList} />
 
@@ -82,6 +83,7 @@ const RecipeList = () => {
           <option value="popular">인기순</option>
         </SortSelectBox>
       </ContentTitle>
+
       {/* 5개씩 늘어날 것. */}
       {recipeList.map((recipeItem, index) => (
         <RecipeCard
@@ -101,17 +103,24 @@ const RecipeList = () => {
           더보기
         </ViewMoreBtn>
       </ViewMoreBtnBox>
+
       <CreateBtn
         onClick={() => {
           navigate("/recipe/create");
         }}
         src="/img/btn/create-recipe.png"
       />
-    </div>
+    </Container>
   );
 };
 
 export default RecipeList;
+
+const Container = tw.div`
+relative 
+min-w-[22.5rem] 
+max-w-[28.125rem]
+`;
 
 const ContentTitle = tw.div`
 relative
