@@ -2,7 +2,9 @@ package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.SocialType;
 import com.ssafy.special.enums.RoleType;
+import com.ssafy.special.member.model.vo.MemberViewDTO;
 import lombok.*;
+import org.elasticsearch.monitor.os.OsStats;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -53,14 +55,24 @@ public class Member {
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",  insertable=false, updatable=true)
     LocalDateTime updatedAt;
 
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-//    private Set<MemberPickProd> likeProducts = new HashSet<>();
-//
-//    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-//    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
-//
-//    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
-//    private List<Recipe> writeRecipes = new LinkedList<>();
+
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    private Set<MemberPickProd> likeProducts = new HashSet<>();
+
+    @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY)
+    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
+
+    @OneToMany(mappedBy = "writerId", fetch = FetchType.LAZY)
+    private List<Recipe> writeRecipes = new LinkedList<>();
+
+
+    public MemberViewDTO toViewDTO(){
+        return MemberViewDTO.builder()
+                .memberId(this.memberId)
+                .nickname(this.nickname)
+                .memberImg(this.memberImg)
+                .build();
+    }
 
     public Member updateMemberInfo(String memberImg, String nickname, boolean mailReceive){
         this.memberImg = memberImg;
