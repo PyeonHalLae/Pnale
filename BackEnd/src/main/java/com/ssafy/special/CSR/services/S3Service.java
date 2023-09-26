@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -49,17 +50,20 @@ public class S3Service {
     }
 
     @Transactional
-    public void deleteImg(String imgSrc) {
-        String[] urlParse = imgSrc.split("/");
-        String deleteFile = urlParse[3] + "/" + urlParse[4];
-        if (amazonS3Client.doesObjectExist(bucket, deleteFile)) {
-            amazonS3Client.deleteObject(bucket, deleteFile);
-            s3Repository.deleteByUploadFileUrl(imgSrc);
+    public void deleteImg(List<String> imgSrcs) {
+        for(String imgSrc : imgSrcs){
+            String[] urlParse = imgSrc.split("/");
+            String deleteFile = urlParse[3] + "/" + urlParse[4];
+            if (amazonS3Client.doesObjectExist(bucket, deleteFile)) {
+                amazonS3Client.deleteObject(bucket, deleteFile);
+                s3Repository.deleteByUploadFileUrl(imgSrc);
+            }
         }
+
     }
 
     public String getUUIDFileName(String fileName) {
         String ext = fileName.substring(fileName.indexOf(".") + 1);
-        return UUID.randomUUID() + "." + ext;
+        return UUID.randomUUID() + fileName + "." + ext;
     }
 }
