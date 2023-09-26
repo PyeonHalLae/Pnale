@@ -1,5 +1,5 @@
 // import React from 'react'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
@@ -7,11 +7,13 @@ import * as pyeneRecoil from "@/recoil/pyeneRecoil";
 
 import PyeneShopProductNineView from "./PyeneShopProductNineView";
 import PyeneShopProductFilter from "./PyeneShopProductFilter";
+import { useParams } from "react-router-dom";
 
 const PyeneShopProductList = () => {
   //recoil 상품 Type 을 위한 값
   const [preProductViewType, setPreProductViewType] = useRecoilState(pyeneRecoil.preProductView);
   const filterCnt = useRecoilValue(pyeneRecoil.FilterCnt);
+  const filterInfo = useRecoilValue(pyeneRecoil.FilterInfo);
 
   //recoil 필터 초기화
   const resetSort = useResetRecoilState(pyeneRecoil.SortFilterDefault);
@@ -27,24 +29,38 @@ const PyeneShopProductList = () => {
 
   const [productListType, setProductListType] = useState<string>("EVENT");
   const [modalState, setModalState] = useState<boolean>(false);
+
+  const refPyenType = useRef<string>();
+  const { pyenType } = useParams();
   // const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
 
   useEffect(() => {
     if (preProductViewType.type !== productListType) {
       //필터값 초기화
       setPreProductViewType({ type: productListType });
-      resetSort();
-      resetEvent();
-      resetMeal();
-      resetCook();
-      resetSnack();
-      resetFood();
-      resetDrink();
-      resetLife();
-      resetAllEventState();
-      resetAllCategoryState();
+      ClearFilterHandler();
+      console.log("필터 초기화 편의점 리스트타입");
     }
-  }, [productListType]);
+    if (refPyenType.current !== pyenType) {
+      refPyenType.current = pyenType;
+      ClearFilterHandler();
+      console.log("필터 초기화 편타입");
+    }
+    console.log(filterInfo);
+  }, [productListType, pyenType]);
+
+  const ClearFilterHandler = () => {
+    resetSort();
+    resetEvent();
+    resetMeal();
+    resetCook();
+    resetSnack();
+    resetFood();
+    resetDrink();
+    resetLife();
+    resetAllEventState();
+    resetAllCategoryState();
+  };
 
   const ModalHandler = () => {
     setModalState(!modalState);
@@ -83,7 +99,7 @@ const PyeneShopProductList = () => {
       </ProductListHeader>
       <ProductListMain>
         <FilterBox>
-          <FilterText>필터 선택:</FilterText>
+          <FilterText>필터 선택 :</FilterText>
           <FilterBtn $filterState={filterCnt > 0 ? true : false} onClick={ModalHandler}>
             <FilterBtnText>필터</FilterBtnText>
             {filterCnt !== 0 && (
@@ -93,7 +109,24 @@ const PyeneShopProductList = () => {
             )}
             <FilterImg src="/img/icons/filter-icon.png" />
           </FilterBtn>
+          <FilterHelpTextBox>
+            <FilterHelpText>미리보기는 10개 까지 확인할 수 있습니다.</FilterHelpText>
+          </FilterHelpTextBox>
         </FilterBox>
+        {filterInfo.category && (
+          <>
+            <FilterListBox>
+              {filterInfo.category.map(
+                (value, index) =>
+                  index < 10 && (
+                    <FilterListBtn key={index}>
+                      <FilterListText>{value}</FilterListText>
+                    </FilterListBtn>
+                  )
+              )}
+            </FilterListBox>
+          </>
+        )}
         <PyeneShopProductNineView $productListType={productListType} />
       </ProductListMain>
     </>
@@ -116,7 +149,7 @@ const SideBtn = tw.div`
 const EventProductBtn = tw.div`
   ml-[0.625rem]
   w-[90px]
-  h-[29px]  
+  h-[29px] 
   text-[20px]
   text-center
   border-common-text-color
@@ -187,11 +220,54 @@ const FilterCntBox = tw.div`
   z-10
   top-[1px]
   right-[10px]
-  
 `;
 
 const FilterCnt = styled.div`
   font-size: 11px;
   font-weight: bold;
   color: white;
+`;
+
+const FilterHelpTextBox = tw.div`
+  w-[calc(100vh-520px)]
+  ml-0
+  mt-3
+  whitespace-nowrap
+`;
+
+const FilterHelpText = tw.div`
+  scale-[0.9]
+  text-[10px]
+  text-common-text-gray-color
+ 
+`;
+
+const FilterListBox = tw.div`
+w-[calc(100%-10px)]
+mt-[1px]
+mb-[10px]
+mx-auto
+whitespace-nowrap
+overflow-x-auto
+flex
+gap-1
+h-[23px]
+`;
+
+const FilterListBtn = tw.div`
+inline-block
+rounded-2xl
+text-center
+justify-center
+bg-common-text-color
+h-[20px]
+my-auto
+`;
+
+const FilterListText = tw.div`
+text-[13px]
+font-normal
+text-white
+mx-2
+py-[1px]
 `;
