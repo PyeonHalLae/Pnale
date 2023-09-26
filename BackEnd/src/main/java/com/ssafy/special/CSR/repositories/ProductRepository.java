@@ -40,7 +40,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("SELECT p, ep, mpp FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0")
+            "WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.CUType is not null")
     Page<Object[]> findCUBestProduct(Pageable pageable,
                                      @Param("all") CorpType all,
                                      @Param("corp") CorpType corpType);
@@ -138,5 +138,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query("SELECT p FROM Product p " +
             "WHERE p.category = :category ")
-    Page<Object[]> findRelateProduct(Pageable pageable, @Param("category") ProductCategory category);
+    Page<Product> findRelateProduct(Pageable pageable, @Param("category") ProductCategory category);
 }

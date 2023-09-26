@@ -1,6 +1,6 @@
 package com.ssafy.special.entity;
 
-import com.ssafy.special.CSR.dtos.search.ESResultDto;
+import com.ssafy.special.CSR.dtos.search.ESListDto;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,8 +20,8 @@ public class Elastic {
     private String eventDate;
     private String category;
 
-    public ESResultDto toDto(){
-        return ESResultDto.builder()
+    public ESListDto toDto(){
+        return ESListDto.builder()
                 .id(this.id)
                 .name(this.name)
                 .category(this.category)

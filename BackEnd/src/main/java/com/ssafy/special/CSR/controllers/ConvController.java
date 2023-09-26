@@ -29,37 +29,29 @@ public class ConvController {
     @GetMapping("/best/{corpType}")
     public DataResponse<?> getBestProduct(@PageableDefault(size = 9) Pageable pageable,
                                        @PathVariable("corpType") CorpType corpType){
-        log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 Best상품들을 반환합니다.",
-                convService.findBestProduct(pageable, corpType));
+        return new DataResponse<>(200, corpType.name() + "의 Best상품들을 반환합니다.", convService.findBestProduct(pageable, corpType));
     }
     @GetMapping("/new/{corpType}")
     public DataResponse<?> getNewProduct(@PageableDefault(size = 9) Pageable pageable,
                                        @PathVariable("corpType") CorpType corpType){
-        log.info("{}", corpType);
-        return new DataResponse<>(200, corpType.name() + "의 신상품을 반환합니다.",
-                convService.findNewProduct(pageable, corpType));
+        return new DataResponse<>(200, corpType.name() + "의 신상품을 반환합니다.", convService.findNewProduct(pageable, corpType));
     }
 
     @GetMapping("/event/{corpType}")
     public DataResponse<?> getEventProduct(@PageableDefault(size = 9) Pageable pageable,
                                          @PathVariable("corpType") CorpType corpType){
-        log.info("{}", corpType);
-        return null;
-        //return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.", convService.findEventProduct(pageable, corpType));
+        return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.", convService.findEventProduct(pageable, corpType));
     }
-//    @GetMapping("/pb/{corpType}")
-//    public DataResponse<?> getPBProduct(@PageableDefault(size = 9) Pageable pageable,
-//                                         @PathVariable("corpType") CorpType corpType){
-//        log.info("{}", corpType);
-//        return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
-//                convService.findCorpData(pageable, corpType));
-//    }
+    @GetMapping("/pb/{corpType}")
+    public DataResponse<?> getPBProduct(@PageableDefault(size = 9) Pageable pageable,
+                                         @PathVariable("corpType") CorpType corpType){
+        return new DataResponse<>(200, corpType.name() + "의 PB(독점) 상품을 반환합니다.", convService.findCorpData(pageable, corpType));
+    }
 
-    @PostMapping("/filter")
+    @PostMapping("/event")
     public DataResponse<?> getDetailData(@PageableDefault(size =9 ) Pageable pageable,
                                          @RequestBody Map<String, Object> data){
-        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findEventProduct(pageable, data));
+        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findEventProductByFilter(pageable, data));
     }
 
 

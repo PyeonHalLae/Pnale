@@ -1,5 +1,6 @@
 package com.ssafy.special.CSR.controllers;
 
+import com.ssafy.special.CSR.dtos.search.ESRequestDto;
 import com.ssafy.special.CSR.services.ElasticService;
 import com.ssafy.special.exception.DataResponse;
 import lombok.RequiredArgsConstructor;
@@ -31,26 +32,24 @@ public class ElasticController {
 
     @PostMapping("/result")
     public DataResponse<?> getNameResult(@PageableDefault(size = 9) Pageable pageable,
-                                         @RequestBody() Map<String, Object> map) {
-        List<Long> ids = (List<Long>) map.get("ids");
-        log.info("{}", ids.get(0));
-        return null;
-        //return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findNameResult(pageable, ));
+                                         @RequestBody ESRequestDto request) {
+        for(Long id : request.getIds()) log.info("{}", id);
+        return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findIdsResult(pageable, request.getIds() ));
     }
 
 
     @PostMapping("/product")
     public DataResponse<?> getResultProduct(@PageableDefault(size = 12) Pageable pageable,
-                                            @RequestBody() Map<String, Object> map){
+                                            @RequestBody Map<String, Object> map){
         List<Long> productIds = (List<Long>) map.get("ids");
         return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findResultProducts(pageable, productIds));
     }
 
-    @PostMapping("/rel_recipe")
+    @GetMapping("/rel_recipe/{productId}")
     public DataResponse<?> getRelateRecipe(@PageableDefault(size = 12) Pageable pageable,
-                                           @RequestBody() Map<String, Object> map){
-        String name = (String)map.get("name");
-        log.info("{}", name);
-        return new DataResponse(200, name + "에 대한 검색 결과를 반환합니다.", goodsService.findRelateRecipe(pageable, name));
+                                           @PathVariable Long productId){
+
+        return new DataResponse(200, productId + "에 대한 검색 결과를 반환합니다.", goodsService.findRelateRecipe(pageable, productId));
+
     }
 }
