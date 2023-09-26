@@ -18,13 +18,22 @@ const settings = {
   arrows: false,
 };
 
-const PyeneShopThreeView = ({ $productList }: { $productList: ProductComp[] }) => {
+const PyeneShopThreeView = ({
+  $productList,
+  $listType,
+}: {
+  $productList: ProductComp[];
+  $listType: string;
+}) => {
   return (
     <>
       <Slider {...settings} className="w-[calc(100%-34px)] h-[190px] mt-[18px] mx-auto">
         {$productList &&
           $productList.map(
-            (value, index) => index < 9 && <PyeneProductCard key={index} $productInfo={value} />
+            (value, index) =>
+              index < 9 && (
+                <PyeneProductCard key={index} $productInfo={value} $listType={$listType} />
+              )
           )}
       </Slider>
     </>
