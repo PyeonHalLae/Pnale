@@ -35,9 +35,8 @@ public class MyPageController {
     //내가 찜한 레시피
     @GetMapping("/pick_recipe/{memberId}")
     public DataResponse<?> getUserPickRecipes(@PathVariable Long memberId, @PageableDefault(size = 9) Pageable pageable){
-        DataResponse<Page<Map<String,Object>>> response = new DataResponse<>(200, "유저가 찜한 레시피들을 반환합니다.");
-        // response.setData(recipeService.findAllPick(pageable, memberId));
-        return response;
+        return new DataResponse<>(200, "유저가 찜한 레시피들을 반환합니다.", recipeService.getAllLists(memberId, pageable.getPageNumber(), pageable.getPageSize()));
+        //return new new DataResponse<>(200, "유저가 찜한 레시피들을 반환합니다.", recipeService.getAllLists(pageable, memberId));
     }
 
     //내 레시피

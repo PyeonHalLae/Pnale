@@ -39,12 +39,6 @@ public class ProductController {
         return new DataResponse<>(200, "추천 상품 4개를 반환합니다.", productService.findRecommandProducts());
     }
 
-    //제품 상세 보기
-    @GetMapping("/{productId}")
-    public DataResponse<?> getProduct(@PathVariable Long productId) {
-        return new DataResponse<>(200, "상품 상세 정보를 반환합니다.", productService.findProductById(productId));
-    }
-
     //상품 좋아요
     @PostMapping("/pick")
     public CustomResponse pickProductToggle(@RequestBody Map<String, Long> requestData){

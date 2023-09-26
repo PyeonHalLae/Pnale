@@ -2,6 +2,7 @@ package com.ssafy.special.CSR.repositories;
 
 import com.ssafy.special.entity.Product;
 import com.ssafy.special.enums.CorpType;
+import com.ssafy.special.enums.ProductCategory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -26,13 +27,6 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
             "WHERE p.recommand > 0 AND ( ep.CUType is not null OR ep.GSType is not null OR ep.SEVENType is not null OR ep.EMARTType is not null)" +
             "ORDER BY FUNCTION('RAND') ")
     List<Object[]> findRecommandProducts(Pageable pageable);
-
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE p.productId = :productId")
-    Object[] findRecommandProduct(@Param("productId") Long productId);
 
     //============ CU =============
     @Query("SELECT p, ep, mpp FROM Product p " +
@@ -134,4 +128,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
 
+    //============ 상품 검색
+    @Query("SELECT p, ep, mpp " +
+            "FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE p.productId in ( :productId) ")
+    Page<Object[]> findSearchProducts(Pageable pageable, @Param("productId") List<Long> productId);
+
+    @Query("SELECT p FROM Product p " +
+            "WHERE p.category = :category ")
+    Page<Object[]> findRelateProduct(Pageable pageable, @Param("category") ProductCategory category);
 }
