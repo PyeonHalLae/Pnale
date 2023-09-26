@@ -6,36 +6,9 @@ import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { FilterInfo, FilterInfoType } from "@/recoil/pyeneRecoil";
 
-import PyeneProductCard from "../card/PyeneProductCard";
+import { ProductComp } from "@/model/commonType";
 
-// interface ProductType {
-//   productInfo: {
-//     productId: number;
-//     productName: string;
-//     productImg: string;
-//     productDesc: null | string;
-//     price: number;
-//     category: string;
-//     pb: null;
-//     recommand: null;
-//     hit: number | null;
-//   };
-//   userLikeProd: {
-//     pickProdId: null;
-//     likeStat: boolean;
-//     received: boolean;
-//   };
-//   evnetInfo: {
-//     cutype: string | null;
-//     cudate: string | null;
-//     gstype: string | null;
-//     gsdate: string | null;
-//     seventype: string | null;
-//     sevendate: string | null;
-//     emarttype: string | null;
-//     emartdate: string | null;
-//   };
-// }
+import PyeneProductCard from "../card/PyeneProductCard";
 
 /* eslint-disable */
 const showPageCnt: number = 5;
@@ -45,6 +18,7 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  const [productList, setProductList] = useState<ProductComp[] | null>(null);
   //useREf
   const prevProductListType = useRef<string>("EVENT");
   const prevFilterInfo = useRef<FilterInfoType | null>();
@@ -134,15 +108,9 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   return (
     <>
       <div className="grid grid-cols-3 gap-y-3">
-        {/* <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard /> */}
+        {productList.map((value, index) => {
+          return <PyeneProductCard key={index} $productInfo={value} />;
+        })}
       </div>
       <PaginateBox>
         <FirstMoveBtn onClick={FirstMoveHandler}>&lt;&lt;</FirstMoveBtn>
