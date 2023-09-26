@@ -1,42 +1,34 @@
-import { Main, MainEvent } from "@/model/commonType";
-import React, { useEffect, useState } from "react";
+import { ProductComp } from "@/model/commonType";
+import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
+import { loadImage } from "@model/exportFucKDM";
 
-type ProductCardProps = {
-  product: Main;
+export type ProductCardProps = {
+  product: ProductComp;
+  id: string;
 };
 
-const ProductCard: React.FC<ProductCardProps> = ({ product }) => {
-  const [eventData, setEventData] = useState<MainEvent>();
-
+const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   useEffect(() => {
-    console.log("event", product.event);
-    setEventData(product.event);
-  }, []);
-
+    loadImage(product.product.productImg, id);
+  }, [product.product.productImg, id]);
   return (
     <Card>
-      <ImageArea>
-        <img
-          src={product.product.productImg}
-          alt="제품사진"
-          className="px-4.5 py-3 border-black boder-2 m-auto h-[200px]"
-        />
-        <div className="flex p-1.5 m-auto">
-          {product.event.cutype !== null && (
-            <StickerImg src={`/img/sticker/main/CU-${product.event.cutype}.png`}></StickerImg>
-          )}
-          {product.event.emarttype !== null && (
-            <StickerImg src={`/img/sticker/main/EMART-${product.event.emarttype}.png`}></StickerImg>
-          )}
-          {product.event.gstype !== null && (
-            <StickerImg src={`/img/sticker/main/GS-${product.event.gstype}.png`}></StickerImg>
-          )}
-          {product.event.seventype !== null && (
-            <StickerImg src={`/img/sticker/main/SEVEN-${product.event.seventype}.png`}></StickerImg>
-          )}
-        </div>
-      </ImageArea>
+      <ImageArea id={`${id}`}></ImageArea>
+      <div className="flex p-1.5 m-auto">
+        {product.event.cutype !== null && (
+          <StickerImg src={`/img/sticker/main/CU-${product.event.cutype}.png`}></StickerImg>
+        )}
+        {product.event.emarttype !== null && (
+          <StickerImg src={`/img/sticker/main/EMART-${product.event.emarttype}.png`}></StickerImg>
+        )}
+        {product.event.gstype !== null && (
+          <StickerImg src={`/img/sticker/main/GS-${product.event.gstype}.png`}></StickerImg>
+        )}
+        {product.event.seventype !== null && (
+          <StickerImg src={`/img/sticker/main/SEVEN-${product.event.seventype}.png`}></StickerImg>
+        )}
+      </div>
       <TextArea>
         <div className="flex">
           <Categori>{product.product.category}</Categori>
@@ -63,7 +55,11 @@ shadow-[0px_0px_2px_#0000003f]
 `;
 
 const ImageArea = tw.div`
-`;
+p-2
+m-auto
+h-[22vh]
+justify-center
+flex`;
 
 const TextArea = tw.div`
 relative

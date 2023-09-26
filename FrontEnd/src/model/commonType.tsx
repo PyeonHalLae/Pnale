@@ -1,12 +1,14 @@
+// 상품 정보 카드
+
 //제품 공통 카드 메인
-export type Main = {
-  event: MainEvent;
-  product: MainProduct;
-  userLike: MainUserLike;
+export type ProductComp = {
+  event: CompEvent;
+  product: CompProduct;
+  userLike: CompUserLike;
 };
 
 // 제품 공통 카드의 할인 정보;
-export type MainEvent = {
+export type CompEvent = {
   cudate: string;
   cutype: string;
   emartdate: string;
@@ -16,8 +18,9 @@ export type MainEvent = {
   sevendate: string;
   seventype: string;
 };
+
 // 제품 공통 카드의 제품정보
-export type MainProduct = {
+export type CompProduct = {
   category: string;
   hit: number;
   pb: string | null;
@@ -31,7 +34,7 @@ export type MainProduct = {
 };
 
 // 제품 공통 카드의 유저 좋아요
-export type MainUserLike = {
+export type CompUserLike = {
   likeStat: boolean;
   pickProdId?: string;
   received: boolean;
