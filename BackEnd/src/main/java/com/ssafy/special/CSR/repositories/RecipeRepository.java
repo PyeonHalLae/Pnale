@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     // JPQL을 사용해 가중치를 적용하고 가장 높은 값을 갖는 Recipe를 조회합니다.
-    @Query("SELECT r FROM Recipe r ORDER BY r.likes * 0.5 + r.viewCnt * 0.01 DESC")
+    @Query("SELECT r FROM Recipe r ORDER BY r.likeCnt * 0.5 + r.viewCnt * 0.01 DESC")
     List<Recipe> findRecipeByWeightedValue();
     List<Recipe> findTop2ByOrderByCreatedAtDesc();
 

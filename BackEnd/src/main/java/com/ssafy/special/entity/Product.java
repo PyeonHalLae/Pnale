@@ -13,7 +13,6 @@ import java.time.LocalDate;
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name ="product_id")
     Long productId;
 
     @Column(nullable = false)
@@ -46,8 +45,6 @@ public class Product {
 
     @Column(columnDefinition = "bigint default 0")
     Long hit;
-
-    @Lob
 
     @Column(columnDefinition = "DATE", insertable=false, updatable=false)
     LocalDate createdAt;

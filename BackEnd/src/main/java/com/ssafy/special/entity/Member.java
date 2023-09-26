@@ -18,7 +18,6 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,12 +56,15 @@ public class Member {
 
 
     @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Builder.Default
     private Set<MemberPickProd> likeProducts = new HashSet<>();
 
-    @OneToMany(mappedBy = "memberId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
 
-    @OneToMany(mappedBy = "writerId", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
+    @Builder.Default
     private List<Recipe> writeRecipes = new LinkedList<>();
 
 
