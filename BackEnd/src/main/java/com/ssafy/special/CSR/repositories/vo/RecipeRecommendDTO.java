@@ -1,12 +1,14 @@
-package com.ssafy.special.CSR.dtos.recipe;
+package com.ssafy.special.CSR.repositories.vo;
 
 import com.ssafy.special.member.model.vo.MemberViewDTO;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

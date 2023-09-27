@@ -1,6 +1,7 @@
-package com.ssafy.special.CSR.dtos.recipe;
+package com.ssafy.special.CSR.repositories.vo;
 
 import lombok.*;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
