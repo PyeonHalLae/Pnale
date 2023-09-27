@@ -4,7 +4,7 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-import { Main, MainProduct } from "@/model/commonType";
+import { ProductComp } from "@/model/commonType";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
@@ -20,7 +20,7 @@ const pyeneTypeMap = {
   EMART: "emart",
 };
 
-const PyeneProductCard = ({ $productInfo }: { $productInfo: Main }) => {
+const PyeneProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventInfo, setEventInfo] = useState<pyeneProductEventType>();
   const { pyeneType } = useParams();
   const dumState = false;

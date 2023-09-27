@@ -6,7 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 import PyeneProductCard from "../card/PyeneProductCard";
 
-import { Main } from "@/model/commonType";
+import { ProductComp } from "@/model/commonType";
 
 const settings = {
   slide: "div",
@@ -18,7 +18,7 @@ const settings = {
   arrows: false,
 };
 
-const PyeneShopThreeView = ({ $productList }: { $productList: Main[] }) => {
+const PyeneShopThreeView = ({ $productList }: { $productList: ProductComp[] }) => {
   return (
     <>
       <Slider {...settings} className="w-[calc(100%-34px)] h-[190px] mt-[18px] mx-auto">
