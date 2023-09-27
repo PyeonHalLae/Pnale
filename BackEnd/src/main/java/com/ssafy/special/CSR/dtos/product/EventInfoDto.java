@@ -13,26 +13,28 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class EventInfoDto {
     EventType CUType;
-    LocalDate CUDate;
+    Long CUPrice;
 
     EventType GSType;
-    LocalDate GSDate;
+    Long GSPrice;
 
     EventType SEVENType;
-    LocalDate SEVENDate;
+    Long SEVENPrice;
 
     EventType EMARTType;
-    LocalDate EMARTDate;
+    Long EMARTPrice;
+
 
     @Builder
-    public EventInfoDto(EventType CUType, LocalDate CUDate, EventType GSType, LocalDate GSDate, EventType SEVENType, LocalDate SEVENDate, EventType EMARTType, LocalDate EMARTDate) {
+
+    public EventInfoDto(EventType CUType, Long CUPrice, EventType GSType, Long GSPrice, EventType SEVENType, Long SEVENPrice, EventType EMARTType, Long EMARTPrice) {
         this.CUType = CUType;
-        this.CUDate = CUDate;
+        this.CUPrice = CUPrice;
         this.GSType = GSType;
-        this.GSDate = GSDate;
+        this.GSPrice = GSPrice;
         this.SEVENType = SEVENType;
-        this.SEVENDate = SEVENDate;
+        this.SEVENPrice = SEVENPrice;
         this.EMARTType = EMARTType;
-        this.EMARTDate = EMARTDate;
+        this.EMARTPrice = EMARTPrice;
     }
 }

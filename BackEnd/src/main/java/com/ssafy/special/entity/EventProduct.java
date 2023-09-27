@@ -22,26 +22,27 @@ public class EventProduct {
     @Enumerated(EnumType.STRING)
     @Column(name="cu_type")
     EventType CUType;
-    @Column(name= "cu_date")
-    LocalDate CUDate;
+    @Column(name ="cu_price")
+    Long CUPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name="gs_type")
     EventType GSType;
-    @Column(name= "gs_date")
-    LocalDate  GSDate;
+    @Column(name ="gs_price")
+    Long GSPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name="seven_type")
     EventType SEVENType;
-    @Column(name= "seven_date")
-    LocalDate  SEVENDate;
+    @Column(name ="seven_price")
+    Long SEVENPrice;
 
     @Enumerated(EnumType.STRING)
     @Column(name="emart_type")
     EventType EMARTType;
-    @Column(name= "emart_date")
-    LocalDate  EMARTDate;
+    @Column(name ="EMART_price")
+    Long EMARTPrice;
+
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
@@ -50,13 +51,13 @@ public class EventProduct {
     public EventInfoDto toInfoDto(){
         return EventInfoDto.builder()
                 .CUType(this.CUType)
-                .CUDate(this.CUDate)
+                .CUPrice(this.CUPrice)
                 .GSType(this.GSType)
-                .GSDate(this.GSDate)
+                .GSPrice(this.GSPrice)
                 .SEVENType(this.SEVENType)
-                .SEVENDate(this.SEVENDate)
+                .SEVENPrice(this.SEVENPrice)
                 .EMARTType(this.EMARTType)
-                .EMARTDate(this.EMARTDate)
+                .EMARTPrice(this.EMARTPrice)
                 .build();
     }
 }
