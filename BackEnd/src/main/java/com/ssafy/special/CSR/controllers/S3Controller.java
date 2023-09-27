@@ -21,6 +21,7 @@ public class S3Controller {
         return ResponseEntity.ok(s3UploadService.upload(UploadType.USERPROFILE, multipartFile));
     }
 
+    // 레시피를 받ㅅ
     @PostMapping("/recipe")
     public ResponseEntity<?> uploadRecipe(@RequestPart("image") MultipartFile multipartFile) throws IOException {
         return ResponseEntity.ok(s3UploadService.upload(UploadType.RECIPE, multipartFile));
