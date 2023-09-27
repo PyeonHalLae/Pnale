@@ -1,19 +1,24 @@
 package com.ssafy.special.entity;
 
 
-import com.ssafy.special.CSR.repositories.vo.RecipeListDTO;
-import lombok.Getter;
-
+import com.ssafy.special.CSR.dtos.recipe.RecipeListDTO;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
+import java.util.List;
 
 @Entity
 @Getter
+@Setter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long recipe;
+    Long recipeId;
 
     @ManyToOne
     @JoinColumn(name="writer_id")
@@ -29,6 +34,14 @@ public class Recipe {
     @Column(nullable = false)
     String recipeDesc;
 
+    @Lob
+    @Column(nullable = false)
+    String recipeThumbnail;
+
+    @Lob
+    @Column(nullable = false)
+    String recipeVideoUrl;
+
     @Column(columnDefinition = "bigint default 0")
     Long viewCnt;
 
@@ -36,13 +49,7 @@ public class Recipe {
     Long replyCnt;
 
     @Column(columnDefinition = "bigint default 0")
-    Long likes;
-
-    @Column(nullable = false, columnDefinition = "boolean default false")
-    boolean isDeleted;
-
-    @Lob
-    String recipeVideoUrl;
+    Long likeCnt;
 
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime createdAt;
@@ -50,17 +57,49 @@ public class Recipe {
     @Column(columnDefinition = "TIMESTAMP")
     LocalDateTime updatedAt;
 
+    @Column(nullable = false, columnDefinition = "boolean default false")
+    boolean isDeleted;
+
     boolean influence;
 
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<RecipeIngredient> ingredients = new LinkedList<>();
 
+    /**
+     * CRUD와 관련된 엔티티 내부의 연산입니다.
+    */
+
+    // Update
+    public void updateRecipe(String rcpName, String rcpThumb, String rcpSimp, String rcpDesc, String rcpVideo, List<RecipeIngredient> ingres){
+        this.recipeName = rcpName;
+        this.recipeThumbnail = rcpThumb;
+        this.recipeSimple = rcpSimp;
+        this.recipeDesc = rcpDesc;
+        this.recipeVideoUrl = rcpVideo;
+        this.ingredients = ingres;
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    // Delete
+    public void deleteRecipe(List<RecipeIngredient> lists){
+        this.updatedAt = LocalDateTime.now();
+        this.ingredients = lists;
+        this.isDeleted = true;
+    }
+
+
+    //DTO로 변화시키는 엔티티 내부의 연산입니다.
     public RecipeListDTO toListDto(boolean like){
         return RecipeListDTO.builder()
-                .rcpId(this.recipe)
+                .rcpId(this.recipeId)
                 .rcpName(this.recipeName)
+                .rcpThumb(this.recipeThumbnail)
+                .member(this.writer.toViewDTO())
                 .member(this.member.toViewDTO())
                 .createdAt(this.createdAt)
                 .replyCnt(this.replyCnt)
-                .likeCnt(this.likes)
+                .likeCnt(this.likeCnt)
                 .viewCnt(this.viewCnt)
                 .influence(this.influence)
                 .like(like)
