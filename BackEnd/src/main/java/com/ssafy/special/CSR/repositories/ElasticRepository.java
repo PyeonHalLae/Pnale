@@ -11,4 +11,5 @@ import java.util.List;
 public interface ElasticRepository extends ElasticsearchRepository<Elastic, String> {
     List<Elastic> findByName(Pageable pageable, String name);
     // 추가 검색 메서드 정의 가능
+    List<Elastic> findByNameAndCategory(Pageable pageable, String name, String category);
 }
