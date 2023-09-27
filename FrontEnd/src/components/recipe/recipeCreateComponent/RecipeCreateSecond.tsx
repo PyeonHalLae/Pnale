@@ -4,15 +4,21 @@ import { productFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
 import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
 import RecipeProductsAddModalContent from "./RecipeProductsAddModalContent";
+import { recipeProductsState } from "@/recoil/khiRecoil";
+import { useRecoilState } from "recoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  products: productFormType[];
-  setProducts: Dispatch<SetStateAction<productFormType[]>>;
 }
 
-const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
+const RecipeCreateSecond = ({ stepHandler }: Props) => {
+  const [products, setProducts] = useRecoilState(recipeProductsState);
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
+
+  const productDeleteHandler = (deleteId: number) => {
+    const newProducts = products.filter((product) => product.productId !== deleteId);
+    setProducts(newProducts);
+  };
 
   return (
     <Container>
@@ -23,13 +29,7 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
             setModal={setIsModalActive}
             width="22.5"
             height="36"
-            element={
-              <RecipeProductsAddModalContent
-                products={products}
-                setProducts={setProducts}
-                setModal={setIsModalActive}
-              />
-            }
+            element={<RecipeProductsAddModalContent setModal={setIsModalActive} />}
           />
         )}
         <ProductBoxTitle>재료 등록</ProductBoxTitle>
@@ -43,7 +43,7 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
         </ProductTableColName>
         {products.map((product: productFormType, index: number) => {
           return (
-            <ProductItem>
+            <ProductItem key={index}>
               <ProductNameBox>
                 <div className="w-[4rem] text-center">{index + 1}</div>
                 <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
@@ -53,20 +53,18 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
               <ProductChangeBox>
                 <input className="inline-block" type="checkbox"></input>
               </ProductChangeBox>
+              <div className="absolute right-[-1rem] h-[100%] flex flex-row-reverse items-center">
+                <img
+                  className="w-[1.5rem] border"
+                  src="/img/btn/close-btn.png"
+                  onClick={() => {
+                    productDeleteHandler(product.productId);
+                  }}
+                />
+              </div>
             </ProductItem>
           );
         })}
-        <ProductItem>
-          <ProductNameBox>
-            <div className="w-[4rem] text-center">1</div>
-            <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
-              상품이름
-            </div>
-          </ProductNameBox>
-          <ProductChangeBox>
-            <input className="inline-block" type="checkbox"></input>
-          </ProductChangeBox>
-        </ProductItem>
 
         <ProductAddBtn
           onClick={() => {
@@ -134,6 +132,7 @@ border-b-2
 `;
 
 const ProductItem = tw.div`
+relative
 w-[calc(100%-3rem)]
 h-[2rem]
 flex

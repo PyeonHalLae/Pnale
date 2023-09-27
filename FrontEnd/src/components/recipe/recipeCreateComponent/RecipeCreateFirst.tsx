@@ -1,26 +1,33 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useRef } from "react";
 import tw from "tailwind-styled-components";
-import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
 import axios from "axios";
 import CancelBtn from "./CancelBtn";
+import { useRecoilState } from "recoil";
+import { recipeFormState, recipeImgState } from "@/recoil/khiRecoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  recipeForm: recipeFormType;
-  recipeImg: string;
-  setRecipeImg: Dispatch<SetStateAction<string | undefined>>;
-  FormChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
-const RecipeCreateFirst = ({
-  stepHandler,
-  recipeForm,
-  FormChangeHandler,
-  recipeImg,
-  setRecipeImg,
-}: Props) => {
-  const { recipeTitle, intro, relatedUrl } = recipeForm;
+const RecipeCreateFirst = ({ stepHandler }: Props) => {
+  const [{ recipeTitle, intro, relatedUrl }, setRecipeForm] = useRecoilState(recipeFormState);
+  const [recipeImg, setRecipeImg] = useRecoilState(recipeImgState);
 
+  const inputFileRef = useRef(null);
+
+  const FormChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRecipeForm((recipeForm) => {
+      return { ...recipeForm, [name]: value };
+    });
+  };
+
+  // 이미지 클릭시
+  const imgChangBtnClickHandler = () => {
+    inputFileRef.current.click();
+  };
+
+  // 업로드
   const imgUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
     const maxSize = 5 * 1024 * 1024;
@@ -46,7 +53,7 @@ const RecipeCreateFirst = ({
     formData.append("image", file);
 
     axios
-      .post("/api/img/upload", formData, {
+      .post("/api/img/recipe", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -71,12 +78,16 @@ const RecipeCreateFirst = ({
         {/*  */}
         <input
           type="file"
+          ref={inputFileRef}
           name="recipeImg"
           id="recipeImg"
           onChange={imgUploadHandler}
-          // style={{ display: "none" }}
+          className="hidden"
         />
-        <ImgBox src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg} />
+        <ImgBox
+          src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg}
+          onClick={imgChangBtnClickHandler}
+        />
       </FormBox>
 
       <FormBox>

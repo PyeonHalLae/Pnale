@@ -1,28 +1,49 @@
 import { Dispatch, SetStateAction } from "react";
 import { RecipeEditor } from "../recipeCommonComponent/RecipeEditor";
 import tw from "tailwind-styled-components";
-import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  recipeContentsState,
+  recipeFormState,
+  recipeImgState,
+  recipeProductsState,
+} from "@/recoil/khiRecoil";
+
 // import axios from "axios";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  recipeForm: recipeFormType;
-  contents: string;
-  setContents: Dispatch<SetStateAction<string>>;
-  recipeImg: string;
 }
 
-const RecipeCreateThird = ({
-  stepHandler,
-  contents,
-  setContents,
-  // recipeImg,
-  recipeForm,
-}: Props) => {
+const RecipeCreateThird = ({ stepHandler }: Props) => {
+  const [contents, setContents] = useRecoilState(recipeContentsState);
+  const products = useRecoilValue(recipeProductsState);
+  const recipeForm = useRecoilValue(recipeFormState);
+  const recipeImg = useRecoilValue(recipeImgState);
+
+  const resetForm = useResetRecoilState(recipeFormState);
+  const restContents = useResetRecoilState(recipeContentsState);
+  const restImg = useResetRecoilState(recipeImgState);
+  const restProducts = useResetRecoilState(recipeProductsState);
+
   const submitHandler = () => {
     console.log(recipeForm);
+    console.log("레시피폼");
 
+    console.log(products);
+    console.log("상품리스트");
+
+    console.log(recipeImg);
+    console.log("레시피이미지");
+
+    console.log(contents);
+    console.log("레시피내용");
+
+    resetForm();
+    restContents();
+    restImg();
+    restProducts();
     // json으로 보내야함
     // recipeData = {
     //   ...recipeForm,
@@ -33,7 +54,7 @@ const RecipeCreateThird = ({
     // }
 
     // axios
-    //   .post(url, FormData, {
+    //   .post("", FormData, {
     //     headers: {
     //       "Content-Type": "application/json",
     //       Authorization: "Bearer " + "key value",
@@ -47,14 +68,6 @@ const RecipeCreateThird = ({
     <Container>
       <CancelBtn />
       <RecipeEditor contents={contents} setContents={setContents} />
-      <button
-        onClick={() => {
-          console.log(contents);
-          console.log(recipeForm);
-        }}
-      >
-        ㅎㅎㅎ
-      </button>
       <BtnBox>
         <WhiteBtn
           onClick={() => {
