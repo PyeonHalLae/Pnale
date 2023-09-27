@@ -1,7 +1,7 @@
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 
-import RecipeIngredientModalContent from "./RecipeProductsModalContent";
+import RecipeProductsModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
 // import { useRecoilValue } from "recoil";
 // import { ingredientState } from "@/recoil/khiRecoil";
@@ -22,7 +22,7 @@ const RecipeProductsListItem = () => {
           setModal={setIsModalActive}
           width="20"
           height="32"
-          element={<RecipeIngredientModalContent />}
+          element={<RecipeProductsModalContent />}
         />
       )}
       <ProductInfo>

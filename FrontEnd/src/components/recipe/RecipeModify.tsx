@@ -5,9 +5,10 @@ import { useState } from "react";
 import RecipeCreateFirst from "./recipeCreateComponent/RecipeCreateFirst";
 import RecipeCreateSecond from "./recipeCreateComponent/RecipeCreateSecond";
 import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
-import { productFormType, recipeFormType } from "./recipeCommonComponent/recipeFormType";
+import { recipeFormType, productFormType } from "./recipeCommonComponent/recipeFormType";
+import { useParams } from "react-router-dom";
 
-const RecipeCreate = () => {
+const RecipeModify = () => {
   const [step, setStep] = useState<string>("1");
   const [recipeForm, setRecipeForm] = useState<recipeFormType>({
     recipeTitle: "",
@@ -15,9 +16,11 @@ const RecipeCreate = () => {
     relatedUrl: "",
     // products: [],
   });
+
   const [contents, setContents] = useState<string>("");
   const [recipeImg, setRecipeImg] = useState<string>("");
   const [products, setProducts] = useState<productFormType[]>([]);
+  const { recipeId } = useParams();
 
   const FormChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -58,10 +61,15 @@ const RecipeCreate = () => {
     ),
   };
 
-  return <Container>{stepSelector[step]}</Container>;
+  return (
+    <Container>
+      {recipeId}
+      {stepSelector[step]}
+    </Container>
+  );
 };
 
-export default RecipeCreate;
+export default RecipeModify;
 
 const Container = tw.div`
 relative

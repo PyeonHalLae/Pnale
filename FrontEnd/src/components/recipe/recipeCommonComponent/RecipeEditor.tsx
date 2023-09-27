@@ -60,9 +60,9 @@ export const RecipeEditor = ({ contents, setContents }: Props) => {
   //     }
   //   };
   // };
-  const imageHandler = () => {
-    console.log("gg");
-  };
+  // const imageHandler = () => {
+  //   console.log("gg");
+  // };
 
   // quill에서 사용할 모듈을 설정하는 코드 입니다.
   // 원하는 설정을 사용하면 되는데, 저는 아래와 같이 사용했습니다.
@@ -96,7 +96,7 @@ export const RecipeEditor = ({ contents, setContents }: Props) => {
         modules={modules}
         theme="snow"
         placeholder="내용을 입력해주세요."
-        className="w-[20rem] h-[34.375rem] mb-20"
+        className="w-[100%] h-[34.375rem] mb-20 bg-white"
       />
     </>
   );

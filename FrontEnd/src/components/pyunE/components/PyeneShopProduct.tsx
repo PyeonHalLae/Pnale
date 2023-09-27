@@ -5,7 +5,7 @@ import styled from "styled-components";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import * as pyeneRecoil from "@/recoil/pyeneRecoil";
 
-// import PyeneShopProductNineView from "./PyeneShopProductNineView";
+import PyeneShopProductNineView from "./PyeneShopProductNineView";
 import PyeneShopProductFilter from "./PyeneShopProductFilter";
 import { useParams } from "react-router-dom";
 // import { ProductComp } from "@/model/commonType";
@@ -43,6 +43,7 @@ const PyeneShopProductList = () => {
     }
     if (refPyenType.current !== pyenType) {
       refPyenType.current = pyenType;
+      setProductListType("EVENT");
       ClearFilterHandler();
     }
   }, [productListType, pyenType]);
@@ -125,7 +126,7 @@ const PyeneShopProductList = () => {
             </FilterListBox>
           </>
         )}
-        {/* <PyeneShopProductNineView $productListType={productListType} /> */}
+        <PyeneShopProductNineView $productListType={productListType} />
       </ProductListMain>
     </>
   );

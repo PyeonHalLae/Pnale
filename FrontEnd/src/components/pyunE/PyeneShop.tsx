@@ -38,7 +38,7 @@ const PyeneShop = () => {
 
   const [bestList, setBestList] = useState<ProductComp[]>([]);
   const [newList, setNewList] = useState<ProductComp[]>([]);
-  const [productList, setProductList] = useState<ProductComp[]>([]);
+  // const [productList, setProductList] = useState<ProductComp[]>([]);
   const [bannerList, setBannerList] = useState<bannerType[]>([]);
 
   const scrollToHeader = () => {
@@ -57,9 +57,9 @@ const PyeneShop = () => {
           setBannerList(data.banners);
           setBestList(data.bestProduct.content);
           setNewList(data.newProduct.content);
-          setProductList(data.eventProduct.content);
+          // setProductList(data.eventProduct.content);
           console.log("엑시오스 요청 완료");
-          console.log(productList, "최상단");
+          // console.log(productList, "최상단");
         }
       });
     };
@@ -81,7 +81,7 @@ const PyeneShop = () => {
           <div>베스트</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneShopThreeView $productList={bestList} />
+        <PyeneShopThreeView $productList={bestList} $listViewType={"BEST"} />
       </PyeneBestBox>
       <PyeneNewBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
@@ -90,7 +90,7 @@ const PyeneShop = () => {
           <div>NEW</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneShopThreeView $productList={newList} />
+        <PyeneShopThreeView $productList={newList} $listViewType={"NEW"} />
       </PyeneNewBox>
       <PyeneProductBox>
         <SideTitle $pyeneColor={pyeneText}>

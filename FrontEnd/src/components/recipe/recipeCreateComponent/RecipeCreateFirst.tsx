@@ -1,38 +1,82 @@
 import { Dispatch, SetStateAction } from "react";
-import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
+import axios from "axios";
+import CancelBtn from "./CancelBtn";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
   recipeForm: recipeFormType;
-  setRecipeForm: Dispatch<SetStateAction<recipeFormType>>;
+  recipeImg: string;
+  setRecipeImg: Dispatch<SetStateAction<string | undefined>>;
+  FormChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
 const RecipeCreateFirst = ({
   stepHandler,
   recipeForm,
-  setRecipeFrom,
   FormChangeHandler,
+  recipeImg,
+  setRecipeImg,
 }: Props) => {
-  const navigate = useNavigate();
-  const { recipeImg, recipeTitle, intro } = recipeForm;
+  const { recipeTitle, intro, relatedUrl } = recipeForm;
 
-  const cancleBtn = () => {
-    navigate("/recipe");
+  const imgUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+    const maxSize = 5 * 1024 * 1024;
+    let fileSize: number;
+
+    const imgFile = e.target.value;
+
+    // 이미지 업로드 유효성검사
+    if (imgFile !== "" && imgFile != null) {
+      fileSize = e.target.files[0].size;
+
+      if (!imgFile.match(fileForm)) {
+        alert("이미지 파일만 업로드 가능");
+        return;
+      } else if (fileSize === maxSize) {
+        alert("파일 사이즈는 5MB까지 가능");
+        return;
+      }
+    }
+    const file = e.target.files[0];
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    axios
+      .post("/api/img/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+      .then((res) => {
+        // res로 S3 주소 string 올 예정
+        const imgUrl = res.data;
+        console.log(res.data);
+        // 성공시 recipeImg에 url 할당
+        setRecipeImg(imgUrl);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <Container>
-      <div
-        className="absolute top-[-2rem] right-[2.5rem] text-[1.25rem] text-common-text-color"
-        onClick={cancleBtn}
-      >
-        작성 취소
-      </div>
+      <CancelBtn />
       <FormBox>
         <FormTitle>미리보기 사진</FormTitle>
-        <ImgBox />
+        {/*  */}
+        <input
+          type="file"
+          name="recipeImg"
+          id="recipeImg"
+          onChange={imgUploadHandler}
+          // style={{ display: "none" }}
+        />
+        <ImgBox src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg} />
       </FormBox>
 
       <FormBox>
@@ -62,6 +106,7 @@ const RecipeCreateFirst = ({
         <RelatedUrlBox
           type="text"
           name="relatedUrl"
+          value={relatedUrl}
           onChange={FormChangeHandler}
           placeholder="URL을 입력해주세요"
         ></RelatedUrlBox>
@@ -73,7 +118,7 @@ const RecipeCreateFirst = ({
             stepHandler("2");
           }}
         >
-          dd
+          다음으로
         </BlueBtn>
       </BtnBox>
     </Container>
@@ -109,6 +154,7 @@ w-[100%]
 bg-common-back-color
 border-b-2
 break-all
+resize-none
 `;
 
 const IntroBox = tw.textarea`
@@ -116,6 +162,7 @@ w-[100%]
 bg-common-back-color
 border-b-2
 break-all
+resize-none
 `;
 
 const RelatedUrlBox = tw.input`
@@ -153,5 +200,5 @@ py-[.75rem]
 bg-common-text-color
 text-white
 text-[0.9375rem]
-shadow-[0px_4px_4px_0px_rgba(0, 0, 0, 0.25)]
+shadow
 `;

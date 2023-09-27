@@ -30,6 +30,9 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "linear",
     arrows: false,
     beforeChange: (current: number, next: number) =>
       setSlideState({ activeSlide: next, activeSlide2: current }),

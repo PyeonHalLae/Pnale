@@ -36,7 +36,7 @@ const Container = styled.div<{ width: string; height: string }>`
   display: flex;
   flex-direction: column;
   left: calc(50vw - ${(props) => props.width}rem / 2);
-  top: calc(45vh - ${(props) => props.height}rem / 2);
+  top: calc(40vh - ${(props) => props.height}rem / 2);
   width: ${(props) => props.width}rem;
   height: ${(props) => props.height}rem;
   padding: 8px;
