@@ -17,12 +17,4 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByLoginIdAndRole(String LoginId, RoleType role);
     Optional<Member> findByRefreshToken(String refreshToken);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true")
-    Page<Object[]> findByMember_MemberIdAndLikeStatTrue(@Param("memberId")Long memberId, Pageable pageable);
-
-
 }

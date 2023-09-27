@@ -14,4 +14,11 @@ import java.util.Optional;
 @Repository
 public interface MemberPickProdRepository extends JpaRepository<MemberPickProd, Long> {
     Optional<MemberPickProd> findByMember_MemberIdAndProduct_ProductId(Long userId, Long productId);
+
+    @Query("SELECT p, ep, mpp " +
+            "FROM Product p " +
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
+            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true")
+    Page<Object[]> findByMember_MemberIdAndLikeStatTrue(@Param("memberId")Long memberId, Pageable pageable);
 }

@@ -22,7 +22,7 @@ public class Recipe {
 
     @ManyToOne
     @JoinColumn(name="writer_id")
-    Member writer;
+    Member member;
 
     @Column(nullable = false)
     String recipeName;
@@ -96,6 +96,7 @@ public class Recipe {
                 .rcpName(this.recipeName)
                 .rcpThumb(this.recipeThumbnail)
                 .member(this.writer.toViewDTO())
+                .member(this.member.toViewDTO())
                 .createdAt(this.createdAt)
                 .replyCnt(this.replyCnt)
                 .likeCnt(this.likeCnt)

@@ -16,6 +16,8 @@ import com.ssafy.special.CSR.dtos.recipe.RecipeRecommendDTO;
 import com.ssafy.special.entity.Recipe;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
+import com.ssafy.special.CSR.repositories.S3Repository;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -75,7 +77,7 @@ public class RecipeService {
         return RecipeRecommendDTO.builder()
                 .rcpId(recipe.getRecipeId())
                 .rcpName(recipe.getRecipeName())
-                .member(recipe.getWriter().toViewDTO())
+                .member(recipe.getMember().toViewDTO())
                 .ingredients(ingredients)
                 .rcpTemp(recipe.getRecipeSimple())
                 .likeCnt(recipe.getLikeCnt())

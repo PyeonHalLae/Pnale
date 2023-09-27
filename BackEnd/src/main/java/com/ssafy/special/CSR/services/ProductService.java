@@ -30,8 +30,6 @@ public class ProductService {
     private final MemberRepository memberRepository;
     private final MemberPickProdRepository memberPickProdRepository;
 
-
-    //=============================================================
     //페이지별 전체 행사상품 반환
     public Page<Map<String, Object>> findAllEventProducts(Pageable pageable) {
         return ResponseUtil.getPageProducts(productRepository.findAllProducts(pageable));
@@ -54,14 +52,13 @@ public class ProductService {
 
     //상품 좋아요
     @Transactional
-    public String pickToggle(Long productId, Long userId) {
-        Member findUser = getUserById(userId);
+    public String pickToggle(Long productId, Long memberId) {
+        Member findUser = getUserById(memberId);
         Product findProduct = getProductById(productId);
 
-        return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(userId, productId)
+        return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(memberId, productId)
                 .map(upp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
                     updateUserLikeProduct(upp);
-
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
@@ -71,21 +68,21 @@ public class ProductService {
     }
     //이메일 수신체크
     @Transactional
-    public String receiveToggle(Long productId, Long userId) {
-        Member findUser = getUserById(userId);
+    public String receiveToggle(Long productId, Long memberId) {
+        Member findUser = getUserById(memberId);
         Product findProduct = getProductById(productId);
 
-        MemberPickProd upp = memberPickProdRepository
-                .findByMember_MemberIdAndProduct_ProductId(userId, productId)
+        MemberPickProd upp = memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(memberId, productId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
         updateEmailReceiveStatus(upp);
         return upp.getProduct().getProductName() + "의 이메일 수신 여부 정보를 업데이트 했습니다.";
     }
 
-
-    public Page<Map<String, Object>> findAllPick(Pageable pageable, Long userId) {//유저가 좋아요 한 것 반
-        return ResponseUtil.getPageProducts(memberRepository.findByMember_MemberIdAndLikeStatTrue(userId, pageable));
+    //유저가 좋아요한 목록 반환
+    public Page<Map<String, Object>> findPickProd(Pageable pageable, Long memberId) {//유저가 좋아요 한 것 반
+        return ResponseUtil.getPageProducts(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(memberId, pageable));
     }
+
     public Map<String, Object> findSearchDate(Long productId) {
         Map<String, Object> searchData = new HashMap<>();
         searchData.put("searchData", null);
@@ -97,8 +94,8 @@ public class ProductService {
 
     //==============================================
 
-    private Member getUserById(Long userId) {
-        return memberRepository.findById(userId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+    private Member getUserById(Long memberId) {
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
     private Product getProductById(Long productId) {

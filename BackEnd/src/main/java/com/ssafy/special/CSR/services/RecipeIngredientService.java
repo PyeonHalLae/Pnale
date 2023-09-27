@@ -1,15 +1,18 @@
 package com.ssafy.special.CSR.services;
 
+
 import com.ssafy.special.CSR.dtos.recipe.RecipeWriteDTO;
 import com.ssafy.special.CSR.repositories.ProductRepository;
 import com.ssafy.special.CSR.repositories.RecipeIngredientRepository;
 import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.entity.Product;
+
 import com.ssafy.special.entity.Recipe;
 import com.ssafy.special.entity.RecipeIngredient;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -50,10 +53,9 @@ public class RecipeIngredientService {
 
     }
 
+    public List<String> getIngredientNamesByRecipe(Recipe recipe) {
+        List<RecipeIngredient> ingredients = recipeIngredientRepository.findByRecipeOrderByIngredientSeq(recipe);
 
-
-    public List<String> getIngredientNamesByRecipe(Long rcpId) {
-        List<RecipeIngredient> ingredients = recipeIngredientRepository.findAllByRecipe_RecipeId(rcpId);
 
         return ingredients.stream()
                 .map(ingredient -> ingredient.getProduct().getProductName())
