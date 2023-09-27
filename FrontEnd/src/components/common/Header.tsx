@@ -1,16 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { searchInputData } from "@recoil/kdmRecoil";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
+import { SearchResponseToRecommand } from "@/model/commonType";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isActive, setIsActive] = useState(false);
-  const [name, setName] = useRecoilState(searchInputData);
-  const queryClient = useQueryClient();
+  const [name, setName] = useRecoilState<{ input: string }>(searchInputData);
 
   const backBtn = () => {
     navigate(-1);
@@ -19,22 +18,33 @@ const Header = () => {
   const reset = () => {
     setName({ ...name, input: "" });
   };
-  const toggleSearch = () => {
-    setIsActive((prevIsActive) => !prevIsActive);
-    navigate("/search");
+  const toggleSearch = async (name: string) => {
+    const response = await axios.post("/api/search/result", {
+      ids: [14770],
+    });
+    console.log(response.data.data);
   };
 
-  const handleInputChange = (e) => {
-    setName({ ...name, input: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setName((prev) => ({
+      ...prev,
+      input: inputValue, // Recoil 상태 업데이트
+    }));
   };
 
+  const handleDivClick = (name: string) => {
+    console.log(name);
+    const fakeEvent = { target: { value: name } } as React.ChangeEvent<HTMLInputElement>;
+    handleInputChange(fakeEvent);
+  };
   useEffect(() => {
     reset();
     // eslint-disable-next-line
   }, []);
 
   // eslint-disable-next-line
-  const { data, isLoading, isError, error } = useQuery<any, AxiosError>(
+  const { data, isLoading, isError, error } = useQuery<SearchResponseToRecommand[], AxiosError>(
     ["searchTag", name.input],
     async () => {
       if (name.input !== "") {
@@ -46,9 +56,6 @@ const Header = () => {
       } else return [];
     },
     {
-      // onSuccess: (data) => {
-      //   queryClient.setQueryData(["searchTag", setName({ ...name, input: "" })], data);
-      // },
       retry: 2,
     }
   );
@@ -81,13 +88,16 @@ const Header = () => {
           onChange={handleInputChange}
         />
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
-        <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
+        <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(name.input)} />
       </SearchBar>
-      {/* <div className="absolute w-full bg-slate-400 max-w-[450px]">
-        {data.map((index) => (
-          <div>{index}</div>
-        ))}
-      </div> */}
+      <TagBox className="">
+        {data &&
+          data.map((index, key) => (
+            <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
+              {index.name}
+            </RecommandTag>
+          ))}
+      </TagBox>
     </>
   );
 };
@@ -133,4 +143,17 @@ w-6
 h-6 
 relative
 left-[-1.5rem]
+`;
+
+const TagBox = tw.div`
+pb-3
+pl-4
+z-10
+absolute
+ w-full 
+bg-white
+max-w-[450px]
+`;
+const RecommandTag = tw.div`
+mt-2
 `;
