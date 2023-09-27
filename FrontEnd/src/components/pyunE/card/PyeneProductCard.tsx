@@ -43,7 +43,7 @@ const PyeneProductCard = ({
     };
     setEventInfo(pyeneEventInfo);
     setListType($listType);
-  }, []);
+  }, [$productInfo]);
 
   const ImageErrorHandler = () => {
     prodctImgRef.current.src = "/img/sticker/noimage.jpg";

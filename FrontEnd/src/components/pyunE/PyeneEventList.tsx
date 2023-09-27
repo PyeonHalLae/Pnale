@@ -3,18 +3,24 @@ import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 import PyeneEventHeader from "./card/PyeneEventHeader";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 interface eventListType {
-  title: string;
-  date: string;
-  url: string;
-  id: number;
+  bannerId: number;
+  bannerName: string;
+  startDate: string;
+  endDate: string | null;
+  corpType: null;
+  thumbnailImg: string;
+  fullImg: string;
 }
 
 const PyeneEventList = () => {
   const [eventList, setEventList] = useState<eventListType[]>();
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const { pyenType } = useParams<string>();
 
   const navigate = useNavigate();
 
@@ -26,48 +32,12 @@ const PyeneEventList = () => {
     }
   };
 
-  const temp2 = [
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 1,
-    },
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 2,
-    },
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 3,
-    },
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 4,
-    },
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 5,
-    },
-    {
-      title: "호텔스닷컴 할인 받으세요글ㅁㅁㄴㅇ라ㅣㅓㅁㄴ아ㅣ럼ㄴ아ㅣ러",
-      date: "2023.09.01",
-      url: "/img/test/test-event-img.png",
-      id: 6,
-    },
-  ];
-
   useEffect(() => {
-    setEventList(temp2);
-  }, []);
+    axios.get("/api/banner/" + pyenType + "?page=" + 1).then((res) => {
+      console.log(res.data);
+      setEventList(res.data.data);
+    });
+  }, [pyenType]);
 
   return (
     <>
@@ -76,14 +46,19 @@ const PyeneEventList = () => {
         {eventList &&
           eventList.map((value, index) => (
             <EventBanner
-              key={value.id + index}
-              $imgurl={value.url}
+              key={value.bannerId + index}
+              $imgurl={value.thumbnailImg}
               onClick={() => changeIndexHanddler(index)}
             >
               <EventDetailInfo $isActive={activeIndex === index}>
-                <EventTitle>{value.title}</EventTitle>
-                <EventDate>{value.date}</EventDate>
-                <EventDetilBtn onClick={() => navigate("" + value.id)}>자세히보기</EventDetilBtn>
+                <EventTitle>{value.bannerName}</EventTitle>
+                <EventDate>
+                  {value.startDate}
+                  {value.endDate && " ~ " + value.endDate}{" "}
+                </EventDate>
+                <EventDetilBtn onClick={() => navigate("" + value.bannerId, { state: value })}>
+                  자세히보기
+                </EventDetilBtn>
               </EventDetailInfo>
             </EventBanner>
           ))}
