@@ -58,7 +58,6 @@ const PyeneShop = () => {
           setBestList(data.bestProduct.content);
           setNewList(data.newProduct.content);
           // setProductList(data.eventProduct.content);
-          console.log("엑시오스 요청 완료");
           // console.log(productList, "최상단");
         }
       });
