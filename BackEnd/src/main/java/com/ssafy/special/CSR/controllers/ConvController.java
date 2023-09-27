@@ -1,5 +1,6 @@
 package com.ssafy.special.CSR.controllers;
 
+import com.ssafy.special.CSR.dtos.conv.FilterDTO;
 import com.ssafy.special.CSR.services.ConvService;
 import com.ssafy.special.enums.CorpType;
 import com.ssafy.special.exception.DataResponse;
@@ -50,8 +51,8 @@ public class ConvController {
 
     @PostMapping("/event")
     public DataResponse<?> getDetailData(@PageableDefault(size =9 ) Pageable pageable,
-                                         @RequestBody Map<String, Object> data){
-        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findEventProductByFilter(pageable, data));
+                                         @ModelAttribute FilterDTO filter){
+        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findProductByFilter(pageable, filter));
     }
 
 
