@@ -6,7 +6,6 @@ import com.ssafy.special.entity.Banner;
 import com.ssafy.special.enums.CorpType;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
 public class BannerService {
     private final BannerRepository bannerRepository;
 
-    public List<BannerDto> findCorpBanner(@PageableDefault(size = 5) Pageable pageable, CorpType corpType) {
+    public List<BannerDto> findCorpBanner(Pageable pageable, CorpType corpType) {
         return bannerRepository.findVaildBanner(pageable, LocalDate.now(), corpType)
                 .stream()
                 .map(Banner::toDto)
