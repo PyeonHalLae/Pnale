@@ -31,7 +31,6 @@ public class ResponseUtil {
     }
 
     public static Page<Map<String, Object>> getPageProducts(Page<Object[]> data) {
-        log.info("여기서 버그나나?");
         return data.map(ResponseUtil::toResponseData);
     }
 
