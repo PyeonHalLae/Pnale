@@ -9,12 +9,18 @@ import { FilterInfo, FilterInfoType } from "@/recoil/pyeneRecoil";
 import { ProductComp } from "@/model/commonType";
 
 import PyeneProductCard from "../card/PyeneProductCard";
-import { useParams } from "react-router-dom";
+// import { useParams } from "react-router-dom";
 
 /* eslint-disable */
 const showPageCnt: number = 5;
 
-const PyeneShopProductNineView = ({ $productViewType }: { $productViewType: string }) => {
+const PyeneShopProductNineView = ({
+  $productViewType,
+  $pyenType,
+}: {
+  $productViewType: string;
+  $pyenType: string;
+}) => {
   //useSate
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
@@ -25,8 +31,7 @@ const PyeneShopProductNineView = ({ $productViewType }: { $productViewType: stri
   const prevFilterInfo = useRef<FilterInfoType | null>();
   //recoil
   const getFilterInfo = useRecoilValue(FilterInfo);
-
-  const { pyenType } = useParams<string>();
+  const prePyenType = useRef<string>($pyenType);
 
   //페이지 변경 핸들러
   const PageChangeHandler = (page: number) => {
@@ -54,20 +59,22 @@ const PyeneShopProductNineView = ({ $productViewType }: { $productViewType: stri
 
   // 엑시오스 요청
   const AxiosHandler = () => {
+    // console.log("===============================");
+    console.log(getFilterInfo);
     if ($productViewType === "EVENT") {
-      console.log(pyenType + " EVENT 정보 요청 ");
-      axios.get("/api/conv/event/" + pyenType + "?page=" + currentPage).then((res) => {
-        console.log("EVENT 서버 호출 ", currentPage, pyenType);
-        console.log(res);
+      console.log($pyenType + " EVENT 정보 요청 " + currentPage);
+      axios.get("/api/conv/event/" + $pyenType + "?page=" + currentPage).then((res) => {
+        // console.log("EVENT 서버 호출 ", currentPage, $pyenType);
+        // console.log(res);
         const data = res.data.data;
         setTotalPage(data.totalPages);
         setProductList(data.content);
         PageNationSettion();
       });
     } else if ($productViewType === "MONOPOLY") {
-      console.log(pyenType + " 독점 정보 요청 ");
-      axios.get("/api/conv/pb/" + pyenType + "?page=" + currentPage).then((res) => {
-        console.log("독점 서버 호출 ", currentPage, pyenType);
+      console.log($pyenType + " 독점 정보 요청 " + currentPage);
+      axios.get("/api/conv/pb/" + $pyenType + "?page=" + currentPage).then((res) => {
+        // console.log("독점 서버 호출 ", currentPage, $pyenType);
         const data = res.data.data;
         setTotalPage(data.totalPages);
         setProductList(data.content);
@@ -91,28 +98,34 @@ const PyeneShopProductNineView = ({ $productViewType }: { $productViewType: stri
         prevProductListType.current = await $productViewType;
         await setCurrentPage(0);
         setCurrentPage(1);
+      } else if (prevProductListType.current === $productViewType) {
+        //엑시오스 요청
+        AxiosHandler();
       } else {
         if (getFilterInfo !== prevFilterInfo.current) {
           prevFilterInfo.current = getFilterInfo;
           return;
         }
-        console.log(getFilterInfo, "필터정보");
+        // console.log(getFilterInfo, "필터정보");
         //엑시오스 요청
         AxiosHandler();
       }
     };
 
     fetchData();
-  }, [currentPage, $productViewType]);
+  }, [currentPage, $productViewType, getFilterInfo]);
 
-  //필터가 변경되었다면 다시 요청
   useEffect(() => {
-    if (prevProductListType.current === $productViewType) {
-      console.log(getFilterInfo, "수정됬으면 필터정보");
-      //엑시오스 요청
+    const fetchData = async () => {
+      prePyenType.current = $pyenType;
+      if (currentPage !== 1) return;
+      await setCurrentPage(0);
       AxiosHandler();
+    };
+    if ($pyenType !== prePyenType.current) {
+      fetchData();
     }
-  }, [getFilterInfo]);
+  }, [$pyenType]);
 
   return (
     <>

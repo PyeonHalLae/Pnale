@@ -1,5 +1,5 @@
 // import React from 'react'
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
@@ -31,8 +31,10 @@ const PyeneShopProductList = () => {
   const [productViewType, setProductViewType] = useState<string>("EVENT");
   const [modalState, setModalState] = useState<boolean>(false);
 
-  const refPyenType = useRef<string>();
+  //const refPyenType = useRef<string>();
   const { pyenType } = useParams();
+
+  const [prePyenType, setPrePyenType] = useState<string>(pyenType);
 
   //필터 초기화 전용
   useEffect(() => {
@@ -41,12 +43,15 @@ const PyeneShopProductList = () => {
       setPreProductViewType({ type: productViewType });
       ClearFilterHandler();
     }
-    if (refPyenType.current !== pyenType) {
-      refPyenType.current = pyenType;
+  }, [productViewType]);
+
+  useEffect(() => {
+    if (prePyenType !== pyenType) {
+      setPrePyenType(pyenType);
       setProductViewType("EVENT");
       ClearFilterHandler();
     }
-  }, [productViewType, pyenType]);
+  }, [pyenType]);
 
   const ClearFilterHandler = () => {
     resetSort();
@@ -126,7 +131,7 @@ const PyeneShopProductList = () => {
             </FilterListBox>
           </>
         )}
-        <PyeneShopProductNineView $productViewType={productViewType} />
+        <PyeneShopProductNineView $productViewType={productViewType} $pyenType={prePyenType} />
       </ProductListMain>
     </>
   );
