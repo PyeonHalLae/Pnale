@@ -14,7 +14,7 @@ import { useParams } from "react-router-dom";
 /* eslint-disable */
 const showPageCnt: number = 5;
 
-const PyeneShopProductNineView = ({ $productListType }: { $productListType: string }) => {
+const PyeneShopProductNineView = ({ $productViewType }: { $productViewType: string }) => {
   //useSate
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
@@ -54,7 +54,7 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
 
   // 엑시오스 요청
   const AxiosHandler = () => {
-    if ($productListType === "EVENT") {
+    if ($productViewType === "EVENT") {
       console.log(pyenType + " EVENT 정보 요청 ");
       axios.get("/api/conv/event/" + pyenType + "?page=" + currentPage).then((res) => {
         console.log("EVENT 서버 호출 ", currentPage);
@@ -64,7 +64,7 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
         setProductList(data.content);
         PageNationSettion();
       });
-    } else if ($productListType === "MONOPOLY") {
+    } else if ($productViewType === "MONOPOLY") {
       console.log(pyenType + " 독점 정보 요청 ");
       axios.get("/api/conv/pb/" + pyenType + "?page=" + currentPage).then((res) => {
         console.log("독점 서버 호출 ", currentPage);
@@ -86,8 +86,8 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   useEffect(() => {
     const fetchData = async () => {
       if (currentPage === 0) return;
-      if (prevProductListType.current !== $productListType) {
-        prevProductListType.current = await $productListType;
+      if (prevProductListType.current !== $productViewType) {
+        prevProductListType.current = await $productViewType;
         await setCurrentPage(0);
         setCurrentPage(1);
       } else {
@@ -102,11 +102,11 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
     };
 
     fetchData();
-  }, [currentPage, $productListType]);
+  }, [currentPage, $productViewType]);
 
   //필터가 변경되었다면 다시 요청
   useEffect(() => {
-    if (prevProductListType.current === $productListType) {
+    if (prevProductListType.current === $productViewType) {
       console.log(getFilterInfo, "수정됬으면 필터정보");
       //엑시오스 요청
       AxiosHandler();

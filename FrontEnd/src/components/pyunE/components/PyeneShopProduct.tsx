@@ -28,7 +28,7 @@ const PyeneShopProductList = () => {
   const resetAllEventState = useResetRecoilState(pyeneRecoil.AllEventDefault);
   const resetAllCategoryState = useResetRecoilState(pyeneRecoil.AllCategoryDefault);
 
-  const [productListType, setProductListType] = useState<string>("EVENT");
+  const [productViewType, setProductViewType] = useState<string>("EVENT");
   const [modalState, setModalState] = useState<boolean>(false);
 
   const refPyenType = useRef<string>();
@@ -36,17 +36,17 @@ const PyeneShopProductList = () => {
 
   //필터 초기화 전용
   useEffect(() => {
-    if (preProductViewType.type !== productListType) {
+    if (preProductViewType.type !== productViewType) {
       //필터값 초기화
-      setPreProductViewType({ type: productListType });
+      setPreProductViewType({ type: productViewType });
       ClearFilterHandler();
     }
     if (refPyenType.current !== pyenType) {
       refPyenType.current = pyenType;
-      setProductListType("EVENT");
+      setProductViewType("EVENT");
       ClearFilterHandler();
     }
-  }, [productListType, pyenType]);
+  }, [productViewType, pyenType]);
 
   const ClearFilterHandler = () => {
     resetSort();
@@ -66,14 +66,14 @@ const PyeneShopProductList = () => {
   };
 
   const OnEventHandler = () => {
-    if (productListType !== "EVENT") {
-      setProductListType("EVENT");
+    if (productViewType !== "EVENT") {
+      setProductViewType("EVENT");
     }
   };
 
   const OnMonopolyHandler = () => {
-    if (productListType !== "MONOPOLY") {
-      setProductListType("MONOPOLY");
+    if (productViewType !== "MONOPOLY") {
+      setProductViewType("MONOPOLY");
     }
   };
 
@@ -83,13 +83,13 @@ const PyeneShopProductList = () => {
       <ProductListHeader>
         <SideBtn>
           <EventProductBtn
-            className={`${productListType === "EVENT" ? "border-b-[3px]" : "border-b-0"}`}
+            className={`${productViewType === "EVENT" ? "border-b-[3px]" : "border-b-0"}`}
             onClick={OnEventHandler}
           >
             행사 상품
           </EventProductBtn>
           <MonopolyBtn
-            className={`${productListType === "MONOPOLY" ? "border-b-[3px]" : "border-b-0"}`}
+            className={`${productViewType === "MONOPOLY" ? "border-b-[3px]" : "border-b-0"}`}
             onClick={OnMonopolyHandler}
           >
             독점상품
@@ -126,7 +126,7 @@ const PyeneShopProductList = () => {
             </FilterListBox>
           </>
         )}
-        <PyeneShopProductNineView $productListType={productListType} />
+        <PyeneShopProductNineView $productViewType={productViewType} />
       </ProductListMain>
     </>
   );
