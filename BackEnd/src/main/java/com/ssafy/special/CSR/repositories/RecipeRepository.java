@@ -22,7 +22,7 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
 
     @Query("SELECT r FROM RecipeIngredient ri " +
             "LEFT JOIN Recipe r " +
-            "ON ri.recipe.recipe = r.recipe " +
+            "ON ri.recipe.recipeId = r.recipeId " +
             "where ri.product.productId = :productId ")
     Page<Recipe> findRecipeByProductId(Pageable pageable,
                                        @Param("productId") Long productId);
