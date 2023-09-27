@@ -13,10 +13,10 @@ import java.time.LocalDateTime;
 public class Recipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    Long recipe;
+    Long recipeId;
 
     @ManyToOne
-    @JoinColumn(name="writer_id")
+    @JoinColumn(name="member_id")
     Member member;
 
     @Column(nullable = false)
@@ -55,7 +55,7 @@ public class Recipe {
 
     public RecipeListDTO toListDto(boolean like){
         return RecipeListDTO.builder()
-                .rcpId(this.recipe)
+                .rcpId(this.recipeId)
                 .rcpName(this.recipeName)
                 .member(this.member.toViewDTO())
                 .createdAt(this.createdAt)
