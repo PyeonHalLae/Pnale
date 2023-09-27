@@ -5,7 +5,7 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 import { ProductComp } from "@/model/commonType";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
 interface pyeneProductEventType {
@@ -20,31 +20,52 @@ const pyeneTypeMap = {
   EMART: "emart",
 };
 
-const PyeneProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
-  const [eventInfo, setEventInfo] = useState<pyeneProductEventType>();
-  const { pyeneType } = useParams();
+const PyeneProductCard = ({
+  $productInfo,
+  $listType,
+}: {
+  $productInfo: ProductComp;
+  $listType: string;
+}) => {
+  const [eventInfo, setEventInfo] = useState<pyeneProductEventType>(null);
+  const [listType, setListType] = useState<string>();
+  const { pyenType } = useParams<string>();
+
   const dumState = false;
+
+  const prodctImgRef = useRef(null);
 
   useEffect(() => {
     // const eventInfoDefault =  $productInfo.event;
     const pyeneEventInfo: pyeneProductEventType = {
-      type: $productInfo.event[pyeneTypeMap[pyeneType] + "type"],
-      date: $productInfo.event[pyeneTypeMap[pyeneType] + "date"],
+      type: $productInfo.event[pyeneTypeMap[pyenType] + "type"],
+      date: $productInfo.event[pyeneTypeMap[pyenType] + "date"],
     };
     setEventInfo(pyeneEventInfo);
+    setListType($listType);
   }, []);
+
+  const ImageErrorHandler = () => {
+    prodctImgRef.current.src = "/img/sticker/noimage.jpg";
+  };
 
   return (
     <>
       <BackSize>
         <ImageBox>
-          <ProductImg src={$productInfo.product.productImg} />
+          <ProductImg
+            ref={prodctImgRef}
+            src={$productInfo.product.productImg}
+            onError={ImageErrorHandler}
+          />
           {dumState && <ProductDumImg src="/img/test/image61.png" />}
-          {eventInfo ? (
-            <ProductEventImg src="/img/icons/best-product-icon.png" />
-          ) : (
-            <ProductEventImg src="/img/icons/best-product-icon.png" />
-          )}
+          {eventInfo && eventInfo.type ? (
+            <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
+          ) : listType === "BEST" ? (
+            <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
+          ) : listType === "NEW" ? (
+            <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
+          ) : null}
         </ImageBox>
         <InfoBox>
           <div className="h-6">
