@@ -3,16 +3,45 @@ import { RecipeEditor } from "../recipeCommonComponent/RecipeEditor";
 import tw from "tailwind-styled-components";
 import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
+// import axios from "axios";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
   recipeForm: recipeFormType;
   contents: string;
   setContents: Dispatch<SetStateAction<string>>;
+  recipeImg: string;
 }
 
-const RecipeCreateThird = ({ stepHandler, contents, setContents, recipeForm }: Props) => {
-  console.log(recipeForm);
+const RecipeCreateThird = ({
+  stepHandler,
+  contents,
+  setContents,
+  // recipeImg,
+  recipeForm,
+}: Props) => {
+  const submitHandler = () => {
+    console.log(recipeForm);
+
+    // json으로 보내야함
+    // recipeData = {
+    //   ...recipeForm,
+    //  레시피폼 : 제목, 1줄설명, 관련영상주소, products...
+    //   contents: contents,
+    //   recipeImg: recipeImg,
+    //   userId: userId
+    // }
+
+    // axios
+    //   .post(url, FormData, {
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       Authorization: "Bearer " + "key value",
+    //     },
+    //   })
+    //   .then(() => {})
+    //   .catch(() => {});
+  };
 
   return (
     <Container>
@@ -21,6 +50,7 @@ const RecipeCreateThird = ({ stepHandler, contents, setContents, recipeForm }: P
       <button
         onClick={() => {
           console.log(contents);
+          console.log(recipeForm);
         }}
       >
         ㅎㅎㅎ
@@ -34,13 +64,7 @@ const RecipeCreateThird = ({ stepHandler, contents, setContents, recipeForm }: P
           이전으로
         </WhiteBtn>
 
-        <BlueBtn
-          onClick={() => {
-            stepHandler("3");
-          }}
-        >
-          작성완료
-        </BlueBtn>
+        <BlueBtn onClick={submitHandler}>작성완료</BlueBtn>
       </BtnBox>
     </Container>
   );

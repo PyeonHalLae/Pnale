@@ -1,7 +1,7 @@
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 
-import RecipeProductsModalContent from "../recipeCommonComponent/RecipeProductsModalContent";
+import RecipeProductsModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
 // import { useRecoilValue } from "recoil";
 // import { ingredientState } from "@/recoil/khiRecoil";

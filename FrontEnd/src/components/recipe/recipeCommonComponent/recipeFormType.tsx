@@ -11,12 +11,13 @@ export interface recipeFormType {
   //   Craeted, recipeId 필요없을듯? 어짜피 BE처리할듯
   //   createdDate: string;
   //   recipeId: number;
-  products: productFormType[];
+  // products: productFormType[];
   //   레시피 내용 (HTML 태그로 보낼것)
 }
 
 export interface productFormType {
   productId: number;
+  productName: string;
   isChangeable: boolean;
 }
 

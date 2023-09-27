@@ -1,17 +1,17 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import tw from "tailwind-styled-components";
-import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
+import { productFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
 import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
-import RecipeProductsModalContent from "./../recipeCommonComponent/RecipeProductsModalContent";
+import RecipeProductsAddModalContent from "./RecipeProductsAddModalContent";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  recipeForm: recipeFormType;
-  FormChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
+  products: productFormType[];
+  setProducts: Dispatch<SetStateAction<productFormType[]>>;
 }
 
-const RecipeCreateSecond = ({ stepHandler, recipeForm }: Props) => {
+const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
   return (
@@ -23,7 +23,13 @@ const RecipeCreateSecond = ({ stepHandler, recipeForm }: Props) => {
             setModal={setIsModalActive}
             width="22.5"
             height="36"
-            element={<RecipeProductsModalContent />}
+            element={
+              <RecipeProductsAddModalContent
+                products={products}
+                setProducts={setProducts}
+                setModal={setIsModalActive}
+              />
+            }
           />
         )}
         <ProductBoxTitle>재료 등록</ProductBoxTitle>
@@ -35,9 +41,33 @@ const RecipeCreateSecond = ({ stepHandler, recipeForm }: Props) => {
             <div>변경가능</div>
           </div>
         </ProductTableColName>
-        {recipeForm.products.map((product) => {
-          return <div>{product.productId}</div>;
+        {products.map((product: productFormType, index: number) => {
+          return (
+            <ProductItem>
+              <ProductNameBox>
+                <div className="w-[4rem] text-center">{index + 1}</div>
+                <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
+                  {product.productName}
+                </div>
+              </ProductNameBox>
+              <ProductChangeBox>
+                <input className="inline-block" type="checkbox"></input>
+              </ProductChangeBox>
+            </ProductItem>
+          );
         })}
+        <ProductItem>
+          <ProductNameBox>
+            <div className="w-[4rem] text-center">1</div>
+            <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
+              상품이름
+            </div>
+          </ProductNameBox>
+          <ProductChangeBox>
+            <input className="inline-block" type="checkbox"></input>
+          </ProductChangeBox>
+        </ProductItem>
+
         <ProductAddBtn
           onClick={() => {
             setIsModalActive(true);
@@ -92,15 +122,36 @@ text-center
 `;
 
 const ProductTableColName = tw.div`
+w-[calc(100%-3rem)]
+h-[2rem]
 flex
 text-[0.9375rem];
 text-common-text-color
 font-bold
+mx-[1.5rem]
 mb-[.625rem]
 border-b-2
 `;
 
+const ProductItem = tw.div`
+w-[calc(100%-3rem)]
+h-[2rem]
+flex
+my-[1rem]
+mx-[1.5rem]
+`;
+
+const ProductNameBox = tw.div`
+w-[calc(100%-5rem)] 
+flex 
+items-center
+`;
+const ProductChangeBox = tw.div`
+w-[5rem] flex justify-center items-center
+`;
+
 const ProductAddBtn = tw.div`
+mt-[2rem]
 text-[0.9375rem];
 text-common-text-color
 py-[1rem];

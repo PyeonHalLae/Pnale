@@ -46,7 +46,7 @@ const RecipeCreateFirst = ({
     formData.append("image", file);
 
     axios
-      .post("https://pnale.online/api/img/upload", formData, {
+      .post("/api/img/upload", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -76,7 +76,7 @@ const RecipeCreateFirst = ({
           onChange={imgUploadHandler}
           // style={{ display: "none" }}
         />
-        <ImgBox src={recipeImg} />
+        <ImgBox src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg} />
       </FormBox>
 
       <FormBox>
@@ -154,6 +154,7 @@ w-[100%]
 bg-common-back-color
 border-b-2
 break-all
+resize-none
 `;
 
 const IntroBox = tw.textarea`
@@ -161,6 +162,7 @@ w-[100%]
 bg-common-back-color
 border-b-2
 break-all
+resize-none
 `;
 
 const RelatedUrlBox = tw.input`
