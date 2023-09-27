@@ -15,7 +15,7 @@ export default PyeneEventDetail;
 
 const EventMainBox = tw.div`
   w-full
-  h-[clac(100%-40px)]
+  h-[calc(100%-40px)]
   overflow-scroll
   mt-[70px]
   mb-[15px]
