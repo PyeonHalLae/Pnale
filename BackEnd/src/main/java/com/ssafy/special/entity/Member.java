@@ -18,6 +18,7 @@ import java.util.Set;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,22 +54,6 @@ public class Member {
 
     @Column(columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP",  insertable=false, updatable=true)
     LocalDateTime updatedAt;
-
-    
-    /*
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    @Builder.Default
-    private Set<MemberPickProd> likeProducts = new HashSet<>();
-
-    @OneToMany(mappedBy = "member", fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<MemberPickRecipe> likeRecipes = new LinkedList<>();
-
-    @OneToMany(mappedBy = "writer", fetch = FetchType.LAZY)
-    @Builder.Default
-    private List<Recipe> writeRecipes = new LinkedList<>();
-    */
-
 
     public MemberViewDTO toViewDTO(){
         return MemberViewDTO.builder()
