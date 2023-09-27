@@ -24,7 +24,6 @@ const SearchInput = () => {
         </p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -33,7 +32,6 @@ const SearchInput = () => {
         <p className="mt-1">맥도날드 더블 쿼터파운드 치즈버거</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -42,7 +40,6 @@ const SearchInput = () => {
         <p className="mt-1">GS-25 김혜자 치킨버거</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -51,7 +48,6 @@ const SearchInput = () => {
         <p className="mt-1">오늘의 점심은?</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -60,7 +56,6 @@ const SearchInput = () => {
         <p className="mt-1">프링글스</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -69,7 +64,6 @@ const SearchInput = () => {
         <p className="mt-1">짜장면 짬뽕 탕수육</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"
@@ -78,7 +72,6 @@ const SearchInput = () => {
         <p className="mt-1">특화 프로젝트 화이팅</p>
       </RecentTag>
       <RecentTag>
-        {" "}
         <img
           src="/img/icons/recentTag.png"
           alt="지난 검색"

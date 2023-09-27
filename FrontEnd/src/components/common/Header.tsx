@@ -1,14 +1,16 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { searchInputData } from "@recoil/kdmRecoil";
+import { useQuery, useQueryClient } from "react-query";
 
 const Header = () => {
   const navigate = useNavigate();
   const [isActive, setIsActive] = useState(false);
   const [name, setName] = useRecoilState(searchInputData);
+  const queryClient = useQueryClient();
 
   const backBtn = () => {
     navigate(-1);
@@ -28,28 +30,49 @@ const Header = () => {
 
   useEffect(() => {
     reset();
+    // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    const searchTag = async () => {
-      console.log("요청 보낸다", name);
-      try {
+  // eslint-disable-next-line
+  const { data, isLoading, isError, error } = useQuery<any, AxiosError>(
+    ["searchTag", name.input],
+    async () => {
+      if (name.input !== "") {
         const response = await axios.post("/api/search", {
           name: name.input,
         });
-        console.log("요청 성공:", response.data);
-      } catch (error) {
-        console.error("요청 실패:", error);
-      }
-    };
-    if (name.input !== "") {
-      searchTag();
+        console.log(response.data.data);
+        return response.data.data;
+      } else return [];
+    },
+    {
+      // onSuccess: (data) => {
+      //   queryClient.setQueryData(["searchTag", setName({ ...name, input: "" })], data);
+      // },
+      retry: 2,
     }
-  }, [name]);
+  );
+
+  // useEffect(() => {
+  //   const searchTag = async () => {
+  //     console.log("요청 보낸다: ", name.input);
+  //     try {
+  //       const response = await axios.post("/api/search", {
+  //         name: name.input,
+  //       });
+  //       console.log("요청 성공:", ...response.data.data);
+  //     } catch (error) {
+  //       console.error("요청 실패:", error);
+  //     }
+  //   };
+  //   if (name.input !== "") {
+  //     searchTag();
+  //   }
+  // }, [name]);
 
   return (
     <>
-      <SearchBar className={isActive ? "active" : ""}>
+      <SearchBar>
         <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
         <Input
           type="text"
@@ -61,7 +84,7 @@ const Header = () => {
         <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
       </SearchBar>
       {/* <div className="absolute w-full bg-slate-400 max-w-[450px]">
-        {recommandTag.map((index) => (
+        {data.map((index) => (
           <div>{index}</div>
         ))}
       </div> */}
