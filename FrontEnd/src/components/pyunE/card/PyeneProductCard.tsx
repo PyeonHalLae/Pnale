@@ -4,31 +4,77 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-const PyeneProductCard = () => {
-  // const [dumState, setDumState] = useState<boolean>();
+import { ProductComp } from "@/model/commonType";
+import { useEffect, useState, useRef } from "react";
+import { useParams } from "react-router-dom";
 
-  // useEffect(() => {
-  //   setDumState(false);
-  // }, []);
+interface pyeneProductEventType {
+  type: string;
+  date: string;
+}
 
-  const dumState = true;
+const pyeneTypeMap = {
+  CU: "cu",
+  GS: "gs",
+  SEVEN: "seven",
+  EMART: "emart",
+};
+
+const PyeneProductCard = ({
+  $productInfo,
+  $listType,
+}: {
+  $productInfo: ProductComp;
+  $listType: string;
+}) => {
+  const [eventInfo, setEventInfo] = useState<pyeneProductEventType>(null);
+  const [listType, setListType] = useState<string>();
+  const { pyenType } = useParams<string>();
+
+  const dumState = false;
+
+  const prodctImgRef = useRef(null);
+
+  useEffect(() => {
+    // const eventInfoDefault =  $productInfo.event;
+    const pyeneEventInfo: pyeneProductEventType = {
+      type: $productInfo.event[pyeneTypeMap[pyenType] + "type"],
+      date: $productInfo.event[pyeneTypeMap[pyenType] + "date"],
+    };
+    setEventInfo(pyeneEventInfo);
+    setListType($listType);
+  }, []);
+
+  const ImageErrorHandler = () => {
+    prodctImgRef.current.src = "/img/sticker/noimage.jpg";
+  };
 
   return (
     <>
       <BackSize>
         <ImageBox>
-          <ProductImg src="/img/test/image61.png" />
+          <ProductImg
+            ref={prodctImgRef}
+            src={$productInfo.product.productImg}
+            onError={ImageErrorHandler}
+          />
           {dumState && <ProductDumImg src="/img/test/image61.png" />}
-          <ProductEventImg src="/img/icons/best-product-icon.png" />
+          {eventInfo && eventInfo.type ? (
+            <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
+          ) : listType === "BEST" ? (
+            <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
+          ) : listType === "NEW" ? (
+            <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
+          ) : null}
         </ImageBox>
         <InfoBox>
           <div className="h-6">
-            <Category>스낵</Category>
+            <Category>{$productInfo.product.category}</Category>
             <LikeBtn />
           </div>
-          <Title>안녕하세요 이거는 이거입니다 그럴걸요인데요맞아요그래요</Title>
+          <Title>{$productInfo.product.productName}</Title>
           <PriceBox>
-            <Price>2000</Price>
+            <Price>{$productInfo.product.price}</Price>
             <span>원</span>
           </PriceBox>
         </InfoBox>
@@ -89,6 +135,7 @@ const Category = styled.span`
   border: 1px solid #1e2b4f;
   border-radius: 0.1875rem;
   color: #1e2b4f;
+  padding: 1px 6px;
   font-size: 10px;
 `;
 

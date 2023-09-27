@@ -126,6 +126,7 @@ export interface FilterInfoType {
   sort: number;
   event: string[] | null;
   category: string[] | null;
+  activeAll: string[] | null;
 }
 
 export const FilterInfo = selector({
@@ -143,6 +144,7 @@ export const FilterInfo = selector({
     ];
 
     const eventTrueFilter = eventFilter.filter((item) => item.state).map((item) => item.engName);
+    const eventTrueKorea = eventFilter.filter((item) => item.state).map((item) => item.name);
     const categoryTrueFilter = categoryFilter.flatMap((category) =>
       category.filter((item) => item.state).map((item) => item.name)
     );
@@ -151,6 +153,7 @@ export const FilterInfo = selector({
       sort: sortFilter,
       event: eventTrueFilter.length != 0 ? [...eventTrueFilter] : null,
       category: categoryTrueFilter.length != 0 ? [...categoryTrueFilter] : null,
+      activeAll: [...eventTrueKorea, ...categoryTrueFilter],
     };
 
     return Filter;

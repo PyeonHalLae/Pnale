@@ -21,6 +21,7 @@ export default defineConfig({
       { find: "@", replacement: "/src" },
       { find: "@public", replacement: "/public" },
       { find: "@model", replacement: "/src/model" },
+      { find: "@recoil", replacement: "/src/recoil" },
     ],
   },
 });

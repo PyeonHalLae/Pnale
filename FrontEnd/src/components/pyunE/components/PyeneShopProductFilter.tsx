@@ -175,8 +175,10 @@ const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
         <FilterMainBox>
           <SortBox>
             <SideHeader>
-              <SideTitle>정렬</SideTitle>
-              <SideInfo>기본값 : 이름순</SideInfo>
+              <div className="flex">
+                <SideTitle>정렬</SideTitle>
+                <SideInfo>기본값 : 이름순</SideInfo>
+              </div>
             </SideHeader>
             <SideMain>
               {SortFilterList.map((value, index) => (
@@ -192,8 +194,10 @@ const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
           </SortBox>
           <EventBox>
             <SideHeader>
-              <SideTitle>행사선택</SideTitle>
-              <SideInfo>기본값 : 전체</SideInfo>
+              <div className="flex">
+                <SideTitle>행사선택</SideTitle>
+                <SideInfo>기본값 : 전체</SideInfo>
+              </div>
               <AllMain onClick={AllEventHandler}>
                 <div className={eventAllFilter ? "active" : ""}>전체</div>
               </AllMain>
@@ -214,8 +218,10 @@ const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
           </EventBox>
           <CategoryBox>
             <SideHeader>
-              <SideTitle>카테고리</SideTitle>
-              <SideInfo>기본값 : 전체</SideInfo>
+              <div className="flex">
+                <SideTitle>카테고리</SideTitle>
+                <SideInfo>기본값 : 전체</SideInfo>
+              </div>
               <AllMain onClick={AllCategoryHandler}>
                 <div className={categoryAllFilter ? "active" : ""}>전체</div>
               </AllMain>
@@ -352,11 +358,11 @@ const CloseBtn = styled.img`
   top: 8px;
 `;
 
-const FilterMainBox = tw.div`mt-[52px] overflow-scroll h-[calc(85%-20px)]`;
+const FilterMainBox = tw.div`mt-[52px] overflow-scroll h-[calc(85%-32px)]`;
 
 const SortBox = tw.div`mt-3 ml-[22px]`;
 
-const SideHeader = tw.div`flex text-common-text-color my-3`;
+const SideHeader = tw.div`flex text-common-text-color my-3 justify-between`;
 
 const SideTitle = tw.div`text-[20px] font-bold mr-[6px]`;
 
@@ -435,8 +441,6 @@ const ApplyBtn = tw.div`
 `;
 
 const AllMain = styled.div`
-  display: flex;
-  z-index: 10;
   div {
     font-size: 13px;
     padding: 5px 15px;

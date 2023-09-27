@@ -6,36 +6,10 @@ import axios from "axios";
 import { useRecoilValue } from "recoil";
 import { FilterInfo, FilterInfoType } from "@/recoil/pyeneRecoil";
 
-import PyeneProductCard from "../card/PyeneProductCard";
+import { ProductComp } from "@/model/commonType";
 
-// interface ProductType {
-//   productInfo: {
-//     productId: number;
-//     productName: string;
-//     productImg: string;
-//     productDesc: null | string;
-//     price: number;
-//     category: string;
-//     pb: null;
-//     recommand: null;
-//     hit: number | null;
-//   };
-//   userLikeProd: {
-//     pickProdId: null;
-//     likeStat: boolean;
-//     received: boolean;
-//   };
-//   evnetInfo: {
-//     cutype: string | null;
-//     cudate: string | null;
-//     gstype: string | null;
-//     gsdate: string | null;
-//     seventype: string | null;
-//     sevendate: string | null;
-//     emarttype: string | null;
-//     emartdate: string | null;
-//   };
-// }
+import PyeneProductCard from "../card/PyeneProductCard";
+import { useParams } from "react-router-dom";
 
 /* eslint-disable */
 const showPageCnt: number = 5;
@@ -45,11 +19,14 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPage, setTotalPage] = useState<number>();
   const [pageNumbers, setPageNumbers] = useState<number[]>([]);
+  const [productList, setProductList] = useState<ProductComp[]>([]);
   //useREf
   const prevProductListType = useRef<string>("EVENT");
   const prevFilterInfo = useRef<FilterInfoType | null>();
   //recoil
   const getFilterInfo = useRecoilValue(FilterInfo);
+
+  const { pyenType } = useParams<string>();
 
   //페이지 변경 핸들러
   const PageChangeHandler = (page: number) => {
@@ -78,17 +55,22 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
   // 엑시오스 요청
   const AxiosHandler = () => {
     if ($productListType === "EVENT") {
-      axios.get("/api/product/none").then((res) => {
+      console.log(pyenType + " EVENT 정보 요청 ");
+      axios.get("/api/conv/event/" + pyenType + "?page=" + currentPage).then((res) => {
         console.log("EVENT 서버 호출 ", currentPage);
-        const pageAble = res.data.data.pageable;
-        setTotalPage(pageAble.pageSize);
+        console.log(res);
+        const data = res.data.data;
+        setTotalPage(data.totalPages);
+        setProductList(data.content);
         PageNationSettion();
       });
     } else if ($productListType === "MONOPOLY") {
-      axios.get("/api/product/none").then((res) => {
+      console.log(pyenType + " 독점 정보 요청 ");
+      axios.get("/api/conv/pb/" + pyenType + "?page=" + currentPage).then((res) => {
         console.log("독점 서버 호출 ", currentPage);
-        const pageAble = res.data.data.pageable;
-        setTotalPage(pageAble.pageSize);
+        const data = res.data.data;
+        setTotalPage(data.totalPages);
+        setProductList(data.content);
         PageNationSettion();
       });
     }
@@ -129,20 +111,14 @@ const PyeneShopProductNineView = ({ $productListType }: { $productListType: stri
       //엑시오스 요청
       AxiosHandler();
     }
-  }, [getFilterInfo]);
+  }, [getFilterInfo, pyenType]);
 
   return (
     <>
-      <div className="grid grid-cols-3 gap-y-3">
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
-        <PyeneProductCard />
+      <div className="grid grid-cols-3 grid-rows-3 gap-y-3 h-[590px]">
+        {productList.map((value, index) => {
+          return <PyeneProductCard key={index} $productInfo={value} $listType={"EVENT"} />;
+        })}
       </div>
       <PaginateBox>
         <FirstMoveBtn onClick={FirstMoveHandler}>&lt;&lt;</FirstMoveBtn>

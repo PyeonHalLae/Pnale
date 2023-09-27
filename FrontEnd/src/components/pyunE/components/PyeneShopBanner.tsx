@@ -1,16 +1,27 @@
 // import React from "react";
 
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Slider from "react-slick";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import tw from "tailwind-styled-components";
 
-const PyeneShopBanner = () => {
+interface bannerType {
+  bannerId: number;
+  bannerName: string;
+  corpType: null | string;
+  endDate: string;
+  fullImg: string;
+  startDate: string;
+  thumbnailImg: string;
+}
+
+const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
   const navigate = useNavigate();
-  const { pyenType } = useParams<string>();
+  // const { pyenType } = useParams<string>();
   const [slideState, setSlideState] = useState({ activeSlide: 0, activeSlide2: 0 });
   const [slideImgSize, setSlideImgSize] = useState<number>();
+  const [bannerList, setBannerList] = useState<bannerType[]>();
 
   const settings = {
     slide: "div",
@@ -19,15 +30,17 @@ const PyeneShopBanner = () => {
     speed: 500,
     slidesToShow: 1,
     slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    cssEase: "linear",
     arrows: false,
     beforeChange: (current: number, next: number) =>
       setSlideState({ activeSlide: next, activeSlide2: current }),
   };
 
-  const urlImgTmp = "/img/test/너굴맨레시피.jpg";
-
   useEffect(() => {
     setSlideImgSize(5);
+    setBannerList($bannerList);
   });
 
   const EventPageMoveHandler = () => {
@@ -41,11 +54,10 @@ const PyeneShopBanner = () => {
         {slideState.activeSlide + 1} / {slideImgSize}
       </SlideSizeInfo>
       <CustomSlick {...settings} className="w-full h-full">
-        <SlideImage $urlImg={urlImgTmp}></SlideImage>
-        <div>{pyenType} 배너 입니다 </div>
-        <div>{pyenType} 배너 입니다 </div>
-        <div>{pyenType} 배너 입니다 </div>
-        <div>{pyenType} 배너 입니다 </div>
+        {bannerList &&
+          bannerList.map((value, index) => {
+            return <SlideImage key={index} $urlImg={value.thumbnailImg}></SlideImage>;
+          })}
       </CustomSlick>
     </div>
   );

@@ -5,13 +5,24 @@ import tw from "tailwind-styled-components";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
 import PyeneShopThreeView from "./components/PyeneShopThereView";
 import PyeneShopProduct from "./components/PyeneShopProduct";
 import PyeneShopDirectList from "./components/PyeneShopDirectList";
 import PyeneShopBanner from "./components/PyeneShopBanner";
 
-// interface productInfoType {}
+import { ProductComp } from "@/model/commonType";
+
+interface bannerType {
+  bannerId: number;
+  bannerName: string;
+  corpType: null | string;
+  endDate: string;
+  fullImg: string;
+  startDate: string;
+  thumbnailImg: string;
+}
 
 const colorMap = {
   CU: "#652F8D",
@@ -25,9 +36,10 @@ const PyeneShop = () => {
   const [pyeneText, setPyeneText] = useState<string>();
   const pyeneHeader = useRef<HTMLDivElement>(null);
 
-  // const [bestList, setBestList] = useState<productInfoType>([]);
-  // const [newList, setNewList] = useState<productInfoType[]>([]);
-  // const [productList, setProductList] = useState<productInfoType[]>([]);
+  const [bestList, setBestList] = useState<ProductComp[]>([]);
+  const [newList, setNewList] = useState<ProductComp[]>([]);
+  // const [productList, setProductList] = useState<ProductComp[]>([]);
+  const [bannerList, setBannerList] = useState<bannerType[]>([]);
 
   const scrollToHeader = () => {
     if (pyeneHeader.current) {
@@ -36,15 +48,31 @@ const PyeneShop = () => {
   };
 
   useEffect(() => {
+    const fetchData = async () => {
+      await axios.get("/api/conv/" + pyenType).then((res) => {
+        const response = res.data;
+        if (response.code === 200) {
+          const data = response.data;
+          console.log(data);
+          setBannerList(data.banners);
+          setBestList(data.bestProduct.content);
+          setNewList(data.newProduct.content);
+          // setProductList(data.eventProduct.content);
+          console.log("엑시오스 요청 완료");
+          // console.log(productList, "최상단");
+        }
+      });
+    };
+
     setPyeneText(colorMap[pyenType]);
-    console.log(pyenType);
+    fetchData();
   }, [pyenType]);
 
   return (
     <>
       <PyeneHeader ref={pyeneHeader}>
         <Header />
-        <PyeneShopBanner />
+        <PyeneShopBanner $bannerList={bannerList} />
       </PyeneHeader>
       <PyeneBestBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
@@ -53,7 +81,7 @@ const PyeneShop = () => {
           <div>베스트</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneShopThreeView />
+        <PyeneShopThreeView $productList={bestList} $listViewType={"BEST"} />
       </PyeneBestBox>
       <PyeneNewBox>
         <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
@@ -62,7 +90,7 @@ const PyeneShop = () => {
           <div>NEW</div>
           <p>상품</p>
         </SideTitle>
-        <PyeneShopThreeView />
+        <PyeneShopThreeView $productList={newList} $listViewType={"NEW"} />
       </PyeneNewBox>
       <PyeneProductBox>
         <SideTitle $pyeneColor={pyeneText}>
@@ -107,7 +135,7 @@ const PyeneNewBox = tw.div`
 const PyeneProductBox = tw.div`
   bg-white
   w-full
-  h-[820px]
+  h-[850px]
   mt-[6px]
 `;
 
