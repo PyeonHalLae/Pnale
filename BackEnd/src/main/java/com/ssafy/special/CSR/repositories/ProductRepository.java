@@ -131,15 +131,15 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
                                           @Param("categories") List<ProductCategory> categories,
                                           @Param("eventTypes")List<EventType> eventTypes);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+    @Query(defaultQuery +
             "WHERE  p.pb = 'CU' " +
             "AND p.category in (:categories) " +
+            "AND (ep.CUType in (:eventTypes) " +
+            "OR ep.CUType is null) " +
             "ORDER BY p.productName ")
     Page<Object[]> cuPBFilterOrderName(Pageable pageable,
-                                       @Param("categories") List<ProductCategory> categories);
+                                       @Param("categories") List<ProductCategory> categories,
+                                       @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.GSType is not null " +
@@ -153,9 +153,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'GS'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.GSType in (:eventTypes) " +
+            "OR ep.GSType is null) " +
             "ORDER BY p.productName ")
     Page<Object[]> gsPBFilterOrderName(Pageable pageable,
-                                       @Param("categories") List<ProductCategory> categories);
+                                       @Param("categories") List<ProductCategory> categories,
+                                       @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.SEVENType is not null " +
@@ -169,9 +172,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'SEVEN'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.SEVENType in (:eventTypes) " +
+            "OR ep.SEVENType is null) " +
             "ORDER BY p.productName ")
     Page<Object[]> sevenPBFilterOrderName(Pageable pageable,
-                                          @Param("categories") List<ProductCategory> categories);
+                                          @Param("categories") List<ProductCategory> categories,
+                                          @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.EMARTType is not null " +
@@ -185,9 +191,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'EMART'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.EMARTType in (:eventTypes) " +
+            "OR ep.EMARTType is null) " +
             "ORDER BY p.productName ")
     Page<Object[]> emartPBFilterOrderName(Pageable pageable,
-                                          @Param("categories") List<ProductCategory> categories);
+                                          @Param("categories") List<ProductCategory> categories,
+                                          @Param("eventTypes")List<EventType> eventTypes);
 
 
     //============ 필터 적용 검색 - 가격 오름차순
@@ -200,15 +209,15 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
                                           @Param("categories") List<ProductCategory> categories,
                                           @Param("eventTypes")List<EventType> eventTypes);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+    @Query(defaultQuery +
             "WHERE  p.pb = 'CU'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.CUType in (:eventTypes) " +
+            "OR ep.CUType is null) " +
             "ORDER BY p.price ASC ")
     Page<Object[]> cuPBFilterOrderPriceASC(Pageable pageable,
-                                       @Param("categories") List<ProductCategory> categories);
+                                       @Param("categories") List<ProductCategory> categories,
+                                           @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.GSType is not null " +
@@ -222,9 +231,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'GS'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.GSType in (:eventTypes) " +
+            "OR ep.GSType is null) " +
             "ORDER BY p.price ASC ")
     Page<Object[]> gsPBFilterOrderPriceASC(Pageable pageable,
-                                       @Param("categories") List<ProductCategory> categories);
+                                       @Param("categories") List<ProductCategory> categories,
+                                           @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.SEVENType is not null " +
@@ -238,9 +250,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'SEVEN'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.SEVENType in (:eventTypes) " +
+            "OR ep.SEVENType is null) " +
             "ORDER BY p.price ASC ")
     Page<Object[]> sevenPBFilterOrderPriceASC(Pageable pageable,
-                                          @Param("categories") List<ProductCategory> categories);
+                                          @Param("categories") List<ProductCategory> categories,
+                                              @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.EMARTType is not null " +
@@ -254,9 +269,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'EMART'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.EMARTType in (:eventTypes) " +
+            "OR ep.EMARTType is null) " +
             "ORDER BY p.price ASC ")
     Page<Object[]> emartPBFilterOrderPriceASC(Pageable pageable,
-                                          @Param("categories") List<ProductCategory> categories);
+                                          @Param("categories") List<ProductCategory> categories,
+                                              @Param("eventTypes")List<EventType> eventTypes);
 
 
     //============ 필터 적용 검색 - 가격 내림차순
@@ -269,15 +287,15 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
                                               @Param("categories") List<ProductCategory> categories,
                                               @Param("eventTypes")List<EventType> eventTypes);
 
-    @Query("SELECT p, ep, mpp " +
-            "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
+    @Query( defaultQuery +
             "WHERE  p.pb = 'CU'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.CUType in (:eventTypes) " +
+            "OR ep.CUType is null) " +
             "ORDER BY p.price DESC ")
     Page<Object[]> cuPBFilterOrderPriceDESC(Pageable pageable,
-                                           @Param("categories") List<ProductCategory> categories);
+                                           @Param("categories") List<ProductCategory> categories,
+                                            @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.GSType is not null " +
@@ -291,9 +309,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'GS'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.GSType in (:eventTypes) " +
+            "OR ep.GSType is null) " +
             "ORDER BY p.price DESC ")
     Page<Object[]> gsPBFilterOrderPriceDESC(Pageable pageable,
-                                           @Param("categories") List<ProductCategory> categories);
+                                           @Param("categories") List<ProductCategory> categories,
+                                            @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.SEVENType is not null " +
@@ -307,9 +328,12 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'SEVEN'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.SEVENType in (:eventTypes) " +
+            "OR ep.SEVENType is null) " +
             "ORDER BY p.price DESC ")
     Page<Object[]> sevenPBFilterOrderPriceDESC(Pageable pageable,
-                                              @Param("categories") List<ProductCategory> categories);
+                                              @Param("categories") List<ProductCategory> categories,
+                                               @Param("eventTypes")List<EventType> eventTypes);
 
     @Query(defaultQuery +
             "WHERE ep.EMARTType is not null " +
@@ -323,7 +347,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query(defaultQuery +
             "WHERE  p.pb = 'EMART'  " +
             "AND p.category in (:categories) " +
+            "AND (ep.EMARTType in (:eventTypes) " +
+            "OR ep.EMARTType is null) " +
             "ORDER BY p.price DESC ")
     Page<Object[]> emartPBFilterOrderPriceDESC(Pageable pageable,
-                                              @Param("categories") List<ProductCategory> categories);
+                                              @Param("categories") List<ProductCategory> categories,
+                                               @Param("eventTypes")List<EventType> eventTypes);
 }

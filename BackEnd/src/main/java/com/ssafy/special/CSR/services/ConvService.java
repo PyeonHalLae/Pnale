@@ -81,7 +81,10 @@ public class ConvService {
 
     public Page<Map<String,Object>> findProductByFilter(Pageable pageable, FilterDTO filter) {
         log.info("{}", filter);
-        if(filter.getEvent().size() == 0) filter.setEvent(Arrays.asList(EventType.values()));
+        if(filter.getEvent().size() == 0) {
+            filter.setEvent(Arrays.asList(EventType.values()));
+        }
+
         if(filter.getCategory().size() == 0) filter.setCategory(Arrays.asList(ProductCategory.values()));
         log.info("{}", Arrays.toString(filter.getEvent().toArray()));
         log.info("{}", Arrays.toString(filter.getCategory().toArray()));
@@ -90,32 +93,32 @@ public class ConvService {
             switch(filter.getCorp()){
                 case CU : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.cuEventFilterOrderName(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderName(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderName(pageable, filter.getCategory(),filter.getEvent()));
                 case GS : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.gsEventFilterOrderName(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderName(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderName(pageable, filter.getCategory(),filter.getEvent()));
                 case SEVEN: return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.sevenEventFilterOrderName(pageable, filter.getCategory(), filter.getEvent()))
-                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderName(pageable, filter.getCategory()));
+                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderName(pageable, filter.getCategory(),filter.getEvent()));
                 case EMART : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.emartEventFilterOrderName(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderName(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderName(pageable, filter.getCategory(),filter.getEvent()));
                 default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
             }
         } else if(filter.getSort() == 1L){
             switch(filter.getCorp()){
                 case CU : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.cuEventFilterOrderPriceASC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderPriceASC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderPriceASC(pageable, filter.getCategory(),filter.getEvent()));
                 case GS : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.gsEventFilterOrderPriceASC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderPriceASC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderPriceASC(pageable, filter.getCategory(),filter.getEvent()));
                 case SEVEN: return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.sevenEventFilterOrderPriceASC(pageable, filter.getCategory(), filter.getEvent()))
-                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderPriceASC(pageable, filter.getCategory()));
+                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderPriceASC(pageable, filter.getCategory(),filter.getEvent()));
                 case EMART : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.emartEventFilterOrderPriceASC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderPriceASC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderPriceASC(pageable, filter.getCategory(),filter.getEvent()));
                 default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
             }
 
@@ -123,16 +126,16 @@ public class ConvService {
             switch(filter.getCorp()){
                 case CU : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.cuEventFilterOrderPriceDESC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderPriceDESC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.cuPBFilterOrderPriceDESC(pageable, filter.getCategory(),filter.getEvent()));
                 case GS : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.gsEventFilterOrderPriceDESC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderPriceDESC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.gsPBFilterOrderPriceDESC(pageable, filter.getCategory(),filter.getEvent()));
                 case SEVEN: return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.sevenEventFilterOrderPriceDESC(pageable, filter.getCategory(), filter.getEvent()))
-                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderPriceDESC(pageable, filter.getCategory()));
+                            :  ResponseUtil.getPageProducts(productRepository.sevenPBFilterOrderPriceDESC(pageable, filter.getCategory(),filter.getEvent()));
                 case EMART : return filter.getDataType().equals("EVENT")
                             ? ResponseUtil.getPageProducts(productRepository.emartEventFilterOrderPriceDESC(pageable, filter.getCategory(), filter.getEvent()))
-                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderPriceDESC(pageable, filter.getCategory()));
+                            : ResponseUtil.getPageProducts(productRepository.emartPBFilterOrderPriceDESC(pageable, filter.getCategory(),filter.getEvent()));
                 default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
             }
 
