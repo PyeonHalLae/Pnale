@@ -27,7 +27,7 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
         {isModalActive && (
           <RecipeCommonModal
             setModal={setIsModalActive}
-            width="22.5"
+            width="22"
             height="36"
             element={<RecipeProductsAddModalContent setModal={setIsModalActive} />}
           />
