@@ -30,6 +30,15 @@ public class ElasticController {
         return new DataResponse(200, name + "에 대한 검색 리스트를 반환합니다.", goodsService.findSeachList(pageable, name));
     }
 
+    @PostMapping("/recipe")
+    public DataResponse<?> getNameOnRecipeList(@PageableDefault(size = 20) Pageable pageable,
+                                       @RequestBody() Map<String, Object> map) {
+        String name = (String) map.get("name");
+        String category = (String) map.get("category");
+        log.info("{} {}", name,category);
+        return new DataResponse(200, name + " " + category + "에 대한 검색 리스트를 반환합니다.", goodsService.findSearchRecipeList(pageable, name,category));
+    }
+
     @PostMapping("/result")
     public DataResponse<?> getNameResult(@PageableDefault(size = 9) Pageable pageable,
                                          @RequestBody ESRequestDto request) {

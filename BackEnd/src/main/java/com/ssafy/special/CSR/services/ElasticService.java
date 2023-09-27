@@ -40,6 +40,11 @@ public class ElasticService {
                 .stream().map(Elastic::toDto).collect(Collectors.toList());
     }
 
+    public List<ESListDto> findSearchRecipeList(Pageable pageable, String name, String category) {
+        return GoodsRepository.findByNameAndCategory(pageable, name, category)
+                .stream().map(Elastic::toDto).collect(Collectors.toList());
+    }
+
     public Map<String, Object> findIdsResult(Pageable pageable, List<Long> productIds) {
         Product p = productRepository.findById(productIds.get(0)).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
         log.info("{}", p.getCategory());
