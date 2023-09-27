@@ -10,10 +10,10 @@ const { persistAtom: persistAtom2 } = recoilPersist({
   key: "recoil-persist-local", //로컬 스토리지 사용
 });
 
-export const sessionState = atom({
-  key: "sessionState",
-  default: { test1: 0 },
-  effects_UNSTABLE: [persistAtom1],
+export const searchInputData = atom({
+  key: "searchInputData",
+  default: { input: "" },
+  // effects_UNSTABLE: [persistAtom1],
 });
 
 export const localState = atom({

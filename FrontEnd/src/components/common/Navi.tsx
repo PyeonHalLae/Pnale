@@ -41,6 +41,8 @@ export default function Navi() {
     }));
     if (iconName === "home") {
       navigate("/");
+    } else if (iconName === "search") {
+      navigate("/search/what");
     } else {
       navigate(`/${iconName}`);
     }

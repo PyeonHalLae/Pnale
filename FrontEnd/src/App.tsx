@@ -34,6 +34,7 @@ import RecipeDetail from "@components/recipe/RecipeDetail";
 //임시
 import NotLogin from "@components/common/NotLogin";
 import RecipeSearch from "./components/recipe/RecipeSearch";
+import SearchInput from "@components/search/SearchInput";
 
 function App() {
   Modal.setAppElement("#root");
@@ -48,6 +49,7 @@ function App() {
             {/* 김동민 개발 페이지*/}
             <Route index element={<MainPageContent />} />
             <Route path="/" element={<MainPage />}>
+              <Route path="search/what" element={<SearchInput />} />
               <Route path="search" element={<SearchMain />} />
               <Route path="search-product" element={<MoreProduct />} />
               <Route path="search-related" element={<MoreRelated />} />
