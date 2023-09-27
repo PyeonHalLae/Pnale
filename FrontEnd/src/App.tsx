@@ -30,10 +30,11 @@ import Recipe from "@components/recipe/Recipe";
 import RecipeList from "@components/recipe/RecipeList";
 import RecipeCreate from "@components/recipe/RecipeCreate";
 import RecipeDetail from "@components/recipe/RecipeDetail";
+import RecipeSearch from "./components/recipe/RecipeSearch";
+import RecipeModify from "./components/recipe/RecipeModify";
 
 //임시
 import NotLogin from "@components/common/NotLogin";
-import RecipeSearch from "./components/recipe/RecipeSearch";
 import SearchInput from "@components/search/SearchInput";
 
 function App() {
@@ -79,6 +80,7 @@ function App() {
               <Route path="create" element={<RecipeCreate />} />
               <Route path="search" element={<RecipeSearch />} />
               <Route path=":recipeId" element={<RecipeDetail />} />
+              <Route path=":recipeId/modify" element={<RecipeModify />} />
             </Route>
           </Route>
 
