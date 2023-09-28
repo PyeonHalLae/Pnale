@@ -1,6 +1,6 @@
 // import React from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import styled from "styled-components";
 import { useEffect, useState } from "react";
@@ -18,7 +18,7 @@ interface bannerType {
 
 const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
   const navigate = useNavigate();
-  // const { pyenType } = useParams<string>();
+  const { pyenType } = useParams<string>();
   const [slideState, setSlideState] = useState({ activeSlide: 0, activeSlide2: 0 });
   const [slideImgSize, setSlideImgSize] = useState<number>();
   const [bannerList, setBannerList] = useState<bannerType[]>();
@@ -47,6 +47,10 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
     navigate("EVENT");
   };
 
+  const DetailPageMoveHandler = (banner: bannerType) => {
+    navigate("/pyenE/" + pyenType + "/EVENT/" + banner.bannerId, { state: banner });
+  };
+
   return (
     <div className="relative w-full h-[calc(100%-52px)]">
       <BannerAddBtn onClick={EventPageMoveHandler} src="/img/btn/create-recipe-white.png" />
@@ -56,7 +60,13 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
       <CustomSlick {...settings} className="w-full h-full">
         {bannerList &&
           bannerList.map((value, index) => {
-            return <SlideImage key={index} $urlImg={value.thumbnailImg}></SlideImage>;
+            return (
+              <SlideImage
+                key={index}
+                $urlImg={value.thumbnailImg}
+                onClick={() => DetailPageMoveHandler(value)}
+              ></SlideImage>
+            );
           })}
       </CustomSlick>
     </div>

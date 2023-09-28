@@ -151,8 +151,8 @@ export const FilterInfo = selector({
 
     const Filter: FilterInfoType = {
       sort: sortFilter,
-      event: eventTrueFilter.length != 0 ? [...eventTrueFilter] : null,
-      category: categoryTrueFilter.length != 0 ? [...categoryTrueFilter] : null,
+      event: eventTrueFilter.length != 0 ? [...eventTrueFilter] : [],
+      category: categoryTrueFilter.length != 0 ? [...categoryTrueFilter] : [],
       activeAll: [...eventTrueKorea, ...categoryTrueFilter],
     };
 
