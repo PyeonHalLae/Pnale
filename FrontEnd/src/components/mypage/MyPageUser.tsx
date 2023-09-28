@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
+import { MemberInfo } from "@/recoil/memberRecoil";
+import { useRecoilValue } from "recoil";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
@@ -9,24 +11,14 @@ const myPageType = [
   { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
-interface userInfoType {
-  userName: string;
-  userImage: string;
-}
-
 interface productInfoType {
   productImage: string;
   productName: string;
 }
 
-const userInfos = {
-  userName: "",
-  userImage: "/img/logo/logo-pink.png",
-};
-
 const MyPageUser = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState<userInfoType>({ userName: "", userImage: "" });
+  const userInfo = useRecoilValue(MemberInfo);
   const [productInfo, setProductInfo] = useState<productInfoType[]>([]);
 
   useEffect(() => {
@@ -43,17 +35,13 @@ const MyPageUser = () => {
     ]);
   }, []);
 
-  useEffect(() => {
-    setUserInfo(userInfos);
-  }, []);
-
   const LoginPageMoveHandler = () => {
     navigate("/login");
   };
 
   return (
     <>
-      {userInfo.userName === null || userInfo.userName === "" ? (
+      {userInfo.member.nickname === null || userInfo.member.nickname === "" ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox onClick={LoginPageMoveHandler}>
@@ -82,9 +70,9 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.userImage} />
+              <UserImage $imgurl={userInfo.member.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.userName}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.member.nickname}</span>님<br />
                 반갑습니다!
                 <div className="text-sm">로그아웃</div>
               </div>
