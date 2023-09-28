@@ -20,7 +20,7 @@ interface productInfoType {
 }
 
 const userInfos = {
-  userName: "정현모",
+  userName: "",
   userImage: "/img/logo/logo-pink.png",
 };
 
@@ -47,12 +47,16 @@ const MyPageUser = () => {
     setUserInfo(userInfos);
   }, []);
 
+  const LoginPageMoveHandler = () => {
+    navigate("/login");
+  };
+
   return (
     <>
       {userInfo.userName === null || userInfo.userName === "" ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
-            <UserBox>
+            <UserBox onClick={LoginPageMoveHandler}>
               <div className="mt-20 ml-4">
                 <span className="text-[35px] text-[#AEB0B6] h-[35px]">
                   <span className="text-[#1E2B4F]">로그인</span>을 해주세요
