@@ -18,11 +18,18 @@ const Header = () => {
   const reset = () => {
     setName({ ...name, input: "" });
   };
-  const toggleSearch = async (name: string) => {
+
+  const toggleSearch = async (data: SearchResponseToRecommand[]) => {
+    const idsArray = data.map((item) => item.id);
+    console.log("전송할 id 값:", idsArray);
+
     const response = await axios.post("/api/search/result", {
-      ids: [14770],
+      ids: idsArray,
     });
-    console.log(response.data.data);
+    // console.log(response.data.data);
+
+    navigate("/search", { state: response.data.data });
+    reset();
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -87,9 +94,10 @@ const Header = () => {
           placeholder="코카콜라라고 검색해보세요."
           value={name.input}
           onChange={handleInputChange}
+          // onClick={() => navigate("/search/what")}
         />
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
-        <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(name.input)} />
+        <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(data)} />
       </SearchBar>
       {data && data.length >= 1 && (
         <TagBox>
@@ -149,7 +157,7 @@ left-[-1.5rem]
 const TagBox = tw.div`
 pb-3
 pl-4
-z-10
+z-20
 absolute
  w-full 
 bg-gray-500
