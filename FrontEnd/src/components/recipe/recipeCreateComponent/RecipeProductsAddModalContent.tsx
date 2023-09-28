@@ -36,17 +36,15 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
     "가공식품",
     "안주류",
     "식재료",
+    "가공식사",
+    "음료",
+    "소스",
     "밀키트",
-
     "도시락",
     "샌드위치",
     "햄버거",
     "주먹밥",
     "김밥",
-
-    "즉석 튀김",
-    "즉석 베이커리",
-    "즉석 커피",
 
     "스낵",
     "비스켓",
@@ -59,23 +57,21 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
     "아이스크림",
     "과일",
 
-    "가공식사",
-    "안주류",
-    "식재료",
-
-    "음료",
     "아이스 드링크",
     "유제품",
 
+    "조미료",
+    "젤리",
+
+    "펫용품",
+    "차",
+    "즉석 튀김",
+    "즉석 베이커리",
+    "즉석 커피",
     "취미",
     "레져",
     "의약용품",
     "생활용품",
-    "조미료",
-    "젤리",
-    "소스",
-    "펫용품",
-    "차",
   ];
 
   const productSearchHandler = () => {
@@ -107,6 +103,12 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
     }
   };
 
+  const searchBarEnterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      productSearchHandler();
+    }
+  };
+
   //   const [keyword, setKeyword] = useRecoilState(ingredientState);
   useEffect(() => {
     setProductList([]);
@@ -131,10 +133,11 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
           className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem]"
           value={searchKeyword}
           onChange={inputChangeHandler}
+          onKeyDown={searchBarEnterHandler}
           placeholder="제품이름을 입력하세요"
         />
         <div
-          className="w-[3rem] bg-common-text-color text-[1rem] text-center text-white"
+          className="w-[3rem] py-1 mr-2 font-light bg-common-text-color text-[0.8rem] text-center text-white rounded-[0.5rem]"
           onClick={productSearchHandler}
         >
           검색
