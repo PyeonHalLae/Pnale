@@ -74,7 +74,9 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
     <Container>
       <CancelBtn />
       <FormBox>
-        <FormTitle>미리보기 사진</FormTitle>
+        <FormTitle>
+          미리보기 사진<span className="text-common-orange">*</span>
+        </FormTitle>
         {/*  */}
         <input
           type="file"
@@ -91,7 +93,9 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
       </FormBox>
 
       <FormBox>
-        <FormTitle>제목</FormTitle>
+        <FormTitle>
+          제목<span className="text-common-orange">*</span>
+        </FormTitle>
         <TitleBox
           rows={1}
           value={recipeTitle}
@@ -99,10 +103,13 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
           onChange={FormChangeHandler}
           placeholder="제목을 입력해주세요."
         ></TitleBox>
+        <InfoBox>최대 20자</InfoBox>
       </FormBox>
 
       <FormBox>
-        <FormTitle>간단 설명</FormTitle>
+        <FormTitle>
+          간단 설명<span className="text-common-orange">*</span>
+        </FormTitle>
         <IntroBox
           rows={1}
           value={intro}
@@ -110,6 +117,7 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
           onChange={FormChangeHandler}
           placeholder="레시피 간단 설명을 작성해주세요."
         ></IntroBox>
+        <InfoBox>최대 50자</InfoBox>
       </FormBox>
 
       <FormBox>
@@ -145,12 +153,21 @@ w-[100%]
 `;
 
 const FormBox = tw.div`
+relative
 mb-[1.5rem]
 w-[100%]
 `;
 
 const FormTitle = tw.div`
 text-[1.25rem]
+text-common-text-color
+`;
+
+const InfoBox = tw.div`
+absolute
+right-0
+bottom-[-0.5rem]
+text-[0.625rem]
 text-common-text-color
 `;
 

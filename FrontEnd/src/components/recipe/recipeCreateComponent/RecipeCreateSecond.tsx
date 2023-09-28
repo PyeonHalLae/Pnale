@@ -19,6 +19,14 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
     const newProducts = products.filter((product) => product.productId !== deleteId);
     setProducts(newProducts);
   };
+  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newProducts = products.map((product) => {
+      return product.productName === e.target.value
+        ? { ...product, isChangeable: !product.isChangeable }
+        : product;
+    });
+    setProducts(newProducts);
+  };
 
   return (
     <Container>
@@ -32,7 +40,9 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
             element={<RecipeProductsAddModalContent setModal={setIsModalActive} />}
           />
         )}
-        <ProductBoxTitle>재료 등록</ProductBoxTitle>
+        <ProductBoxTitle>
+          재료 등록<span className="text-common-orange">*</span>
+        </ProductBoxTitle>
         <ProductTableColName>
           <div className="w-[calc(100%-5rem)] flex justify-center items-center">
             <div>재료명</div>
@@ -51,7 +61,13 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
                 </div>
               </ProductNameBox>
               <ProductChangeBox>
-                <input className="inline-block" type="checkbox"></input>
+                <input
+                  className="inline-block"
+                  checked={product.isChangeable}
+                  value={product.productName}
+                  type="checkbox"
+                  onChange={checkHandler}
+                ></input>
               </ProductChangeBox>
               <div className="absolute right-[-1rem] h-[100%] flex flex-row-reverse items-center">
                 <img
@@ -105,10 +121,9 @@ w-[100%]
 
 const ProductsBox = tw.div`
 w-[100%]
-h-[34.375rem]
+h-[31.25rem]
 bg-white
 my-[3rem]
-rounded-[0.625rem]
 shadow
 `;
 
