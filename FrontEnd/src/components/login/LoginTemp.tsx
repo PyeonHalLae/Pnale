@@ -21,7 +21,7 @@ const LoginTemp = () => {
         if (res.data.code == 200) {
           setMemberInfo({ member: res.data.data });
           console.log(MemberInfo, "저장후");
-          navigate("/main");
+          navigate("/");
         } else {
           resetMemberInfo();
           navigate("/mypage");
