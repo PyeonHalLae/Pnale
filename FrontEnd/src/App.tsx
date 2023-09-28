@@ -25,6 +25,7 @@ import PyeneEvent from "@components/pyunE/PyeneEvent";
 import PyeneEventList from "@components/pyunE/PyeneEventList";
 import PyeneEventDetail from "@components/pyunE/PyeneEventDetail";
 import LoginMain from "@components/login/LoginMain";
+import LoginTemp from "@components/login/LoginTemp";
 
 //김효인 라우터
 import Recipe from "@components/recipe/Recipe";
@@ -77,6 +78,7 @@ function App() {
 
             {/* 로그인 페이지 */}
             <Route path="login" element={<LoginMain />}></Route>
+            <Route path="temp" element={<LoginTemp />}></Route>
 
             {/* 김효인 개발 페이지*/}
             <Route path="recipe" element={<Recipe />}>
