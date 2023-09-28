@@ -4,7 +4,7 @@ import tw from "tailwind-styled-components";
 // import { productFormType } from "../recipeCommonComponent/recipeFormType";
 import { recipeProductsState } from "@/recoil/khiRecoil";
 import { useRecoilState } from "recoil";
-import axios from "axios";
+import { customAxios } from "./../../../api/customAxios";
 
 interface Props {
   setModal: Dispatch<SetStateAction<boolean>>;
@@ -79,7 +79,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
       const data = {
         name: searchKeyword,
       };
-      axios
+      customAxios
         .post("/api/search", data)
         .then((res) => {
           setProductList(res.data.data);
@@ -92,7 +92,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
         name: searchKeyword,
         category: selectedCategory,
       };
-      axios
+      customAxios
         .post("/api/search/recipe", data)
         .then((res) => {
           setProductList(res.data.data);

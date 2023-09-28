@@ -10,13 +10,15 @@ import {
   recipeProductsState,
 } from "@/recoil/khiRecoil";
 
-// import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { customAxios } from "./../../../api/customAxios";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
 }
 
 const RecipeCreateThird = ({ stepHandler }: Props) => {
+  const navigate = useNavigate();
   const [contents, setContents] = useRecoilState(recipeContentsState);
   const products = useRecoilValue(recipeProductsState);
   const recipeForm = useRecoilValue(recipeFormState);
@@ -52,22 +54,53 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     //   recipeImg: recipeImg,
     //   userId: userId
     // }
+    const productsData = products.map((product) => {
+      return { prdId: product.productId, changeable: product.isChangeable };
+    });
 
-    // axios
-    //   .post("", FormData, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Bearer " + "key value",
-    //     },
-    //   })
-    //   .then(() => {})
-    //   .catch(() => {});
+    const data = {
+      rcpName: recipeForm.recipeTitle, // 레시피명
+      ingredients: productsData,
+      // [
+      //   // 재료 : 재료ID, 바꿀수 있는지 여부
+      //   { prdId: 36, changeable: true },
+      //   { prdId: 42, changeable: true },
+      //   { prdId: 52, changeable: false },
+      // ],
+      rcpThumb: recipeImg, // 대표 이미지
+      rcpSimp: recipeForm.intro, // 요약
+      rcpDesc: contents, // 본문
+      rcpVideo: recipeForm.relatedUrl, // 레시피 관련 영상
+    };
+    console.log(data);
+
+    customAxios
+      .post("/api/recipe/form", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        alert("작성성공");
+        resetForm();
+        restContents();
+        restImg();
+        restProducts();
+        navigate(`/recipe/${res.data.rcpId}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <Container>
       <CancelBtn />
-      <RecipeEditor contents={contents} setContents={setContents} />
+      <div className="bg-white w-[100%] h-[calc(31.25rem-6px)] mb-[3rem] rounded-[0.625rem]">
+        <RecipeEditor contents={contents} setContents={setContents} />
+      </div>
+
       <BtnBox>
         <WhiteBtn
           onClick={() => {
