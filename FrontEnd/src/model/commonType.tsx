@@ -19,6 +19,12 @@ export type CompEvent = {
   seventype: string;
 };
 
+// 검색창 입력시 자동 완성 추천 타입
+export type SearchResponseToRecommand = {
+  category: string;
+  id: number;
+  name: string;
+};
 // 제품 공통 카드의 제품정보
 export type CompProduct = {
   category: string;

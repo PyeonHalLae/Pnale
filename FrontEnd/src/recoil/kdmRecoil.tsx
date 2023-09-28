@@ -1,10 +1,10 @@
 import { atom } from "recoil";
 import { recoilPersist } from "recoil-persist";
 
-const { persistAtom: persistAtom1 } = recoilPersist({
-  key: "recoil-persist-session",
-  storage: sessionStorage, // 세션 스토리지 사용
-});
+// const { persistAtom: persistAtom1 } = recoilPersist({
+//   key: "recoil-persist-session",
+//   storage: sessionStorage, // 세션 스토리지 사용
+// });
 
 const { persistAtom: persistAtom2 } = recoilPersist({
   key: "recoil-persist-local", //로컬 스토리지 사용

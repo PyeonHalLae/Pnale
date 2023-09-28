@@ -59,6 +59,8 @@ p-2
 m-auto
 h-[22vh]
 justify-center
+min-w-[160px]
+min-h-[160px]
 flex`;
 
 const TextArea = tw.div`

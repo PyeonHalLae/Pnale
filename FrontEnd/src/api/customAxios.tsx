@@ -9,4 +9,10 @@ export const customAxios = axios.create({
 
 export const baseAxios = axios.create({
   baseURL: "https://pnale.online",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  withCredentials: true,
 });
+
+export default baseAxios;
