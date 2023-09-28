@@ -33,7 +33,7 @@ const PyeneEventList = () => {
   };
 
   useEffect(() => {
-    axios.get("/api/banner/" + pyenType + "?page=" + 1).then((res) => {
+    axios.get("/api/banner/" + pyenType + "?page=" + 0).then((res) => {
       console.log(res.data);
       setEventList(res.data.data);
     });
@@ -42,27 +42,51 @@ const PyeneEventList = () => {
   return (
     <>
       <PyeneEventHeader />
-      <EventMainBox>
-        {eventList &&
-          eventList.map((value, index) => (
-            <EventBanner
-              key={value.bannerId + index}
-              $imgurl={value.thumbnailImg}
-              onClick={() => changeIndexHanddler(index)}
-            >
-              <EventDetailInfo $isActive={activeIndex === index}>
-                <EventTitle>{value.bannerName}</EventTitle>
-                <EventDate>
-                  {value.startDate}
-                  {value.endDate && " ~ " + value.endDate}{" "}
-                </EventDate>
-                <EventDetilBtn onClick={() => navigate("" + value.bannerId, { state: value })}>
-                  자세히보기
-                </EventDetilBtn>
-              </EventDetailInfo>
-            </EventBanner>
-          ))}
-      </EventMainBox>
+      {pyenType == "SEVEN" ? (
+        <EventSevenMainBox>
+          {eventList &&
+            eventList.map((value, index) => (
+              <EventSevenBanner
+                key={value.bannerId + index}
+                $imgurl={value.thumbnailImg}
+                onClick={() => changeIndexHanddler(index)}
+              >
+                <EventSevenDetailInfo $isActive={activeIndex === index}>
+                  <EventTitle>{value.bannerName}</EventTitle>
+                  <EventDate>
+                    {value.startDate}
+                    {value.endDate && " ~ " + value.endDate}{" "}
+                  </EventDate>
+                  <EventDetilBtn onClick={() => navigate("" + value.bannerId, { state: value })}>
+                    자세히보기
+                  </EventDetilBtn>
+                </EventSevenDetailInfo>
+              </EventSevenBanner>
+            ))}
+        </EventSevenMainBox>
+      ) : (
+        <EventMainBox>
+          {eventList &&
+            eventList.map((value, index) => (
+              <EventBanner
+                key={value.bannerId + index}
+                $imgurl={value.thumbnailImg}
+                onClick={() => changeIndexHanddler(index)}
+              >
+                <EventDetailInfo $isActive={activeIndex === index}>
+                  <EventTitle>{value.bannerName}</EventTitle>
+                  <EventDate>
+                    {value.startDate}
+                    {value.endDate && " ~ " + value.endDate}{" "}
+                  </EventDate>
+                  <EventDetilBtn onClick={() => navigate("" + value.bannerId, { state: value })}>
+                    자세히보기
+                  </EventDetilBtn>
+                </EventDetailInfo>
+              </EventBanner>
+            ))}
+        </EventMainBox>
+      )}
     </>
   );
 };
@@ -135,4 +159,33 @@ const EventDetilBtn = styled.div`
   font-weight: bold;
   padding-top: 7px;
   z-index: 10;
+`;
+
+const EventSevenMainBox = tw.div`
+  w-full
+  h-[clac(100%-40px)]
+  overflow-scroll
+  grid
+  grid-cols-2
+  gap-1
+  mt-[70px]
+  mb-[15px]
+  `;
+
+const EventSevenBanner = styled.div<{ $imgurl: string }>`
+  position: relative;
+  display: inline-block;
+  height: 210px;
+  width: 100%;
+  background-image: url(${(props) => props.$imgurl});
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+`;
+
+const EventSevenDetailInfo = styled.div<{ $isActive: boolean }>`
+  width: 100%;
+  height: 100%;
+  background-color: rgba(51, 51, 51, 0.6);
+  display: ${(props) => (props.$isActive ? "block" : "none")};
 `;
