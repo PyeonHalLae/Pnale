@@ -96,7 +96,7 @@ export const RecipeEditor = ({ contents, setContents }: Props) => {
         modules={modules}
         theme="snow"
         placeholder="내용을 입력해주세요."
-        className="w-[100%] h-[34.375rem] mb-20 bg-white"
+        className="w-[100%] h-[28.125rem]"
       />
     </>
   );
