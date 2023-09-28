@@ -38,6 +38,7 @@ const Header = () => {
     const fakeEvent = { target: { value: name } } as React.ChangeEvent<HTMLInputElement>;
     handleInputChange(fakeEvent);
   };
+
   useEffect(() => {
     reset();
     // eslint-disable-next-line
@@ -51,7 +52,7 @@ const Header = () => {
         const response = await axios.post("/api/search", {
           name: name.input,
         });
-        console.log(response.data.data);
+        console.log("추천", response.data.data);
         return response.data.data;
       } else return [];
     },
@@ -90,14 +91,15 @@ const Header = () => {
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
         <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(name.input)} />
       </SearchBar>
-      <TagBox className="">
-        {data &&
-          data.map((index, key) => (
+      {data && data.length >= 1 && (
+        <TagBox>
+          {data.map((index, key) => (
             <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
               {index.name}
             </RecommandTag>
           ))}
-      </TagBox>
+        </TagBox>
+      )}
     </>
   );
 };
@@ -109,7 +111,6 @@ mx-auto
 w-full
 h-[55px]
 flex
-bg-white
 animate-moveToRight
 `;
 
@@ -151,9 +152,10 @@ pl-4
 z-10
 absolute
  w-full 
-bg-white
+bg-gray-500
 max-w-[450px]
 `;
+
 const RecommandTag = tw.div`
 mt-2
 `;

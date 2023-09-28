@@ -9,7 +9,7 @@ const SearchInput = () => {
 
   return (
     <SearchMain>
-      <div className="flex items-end justify-between px-4 h-11 text-common-text-color">
+      <div className="flex items-end justify-between px-4 text-common-text-color">
         <p className="text-2xl font-bold">최근 검색어</p>
         <button className="text-common-text-gray-color">전체삭제</button>
       </div>
