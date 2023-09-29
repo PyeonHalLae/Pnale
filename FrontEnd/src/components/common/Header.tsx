@@ -1,14 +1,15 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useEffect } from "react";
+import axios, { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
 import { searchInputData } from "@recoil/kdmRecoil";
+import { useQuery } from "react-query";
+import { SearchResponseToRecommand } from "@/model/commonType";
 
 const Header = () => {
   const navigate = useNavigate();
-  const [isActive, setIsActive] = useState(false);
-  const [name, setName] = useRecoilState(searchInputData);
+  const [name, setName] = useRecoilState<{ input: string }>(searchInputData);
 
   const backBtn = () => {
     navigate(-1);
@@ -17,39 +18,69 @@ const Header = () => {
   const reset = () => {
     setName({ ...name, input: "" });
   };
-  const toggleSearch = () => {
-    setIsActive((prevIsActive) => !prevIsActive);
-    navigate("/search");
+  const toggleSearch = async (name: string) => {
+    const response = await axios.post("/api/search/result", {
+      ids: [14770],
+    });
+    console.log(response.data.data);
   };
 
-  const handleInputChange = (e) => {
-    setName({ ...name, input: e.target.value });
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setName((prev) => ({
+      ...prev,
+      input: inputValue, // Recoil 상태 업데이트
+    }));
+  };
+
+  const handleDivClick = (name: string) => {
+    console.log(name);
+    const fakeEvent = { target: { value: name } } as React.ChangeEvent<HTMLInputElement>;
+    handleInputChange(fakeEvent);
   };
 
   useEffect(() => {
     reset();
+    // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    const searchTag = async () => {
-      console.log("요청 보낸다", name);
-      try {
+  // eslint-disable-next-line
+  const { data, isLoading, isError, error } = useQuery<SearchResponseToRecommand[], AxiosError>(
+    ["searchTag", name.input],
+    async () => {
+      if (name.input !== "") {
         const response = await axios.post("/api/search", {
           name: name.input,
         });
-        console.log("요청 성공:", response.data);
-      } catch (error) {
-        console.error("요청 실패:", error);
-      }
-    };
-    if (name.input !== "") {
-      searchTag();
+        console.log("추천", response.data.data);
+        return response.data.data;
+      } else return [];
+    },
+    {
+      retry: 2,
     }
-  }, [name]);
+  );
+
+  // useEffect(() => {
+  //   const searchTag = async () => {
+  //     console.log("요청 보낸다: ", name.input);
+  //     try {
+  //       const response = await axios.post("/api/search", {
+  //         name: name.input,
+  //       });
+  //       console.log("요청 성공:", ...response.data.data);
+  //     } catch (error) {
+  //       console.error("요청 실패:", error);
+  //     }
+  //   };
+  //   if (name.input !== "") {
+  //     searchTag();
+  //   }
+  // }, [name]);
 
   return (
     <>
-      <SearchBar className={isActive ? "active" : ""}>
+      <SearchBar>
         <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
         <Input
           type="text"
@@ -58,13 +89,17 @@ const Header = () => {
           onChange={handleInputChange}
         />
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
-        <SearchBtn src="/img/btn/search-blue.png" onClick={toggleSearch} />
+        <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(name.input)} />
       </SearchBar>
-      {/* <div className="absolute w-full bg-slate-400 max-w-[450px]">
-        {recommandTag.map((index) => (
-          <div>{index}</div>
-        ))}
-      </div> */}
+      {data && data.length >= 1 && (
+        <TagBox>
+          {data.map((index, key) => (
+            <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
+              {index.name}
+            </RecommandTag>
+          ))}
+        </TagBox>
+      )}
     </>
   );
 };
@@ -76,7 +111,6 @@ mx-auto
 w-full
 h-[55px]
 flex
-bg-white
 animate-moveToRight
 `;
 
@@ -110,4 +144,18 @@ w-6
 h-6 
 relative
 left-[-1.5rem]
+`;
+
+const TagBox = tw.div`
+pb-3
+pl-4
+z-10
+absolute
+ w-full 
+bg-gray-500
+max-w-[450px]
+`;
+
+const RecommandTag = tw.div`
+mt-2
 `;
