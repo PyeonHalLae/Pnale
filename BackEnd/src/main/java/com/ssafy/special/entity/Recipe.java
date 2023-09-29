@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -63,6 +64,15 @@ public class Recipe {
     @Builder.Default
     private List<RecipeIngredient> ingredients = new LinkedList<>();
 
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @Builder.Default
+    private List<RecipeReview> reviews = new LinkedList<>();
+
+    public void addReview(RecipeReview review) {
+        reviews.add(review);
+        review.setRecipe(this);
+    }
+
     /**
      * CRUD와 관련된 엔티티 내부의 연산입니다.
      */
@@ -91,7 +101,8 @@ public class Recipe {
         return RecipeListDTO.builder()
                 .rcpId(this.recipeId)
                 .rcpName(this.recipeName)
-                .rcpThumb(this.recipeThumbnail)
+                .rcpThumbnail(this.recipeThumbnail)
+                .rcpSimple(this.recipeSimple)
                 .member(this.writer.toViewDTO())
                 .createdAt(this.createdAt)
                 .replyCnt(this.replyCnt)
