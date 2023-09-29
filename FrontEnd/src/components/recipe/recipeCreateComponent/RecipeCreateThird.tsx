@@ -1,28 +1,51 @@
 import { Dispatch, SetStateAction } from "react";
 import { RecipeEditor } from "../recipeCommonComponent/RecipeEditor";
 import tw from "tailwind-styled-components";
-import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
-// import axios from "axios";
+import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
+import {
+  recipeFormContent,
+  recipeFormState,
+  recipeFormImg,
+  recipeFormProduct,
+} from "@/recoil/khiRecoil";
+
+import { useNavigate } from "react-router-dom";
+import { customAxios } from "./../../../api/customAxios";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  recipeForm: recipeFormType;
-  contents: string;
-  setContents: Dispatch<SetStateAction<string>>;
-  recipeImg: string;
 }
 
-const RecipeCreateThird = ({
-  stepHandler,
-  contents,
-  setContents,
-  // recipeImg,
-  recipeForm,
-}: Props) => {
+const RecipeCreateThird = ({ stepHandler }: Props) => {
+  const navigate = useNavigate();
+  const [contents, setContents] = useRecoilState(recipeFormContent);
+  const products = useRecoilValue(recipeFormProduct);
+  const recipeForm = useRecoilValue(recipeFormState);
+  const recipeImg = useRecoilValue(recipeFormImg);
+
+  const resetForm = useResetRecoilState(recipeFormState);
+  const restContents = useResetRecoilState(recipeFormContent);
+  const restImg = useResetRecoilState(recipeFormImg);
+  const restProducts = useResetRecoilState(recipeFormProduct);
+
   const submitHandler = () => {
     console.log(recipeForm);
+    console.log("레시피폼");
 
+    console.log(products);
+    console.log("상품리스트");
+
+    console.log(recipeImg);
+    console.log("레시피이미지");
+
+    console.log(contents);
+    console.log("레시피내용");
+
+    resetForm();
+    restContents();
+    restImg();
+    restProducts();
     // json으로 보내야함
     // recipeData = {
     //   ...recipeForm,
@@ -31,30 +54,53 @@ const RecipeCreateThird = ({
     //   recipeImg: recipeImg,
     //   userId: userId
     // }
+    const productsData = products.map((product) => {
+      return { prdId: product.productId, changeable: product.isChangeable };
+    });
 
-    // axios
-    //   .post(url, FormData, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //       Authorization: "Bearer " + "key value",
-    //     },
-    //   })
-    //   .then(() => {})
-    //   .catch(() => {});
+    const data = {
+      rcpName: recipeForm.recipeTitle, // 레시피명
+      ingredients: productsData,
+      // [
+      //   // 재료 : 재료ID, 바꿀수 있는지 여부
+      //   { prdId: 36, changeable: true },
+      //   { prdId: 42, changeable: true },
+      //   { prdId: 52, changeable: false },
+      // ],
+      rcpThumb: recipeImg, // 대표 이미지
+      rcpSimp: recipeForm.intro, // 요약
+      rcpDesc: contents, // 본문
+      rcpVideo: recipeForm.relatedUrl, // 레시피 관련 영상
+    };
+    console.log(data);
+
+    customAxios
+      .post("/api/recipe/form", data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        alert("작성성공");
+        resetForm();
+        restContents();
+        restImg();
+        restProducts();
+        navigate(`/recipe/${res.data.rcpId}`);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <Container>
       <CancelBtn />
-      <RecipeEditor contents={contents} setContents={setContents} />
-      <button
-        onClick={() => {
-          console.log(contents);
-          console.log(recipeForm);
-        }}
-      >
-        ㅎㅎㅎ
-      </button>
+      <div className="bg-white w-[100%] h-[calc(31.25rem-6px)] mb-[3rem] rounded-[0.625rem]">
+        <RecipeEditor contents={contents} setContents={setContents} />
+      </div>
+
       <BtnBox>
         <WhiteBtn
           onClick={() => {

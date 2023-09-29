@@ -4,15 +4,29 @@ import { productFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
 import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
 import RecipeProductsAddModalContent from "./RecipeProductsAddModalContent";
+import { recipeFormProduct } from "@/recoil/khiRecoil";
+import { useRecoilState } from "recoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  products: productFormType[];
-  setProducts: Dispatch<SetStateAction<productFormType[]>>;
 }
 
-const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
+const RecipeCreateSecond = ({ stepHandler }: Props) => {
+  const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
+
+  const productDeleteHandler = (deleteId: number) => {
+    const newProducts = products.filter((product) => product.productId !== deleteId);
+    setProducts(newProducts);
+  };
+  const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newProducts = products.map((product) => {
+      return product.productName === e.target.value
+        ? { ...product, isChangeable: !product.isChangeable }
+        : product;
+    });
+    setProducts(newProducts);
+  };
 
   return (
     <Container>
@@ -21,18 +35,14 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
         {isModalActive && (
           <RecipeCommonModal
             setModal={setIsModalActive}
-            width="22.5"
+            width="22"
             height="36"
-            element={
-              <RecipeProductsAddModalContent
-                products={products}
-                setProducts={setProducts}
-                setModal={setIsModalActive}
-              />
-            }
+            element={<RecipeProductsAddModalContent setModal={setIsModalActive} />}
           />
         )}
-        <ProductBoxTitle>재료 등록</ProductBoxTitle>
+        <ProductBoxTitle>
+          재료 등록<span className="text-common-orange">*</span>
+        </ProductBoxTitle>
         <ProductTableColName>
           <div className="w-[calc(100%-5rem)] flex justify-center items-center">
             <div>재료명</div>
@@ -43,7 +53,7 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
         </ProductTableColName>
         {products.map((product: productFormType, index: number) => {
           return (
-            <ProductItem>
+            <ProductItem key={index}>
               <ProductNameBox>
                 <div className="w-[4rem] text-center">{index + 1}</div>
                 <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
@@ -51,22 +61,26 @@ const RecipeCreateSecond = ({ stepHandler, products, setProducts }: Props) => {
                 </div>
               </ProductNameBox>
               <ProductChangeBox>
-                <input className="inline-block" type="checkbox"></input>
+                <input
+                  className="inline-block"
+                  checked={product.isChangeable}
+                  value={product.productName}
+                  type="checkbox"
+                  onChange={checkHandler}
+                ></input>
               </ProductChangeBox>
+              <div className="absolute right-[-1rem] h-[100%] flex flex-row-reverse items-center">
+                <img
+                  className="w-[1.5rem] border"
+                  src="/img/btn/close-btn.png"
+                  onClick={() => {
+                    productDeleteHandler(product.productId);
+                  }}
+                />
+              </div>
             </ProductItem>
           );
         })}
-        <ProductItem>
-          <ProductNameBox>
-            <div className="w-[4rem] text-center">1</div>
-            <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
-              상품이름
-            </div>
-          </ProductNameBox>
-          <ProductChangeBox>
-            <input className="inline-block" type="checkbox"></input>
-          </ProductChangeBox>
-        </ProductItem>
 
         <ProductAddBtn
           onClick={() => {
@@ -107,10 +121,9 @@ w-[100%]
 
 const ProductsBox = tw.div`
 w-[100%]
-h-[34.375rem]
+h-[31.25rem]
 bg-white
 my-[3rem]
-rounded-[0.625rem]
 shadow
 `;
 
@@ -134,6 +147,7 @@ border-b-2
 `;
 
 const ProductItem = tw.div`
+relative
 w-[calc(100%-3rem)]
 h-[2rem]
 flex

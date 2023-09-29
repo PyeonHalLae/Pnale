@@ -1,9 +1,26 @@
-import React from "react";
 import { useNavigate } from "react-router-dom";
+import {
+  recipeFormContent,
+  recipeFormState,
+  recipeFormImg,
+  recipeFormProduct,
+} from "@/recoil/khiRecoil";
+import { useResetRecoilState } from "recoil";
 
 const CancelBtn = () => {
   const navigate = useNavigate();
+
+  const resetForm = useResetRecoilState(recipeFormState);
+  const restContents = useResetRecoilState(recipeFormContent);
+  const restImg = useResetRecoilState(recipeFormImg);
+  const restProducts = useResetRecoilState(recipeFormProduct);
+
   const cancleBtn = () => {
+    resetForm();
+    restContents();
+    restImg();
+    restProducts();
+
     navigate("/recipe");
   };
   return (

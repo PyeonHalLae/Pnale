@@ -1,8 +1,13 @@
 import tw from "tailwind-styled-components";
-import { useState } from "react";
-// import { useEffect } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { customAxios } from "./../../../api/customAxios";
 
-const RecipeCommentInput = () => {
+interface Props {
+  recipeId: number;
+  setRefresh: Dispatch<SetStateAction<boolean>>;
+}
+
+const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
   const [commentContent, setCommentContent] = useState("");
 
   // 댓글 내용 입력
@@ -13,6 +18,27 @@ const RecipeCommentInput = () => {
 
   // 작성하기 버튼 클릭
   const commentCreateHandler = () => {
+    const data = {
+      rcpId: recipeId,
+      revDesc: commentContent,
+    };
+    customAxios
+      .post(`/api/recipe/review?rcpId=${recipeId}`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        setCommentContent("");
+        setRefresh((prev) => {
+          return !prev;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
     console.log(commentContent);
   };
 

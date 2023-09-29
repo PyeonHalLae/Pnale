@@ -3,28 +3,30 @@ import tw from "tailwind-styled-components";
 import RecipeCommentCard from "./RecipeCommentCard";
 import RecipeCommentInput from "./RecipeCommentInput";
 import { useEffect, useState } from "react";
+import { customAxios } from "./../../../api/customAxios";
+import { commentInfoType } from "./recipeDetailType";
 
-interface commentType {
-  commentContent: string;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  commentId: number;
-}
+const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
+  const [commentList, setCommentList] = useState<commentInfoType[]>([]);
+  const [refresh, setRefresh] = useState<boolean>(false);
 
-const RecipeCommentBox = () => {
-  const [commentList, setCommentList] = useState<commentType[]>([]);
   useEffect(() => {
-    setCommentList([
-      {
-        commentContent: "두줄제목입니다입니다입니다입니다",
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        commentId: 1,
-      },
-    ]);
-  }, []);
+    // 처음 렌더링될 때 받아옴
+    customAxios
+      .get("/api/recipe/reply", {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + "key value",
+        },
+        params: { rcpId: recipeId },
+      })
+      .then((res) => {
+        setCommentList(res.data.replys);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [recipeId, refresh]);
 
   return (
     <Container>
@@ -35,32 +37,14 @@ const RecipeCommentBox = () => {
       </CommentBoxHeader>
 
       {commentList.map((commentItem, index) => (
-        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
-      ))}
-      {commentList.map((commentItem, index) => (
-        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
-      ))}
-      {commentList.map((commentItem, index) => (
-        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
-      ))}
-      {commentList.map((commentItem, index) => (
-        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
-      ))}
-      {commentList.map((commentItem, index) => (
-        <RecipeCommentCard key={commentItem.commentId + index} commentInfo={commentItem} />
+        <RecipeCommentCard
+          key={commentItem.revId + index}
+          commentInfo={commentItem}
+          setRefresh={setRefresh}
+        />
       ))}
 
-      <ViewMoreBtnBox>
-        <ViewMoreBtn
-          onClick={() => {
-            console.log("ㅎㅎ");
-          }}
-        >
-          더보기 V
-        </ViewMoreBtn>
-      </ViewMoreBtnBox>
-
-      <RecipeCommentInput />
+      <RecipeCommentInput recipeId={recipeId} setRefresh={setRefresh} />
     </Container>
   );
 };
@@ -73,12 +57,4 @@ h-auto w-[100%] bg-white text-common-text-color
 
 const CommentBoxHeader = tw.div`
     pt-[1.75rem] pl-[1.94rem] pb-[0.875rem] text-[1.5rem]
-`;
-
-const ViewMoreBtnBox = tw.div`
-  flex min-w-[22.5rem] max-w-[28.125rem] py-[1.25rem] justify-center items-center
-  text-common-text-gray-color 
-`;
-const ViewMoreBtn = tw.button`
-  w-[4.6875rem] h-[1.5rem] text-center
 `;
