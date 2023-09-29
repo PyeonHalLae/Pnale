@@ -1,11 +1,10 @@
 package com.ssafy.special.member.model.vo;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import com.ssafy.special.entity.Member;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
@@ -15,4 +14,12 @@ public class MemberViewDTO {
     private Long memberId;
     private String nickname;
     private String memberImg;
+
+    public static MemberViewDTO toDTO(Member member){
+        return MemberViewDTO.builder()
+                .memberId(member.getMemberId())
+                .nickname(member.getNickname())
+                .memberImg(member.getMemberImg())
+                .build();
+    }
 }

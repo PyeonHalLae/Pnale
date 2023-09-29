@@ -25,8 +25,6 @@ public enum CustomErrorCode {
     //잘못된 TOKEN 5000
     TOKEN_UNDEFINED_ERROR(5000, "토큰을 해독하는 과정에서 알 수 없는 오류가 발생하였습니다.");
 
-    //레시피 6000
-
     private final int code;
     private final String message;
 }

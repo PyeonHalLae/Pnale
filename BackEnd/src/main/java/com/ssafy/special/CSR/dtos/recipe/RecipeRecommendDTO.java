@@ -16,7 +16,7 @@ public class RecipeRecommendDTO {
     private String rcpName;
     private MemberViewDTO member;
     private List<String> ingredients;
-    private String rcpTemp;
+    private String rcpSimple;
     private Long likeCnt;
     private Long replyCnt;
     private Long viewCnt;
