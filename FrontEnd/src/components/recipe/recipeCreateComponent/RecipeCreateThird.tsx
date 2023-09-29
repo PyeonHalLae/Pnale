@@ -4,10 +4,10 @@ import tw from "tailwind-styled-components";
 import CancelBtn from "./CancelBtn";
 import { useRecoilState, useRecoilValue, useResetRecoilState } from "recoil";
 import {
-  recipeContentsState,
+  recipeFormContent,
   recipeFormState,
-  recipeImgState,
-  recipeProductsState,
+  recipeFormImg,
+  recipeFormProduct,
 } from "@/recoil/khiRecoil";
 
 import { useNavigate } from "react-router-dom";
@@ -19,15 +19,15 @@ interface Props {
 
 const RecipeCreateThird = ({ stepHandler }: Props) => {
   const navigate = useNavigate();
-  const [contents, setContents] = useRecoilState(recipeContentsState);
-  const products = useRecoilValue(recipeProductsState);
+  const [contents, setContents] = useRecoilState(recipeFormContent);
+  const products = useRecoilValue(recipeFormProduct);
   const recipeForm = useRecoilValue(recipeFormState);
-  const recipeImg = useRecoilValue(recipeImgState);
+  const recipeImg = useRecoilValue(recipeFormImg);
 
   const resetForm = useResetRecoilState(recipeFormState);
-  const restContents = useResetRecoilState(recipeContentsState);
-  const restImg = useResetRecoilState(recipeImgState);
-  const restProducts = useResetRecoilState(recipeProductsState);
+  const restContents = useResetRecoilState(recipeFormContent);
+  const restImg = useResetRecoilState(recipeFormImg);
+  const restProducts = useResetRecoilState(recipeFormProduct);
 
   const submitHandler = () => {
     console.log(recipeForm);

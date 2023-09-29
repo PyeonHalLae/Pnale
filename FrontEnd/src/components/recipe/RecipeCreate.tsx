@@ -8,18 +8,18 @@ import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
 
 import { useResetRecoilState } from "recoil";
 import {
-  recipeContentsState,
   recipeFormState,
-  recipeImgState,
-  recipeProductsState,
+  recipeFormProduct,
+  recipeFormImg,
+  recipeFormContent,
 } from "@/recoil/khiRecoil";
 
 const RecipeCreate = () => {
   const [step, setStep] = useState<string>("1");
   const resetForm = useResetRecoilState(recipeFormState);
-  const restContents = useResetRecoilState(recipeContentsState);
-  const restImg = useResetRecoilState(recipeImgState);
-  const restProducts = useResetRecoilState(recipeProductsState);
+  const restContents = useResetRecoilState(recipeFormContent);
+  const restImg = useResetRecoilState(recipeFormImg);
+  const restProducts = useResetRecoilState(recipeFormProduct);
 
   useEffect(() => {
     resetForm();

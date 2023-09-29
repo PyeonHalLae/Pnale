@@ -4,7 +4,7 @@ import { productFormType } from "./../recipeCommonComponent/recipeFormType";
 import CancelBtn from "./CancelBtn";
 import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
 import RecipeProductsAddModalContent from "./RecipeProductsAddModalContent";
-import { recipeProductsState } from "@/recoil/khiRecoil";
+import { recipeFormProduct } from "@/recoil/khiRecoil";
 import { useRecoilState } from "recoil";
 
 interface Props {
@@ -12,7 +12,7 @@ interface Props {
 }
 
 const RecipeCreateSecond = ({ stepHandler }: Props) => {
-  const [products, setProducts] = useRecoilState(recipeProductsState);
+  const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
   const productDeleteHandler = (deleteId: number) => {

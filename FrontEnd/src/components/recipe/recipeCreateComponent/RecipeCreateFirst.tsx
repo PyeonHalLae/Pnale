@@ -3,7 +3,7 @@ import tw from "tailwind-styled-components";
 import axios from "axios";
 import CancelBtn from "./CancelBtn";
 import { useRecoilState } from "recoil";
-import { recipeFormState, recipeImgState } from "@/recoil/khiRecoil";
+import { recipeFormState, recipeFormImg } from "@/recoil/khiRecoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
@@ -11,7 +11,7 @@ interface Props {
 
 const RecipeCreateFirst = ({ stepHandler }: Props) => {
   const [{ recipeTitle, intro, relatedUrl }, setRecipeForm] = useRecoilState(recipeFormState);
-  const [recipeImg, setRecipeImg] = useRecoilState(recipeImgState);
+  const [recipeImg, setRecipeImg] = useRecoilState(recipeFormImg);
 
   const inputFileRef = useRef(null);
 

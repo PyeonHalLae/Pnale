@@ -2,7 +2,7 @@ import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 // import { productFormType } from "../recipeCommonComponent/recipeFormType";
-import { recipeProductsState } from "@/recoil/khiRecoil";
+import { recipeFormProduct } from "@/recoil/khiRecoil";
 import { useRecoilState } from "recoil";
 import { customAxios } from "./../../../api/customAxios";
 
@@ -20,7 +20,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
   const disableModal = () => {
     setModal(false);
   };
-  const [products, setProducts] = useRecoilState(recipeProductsState);
+  const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const [productList, setProductList] = useState<ProductInfoType[]>([]);

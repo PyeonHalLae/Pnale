@@ -4,7 +4,7 @@ const RecipeDetailHeaderBar = () => {
   const navigate = useNavigate();
 
   const backBtn = () => {
-    navigate(-1);
+    navigate("/recipe");
   };
 
   const manageBtn = () => {

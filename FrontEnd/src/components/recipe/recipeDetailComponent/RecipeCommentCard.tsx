@@ -1,31 +1,31 @@
 import tw from "tailwind-styled-components";
+import { commentInfoType } from "./recipeDetailType";
+import { Dispatch, SetStateAction } from "react";
 
-interface commentType {
-  commentContent: string;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  commentId: number;
+interface Props {
+  commentInfo: commentInfoType;
+  setRefresh: Dispatch<SetStateAction<boolean>>;
 }
 
-const RecipeCommentCard = ({ commentInfo }: { commentInfo: commentType }) => {
+const RecipeCommentCard = ({ commentInfo }: Props) => {
   return (
     <CommentCardContainer>
       <ImgBox>
-        <Img src={commentInfo.userImg} />
+        <Img src={commentInfo.user.usrImg} />
       </ImgBox>
       <ContentBox>
         <CommentNameBox>
-          <div className="w-[8rem]">{commentInfo.userName}</div>
+          <div className="w-[8rem]">{commentInfo.user.nickname}</div>
 
+          {/* 유저가 같을 때만 노출 */}
           <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
             <CommentManageBtn>삭제</CommentManageBtn>
             <CommentManageBtn>수정</CommentManageBtn>
           </div>
         </CommentNameBox>
-        <CommentContentBox>{commentInfo.commentContent}</CommentContentBox>
+        <CommentContentBox>{commentInfo.revDesc}</CommentContentBox>
         <div className="text-[0.625rem] text-common-text-gray-color font-medium">
-          {commentInfo.createdDate}
+          {commentInfo.createdAt}
         </div>
       </ContentBox>
     </CommentCardContainer>
