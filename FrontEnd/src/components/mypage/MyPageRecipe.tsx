@@ -39,7 +39,9 @@ const MyPageRecipe = () => {
       setLikeRecipeState(false);
       setRecipeType("MYRECIPE");
       axios
-        .get("/api/mypage/recipe?page=0")
+        .get("/api/mypage/recipe?page=0", {
+          withCredentials: true,
+        })
         .then((res) => {
           console.log(res.data.data.content, "성공");
           setRecipeList(res.data.data.content);
@@ -73,7 +75,9 @@ const MyPageRecipe = () => {
       setRecipeType("LIKERECIPE");
       //엑시오스 들어갈 예정
       axios
-        .get("/api/mypage/pick_recipe?page=0")
+        .get("/api/mypage/pick_recipe?page=0", {
+          withCredentials: true,
+        })
         .then((res) => {
           console.log(res.data.data.content, "성공");
           setRecipeList(res.data.data.content);
