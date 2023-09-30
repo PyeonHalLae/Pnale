@@ -84,7 +84,7 @@ const PyeneShopProductNineView = ({
       axios
         .post("/api/conv/filter?page=" + (currentPage - 1), {
           sort: getFilterInfo.sort,
-          dataType: "EVENT",
+          dataType: "PB",
           corp: $pyenType,
           event: getFilterInfo.event,
           category: getFilterInfo.category,
@@ -92,6 +92,7 @@ const PyeneShopProductNineView = ({
         .then((res) => {
           console.log("독점 서버 호출 ", currentPage, $pyenType);
           const data = res.data.data;
+          console.log(data);
           setTotalPage(data.totalPages);
           setProductList(data.content);
           PageNationSettion();
