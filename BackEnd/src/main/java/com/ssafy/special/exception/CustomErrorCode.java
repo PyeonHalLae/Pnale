@@ -20,7 +20,7 @@ public enum CustomErrorCode {
     ULP_NOT_FOUND(2000, "해당 상품에 유저 좋아요 정보를 찾을 수 없습니다."),
 
     //MEMBER 관련
-    USER_NOT_FOUND(3000, "해당 유저를 찾을 수 없습니다."),
+    MEMBER_NOT_FOUND(3000, "해당 유저를 찾을 수 없습니다."),
     INVALID_MEMBER(3001, "유저 정보가 올바르지 않습니다."),
 
     //행사 상품 관련
