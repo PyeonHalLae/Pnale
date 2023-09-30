@@ -97,7 +97,7 @@ public class Recipe {
 
 
     //DTO로 변화시키는 엔티티 내부의 연산입니다.
-    public RecipeListDTO toListDto(boolean like){
+    public RecipeListDTO toListDto(boolean like, boolean myRecipe){
         return RecipeListDTO.builder()
                 .rcpId(this.recipeId)
                 .rcpName(this.recipeName)
@@ -110,6 +110,7 @@ public class Recipe {
                 .viewCnt(this.viewCnt)
                 .influence(this.influence)
                 .like(like)
+                .myRecipe(myRecipe)
                 .build();
     }
 }

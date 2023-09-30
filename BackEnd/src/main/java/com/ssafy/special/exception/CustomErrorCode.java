@@ -6,6 +6,9 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum CustomErrorCode {
+    //글로벌한 것
+    EXPIRED_TOKEN(401, "액세스 토큰이 존재하나 유효하지 않습니다."),
+    FORBIDDEN(403, "로그인 정보가 없거나 만료되어 재로그인이 필요합니다"),
 
     //상품관련
     PRODUCT_NOT_FOUND(1000, "해당 상품 정보를 찾을 수 없습니다."),
@@ -16,7 +19,7 @@ public enum CustomErrorCode {
     //USER LIKE PRODUCT 관련
     ULP_NOT_FOUND(2000, "해당 상품에 유저 좋아요 정보를 찾을 수 없습니다."),
 
-    //User 관련
+    //MEMBER 관련
     USER_NOT_FOUND(3000, "해당 유저를 찾을 수 없습니다."),
 
     //행사 상품 관련

@@ -13,8 +13,8 @@ import java.util.Map;
 public class RecipeWriteDTO {
     private String rcpName;
     private List<Ingredients> ingredients;
-    private String rcpThumb;
-    private String rcpSimp;
+    private String rcpThumbnail;
+    private String rcpSimple;
     private String rcpDesc;
     private String rcpVideo;
 

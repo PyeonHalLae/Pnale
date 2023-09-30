@@ -136,9 +136,8 @@ public class JwtService {
     @Transactional
     public void updateRefreshToken(Long memberId, String refreshToken) {
         memberRepository.findByMemberId(memberId)
-                .ifPresentOrElse(
-                        member -> member.updateRefreshToken(refreshToken),
-                        () -> new Exception("일치하는 회원이 없습니다.")
+                .ifPresent(
+                        member -> member.updateRefreshToken(refreshToken)
                 );
     }
 
