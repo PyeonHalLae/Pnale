@@ -2,6 +2,7 @@ package com.ssafy.special.entity;
 
 import com.ssafy.special.enums.SocialType;
 import com.ssafy.special.enums.RoleType;
+import com.ssafy.special.member.model.vo.MemberInfoDTO;
 import com.ssafy.special.member.model.vo.MemberViewDTO;
 import lombok.*;
 import org.elasticsearch.monitor.os.OsStats;
@@ -63,6 +64,16 @@ public class Member {
                 .build();
     }
 
+    public MemberInfoDTO toInfoDTO(){
+        return MemberInfoDTO.builder()
+                .memberId(this.memberId)
+                .nickname(this.nickname)
+                .socialType(this.social)
+                .email(this.email)
+                .memberImg(this.memberImg)
+                .mailReceive(this.mailReceive)
+                .build();
+    }
     public Member updateMemberInfo(String memberImg, String nickname, boolean mailReceive){
         this.memberImg = memberImg;
         this.nickname = nickname;

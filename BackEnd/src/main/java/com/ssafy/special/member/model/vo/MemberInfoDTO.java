@@ -1,5 +1,6 @@
 package com.ssafy.special.member.model.vo;
 
+import com.ssafy.special.enums.SocialType;
 import lombok.*;
 
 @Getter
@@ -9,7 +10,8 @@ import lombok.*;
 public class MemberInfoDTO {
     private Long memberId;
     private String nickname;
-    private String socialType;
+    private SocialType socialType;
     private String email;
     private String memberImg;
+    private boolean mailReceive;
 }

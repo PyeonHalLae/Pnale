@@ -137,7 +137,7 @@ public class RecipeService {
         List<Recipe> recipePage = recipeRepository.findAll(pageable).getContent();
         return makeLists(memberId, recipePage);
     }
-    public List<RecipeListDTO> makeLists(Long memberId, List<Recipe> recipes){
+    private List<RecipeListDTO> makeLists(Long memberId, List<Recipe> recipes){
         return recipes
                 .stream()
                 .map(recipe -> {
@@ -153,7 +153,7 @@ public class RecipeService {
      * 해당 레시피의 댓글을 모두 찾고, 스트림을 통해 적당한 DTO(RecipeReviewDTO)로 변환하여 반환합니다.
      * 댓글이 아무것도 없는 경우, null값을 반환하여 컨트롤러가 처리할 수 있도록 합니다.
      */
-    public List<RecipeReviewDTO> readAllReviews(Long rcpId, Long memberId, Pageable pageable){
+    private List<RecipeReviewDTO> readAllReviews(Long rcpId, Long memberId, Pageable pageable){
         Recipe recipe = recipeRepository.findById(rcpId).orElseThrow();
         Page<RecipeReview> lists = recipeReviewRepository.findAllByRecipeAndStatusNot(recipe, ReviewStatusType.DELETED, pageable);
         if(lists.isEmpty()) return null;

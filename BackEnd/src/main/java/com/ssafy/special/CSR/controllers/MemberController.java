@@ -37,12 +37,17 @@ public class MemberController {
         Long memberId = (Long)request.getAttribute("memberId");
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
-        MemberInfoDTO memberInfo = MemberInfoDTO.builder().memberId(memberId).nickname(member.getNickname()).memberImg(member.getMemberImg())
-                .email(member.getEmail()).socialType(member.getSocial().name()).build();
+        MemberInfoDTO memberInfo = MemberInfoDTO.builder()
+                .memberId(memberId)
+                .nickname(member.getNickname())
+                .memberImg(member.getMemberImg())
+                .email(member.getEmail())
+                .socialType(member.getSocial())
+                .mailReceive(member.isMailReceive())
+                .build();
 
         return new DataResponse<MemberInfoDTO>(200, "유저 정보를 출력합니다.", memberInfo);
-
-
+        //return new DataResponse<MemberInfoDTO>(200, "유저 정보를 출력합니다.", memberRepository.findByMemberId(memberId).map(Member::toInfoDTO).orElseThrow(() -> new RuntimeException("Member not found")););
     }
 
     @PostMapping("/logout")

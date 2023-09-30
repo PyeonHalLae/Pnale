@@ -17,4 +17,6 @@ public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByLoginIdAndRole(String LoginId, RoleType role);
     Optional<Member> findByRefreshToken(String refreshToken);
 
+
+
 }
