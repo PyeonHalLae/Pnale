@@ -80,6 +80,7 @@ const MyPageRecipe = () => {
         })
         .catch((err) => {
           console.log("에러!", err);
+          console.log(err.response);
           const code = err.response.status;
           //토큰이 있었으나 만료된 경우
           if (code === 401) {
