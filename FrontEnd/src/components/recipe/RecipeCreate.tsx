@@ -1,61 +1,41 @@
 import tw from "tailwind-styled-components";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import RecipeCreateFirst from "./recipeCreateComponent/RecipeCreateFirst";
 import RecipeCreateSecond from "./recipeCreateComponent/RecipeCreateSecond";
 import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
-import { productFormType, recipeFormType } from "./recipeCommonComponent/recipeFormType";
+
+import { useResetRecoilState } from "recoil";
+import {
+  recipeFormState,
+  recipeFormProduct,
+  recipeFormImg,
+  recipeFormContent,
+} from "@/recoil/khiRecoil";
 
 const RecipeCreate = () => {
   const [step, setStep] = useState<string>("1");
-  const [recipeForm, setRecipeForm] = useState<recipeFormType>({
-    recipeTitle: "",
-    intro: "",
-    relatedUrl: "",
-    // products: [],
-  });
-  const [contents, setContents] = useState<string>("");
-  const [recipeImg, setRecipeImg] = useState<string>("");
-  const [products, setProducts] = useState<productFormType[]>([]);
+  const resetForm = useResetRecoilState(recipeFormState);
+  const restContents = useResetRecoilState(recipeFormContent);
+  const restImg = useResetRecoilState(recipeFormImg);
+  const restProducts = useResetRecoilState(recipeFormProduct);
 
-  const FormChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setRecipeForm((recipeForm) => {
-      return { ...recipeForm, [name]: value };
-    });
-  };
+  useEffect(() => {
+    resetForm();
+    restContents();
+    restImg();
+    restProducts();
+  }, []);
 
   const stepHandler = (step: string) => {
     setStep(step);
   };
 
   const stepSelector = {
-    "1": (
-      <RecipeCreateFirst
-        stepHandler={stepHandler}
-        recipeForm={recipeForm}
-        recipeImg={recipeImg}
-        setRecipeImg={setRecipeImg}
-        FormChangeHandler={FormChangeHandler}
-      ></RecipeCreateFirst>
-    ),
-    "2": (
-      <RecipeCreateSecond
-        stepHandler={stepHandler}
-        products={products}
-        setProducts={setProducts}
-      ></RecipeCreateSecond>
-    ),
-    "3": (
-      <RecipeCreateThird
-        stepHandler={stepHandler}
-        recipeForm={recipeForm}
-        contents={contents}
-        setContents={setContents}
-        recipeImg={recipeImg}
-      ></RecipeCreateThird>
-    ),
+    "1": <RecipeCreateFirst stepHandler={stepHandler}></RecipeCreateFirst>,
+    "2": <RecipeCreateSecond stepHandler={stepHandler}></RecipeCreateSecond>,
+    "3": <RecipeCreateThird stepHandler={stepHandler}></RecipeCreateThird>,
   };
 
   return <Container>{stepSelector[step]}</Container>;

@@ -1,41 +1,126 @@
 import { Dispatch, SetStateAction, useState, useEffect } from "react";
-// import { ingredientState } from "@/recoil/khiRecoil";
-// import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-import { productFormType } from "../recipeCommonComponent/recipeFormType";
+// import { productFormType } from "../recipeCommonComponent/recipeFormType";
+import { recipeFormProduct } from "@/recoil/khiRecoil";
+import { useRecoilState } from "recoil";
+import { customAxios } from "./../../../api/customAxios";
 
 interface Props {
-  products: productFormType[];
-  setProducts: Dispatch<SetStateAction<productFormType[]>>;
   setModal: Dispatch<SetStateAction<boolean>>;
 }
 
-const RecipeProductsAddModalContent = ({ products, setProducts, setModal }: Props) => {
+interface ProductInfoType {
+  id: number;
+  name: string;
+  category: string;
+}
+
+const RecipeProductsAddModalContent = ({ setModal }: Props) => {
   const disableModal = () => {
     setModal(false);
   };
+  const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const [productList, setProductList] = useState<string[]>([]);
+  const [productList, setProductList] = useState<ProductInfoType[]>([]);
 
-  const [selectedProd, setSelectedProd] = useState<productFormType>({
-    productId: 0,
-    productName: "",
-    isChangeable: false,
+  const [selectedCategory, setSelectedCategory] = useState<string>("전체");
+  const [selectedProd, setSelectedProd] = useState<ProductInfoType>({
+    id: 0,
+    name: "",
+    category: "",
   });
+
+  const categoryList = [
+    "가공식품",
+    "안주류",
+    "식재료",
+    "가공식사",
+    "음료",
+    "소스",
+    "밀키트",
+    "도시락",
+    "샌드위치",
+    "햄버거",
+    "주먹밥",
+    "김밥",
+
+    "스낵",
+    "비스켓",
+    "빵",
+    "디저트",
+    "껌",
+    "초콜릿",
+    "캔디",
+
+    "아이스크림",
+    "과일",
+
+    "아이스 드링크",
+    "유제품",
+
+    "조미료",
+    "젤리",
+
+    "펫용품",
+    "차",
+    "즉석 튀김",
+    "즉석 베이커리",
+    "즉석 커피",
+    "취미",
+    "레져",
+    "의약용품",
+    "생활용품",
+  ];
+
+  const productSearchHandler = () => {
+    if (selectedCategory == "전체") {
+      const data = {
+        name: searchKeyword,
+      };
+      customAxios
+        .post("/api/search", data)
+        .then((res) => {
+          setProductList(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      const data = {
+        name: searchKeyword,
+        category: selectedCategory,
+      };
+      customAxios
+        .post("/api/search/recipe", data)
+        .then((res) => {
+          setProductList(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  };
+
+  const searchBarEnterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      productSearchHandler();
+    }
+  };
+
   //   const [keyword, setKeyword] = useRecoilState(ingredientState);
   useEffect(() => {
-    setProductList(["1", "2", "3", "4"]);
+    setProductList([]);
   }, []);
 
-  const InputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const inputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
 
-  const ItemClickHandler = (selectedProd: productFormType) => {
+  const itemClickHandler = (prod: ProductInfoType) => {
     setSelectedProd(() => {
-      return selectedProd;
+      return prod;
     });
   };
 
@@ -47,30 +132,54 @@ const RecipeProductsAddModalContent = ({ products, setProducts, setModal }: Prop
         <input
           className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem]"
           value={searchKeyword}
-          onChange={InputChangeHandler}
-          placeholder="재료 검색"
+          onChange={inputChangeHandler}
+          onKeyDown={searchBarEnterHandler}
+          placeholder="제품이름을 입력하세요"
         />
+        <div
+          className="w-[3rem] py-1 mr-2 font-light bg-common-text-color text-[0.8rem] text-center text-white rounded-[0.5rem]"
+          onClick={productSearchHandler}
+        >
+          검색
+        </div>
       </SearchBar>
       <SearchResultBox>
         <CategoryListBox>
-          <ListItem selected={true}>전체</ListItem>
+          <SelctedListItem>{selectedCategory}</SelctedListItem>
+          <ListItem
+            selected={selectedCategory == "전체" ? true : false}
+            onClick={() => {
+              setSelectedCategory("전체");
+            }}
+          >
+            전체
+          </ListItem>
+          {categoryList.map((categoryItem: string, index: number) => {
+            return (
+              <ListItem
+                key={index}
+                onClick={() => {
+                  setSelectedCategory(categoryItem);
+                }}
+                selected={selectedCategory == categoryItem ? true : false}
+              >
+                {categoryItem}
+              </ListItem>
+            );
+          })}
         </CategoryListBox>
 
         <ProductsListBox>
           {productList &&
-            productList.map((productItem: string) => (
+            productList.map((productItem: ProductInfoType) => (
               <ListItem
-                key={productItem}
-                selected={productItem == selectedProd.productName}
+                key={productItem.id}
+                selected={productItem.name == selectedProd.name}
                 onClick={() => {
-                  ItemClickHandler({
-                    productId: 0,
-                    productName: "",
-                    isChangeable: false,
-                  });
+                  itemClickHandler(productItem);
                 }}
               >
-                {productItem}
+                {productItem.name}
               </ListItem>
             ))}
         </ProductsListBox>
@@ -78,8 +187,11 @@ const RecipeProductsAddModalContent = ({ products, setProducts, setModal }: Prop
       <BtnBox>
         <ChoiceBtn
           onClick={() => {
+            setProducts([
+              ...products,
+              { productId: selectedProd.id, productName: selectedProd.name, isChangeable: false },
+            ]);
             disableModal();
-            setProducts([...products]);
           }}
         >
           선택하기
@@ -120,10 +232,11 @@ mt-[0.75rem]
 `;
 
 const CategoryListBox = tw.div`
+relative
 w-[5rem]
 h-[100%]
 border-[1px]
-overflow-scroll
+overflow-auto
 `;
 const ProductsListBox = tw.div`
 w-[calc(100%-5rem)]
@@ -133,12 +246,25 @@ overflow-scroll
 `;
 const ListItem = styled.div<{ selected: boolean }>`
   width: 100%;
-  height: 2rem;
+  min-height: 2rem;
   border-bottom: 0.5px solid #d9d9d9;
   padding: 0.3rem 0;
   box-sizing: border-box;
   background-color: ${(props) => (props.selected ? `#1E2B4F` : `#fffff`)};
   color: ${(props) => (props.selected ? `#ffffff` : `#1E2B4F`)};
+  font-size: 1.125rem;
+  font-weight: 500;
+  text-align: center;
+`;
+
+const SelctedListItem = styled.div`
+  width: 100%;
+  min-height: 2rem;
+  border-bottom: 0.5px solid #d9d9d9;
+  padding: 0.3rem 0;
+  box-sizing: border-box;
+  background-color: #1e2b4f;
+  color: #ffffff;
   font-size: 1.125rem;
   font-weight: 500;
   text-align: center;

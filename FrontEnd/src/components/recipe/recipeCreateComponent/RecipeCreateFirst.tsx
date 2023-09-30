@@ -1,26 +1,33 @@
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useRef } from "react";
 import tw from "tailwind-styled-components";
-import { recipeFormType } from "./../recipeCommonComponent/recipeFormType";
 import axios from "axios";
 import CancelBtn from "./CancelBtn";
+import { useRecoilState } from "recoil";
+import { recipeFormState, recipeFormImg } from "@/recoil/khiRecoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
-  recipeForm: recipeFormType;
-  recipeImg: string;
-  setRecipeImg: Dispatch<SetStateAction<string | undefined>>;
-  FormChangeHandler: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void;
 }
 
-const RecipeCreateFirst = ({
-  stepHandler,
-  recipeForm,
-  FormChangeHandler,
-  recipeImg,
-  setRecipeImg,
-}: Props) => {
-  const { recipeTitle, intro, relatedUrl } = recipeForm;
+const RecipeCreateFirst = ({ stepHandler }: Props) => {
+  const [{ recipeTitle, intro, relatedUrl }, setRecipeForm] = useRecoilState(recipeFormState);
+  const [recipeImg, setRecipeImg] = useRecoilState(recipeFormImg);
 
+  const inputFileRef = useRef(null);
+
+  const FormChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRecipeForm((recipeForm) => {
+      return { ...recipeForm, [name]: value };
+    });
+  };
+
+  // 이미지 클릭시
+  const imgChangBtnClickHandler = () => {
+    inputFileRef.current.click();
+  };
+
+  // 업로드
   const imgUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
     const maxSize = 5 * 1024 * 1024;
@@ -46,7 +53,7 @@ const RecipeCreateFirst = ({
     formData.append("image", file);
 
     axios
-      .post("/api/img/upload", formData, {
+      .post("/api/img/recipe", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -67,20 +74,28 @@ const RecipeCreateFirst = ({
     <Container>
       <CancelBtn />
       <FormBox>
-        <FormTitle>미리보기 사진</FormTitle>
+        <FormTitle>
+          미리보기 사진<span className="text-common-orange">*</span>
+        </FormTitle>
         {/*  */}
         <input
           type="file"
+          ref={inputFileRef}
           name="recipeImg"
           id="recipeImg"
           onChange={imgUploadHandler}
-          // style={{ display: "none" }}
+          className="hidden"
         />
-        <ImgBox src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg} />
+        <ImgBox
+          src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg}
+          onClick={imgChangBtnClickHandler}
+        />
       </FormBox>
 
       <FormBox>
-        <FormTitle>제목</FormTitle>
+        <FormTitle>
+          제목<span className="text-common-orange">*</span>
+        </FormTitle>
         <TitleBox
           rows={1}
           value={recipeTitle}
@@ -88,10 +103,13 @@ const RecipeCreateFirst = ({
           onChange={FormChangeHandler}
           placeholder="제목을 입력해주세요."
         ></TitleBox>
+        <InfoBox>최대 20자</InfoBox>
       </FormBox>
 
       <FormBox>
-        <FormTitle>간단 설명</FormTitle>
+        <FormTitle>
+          간단 설명<span className="text-common-orange">*</span>
+        </FormTitle>
         <IntroBox
           rows={1}
           value={intro}
@@ -99,6 +117,7 @@ const RecipeCreateFirst = ({
           onChange={FormChangeHandler}
           placeholder="레시피 간단 설명을 작성해주세요."
         ></IntroBox>
+        <InfoBox>최대 50자</InfoBox>
       </FormBox>
 
       <FormBox>
@@ -134,12 +153,21 @@ w-[100%]
 `;
 
 const FormBox = tw.div`
+relative
 mb-[1.5rem]
 w-[100%]
 `;
 
 const FormTitle = tw.div`
 text-[1.25rem]
+text-common-text-color
+`;
+
+const InfoBox = tw.div`
+absolute
+right-0
+bottom-[-0.5rem]
+text-[0.625rem]
 text-common-text-color
 `;
 
