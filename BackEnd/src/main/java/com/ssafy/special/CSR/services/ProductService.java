@@ -94,7 +94,7 @@ public class ProductService {
     //==============================================
 
     private Member getUserById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
     }
 
     private Product getProductById(Long productId) {
