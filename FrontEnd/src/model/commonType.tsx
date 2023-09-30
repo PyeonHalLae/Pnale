@@ -1,5 +1,8 @@
-// 상품 정보 카드
-
+// 메인화면 정보 카드
+export type RecipeAndRecommand = {
+  recipes: recipeType;
+  recommands: ProductComp[];
+};
 //제품 공통 카드 메인
 export type ProductComp = {
   event: CompEvent;
@@ -9,13 +12,13 @@ export type ProductComp = {
 
 // 제품 공통 카드의 할인 정보;
 export type CompEvent = {
-  cudate: string;
+  cuprice: string;
   cutype: string;
-  emartdate: string;
+  emartprice: string;
   emarttype: string;
-  gsdate: string;
+  gsprice: string;
   gstype: string;
-  sevendate: string;
+  sevenprice: string;
   seventype: string;
 };
 
@@ -25,6 +28,7 @@ export type SearchResponseToRecommand = {
   id: number;
   name: string;
 };
+
 // 제품 공통 카드의 제품정보
 export type CompProduct = {
   category: string;

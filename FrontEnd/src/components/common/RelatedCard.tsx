@@ -1,20 +1,23 @@
 import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
-import { ProductCardProps } from "@components/common/ProductCard";
 import { loadImage } from "@model/exportFucKDM";
+import { CompProduct } from "@/model/commonType";
 
-type RelatedCardProps = ProductCardProps;
+type RelatedCardProps = {
+  product: CompProduct;
+  id: string;
+};
 
 const RelatedCard: React.FC<RelatedCardProps> = ({ product, id }) => {
   useEffect(() => {
-    loadImage(product.product.productImg, id);
-  }, [product.product.productImg, id]);
+    loadImage(product.productImg, id);
+  }, [product.productImg, id]);
 
   return (
     <Card>
       <div id={`${id}`} className="flex p-1.5 m-auto"></div>
-      <Text>{product.product.productName.slice(product.product.productName.indexOf(")") + 1)}</Text>
-      <Price>{product.product.price}원</Price>
+      <Text>{product.productName.slice(product.productName.indexOf(")") + 1)}</Text>
+      <Price>{product.price}원</Price>
     </Card>
   );
 };

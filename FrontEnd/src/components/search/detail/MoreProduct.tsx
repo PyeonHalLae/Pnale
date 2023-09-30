@@ -7,10 +7,17 @@ const SearchProduct = () => {
   const [searchData, setSearchData] = useState<ProductComp[]>([]);
 
   useEffect(() => {
-    axios.get("/api/product/main").then((res) => {
-      const searchRes = res.data.data.recommands;
-      setSearchData(searchRes);
-    });
+    axios
+      .get("/api/search/product?page=2", {
+        data: {
+          keyword: "포카칩",
+          page: 2,
+        },
+      })
+      .then((res) => {
+        const searchRes = res;
+        console.log(searchRes);
+      });
   }, []);
   return (
     <div className="bg-white ">

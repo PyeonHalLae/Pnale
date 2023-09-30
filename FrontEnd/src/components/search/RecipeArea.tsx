@@ -14,14 +14,15 @@ interface recipeType {
   recipeId: number;
 }
 
-const RecipeArea = () => {
+const RecipeArea = ({ recipes }) => {
   const navigate = useNavigate();
 
   const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
 
   useEffect(() => {
-    console.log(popularRecipeList);
+    console.log("popularRecipeList", popularRecipeList);
+    console.log("recipes", recipes);
 
     setRecipeList([
       {

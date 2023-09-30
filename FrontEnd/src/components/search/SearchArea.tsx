@@ -1,19 +1,15 @@
-import ProductCard from "@components/common/ProductCard";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ProductComp } from "@model/commonType";
+import { searchDateSearch } from "@/model/searchType";
+import ProductCard from "@components/common/ProductCard";
 
-const SearchArea = () => {
+type SearchAreaPros = {
+  search: searchDateSearch;
+};
+
+const SearchArea = ({ search }: SearchAreaPros) => {
   const navigate = useNavigate();
-  const [search, setSearch] = useState<ProductComp[]>([]);
-
-  useEffect(() => {
-    axios.get("/api/product/main").then((res) => {
-      const saleRes = res.data.data.recommands;
-      setSearch(saleRes);
-    });
-  }, []);
+  // const [search, setSearch] = useState<ProductComp[]>([]);
+  console.log("search", search);
 
   return (
     <div className="bg-white ">
@@ -30,7 +26,7 @@ const SearchArea = () => {
         </button>
       </div>
       <div className="grid grid-cols-2 p-2 gap-y-3 gap-x-3">
-        {search.map((info, index) => (
+        {search.content.map((info, index) => (
           <ProductCard
             key={index + "-" + info.product.productId}
             id={index + "-" + info.product.productId}

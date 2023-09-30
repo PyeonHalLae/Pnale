@@ -28,6 +28,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
         {product.event.seventype !== null && (
           <StickerImg src={`/img/sticker/main/SEVEN-${product.event.seventype}.png`}></StickerImg>
         )}
+        {product.event.seventype === null &&
+          product.event.cutype === null &&
+          product.event.gstype === null &&
+          product.event.emarttype === null && (
+            <StickerImg src={`/img/sticker/main/None-Event.png`}></StickerImg>
+          )}
       </div>
       <TextArea>
         <div className="flex">
