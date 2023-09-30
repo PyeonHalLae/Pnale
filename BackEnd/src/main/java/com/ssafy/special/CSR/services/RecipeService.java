@@ -8,6 +8,7 @@ import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
 import com.ssafy.special.entity.*;
 import com.ssafy.special.enums.ReviewStatusType;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.member.model.vo.MemberViewDTO;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -313,7 +315,7 @@ public class RecipeService {
      */
 
     @Transactional
-    public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable){
+    public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable) {
         Page<RecipeReview> lists = recipeReviewRepository.findByMemberMemberIdAndStatusNot(pageable, memberId, ReviewStatusType.DELETED);
 
         List<MyRecipeReviewDTO> DTOlist = lists.stream()

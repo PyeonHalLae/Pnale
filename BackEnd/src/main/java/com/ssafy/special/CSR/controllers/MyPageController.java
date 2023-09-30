@@ -69,6 +69,7 @@ public class MyPageController {
         Page<RecipeListDTO> lists = recipeService.getMyLists(memberId, pageable);
         if(lists.isEmpty()) return new DataResponse<>(204, "현재 페이지에 대한 정보가 없습니다.", null);
         return new DataResponse<>(200, "유저가 업로드한 레시피들을 반환합니다.", lists);
+
     }
 
     //내가 작서한 댓글 목록
