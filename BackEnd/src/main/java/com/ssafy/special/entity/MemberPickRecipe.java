@@ -1,11 +1,14 @@
 package com.ssafy.special.entity;
 
-import lombok.Getter;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MemberPickRecipe {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,4 +24,8 @@ public class MemberPickRecipe {
 
     @Column(columnDefinition = "tinyint(1) default 0")
     boolean isDeleted;
+
+    public void toggleLike(){
+        this.isDeleted = !this.isDeleted;
+    }
 }

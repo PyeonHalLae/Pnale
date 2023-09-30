@@ -17,8 +17,10 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     List<Recipe> findRecipeByWeightedValue();
     List<Recipe> findTop2ByOrderByCreatedAtDesc();
 
-    Page<Recipe> findTop3ByOrderByCreatedAtDesc(Pageable pageable);
+    Page<Recipe> findByWriterMemberId(Pageable pageable, Long writerId);
 
+    @Query("SELECT mpr.recipe FROM MemberPickRecipe mpr WHERE mpr.member.memberId = :memberId AND mpr.isDeleted = false")
+    Page<Recipe> findLikedRecipesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
 
     @Query("SELECT r FROM RecipeIngredient ri " +

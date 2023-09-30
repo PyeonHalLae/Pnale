@@ -4,10 +4,13 @@ import co.elastic.clients.elasticsearch.nodes.Http;
 import com.ssafy.special.CSR.dtos.recipe.*;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
 import com.ssafy.special.CSR.services.RecipeService;
+import com.ssafy.special.exception.AuthException;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomResponse;
 import com.ssafy.special.exception.DataResponse;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,7 +33,7 @@ public class RecipeController {
     @GetMapping("")
     public DataResponse<?> getMainpage(HttpServletRequest request) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) memberId = 0L;
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
         DataResponse<RecipeMainPageDTO> response = new DataResponse<>(200, "레시피 메인 페이지가 로드되었습니다");
         RecipeRecommendDTO rm = recipeService.getRecommendData(memberId);
         List<RecipeListDTO> rl = recipeService.getMainListData(memberId);
@@ -46,7 +49,7 @@ public class RecipeController {
     @GetMapping("/detail")
     public DataResponse<?> getDetailPage(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) memberId = 0L;
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
         DataResponse<RecipeDetailsDTO> response = new DataResponse<>(200, "디테일 페이지를 불러오는 데 성공했습니다.");
         RecipeDetailsDTO detail = recipeService.getDetailRecipe(memberId, rcpId);
 
@@ -62,12 +65,13 @@ public class RecipeController {
     public DataResponse<?> getAllLists(HttpServletRequest request,
                                        @PageableDefault(page=0, size=10, sort="recipeId", direction = Sort.Direction.DESC) Pageable pageable) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) memberId = 0L;
-        DataResponse<List<RecipeListDTO>> response = new DataResponse<>(200, pageable.getPageNumber()+"번째 레시피 목록을 불러옵니다.");
-        List<RecipeListDTO> lists = recipeService.getAllLists(memberId, pageable);
-        response.setData(lists);
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        Page<RecipeListDTO> list = recipeService.getAllLists(memberId, pageable);
 
-        return response;
+        if(list.isEmpty()) {
+            return new DataResponse<>(204, "해당 레시피의 리뷰가 존재하지 않습니다.");
+        }
+        return new DataResponse<>(200, pageable.getPageNumber()+"번째 레시피 목록을 불러옵니다.", list);
     }
 
     /**
@@ -76,11 +80,48 @@ public class RecipeController {
     @PostMapping("/form")
     public CustomResponse createRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO){
         Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
         recipeService.writeRecipe(memberId, recipeWriteDTO);
 
-        return new CustomResponse(200, "레시피 등록 성공");
+        return new CustomResponse(201, "레시피 등록 성공");
     }
 
+    /**
+     * 레시피를 수정하는 컨트롤러입니다.
+     */
+    @PatchMapping("/form")
+    public CustomResponse updateRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO, @RequestParam(value="rcpId") Long rcpId){
+        Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        recipeService.updateRecipe(rcpId, recipeWriteDTO);
+
+        return new CustomResponse(200, "레시피 수정 성공");
+    }
+
+    /**
+     * 레시피를 삭제하는 컨트롤러입니다.
+     */
+    @DeleteMapping("/form")
+    public CustomResponse deleteRecipe(HttpServletRequest request, @RequestParam(value="rcpId") Long rcpId){
+        Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        recipeService.deleteRecipe(rcpId);
+
+        return new CustomResponse(200, "레시피 삭제 성공");
+    }
+
+
+    /**
+     * 해당 레시피의 좋아요 여부를 토글합니다.
+     */
+    @PatchMapping("/like")
+    public CustomResponse toggleLike(HttpServletRequest request, @RequestParam(value = "rcpId")Long rcpId){
+        Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        recipeService.toggleLike(memberId, rcpId);
+
+        return new CustomResponse(200, "좋아요가 변경되었습니다.");
+    }
 
 
     /**
@@ -89,13 +130,13 @@ public class RecipeController {
      */
     @GetMapping("/review")
     public DataResponse<?> readReview(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId, @PageableDefault(page=0, size=5, sort="reviewId", direction = Sort.Direction.DESC) Pageable pageable){
-        DataResponse<List<RecipeReviewDTO>> response;
+        DataResponse<Page<RecipeReviewDTO>> response;
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) memberId = 0L;
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
-        List<RecipeReviewDTO> list = recipeService.readAllReviews(rcpId, memberId, pageable);
+        Page<RecipeReviewDTO> list = recipeService.readAllReviews(rcpId, memberId, pageable);
 
-        if(list == null) {
+        if(list.isEmpty()) {
             response = new DataResponse<>(204, "해당 레시피의 리뷰가 존재하지 않습니다.");
             return response;
         }
@@ -112,11 +153,11 @@ public class RecipeController {
     @PostMapping(value= "/review", consumes = "text/plain")
     public CustomResponse writeReview(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId, @RequestBody String content){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) return new CustomResponse(403, "재로그인이 필요합니다.");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
         recipeService.writeReview(rcpId, memberId, content);
 
-        return new CustomResponse(201, rcpId+"에 새로운 댓글을 작성했습니다.");
+        return new CustomResponse(201, "새로운 댓글을 작성했습니다.");
     }
 
     /**
@@ -125,11 +166,11 @@ public class RecipeController {
     @PatchMapping(value= "/review", consumes = "text/plain")
     public CustomResponse updateReview(HttpServletRequest request, @RequestParam(value = "revId") Long revId, @RequestBody String content){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) return new CustomResponse(403, "재로그인이 필요합니다.");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
         recipeService.updateReview(revId, content);
 
-        return new CustomResponse(200, revId+"번 댓글을 수정했습니다.");
+        return new CustomResponse(200, "기존 댓글을 수정했습니다.");
     }
 
     /**
@@ -138,11 +179,12 @@ public class RecipeController {
     @DeleteMapping(value= "/review")
     public CustomResponse deleteReview(HttpServletRequest request, @RequestParam(value = "revId") Long revId){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) return new CustomResponse(403, "재로그인이 필요합니다.");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
         recipeService.deleteReview(revId);
 
         return new CustomResponse(200, revId+"번 댓글을 삭제했습니다.");
     }
+
 
 }

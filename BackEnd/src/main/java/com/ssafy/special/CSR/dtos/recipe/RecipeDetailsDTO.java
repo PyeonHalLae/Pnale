@@ -24,8 +24,9 @@ public class RecipeDetailsDTO {
     private Long viewCnt;
     private String rcpDesc;
     private String rcpThumbnail;
-    private String rcpVideoUrl;
+    private String rcpVideo;
     private LocalDateTime createdAt;
     private boolean influence;
     private boolean like;
+    private boolean myRecipe;
 }

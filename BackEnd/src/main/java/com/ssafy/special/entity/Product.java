@@ -52,6 +52,9 @@ public class Product {
     @Column(columnDefinition = "DATE", insertable=false)
     LocalDate updatedAt;
 
+    @OneToOne(mappedBy = "product")
+    private EventProduct eventProduct;
+
     public ProductInfoDto toInfoDto(){
         return ProductInfoDto.builder()
                 .productId(this.productId)
