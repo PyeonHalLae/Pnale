@@ -40,8 +40,7 @@ public class ProductService {
         Map<String, Object> mainData = new HashMap<>();
 
         mainData.put("recipes", null);
-        mainData.put("recommands",
-                ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4))));
+        mainData.put("recommands", ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4))));
         return mainData;
     }
 
@@ -95,7 +94,7 @@ public class ProductService {
     //==============================================
 
     private Member getUserById(Long memberId) {
-        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.USER_NOT_FOUND));
+        return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_FOUND));
     }
 
     private Product getProductById(Long productId) {

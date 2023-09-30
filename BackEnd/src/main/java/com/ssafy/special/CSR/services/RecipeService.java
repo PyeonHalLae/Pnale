@@ -8,6 +8,7 @@ import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
 import com.ssafy.special.entity.*;
 import com.ssafy.special.enums.ReviewStatusType;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.member.model.vo.MemberViewDTO;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -150,6 +152,7 @@ public class RecipeService {
         return makePages(memberId, recipePage, false, true);
     }
 
+
     /**
      * 내가 찜한 레시피 리스트를 반환합니다.
      */
@@ -194,6 +197,7 @@ public class RecipeService {
      * 해당 레시피의 댓글을 모두 찾고, 스트림을 통해 적당한 DTO(RecipeReviewDTO)로 변환하여 반환합니다.
      * 댓글이 아무것도 없는 경우, null값을 반환하여 컨트롤러가 처리할 수 있도록 합니다.
      */
+
     public Page<RecipeReviewDTO> readAllReviews(Long rcpId, Long memberId, Pageable pageable){
         Recipe recipe = recipeRepository.findById(rcpId).orElseThrow();
         Page<RecipeReview> lists = recipeReviewRepository.findAllByRecipeAndStatusNot(recipe, ReviewStatusType.DELETED, pageable);
@@ -311,7 +315,7 @@ public class RecipeService {
      */
 
     @Transactional
-    public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable){
+    public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable) {
         Page<RecipeReview> lists = recipeReviewRepository.findByMemberMemberIdAndStatusNot(pageable, memberId, ReviewStatusType.DELETED);
 
         List<MyRecipeReviewDTO> DTOlist = lists.stream()

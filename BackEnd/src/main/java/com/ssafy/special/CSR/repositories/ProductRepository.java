@@ -31,7 +31,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     //============ CU =============
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
+            " WHERE p.pb in ( null, :corp) AND ep.CUType is not null ")
     Page<Object[]> findCUEventProduct(Pageable pageable,
                                       @Param("all") CorpType all,
                                       @Param("corp") CorpType corpType);

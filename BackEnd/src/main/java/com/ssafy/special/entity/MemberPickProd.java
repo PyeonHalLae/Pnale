@@ -52,6 +52,10 @@ public class MemberPickProd {
     }
 
     public void updateLike() {
+        //좋아요 해제 할 경우 메일 수신을 하지 않는다.
+        if(this.likeStat) this.isReceived = false;
+        else this.isReceived = true;
+
         this.likeStat = !this.likeStat;
         this.updatedAt = LocalDateTime.now();
     }

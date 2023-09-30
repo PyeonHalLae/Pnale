@@ -21,6 +21,7 @@ public enum CustomErrorCode {
 
     //MEMBER 관련
     USER_NOT_FOUND(3000, "해당 유저를 찾을 수 없습니다."),
+    INVALID_MEMBER(3001, "유저 정보가 올바르지 않습니다."),
 
     //행사 상품 관련
     EP_NOT_FOUND(4000, "해당 상품의 이벤트 정보를 찾을 수 없습니다." ),
