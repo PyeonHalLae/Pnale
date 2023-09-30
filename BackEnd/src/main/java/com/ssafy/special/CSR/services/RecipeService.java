@@ -6,23 +6,22 @@ import com.ssafy.special.CSR.repositories.MemberPickRecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeIngredientRepository;
 import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
-import com.ssafy.special.entity.Member;
-import com.ssafy.special.entity.RecipeIngredient;
-import com.ssafy.special.entity.RecipeReview;
+import com.ssafy.special.entity.*;
 import com.ssafy.special.enums.ReviewStatusType;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.member.model.vo.MemberViewDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 
-import com.ssafy.special.entity.Recipe;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -60,7 +59,7 @@ public class RecipeService {
     public Long updateRecipe(Long rcpId, RecipeWriteDTO info){
         Recipe recipe = recipeRepository.findById(rcpId).orElseThrow();
         List<RecipeIngredient> lists = recipeIngredientService.writeIngredients(recipe, info.getIngredients());
-        recipe.updateRecipe(info.getRcpName(),info.getRcpThumb(), info.getRcpSimp(),info.getRcpDesc(), info.getRcpVideo(), lists);
+        recipe.updateRecipe(info.getRcpName(),info.getRcpThumbnail(), info.getRcpSimple(),info.getRcpDesc(), info.getRcpVideo(), lists);
 
         recipeRepository.save(recipe);
 
@@ -85,6 +84,7 @@ public class RecipeService {
     public RecipeDetailsDTO getDetailRecipe(Long memberId, Long recipeId){
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
         List<ProductInRecipeDTO> ingredients = recipeIngredientRepository.findProductsInRecipe(recipe.getRecipeId());
+        boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
         boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
                 .map(isDeleted -> !isDeleted).orElse(false);
         return RecipeDetailsDTO.builder()
@@ -95,13 +95,14 @@ public class RecipeService {
                 .rcpSimple(recipe.getRecipeSimple())
                 .rcpDesc(recipe.getRecipeDesc())
                 .rcpThumbnail(recipe.getRecipeThumbnail())
-                .rcpVideoUrl(recipe.getRecipeVideoUrl())
+                .rcpVideo(recipe.getRecipeVideoUrl())
                 .likeCnt(recipe.getLikeCnt())
                 .replyCnt(recipe.getReplyCnt())
                 .viewCnt(recipe.getViewCnt())
                 .influence(recipe.isInfluence())
                 .createdAt(recipe.getCreatedAt())
                 .like(myLike)
+                .myRecipe(myRecipe)
                 .build();
     }
 
@@ -133,19 +134,60 @@ public class RecipeService {
         return makeLists(memberId, recipeRepository.findTop2ByOrderByCreatedAtDesc());
     }
 
-    public List<RecipeListDTO> getAllLists(Long memberId, Pageable pageable){
-        List<Recipe> recipePage = recipeRepository.findAll(pageable).getContent();
-        return makeLists(memberId, recipePage);
+    /**
+     * 페이지네이션한 리스트를 반환하는 칭구칭구
+     */
+    public Page<RecipeListDTO> getAllLists(Long memberId, Pageable pageable){
+        Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+        return makePages(memberId, recipePage, false, false);
     }
-    private List<RecipeListDTO> makeLists(Long memberId, List<Recipe> recipes){
-        return recipes
-                .stream()
+
+    /**
+     * 내가 쓴 레시피 리스트를 반환합니다.
+     */
+    public Page<RecipeListDTO> getMyLists(Long memberId, Pageable pageable){
+        Page<Recipe> recipePage = recipeRepository.findByWriterMemberId(pageable,memberId);
+        return makePages(memberId, recipePage, false, true);
+    }
+
+
+    /**
+     * 내가 찜한 레시피 리스트를 반환합니다.
+     */
+    public Page<RecipeListDTO> getlikeLists(Long memberId, Pageable pageable){
+        Page<Recipe> recipePage = recipeRepository.findLikedRecipesByMemberId(memberId, pageable);
+        return makePages(memberId, recipePage, true, false);
+    }
+
+    /**
+     * recipes 목록을 RecipeListDTO 목록으로 변경해주는 메소드입니다.
+     */
+    public List<RecipeListDTO> makeLists(Long memberId, List<Recipe> recipes){
+        return recipes.stream()
                 .map(recipe -> {
-                    Boolean like = memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
+                    boolean like = memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
                             .map(isDeleted -> !isDeleted).orElse(false);
-                    return recipe.toListDto(like);
+                    boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
+                    return recipe.toListDto(like, myRecipe);
                 })
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * recipes 목록을 RecipeListDTO 페이지으로 변경해주는 메소드입니다.
+     * 최적화를 위하여, 이미 찜했거나 자신의 것임이 연산된 경우엔 삼항연산자로 선반영합니다.
+     */
+    public Page<RecipeListDTO> makePages(Long memberId, Page<Recipe> recipes, boolean isLike, boolean isMine){
+        List<RecipeListDTO> list = recipes.stream()
+                .map(recipe -> {
+                    boolean like = isLike?isLike:memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
+                            .map(isDeleted -> !isDeleted).orElse(false);
+                    boolean myRecipe = isMine?isMine:recipe.getWriter().getMemberId().equals(memberId);
+                    return recipe.toListDto(like, myRecipe);
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(list, recipes.getPageable(), recipes.getTotalElements());
     }
 
     /**
@@ -153,12 +195,12 @@ public class RecipeService {
      * 해당 레시피의 댓글을 모두 찾고, 스트림을 통해 적당한 DTO(RecipeReviewDTO)로 변환하여 반환합니다.
      * 댓글이 아무것도 없는 경우, null값을 반환하여 컨트롤러가 처리할 수 있도록 합니다.
      */
-    private List<RecipeReviewDTO> readAllReviews(Long rcpId, Long memberId, Pageable pageable){
+
+    public Page<RecipeReviewDTO> readAllReviews(Long rcpId, Long memberId, Pageable pageable){
         Recipe recipe = recipeRepository.findById(rcpId).orElseThrow();
         Page<RecipeReview> lists = recipeReviewRepository.findAllByRecipeAndStatusNot(recipe, ReviewStatusType.DELETED, pageable);
-        if(lists.isEmpty()) return null;
 
-        return lists.stream()
+        List<RecipeReviewDTO> DTOlist = lists.getContent().stream()
                 .map(review -> {
                     Member member = review.getMember();
                     MemberViewDTO memberViewDTO = MemberViewDTO.toDTO(member);
@@ -166,10 +208,13 @@ public class RecipeService {
                 })
                 .collect(Collectors.toList());
 
+        return new PageImpl<>(DTOlist, lists.getPageable(), lists.getTotalElements());
+
     }
 
     /**
      * 레시피(rcpId)에 댓글을 작성합니다.
+     * cascade를 이용하여, recipe의 ReplyCnt를 하나 올리고 동시에 review를 테이블에 추가하는 방식입니다.
      */
     @Transactional
     public void writeReview(Long rcpId, Long memId, String content){
@@ -203,17 +248,18 @@ public class RecipeService {
 
     /**
      * 특정 댓글(revId)을 삭제합니다.
+     * cascade를 사용하여 recipe의 replyCnt를 하나 줄여줍니다.
      */
     @Transactional
     public void deleteReview(Long revId){
         RecipeReview review = recipeReviewRepository.findById(revId).orElseThrow();
         Recipe recipe = review.getRecipe();
-        review.deleteReview();
-
-        recipe.setReplyCnt(recipe.getReplyCnt()-1);
-        recipe.addReview(review);
-        recipeReviewRepository.save(review);
-        recipeReviewRepository.save(review);
+        if(!review.getStatus().equals(ReviewStatusType.DELETED)){
+            review.deleteReview();
+            recipe.setReplyCnt(recipe.getReplyCnt()-1);
+            recipe.addReview(review);
+            recipeReviewRepository.save(review);
+        }
     }
 
 
@@ -226,14 +272,57 @@ public class RecipeService {
         return Recipe.builder()
                 .writer(member)
                 .recipeName(recipeInfo.getRcpName())
-                .recipeSimple(recipeInfo.getRcpSimp())
+                .recipeSimple(recipeInfo.getRcpSimple())
                 .recipeDesc(recipeInfo.getRcpDesc())
-                .recipeThumbnail(recipeInfo.getRcpThumb())
+                .recipeThumbnail(recipeInfo.getRcpThumbnail())
                 .recipeVideoUrl(recipeInfo.getRcpVideo())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
                 .isDeleted(false)
                 .influence(influence)
                 .build();
+    }
+
+    /**
+     * 토글입니다.
+     */
+
+    @Transactional
+    public void toggleLike(Long memberId, Long recipeId){
+        MemberPickRecipe like = memberPickRecipeRepository.findByMemberAndRecipe(memberId, recipeId)
+                .orElseGet(() -> {
+                    Member member = memberRepository.findById(memberId)
+                            .orElseThrow(() -> new EntityNotFoundException("Member not found with ID: " + memberId));
+                    Recipe recipe = recipeRepository.findById(recipeId)
+                            .orElseThrow(() -> new EntityNotFoundException("Recipe not found with ID: " + recipeId));
+                    return MemberPickRecipe.builder()
+                            .member(member)
+                            .recipe(recipe)
+                            .isDeleted(true)
+                            .build();
+                });
+        System.out.println(like);
+        like.toggleLike();
+        memberPickRecipeRepository.save(like);
+    }
+
+    /**
+     * 마이페이지에서 사용하는 댓글들을 반환하는 서비스입니다.
+     * 해당 레시피의 댓글을 모두 찾고, 스트림을 통해 적당한 DTO(RecipeReviewDTO)로 변환하여 반환합니다.
+     *
+     */
+
+    @Transactional
+    public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable){
+        Page<RecipeReview> lists = recipeReviewRepository.findByMemberMemberIdAndStatusNot(pageable, memberId, ReviewStatusType.DELETED);
+
+        List<MyRecipeReviewDTO> DTOlist = lists.stream()
+                .map(review -> {
+                    Recipe recipe = review.getRecipe();
+                    return MyRecipeReviewDTO.toDTO(review, recipe);
+                })
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(DTOlist, lists.getPageable(), lists.getTotalElements());
     }
 }
