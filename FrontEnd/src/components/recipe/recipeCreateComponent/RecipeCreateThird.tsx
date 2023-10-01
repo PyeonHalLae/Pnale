@@ -19,10 +19,10 @@ interface Props {
 
 const RecipeCreateThird = ({ stepHandler }: Props) => {
   const navigate = useNavigate();
-  const [contents, setContents] = useRecoilState(recipeFormContent);
+  const [rcpDesc, setRcpDesc] = useRecoilState(recipeFormContent);
   const products = useRecoilValue(recipeFormProduct);
   const recipeForm = useRecoilValue(recipeFormState);
-  const recipeImg = useRecoilValue(recipeFormImg);
+  const rcpThumbnail = useRecoilValue(recipeFormImg);
 
   const resetForm = useResetRecoilState(recipeFormState);
   const restContents = useResetRecoilState(recipeFormContent);
@@ -36,10 +36,10 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     console.log(products);
     console.log("상품리스트");
 
-    console.log(recipeImg);
+    console.log(rcpThumbnail);
     console.log("레시피이미지");
 
-    console.log(contents);
+    console.log(rcpDesc);
     console.log("레시피내용");
 
     resetForm();
@@ -50,16 +50,16 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     // recipeData = {
     //   ...recipeForm,
     //  레시피폼 : 제목, 1줄설명, 관련영상주소, products...
-    //   contents: contents,
-    //   recipeImg: recipeImg,
+    //   rcpDesc: rcpDesc,
+    //   rcpThumbnail: rcpThumbnail,
     //   userId: userId
     // }
     const productsData = products.map((product) => {
-      return { prdId: product.productId, changeable: product.isChangeable };
+      return { prdId: product.prdId, changeable: product.changeable };
     });
 
     const data = {
-      rcpName: recipeForm.recipeTitle, // 레시피명
+      rcpName: recipeForm.rcpName, // 레시피명
       ingredients: productsData,
       // [
       //   // 재료 : 재료ID, 바꿀수 있는지 여부
@@ -67,10 +67,10 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
       //   { prdId: 42, changeable: true },
       //   { prdId: 52, changeable: false },
       // ],
-      rcpThumb: recipeImg, // 대표 이미지
-      rcpSimp: recipeForm.intro, // 요약
-      rcpDesc: contents, // 본문
-      rcpVideo: recipeForm.relatedUrl, // 레시피 관련 영상
+      rcpThumbnail: rcpThumbnail, // 대표 이미지
+      rcpSimple: recipeForm.rcpSimple, // 요약
+      rcpDesc: rcpDesc, // 본문
+      rcpVideo: recipeForm.rcpVideo, // 레시피 관련 영상
     };
     console.log(data);
 
@@ -98,7 +98,7 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     <Container>
       <CancelBtn />
       <div className="bg-white w-[100%] h-[calc(31.25rem-6px)] mb-[3rem] rounded-[0.625rem]">
-        <RecipeEditor contents={contents} setContents={setContents} />
+        <RecipeEditor rcpDesc={rcpDesc} setRcpDesc={setRcpDesc} />
       </div>
 
       <BtnBox>

@@ -1,19 +1,18 @@
 import tw from "tailwind-styled-components";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import RecipeProductsModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
-// import { useRecoilValue } from "recoil";
-// import { ingredientState } from "@/recoil/khiRecoil";
+import { recipePrdInfoType } from "./recipeDetailType";
 
-const RecipeProductsListItem = () => {
-  const [isChangable, setIsChangable] = useState<boolean>();
+const RecipeProductsListItem = ({
+  ingredient,
+  index,
+}: {
+  ingredient: recipePrdInfoType;
+  index: number;
+}) => {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
-  // const keyword = useRecoilValue(ingredientState);
-
-  useEffect(() => {
-    setIsChangable(true);
-  }, []);
 
   return (
     <Container>
@@ -26,12 +25,12 @@ const RecipeProductsListItem = () => {
         />
       )}
       <ProductInfo>
-        <OrderNumBox>1.</OrderNumBox>
+        <OrderNumBox>{index + 1}.</OrderNumBox>
 
-        <NameBox>짜파게티</NameBox>
+        <NameBox>{ingredient.prdName}</NameBox>
 
         <ChangeBtnBox>
-          {isChangable ? (
+          {ingredient.changeable ? (
             <ChangBtn
               onClick={() => {
                 setIsModalActive(true);
@@ -44,10 +43,25 @@ const RecipeProductsListItem = () => {
           )}
         </ChangeBtnBox>
 
-        <PriceBox>1,000원</PriceBox>
+        <PriceBox>{ingredient.price}</PriceBox>
       </ProductInfo>
 
-      <StickerBox>스티커들어감</StickerBox>
+      <StickerBox>
+        <div className="flex p-1.5 m-auto">
+          {ingredient.cutype !== null && (
+            <StickerImg src={`/img/sticker/main/CU-${ingredient.cutype}.png`}></StickerImg>
+          )}
+          {ingredient.emarttype !== null && (
+            <StickerImg src={`/img/sticker/main/EMART-${ingredient.emarttype}.png`}></StickerImg>
+          )}
+          {ingredient.gstype !== null && (
+            <StickerImg src={`/img/sticker/main/GS-${ingredient.gstype}.png`}></StickerImg>
+          )}
+          {ingredient.seventype !== null && (
+            <StickerImg src={`/img/sticker/main/SEVEN-${ingredient.seventype}.png`}></StickerImg>
+          )}
+        </div>
+      </StickerBox>
     </Container>
   );
 };
@@ -102,4 +116,9 @@ ml-[1.875rem]
 my-[0.25rem]
 border-[1px]
 border-common-bold-back-color
+`;
+
+const StickerImg = tw.img`
+mr-1.5
+w-[23%]
 `;

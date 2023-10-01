@@ -10,8 +10,8 @@ interface Props {
 }
 
 const RecipeCreateFirst = ({ stepHandler }: Props) => {
-  const [{ recipeTitle, intro, relatedUrl }, setRecipeForm] = useRecoilState(recipeFormState);
-  const [recipeImg, setRecipeImg] = useRecoilState(recipeFormImg);
+  const [{ rcpName, rcpSimple, rcpVideo }, setRecipeForm] = useRecoilState(recipeFormState);
+  const [rcpThumbnail, setRcpThumbnail] = useRecoilState(recipeFormImg);
 
   const inputFileRef = useRef(null);
 
@@ -63,7 +63,7 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
         const imgUrl = res.data;
         console.log(res.data);
         // 성공시 recipeImg에 url 할당
-        setRecipeImg(imgUrl);
+        setRcpThumbnail(imgUrl);
       })
       .catch((err) => {
         console.log(err);
@@ -81,13 +81,13 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
         <input
           type="file"
           ref={inputFileRef}
-          name="recipeImg"
-          id="recipeImg"
+          name="rcpThumbnail"
+          id="rcpThumbnail"
           onChange={imgUploadHandler}
           className="hidden"
         />
         <ImgBox
-          src={recipeImg == "" ? "/img/etc/empty-image.png" : recipeImg}
+          src={rcpThumbnail == "" ? "/img/etc/empty-image.png" : rcpThumbnail}
           onClick={imgChangBtnClickHandler}
         />
       </FormBox>
@@ -96,13 +96,13 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
         <FormTitle>
           제목<span className="text-common-orange">*</span>
         </FormTitle>
-        <TitleBox
+        <RcpNameBox
           rows={1}
-          value={recipeTitle}
-          name="recipeTitle"
+          value={rcpName}
+          name="rcpName"
           onChange={FormChangeHandler}
           placeholder="제목을 입력해주세요."
-        ></TitleBox>
+        ></RcpNameBox>
         <InfoBox>최대 20자</InfoBox>
       </FormBox>
 
@@ -110,25 +110,25 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
         <FormTitle>
           간단 설명<span className="text-common-orange">*</span>
         </FormTitle>
-        <IntroBox
+        <RcpSimpBox
           rows={1}
-          value={intro}
-          name="intro"
+          value={rcpSimple}
+          name="rcpSimple"
           onChange={FormChangeHandler}
           placeholder="레시피 간단 설명을 작성해주세요."
-        ></IntroBox>
+        ></RcpSimpBox>
         <InfoBox>최대 50자</InfoBox>
       </FormBox>
 
       <FormBox>
         <FormTitle>관련 영상 추가</FormTitle>
-        <RelatedUrlBox
+        <RcpVideoBox
           type="text"
-          name="relatedUrl"
-          value={relatedUrl}
+          name="rcpVideo"
+          value={rcpVideo}
           onChange={FormChangeHandler}
           placeholder="URL을 입력해주세요"
-        ></RelatedUrlBox>
+        ></RcpVideoBox>
       </FormBox>
 
       <BtnBox>
@@ -176,7 +176,7 @@ w-[100%]
 h-[15.25rem]
 `;
 
-const TitleBox = tw.textarea`
+const RcpNameBox = tw.textarea`
 text-[1.5rem]
 w-[100%]
 bg-common-back-color
@@ -185,7 +185,7 @@ break-all
 resize-none
 `;
 
-const IntroBox = tw.textarea`
+const RcpSimpBox = tw.textarea`
 w-[100%]
 bg-common-back-color
 border-b-2
@@ -193,7 +193,7 @@ break-all
 resize-none
 `;
 
-const RelatedUrlBox = tw.input`
+const RcpVideoBox = tw.input`
 w-[100%]
 h-[1.8125rem]
 text-[.75rem] 

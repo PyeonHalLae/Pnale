@@ -1,31 +1,63 @@
 import tw from "tailwind-styled-components";
 import { commentInfoType } from "./recipeDetailType";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { customAxios } from "@/api/customAxios";
 
 interface Props {
   commentInfo: commentInfoType;
   setRefresh: Dispatch<SetStateAction<boolean>>;
 }
 
-const RecipeCommentCard = ({ commentInfo }: Props) => {
+const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
+  const [isModifying, setIsModifying] = useState<boolean>(false);
+
+  const commentDeleteHandler = () => {
+    customAxios
+      .delete(`/api/recipe/review?revId=${commentInfo.revId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        setRefresh((prev) => {
+          return !prev;
+        });
+      })
+      .catch();
+  };
+  const commentModifyHandler = () => {
+    setIsModifying(true);
+    setRefresh((prev) => {
+      return !prev;
+    });
+  };
+
   return (
     <CommentCardContainer>
       <ImgBox>
-        <Img src={commentInfo.user.usrImg} />
+        <Img src={commentInfo.writer.memberImg} />
       </ImgBox>
       <ContentBox>
         <CommentNameBox>
-          <div className="w-[8rem]">{commentInfo.user.nickname}</div>
+          <div className="w-[8rem]">{commentInfo.writer.nickname}</div>
 
           {/* 유저가 같을 때만 노출 */}
-          <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
-            <CommentManageBtn>삭제</CommentManageBtn>
-            <CommentManageBtn>수정</CommentManageBtn>
-          </div>
+          {commentInfo.myReview && (
+            <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
+              <CommentManageBtn onClick={commentDeleteHandler}>삭제</CommentManageBtn>
+              <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
+            </div>
+          )}
         </CommentNameBox>
-        <CommentContentBox>{commentInfo.revDesc}</CommentContentBox>
+        {isModifying ? (
+          <CommentContentBox>{commentInfo.content}</CommentContentBox>
+        ) : (
+          <CommentContentBox>{commentInfo.content}</CommentContentBox>
+        )}
+
         <div className="text-[0.625rem] text-common-text-gray-color font-medium">
-          {commentInfo.createdAt}
+          {commentInfo.createdAt.substring(0, 10)} {commentInfo.createdAt.substring(11)}
         </div>
       </ContentBox>
     </CommentCardContainer>

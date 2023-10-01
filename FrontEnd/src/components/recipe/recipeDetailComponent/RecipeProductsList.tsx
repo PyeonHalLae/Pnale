@@ -1,8 +1,9 @@
 // import { useState } from "react";
 import RecipeProductsListItem from "./RecipeProductsListItem";
 import tw from "tailwind-styled-components";
+import { recipePrdInfoType } from "./recipeDetailType";
 
-const RecipeProductsList = () => {
+const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] }) => {
   // const ingredients, setin
 
   return (
@@ -10,9 +11,10 @@ const RecipeProductsList = () => {
       <Title>
         <span className="text-common-peach">재료</span> <span>리스트</span>
       </Title>
-
-      <RecipeProductsListItem />
-      <RecipeProductsListItem />
+      {ingredients.length !== 0 &&
+        ingredients.map((ingredient, index) => {
+          return <RecipeProductsListItem index={index} ingredient={ingredient} />;
+        })}
 
       <TotalPriceBox>
         <div className="w-[4rem]">3,400원</div>

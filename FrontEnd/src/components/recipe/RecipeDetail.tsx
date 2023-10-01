@@ -17,7 +17,7 @@ const RecipeDetail = () => {
   customAxios
     .get("/api/recipe/detail", {
       params: {
-        rcpId: 4,
+        rcpId: recipeId,
       },
       headers: {
         "Content-Type": "application/json",
@@ -50,11 +50,11 @@ const RecipeDetail = () => {
 
   return (
     <div>
-      <RecipeDetailHeaderBar />
+      <RecipeDetailHeaderBar recipeId={recipeInfo.rcpId} myRecipe={recipeInfo.myRecipe} />
 
-      <RecipeDetailHeader mainImgUrl={recipeInfo.rcpImg} />
+      <RecipeDetailHeader recipeInfo={recipeInfo} />
 
-      <RecipeProductsList />
+      <RecipeProductsList ingredients={recipeInfo.ingredients} />
       {/* 레시피 재료 추가해야함 */}
       <RecipeRelatedVideo videoUrl={recipeInfo.rcpVideo} />
 

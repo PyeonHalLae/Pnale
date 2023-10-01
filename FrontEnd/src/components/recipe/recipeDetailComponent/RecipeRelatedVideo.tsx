@@ -18,17 +18,18 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
         <a
           href={videoUrl}
           className="w-[100%]
+          h-[1.8125rem]
           text-[.75rem] 
           line-clamp-1 
           mb-[.625rem] 
           p-[.25rem]
-          py-[.1rem]
+          py-[.4rem]
           border-[0.05rem]
-          rounded-[0.5rem]
+          rounded-[0.625rem]
           border-common-bold-back-color
           bg-common-back-color"
         >
-          {videoUrl}
+          {videoUrl}테스트
         </a>
       </Header>
       <VideoBox>
@@ -40,7 +41,7 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
           />
         </a> */}
 
-        <iframe className="w-[calc(100%)] h-[18.75rem]" src={LinkUrl} title="정의"></iframe>
+        <iframe className="w-[calc(100%)] h-[18.75rem]" src={LinkUrl} title="비디오화면"></iframe>
       </VideoBox>
     </Container>
   );
@@ -53,7 +54,7 @@ bg-white my-[.625rem]
 `;
 
 const Header = tw.div`
-py-[1rem] px-[1.875rem] text-[1.25rem] text-common-text-color
+pt-[1rem] px-[1.875rem] text-[1.25rem] text-common-text-color
 `;
 
 const VideoBox = tw.div`

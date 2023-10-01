@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-const RecipeDetailHeaderBar = () => {
+
+const RecipeDetailHeaderBar = ({ recipeId, myRecipe }: { recipeId: number; myRecipe: boolean }) => {
   const navigate = useNavigate();
 
   const backBtn = () => {
@@ -9,13 +10,14 @@ const RecipeDetailHeaderBar = () => {
 
   const manageBtn = () => {
     console.log("gg");
+    console.log(recipeId);
   };
 
   return (
     <SearchBar>
       <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
       <DetailManageBtnBox>
-        <DetailManageBtn src="/img/btn/menu-btn.png" onClick={manageBtn} />
+        {myRecipe && <DetailManageBtn src="/img/btn/menu-btn.png" onClick={manageBtn} />}
       </DetailManageBtnBox>
     </SearchBar>
   );

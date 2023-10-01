@@ -16,13 +16,13 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
   const productDeleteHandler = (deleteId: number) => {
-    const newProducts = products.filter((product) => product.productId !== deleteId);
+    const newProducts = products.filter((product) => product.prdId !== deleteId);
     setProducts(newProducts);
   };
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newProducts = products.map((product) => {
-      return product.productName === e.target.value
-        ? { ...product, isChangeable: !product.isChangeable }
+      return product.prdName === e.target.value
+        ? { ...product, changeable: !product.changeable }
         : product;
     });
     setProducts(newProducts);
@@ -57,14 +57,14 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
               <ProductNameBox>
                 <div className="w-[4rem] text-center">{index + 1}</div>
                 <div className="w-[calc(100%-2rem)] h-[1.5rem] border-b-2 px-[0.5rem] line-clamp-1">
-                  {product.productName}
+                  {product.prdName}
                 </div>
               </ProductNameBox>
               <ProductChangeBox>
                 <input
                   className="inline-block"
-                  checked={product.isChangeable}
-                  value={product.productName}
+                  checked={product.changeable}
+                  value={product.prdName}
                   type="checkbox"
                   onChange={checkHandler}
                 ></input>
@@ -74,7 +74,7 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
                   className="w-[1.5rem] border"
                   src="/img/btn/close-btn.png"
                   onClick={() => {
-                    productDeleteHandler(product.productId);
+                    productDeleteHandler(product.prdId);
                   }}
                 />
               </div>
