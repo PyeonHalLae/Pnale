@@ -33,6 +33,7 @@ public class JwtService {
 
     public String createAccessToken(Long memberId){
         Date now = new Date();
+        System.out.println(now);
         return JWT.create()
                 .withSubject("AccessToken")
                 .withExpiresAt(new Date(now.getTime() + accessPeriod))
@@ -63,12 +64,12 @@ public class JwtService {
         response.setStatus(HttpServletResponse.SC_OK);
 
         Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setMaxAge(1800); //1800000
+        accessCookie.setMaxAge(1800+3600*9); //1800000
         accessCookie.setHttpOnly(true);
         accessCookie.setPath("/api");
 
         Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setMaxAge(1209600); //1209600000
+        refreshCookie.setMaxAge(120960+3600*9); //1209600000
         refreshCookie.setHttpOnly(true);
         refreshCookie.setPath("/api/auth");
 
