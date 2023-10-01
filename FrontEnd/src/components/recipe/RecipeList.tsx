@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-import PopularRecipeRoller from "./recipeListComponent/PopularRecipeRoller";
 
 // 레시피 카드
 import { recipeType } from "@/model/commonType";
@@ -9,44 +8,91 @@ import { recipeType } from "@/model/commonType";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
+import { customAxios } from "@/api/customAxios";
+import { popularRecipeType } from "./recipeListComponent/recipeListType";
+import PopularRecipeCard from "./recipeListComponent/PopularRecipeCard";
 
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
 const RecipeList = () => {
-  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
+  const [popularRecipe, setPopularRecipe] = useState<popularRecipeType>();
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
   const [listSortBy, setListSortBy] = useState<string>("latest");
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    customAxios
+      .get("/api/recipe", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // params: {
+        //   page: 0,
+        //   size: 5,
+        // },
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        // 인기레시피
+        setPopularRecipe(res.data.best);
+        // 그냥 레시피 리스트
+        setRecipeList(res.data.recipes);
+      })
+      .catch((err) => {
+        const code = err.response.status;
+        if (code === 401) {
+          customAxios
+            .get("http://pnale.online/api/auth/recipe", {
+              withCredentials: true,
+            })
+            .then((response) => {
+              console.log(response.data);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } else {
+          console.log(err);
+        }
+      });
+    // setPopularRecipe({
+    //   rcpName:
+    //     "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
+    //   rcpThumbnail: "/img/test/너굴맨레시피.jpg",
+    //   rcpSimple: "한줄설명",
+    //   member: {
+    //     memberId: 1,
+    //     nickname: "정현모",
+    //     memberImg: "/img/test/너굴맨레시피.jpg",
+    //   },
+    //   ingredients: ["짜파게티", "너구리", "짜파게티", "너구리", "짜파게티", "너구리"],
+    //   viewCnt: 1000,
+    //   likeCnt: 1000,
+    //   replyCnt: 1000,
+    //   rcpId: 1,
+    //   influence: true,
+    //   like: true,
+    // });
     setRecipeList([
       {
-        recipeTitle:
-          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
+        rcpName:
+          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
+        rcpThumbnail: "/img/test/너굴맨레시피.jpg",
+        member: {
+          memberId: 1,
+          nickname: "정현모",
+          memberImg: "/img/test/너굴맨레시피.jpg",
+        },
         viewCnt: 1000,
         likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-    setPopularRecipeList([
-      {
-        recipeTitle: "두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
+        replyCnt: 1000,
+        createdAt: "2020.20.20",
+        rcpId: 1,
+        influence: true,
+        like: true,
+        myRecipe: false,
       },
     ]);
   }, []);
@@ -62,7 +108,11 @@ const RecipeList = () => {
       </ContentTitle>
 
       {/* 인기 레시피 컨테이너 */}
-      <PopularRecipeRoller popularRecipeList={popularRecipeList} />
+      {popularRecipe === undefined ? (
+        <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
+      ) : (
+        <PopularRecipeCard popularRecipe={popularRecipe} />
+      )}
 
       {/* 전체 레시피 컨테이너 */}
 
@@ -88,7 +138,7 @@ const RecipeList = () => {
       {recipeList.map((recipeItem, index) => (
         <RecipeCard
           // onClick={navigateHandler(recipeItem.recipeId)}
-          key={recipeItem.recipeTitle + index}
+          key={recipeItem.rcpName + index}
           recipeInfo={recipeItem}
         />
       ))}
@@ -157,3 +207,15 @@ const ViewMoreBtn = tw.button`
 const CreateBtn = tw.img`
   w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[calc(50%-11rem)]
 `;
+
+const PopularRecipeContainer = tw.div`  
+relatvie
+bg-white
+min-w-[22.5rem]
+max-w-[28.125rem]
+h-[18.125rem]
+mt-[0.62rem]
+mb-[0.625rem]
+position: relative;
+text-center
+py-24`;
