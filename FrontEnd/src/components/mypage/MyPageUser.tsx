@@ -29,12 +29,13 @@ const MyPageUser = () => {
   const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
+    console.log("마이페이지 엑시오스 요청");
     axios
       .get("/api/mypage/", {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res);
+        console.log(res, "처음 요청");
         const resData = res.data;
         //로그인 된경우
         if (resData.code == 200) {
@@ -51,14 +52,17 @@ const MyPageUser = () => {
               withCredentials: true,
             })
             .then((res) => {
+              console.log("리프레시로 요청");
               //재발급이 잘되서 정보를 받아온경우
               console.log(res.data.data.user);
             })
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
+                console.log("몰라 403오류야");
               } else {
                 //그외 서버 오류들
+                console.log("몰라 그냥오류야");
               }
             });
         } else {
