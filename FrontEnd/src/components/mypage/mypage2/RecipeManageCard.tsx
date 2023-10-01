@@ -2,28 +2,37 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
+interface recipeMemberType {
+  memberId: number;
+  nickname: string;
+  memberImg: string;
+}
 interface recipeInfoType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
+  rcpId: number;
+  rcpName: string;
+  member: recipeMemberType;
+  rcpSimple: string;
+  rcpThumbnail: string;
+  createdAt: string;
   likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
+  replyCnt: number;
+  viewCnt: number;
+  like: boolean;
+  myRecipe: boolean;
+  influence: boolean;
 }
 
 function RecipeManageCard({
-  recipeInfo,
+  $recipeInfo,
   myRecipeType,
 }: {
-  recipeInfo: recipeInfoType;
+  $recipeInfo: recipeInfoType;
   myRecipeType: string;
 }) {
   return (
     <Container>
       {/* 레시피 이미지 */}
-      <RecipeImg src={recipeInfo.recipeImg} alt="레시피이미지" />
+      <RecipeImg src={$recipeInfo.rcpThumbnail} alt="레시피이미지" />
 
       {/* 이미지 외의 영역 */}
       <ContentBox>
@@ -36,39 +45,39 @@ function RecipeManageCard({
         {/* 조회수박스 */}
         <ViewCountBox>
           <ViewIcon src="/img/icons/view-icon-gray.png" alt="조회" />
-          {recipeInfo.viewCnt}
+          {$recipeInfo.viewCnt}
         </ViewCountBox>
 
         {/* 레시피 제목 */}
-        <Title>{recipeInfo.recipeTitle}</Title>
+        <Title>{$recipeInfo.rcpName}</Title>
 
         {/* 유저 닉네임, 유저 이미지 */}
-        {recipeInfo.userName === "운영자" ? (
+        {$recipeInfo.influence === true ? (
           <div className="inline-block text-[0.8rem] text-white bg-common-peach justify-center px-1 my-auto h-[1rem]">
             인플루언서
           </div>
         ) : (
           <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top">
-            by {recipeInfo.userName}
+            by {$recipeInfo.member.nickname}
             <img
               className="w-[1.5rem] h-[1.5rem] rounded-[0.8rem] ml-2 inline-block"
-              src={recipeInfo.userImg}
+              src={$recipeInfo.member.memberImg}
               alt="유저이미지"
             />
           </div>
         )}
         {/* 작성일 */}
         <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {recipeInfo.createdDate}
+          {$recipeInfo.createdAt}
         </div>
       </ContentBox>
 
       {/* 좋아요 댓글 우하단 박스 */}
       <LikeCommentBox>
         <LikeCommentIcon src="/img/icons/like-icon-pink.png" alt="좋아요" />
-        {recipeInfo.likeCnt}
+        {$recipeInfo.likeCnt}
         <LikeCommentIcon src="/img/icons/comment-icon-pink.png" alt="댓글" />
-        {recipeInfo.commentCnt}
+        {$recipeInfo.replyCnt}
       </LikeCommentBox>
     </Container>
   );

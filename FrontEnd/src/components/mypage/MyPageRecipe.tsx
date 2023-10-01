@@ -3,114 +3,68 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { useState, useEffect } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
+import axios from "axios";
 
+interface recipeMemberType {
+  memberId: number;
+  nickname: string;
+  memberImg: string;
+}
 interface recipeInfoType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
+  rcpId: number;
+  rcpName: string;
+  member: recipeMemberType;
+  rcpSimple: string;
+  rcpThumbnail: string;
+  createdAt: string;
   likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
+  replyCnt: number;
+  viewCnt: number;
+  like: boolean;
+  myRecipe: boolean;
+  influence: boolean;
 }
 
 const MyPageRecipe = () => {
   const navigate = useNavigate();
 
-  const [myRecipeState, setMyRecipeState] = useState<boolean>(true);
+  const [myRecipeState, setMyRecipeState] = useState<boolean>(false);
   const [likeRecipeState, setLikeRecipeState] = useState<boolean>(false);
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
   const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
-
-  useEffect(() => {
-    setRecipeList([
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-      {
-        recipeTitle: "두줄제목입니다입니다입니다입니다",
-        recipeImg: "/public/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/public/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        // recipeId 도 받아와야함
-      },
-    ]);
-  }, []);
 
   const OnMyRecipe = () => {
     if (!myRecipeState) {
       setMyRecipeState(true);
       setLikeRecipeState(false);
       setRecipeType("MYRECIPE");
-      //엑시오스 들어갈 예정
+      axios
+        .get("/api/mypage/recipe?page=0", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data.data.content, "성공");
+          setRecipeList(res.data.data.content);
+        })
+        .catch((err) => {
+          console.log("에러!", err);
+          const code = err.response.status;
+          //토큰이 있었으나 만료된 경우
+          if (code === 401) {
+            console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
+            axios
+              .get("/api/auth/mypage/recipe?page=0")
+              .then((res) => {
+                console.log(res.data.data.content, "재발급");
+                setRecipeList(res.data.data.content);
+              })
+              .catch((err) => {
+                console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
+              });
+          } else {
+            console.log("로그인이 안되어있었나봐요! ");
+          }
+        });
     }
   };
 
@@ -120,8 +74,41 @@ const MyPageRecipe = () => {
       setLikeRecipeState(true);
       setRecipeType("LIKERECIPE");
       //엑시오스 들어갈 예정
+      axios
+        .get("/api/mypage/pick_recipe?page=0", {
+          withCredentials: true,
+        })
+        .then((res) => {
+          console.log(res.data.data.content, "성공");
+          setRecipeList(res.data.data.content);
+        })
+        .catch((err) => {
+          console.log("에러!", err);
+          console.log(err.response);
+          const code = err.response.status;
+          //토큰이 있었으나 만료된 경우
+          if (code === 401) {
+            console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
+            axios
+              .get("/api/auth/mypage/pick_recipe?page=0")
+              .then((res) => {
+                console.log(res.data.data.content, "재발급");
+                setRecipeList(res.data.data.content);
+              })
+              .catch((err) => {
+                console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
+              });
+          } else {
+            console.log("로그인이 안되어있었나봐요! ");
+            console.log(err);
+          }
+        });
     }
   };
+
+  useEffect(() => {
+    OnMyRecipe();
+  }, []);
 
   return (
     <>
@@ -152,10 +139,10 @@ const MyPageRecipe = () => {
         </SideBtn>
       </MyRecipeHeader>
       <MyRecipeMain>
-        {recipeList.map((recipeItem, index) => (
+        {recipeList.map((recipeItem) => (
           <RecipeManageCard
-            key={recipeItem.recipeTitle + index}
-            recipeInfo={recipeItem}
+            key={recipeItem.rcpId}
+            $recipeInfo={recipeItem}
             myRecipeType={recipeType}
           />
         ))}
