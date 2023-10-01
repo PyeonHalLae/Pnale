@@ -41,6 +41,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("재로그인이 필요합니다.");
     }
 
+
     @ExceptionHandler(CustomException.class)
     public CustomResponse handlerCustomException(CustomException ce) {
         return new CustomResponse(ce.getCustomErrorCode().getCode(), ce.getCustomErrorCode().getMessage());

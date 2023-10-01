@@ -67,8 +67,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
 
                 jwtService.getMemberId(accessToken).flatMap(memberRepository::findByMemberId).ifPresent(member -> {
                     saveAuthentication(member);
-                    request.setAttribute("memberId", 8L);
-                    //request.setAttribute("memberId", member.getMemberId());
+                    request.setAttribute("memberId", member.getMemberId());
                 });
 
                 filterChain.doFilter(request, response);
@@ -96,8 +95,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
                     String reIssuedAccessToken = jwtService.createAccessToken(member.getMemberId());
 
                     jwtService.sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
-                    //request.setAttribute("memberId", member.getMemberId());
-                    request.setAttribute("memberId", 8L);
+                    request.setAttribute("memberId", member.getMemberId());
                     System.out.println(request.getAttribute("memberId"));
                     saveAuthentication(member);
                 });
