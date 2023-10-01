@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
 import axios from "axios";
+import { ProductComp } from "@/model/commonType";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
@@ -10,22 +11,19 @@ const myPageType = [
   { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
-// interface likeProductType {
-//   prodId: number;
-//   prdName: string;
-// }
-
 interface UserInfoType {
-  usrId: number;
+  memberId: number;
   nickName: string;
-  usrImg: string;
+  socialType: string;
+  memberImg: string;
   email: string;
   usrEmail: boolean;
+  mailReceive: boolean;
 }
 
 const MyPageUser = () => {
   const navigate = useNavigate();
-  // const [productInfo, setProductInfo] = useState<likeProductType[]>([]);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
@@ -36,10 +34,11 @@ const MyPageUser = () => {
       })
       .then((res) => {
         console.log(res, "처음 요청");
-        const resData = res.data;
         //로그인 된경우
+        const resData = res.data;
         if (resData.code == 200) {
-          setUserInfo(resData.data.user);
+          setUserInfo(resData.data.member);
+          setProductInfo(resData.data.content);
         }
       })
       .catch((err) => {
@@ -54,7 +53,11 @@ const MyPageUser = () => {
             .then((res) => {
               console.log("리프레시로 요청");
               //재발급이 잘되서 정보를 받아온경우
-              console.log(res.data.data.user);
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data.member);
+                setProductInfo(resData.data.content);
+              }
             })
             .catch((err) => {
               if (err.code === 403) {
@@ -110,7 +113,7 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.usrImg} />
+              <UserImage $imgurl={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
                 <span className="text-[#1E2B4F]">{userInfo.nickName}</span>님<br />
                 반갑습니다!
@@ -145,12 +148,12 @@ const MyPageUser = () => {
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
-                {/* {productInfo.map((value, index) => (
-                  <Product key={value.prodId + index}>
-                    <ProductImage $imgurl={value.productImage} />
-                    <ProductName>{value.productName}</ProductName>
+                {productInfo.map((value, index) => (
+                  <Product key={value.product.productId + index}>
+                    <ProductImage $imgurl={value.product.productImg} />
+                    <ProductName>{value.product.productName}</ProductName>
                   </Product>
-                ))} */}
+                ))}
               </Products>
             </div>
           </LikeProduct>
@@ -233,33 +236,33 @@ const Products = tw.div`
   grid grid-cols-3 
 `;
 
-// const Product = styled.div`
-//   height: 8.75rem;
-//   width: 6.875rem;
-//   margin: 0.5rem auto 0rem auto;
-// `;
+const Product = styled.div`
+  height: 8.75rem;
+  width: 6.875rem;
+  margin: 0.5rem auto 0rem auto;
+`;
 
-// const ProductImage = styled.div<{ $imgurl: string }>`
-//   width: 5.9375rem;
-//   height: 6.25rem;
-//   margin: 0rem auto;
-//   background-image: url(${(props) => props.$imgurl});
-//   background-size: 5.9375rem 6.25rem;
-//   background-position: center;
-//   background-repeat: no-repeat;
-// `;
+const ProductImage = styled.div<{ $imgurl: string }>`
+  width: 5.9375rem;
+  height: 6.25rem;
+  margin: 0rem auto;
+  background-image: url(${(props) => props.$imgurl});
+  background-size: 5.9375rem 6.25rem;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 
-// const ProductName = styled.div`
-//   width: 6.25rem;
-//   height: 1.875rem;
-//   margin: 0.3125rem auto 0rem auto;
-//   font-size: 0.625rem;
-//   color: #1e2b4f;
-//   font-weight: normal;
-//   text-align: center;
-//   word-wrap: break-word;
-//   overflow: hidden;
-//   display: -webkit-box;
-//   -webkit-line-clamp: 2;
-//   -webkit-box-orient: vertical;
-// `;
+const ProductName = styled.div`
+  width: 6.25rem;
+  height: 1.875rem;
+  margin: 0.3125rem auto 0rem auto;
+  font-size: 0.625rem;
+  color: #1e2b4f;
+  font-weight: normal;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;

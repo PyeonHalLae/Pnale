@@ -31,7 +31,7 @@ const MyPageRecipe = () => {
   const [myRecipeState, setMyRecipeState] = useState<boolean>(false);
   const [likeRecipeState, setLikeRecipeState] = useState<boolean>(false);
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
-  const [recipeList, setRecipeList] = useState<recipeInfoType[]>([]);
+  const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
 
   const OnMyRecipe = () => {
     if (!myRecipeState) {
@@ -43,10 +43,19 @@ const MyPageRecipe = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data.data.content, "성공");
-          setRecipeList(res.data.data.content);
+          console.log(res, "성공");
+          if (res.data.code === 200) {
+            console.log("200 입니다");
+            setRecipeList(res.data.data.content);
+          }
+          if (res.data.code === 204) {
+            console.log("204 입니다");
+            setRecipeList(null);
+          }
         })
         .catch((err) => {
+          console.log("에러가 발생했어!");
+          console.log(err);
           console.log("에러!", err);
           const code = err.response.status;
           //토큰이 있었으나 만료된 경우
@@ -55,8 +64,15 @@ const MyPageRecipe = () => {
             axios
               .get("/api/auth/mypage/recipe?page=0")
               .then((res) => {
-                console.log(res.data.data.content, "재발급");
-                setRecipeList(res.data.data.content);
+                console.log(res, "성공");
+                if (res.data.code === 200) {
+                  console.log("200 입니다");
+                  setRecipeList(res.data.data.content);
+                }
+                if (res.data.code === 204) {
+                  console.log("204 입니다");
+                  setRecipeList(null);
+                }
               })
               .catch((err) => {
                 console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
@@ -79,28 +95,43 @@ const MyPageRecipe = () => {
           withCredentials: true,
         })
         .then((res) => {
-          console.log(res.data.data.content, "성공");
-          setRecipeList(res.data.data.content);
+          console.log(res, "성공");
+          if (res.data.code === 200) {
+            console.log("200 입니다");
+            setRecipeList(res.data.data.content);
+          }
+          if (res.data.code === 204) {
+            console.log("204 입니다");
+            setRecipeList(null);
+          }
         })
-        .catch((err) => {
-          console.log("에러!", err);
-          console.log(err.response);
-          const code = err.response.status;
+        .catch((error) => {
+          console.log("에러!", error);
+          console.log(error.response);
+          console.log(error === null);
+          const code = error.response.status;
           //토큰이 있었으나 만료된 경우
           if (code === 401) {
             console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
             axios
               .get("/api/auth/mypage/pick_recipe?page=0")
               .then((res) => {
-                console.log(res.data.data.content, "재발급");
-                setRecipeList(res.data.data.content);
+                console.log(res, "성공");
+                if (res.data.code === 200) {
+                  console.log("200 입니다");
+                  setRecipeList(res.data.data.content);
+                }
+                if (res.data.code === 204) {
+                  console.log("204 입니다");
+                  setRecipeList(null);
+                }
               })
               .catch((err) => {
                 console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
               });
           } else {
             console.log("로그인이 안되어있었나봐요! ");
-            console.log(err);
+            console.log(error);
           }
         });
     }
