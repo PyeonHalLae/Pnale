@@ -34,6 +34,7 @@ const MyPageUser = () => {
         withCredentials: true,
       })
       .then((res) => {
+        console.log(res);
         const resData = res.data;
         //로그인 된경우
         if (resData.code == 200) {
