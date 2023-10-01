@@ -212,11 +212,10 @@ const UserImage = styled.div<{ $imgurl: string }>`
   height: 5rem;
   border-radius: 50%;
   background-image: url(${(props) => props.$imgurl});
-  background-size: contain;
+  background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
   margin: auto 1rem;
-  border: 0.0313rem solid rgba(0, 0, 0, 0.25);
 `;
 
 const LikeProduct = styled.div`
