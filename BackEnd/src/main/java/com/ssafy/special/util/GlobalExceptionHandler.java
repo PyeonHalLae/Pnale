@@ -1,5 +1,7 @@
 package com.ssafy.special.util;
 
+import com.ssafy.special.exception.AuthException;
+import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.CustomResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +38,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Push 알림 서버를 재 연결합니다.");
     }
 
+    @ExceptionHandler(AuthException.class)
+    public ResponseEntity<?> handlerCustomException(AuthException e) {
+        if(e.getCustomErrorCode().equals(CustomErrorCode.EXPIRED_TOKEN))
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 만료되었습니다.");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("재로그인해주세요");
+    }
+    
     @ExceptionHandler(CustomException.class)
     public CustomResponse handlerCustomException(CustomException ce) {
         return new CustomResponse(ce.getCustomErrorCode().getCode(), ce.getCustomErrorCode().getMessage());

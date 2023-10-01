@@ -64,7 +64,7 @@ public class MyPageController {
     @GetMapping("/recipe")
     public DataResponse<?> getUserRecipes(HttpServletRequest request,@PageableDefault(size = 9) Pageable pageable){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId != null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
         Page<RecipeListDTO> lists = recipeService.getMyLists(memberId, pageable);
         if(lists.isEmpty()) return new DataResponse<>(204, "현재 페이지에 대한 정보가 없습니다.", null);
