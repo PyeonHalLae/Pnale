@@ -3,14 +3,13 @@ package com.ssafy.special.CSR.controllers;
 import com.ssafy.special.CSR.dtos.conv.FilterDTO;
 import com.ssafy.special.CSR.services.ConvService;
 import com.ssafy.special.enums.CorpType;
-import com.ssafy.special.exception.CustomErrorCode;
-import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomResponse;
-import com.ssafy.special.exception.DataResponse;
+import com.ssafy.special.exception.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -24,7 +23,7 @@ public class ConvController {
 
     @GetMapping("/{corpType}")
     public DataResponse<?> getConvData(@PageableDefault(size = 9) Pageable pageable,
-                                       @PathVariable("corpType") CorpType corpType){
+                                       @PathVariable("corpType") CorpType corpType) {
         log.info("{}", corpType);
         return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
                                     convService.findCorpData(pageable, corpType));

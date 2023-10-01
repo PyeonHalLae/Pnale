@@ -7,6 +7,7 @@ import com.ssafy.special.entity.MemberPickProd;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.vo.MemberUpdateDTO;
+import com.ssafy.special.util.ResponseUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -33,10 +34,12 @@ public class MemberService {
     public Map<String, Object> findMemberInfo(Long memberId) {
         Map<String, Object> response = new HashMap<>();
 
+
+
         response.put("member", memberRepository.findByMemberId(memberId)
-                                .map(Member::toInfoDTO)
+                        .map(Member::toInfoDTO)
                                 .orElseThrow(() -> new CustomException(CustomErrorCode.INVALID_MEMBER)));
-        response.put("memberPick", memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(memberId, Pageable.ofSize( 6)));
+        response.put("memberPick", ResponseUtil.getPageProducts(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(memberId, Pageable.ofSize( 6))));
         return response;
     }
 }

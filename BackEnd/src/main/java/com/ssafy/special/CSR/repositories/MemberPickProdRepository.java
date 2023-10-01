@@ -19,6 +19,7 @@ public interface MemberPickProdRepository extends JpaRepository<MemberPickProd, 
             "FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true")
+            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true " +
+            "ORDER BY FUNCTION('RAND')" )
     Page<Object[]> findByMember_MemberIdAndLikeStatTrue(@Param("memberId")Long memberId, Pageable pageable);
 }

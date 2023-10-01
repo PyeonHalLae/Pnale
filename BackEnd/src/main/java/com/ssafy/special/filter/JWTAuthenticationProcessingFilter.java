@@ -41,6 +41,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
         // 액세스 토큰이 없다면 다음 필터로 진행합니다.
         // 따라서 로그인이 반드시 필요한 API는 SpringSecurity에서 401오류를 보냅니다.
         if(accessToken == null || request.getRequestURI().contains(NO_CHECK_URL) || request.getRequestURI().contains("favicon")){
+            //request.setAttribute("memberId", 8L);
             filterChain.doFilter(request, response);
             return;
         }
@@ -66,7 +67,8 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
 
                 jwtService.getMemberId(accessToken).flatMap(memberRepository::findByMemberId).ifPresent(member -> {
                     saveAuthentication(member);
-                    request.setAttribute("memberId", member.getMemberId());
+                    request.setAttribute("memberId", 8L);
+                    //request.setAttribute("memberId", member.getMemberId());
                 });
 
                 filterChain.doFilter(request, response);
@@ -94,7 +96,8 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
                     String reIssuedAccessToken = jwtService.createAccessToken(member.getMemberId());
 
                     jwtService.sendAccessAndRefreshToken(response, reIssuedAccessToken, reIssuedRefreshToken);
-                    request.setAttribute("memberId", member.getMemberId());
+                    //request.setAttribute("memberId", member.getMemberId());
+                    request.setAttribute("memberId", 8L);
                     System.out.println(request.getAttribute("memberId"));
                     saveAuthentication(member);
                 });
