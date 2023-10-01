@@ -75,26 +75,26 @@ const RecipeList = () => {
     //   influence: true,
     //   like: true,
     // });
-    setRecipeList([
-      {
-        rcpName:
-          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        rcpThumbnail: "/img/test/너굴맨레시피.jpg",
-        member: {
-          memberId: 1,
-          nickname: "정현모",
-          memberImg: "/img/test/너굴맨레시피.jpg",
-        },
-        viewCnt: 1000,
-        likeCnt: 1000,
-        replyCnt: 1000,
-        createdAt: "2020.20.20",
-        rcpId: 1,
-        influence: true,
-        like: true,
-        myRecipe: false,
-      },
-    ]);
+    // setRecipeList([
+    //   {
+    //     rcpName:
+    //       "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
+    //     rcpThumbnail: "/img/test/너굴맨레시피.jpg",
+    //     member: {
+    //       memberId: 1,
+    //       nickname: "정현모",
+    //       memberImg: "/img/test/너굴맨레시피.jpg",
+    //     },
+    //     viewCnt: 1000,
+    //     likeCnt: 1000,
+    //     replyCnt: 1000,
+    //     createdAt: "2020.20.20",
+    //     rcpId: 1,
+    //     influence: true,
+    //     like: true,
+    //     myRecipe: false,
+    //   },
+    // ]);
   }, []);
 
   return (
