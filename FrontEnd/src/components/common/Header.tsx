@@ -20,15 +20,16 @@ const Header = () => {
   };
 
   const toggleSearch = async (data: SearchResponseToRecommand[]) => {
+    console.log("data", data);
+
     const idsArray = data.map((item) => item.id);
     console.log("전송할 id 값:", idsArray);
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
     });
-    // console.log(response.data.data);
 
-    navigate("/search", { state: response.data.data });
+    navigate("/search", { state: { responseData: response.data.data, idsArray } });
     reset();
   };
 
@@ -64,6 +65,13 @@ const Header = () => {
       } else return [];
     },
     {
+      onError: (error) => {
+        console.log("onError");
+        console.log(error?.response?.status);
+      },
+      onSettled: () => {
+        // console.log("아무튼 Go");
+      },
       retry: 2,
     }
   );

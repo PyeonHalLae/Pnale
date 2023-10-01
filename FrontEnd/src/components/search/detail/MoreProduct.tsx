@@ -2,22 +2,18 @@ import { ProductComp } from "@/model/commonType";
 import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const SearchProduct = () => {
+  const location = useLocation();
+  console.log(location.state);
+
   const [searchData, setSearchData] = useState<ProductComp[]>([]);
 
   useEffect(() => {
-    axios
-      .get("/api/search/product?page=2", {
-        data: {
-          keyword: "포카칩",
-          page: 2,
-        },
-      })
-      .then((res) => {
-        const searchRes = res;
-        console.log(searchRes);
-      });
+    axios.post(`/api/search/product?page=0`, { ids: location.state }).then((res) => {
+      setSearchData(res.data.data.content);
+    });
   }, []);
   return (
     <div className="bg-white ">

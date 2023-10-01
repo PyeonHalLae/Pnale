@@ -1,15 +1,23 @@
 import { useNavigate } from "react-router-dom";
 import { searchDateSearch } from "@/model/searchType";
 import ProductCard from "@components/common/ProductCard";
+import { useEffect } from "react";
 
 type SearchAreaPros = {
   search: searchDateSearch;
+  ids: number;
 };
 
-const SearchArea = ({ search }: SearchAreaPros) => {
+const SearchArea = ({ search, ids }: SearchAreaPros) => {
   const navigate = useNavigate();
-  // const [search, setSearch] = useState<ProductComp[]>([]);
-  console.log("search", search);
+  useEffect(() => {
+    console.log("search", search);
+    console.log(ids);
+  });
+
+  const moveToMoreProduct = () => {
+    navigate("/search-product", { state: ids });
+  };
 
   return (
     <div className="bg-white ">
@@ -20,7 +28,7 @@ const SearchArea = ({ search }: SearchAreaPros) => {
         </div>
         <button
           className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-peach"
-          onClick={() => navigate("/search-product")}
+          onClick={() => moveToMoreProduct()}
         >
           더보기
         </button>
