@@ -170,13 +170,15 @@ const MyPageRecipe = () => {
         </SideBtn>
       </MyRecipeHeader>
       <MyRecipeMain>
-        {recipeList.map((recipeItem) => (
-          <RecipeManageCard
-            key={recipeItem.rcpId}
-            $recipeInfo={recipeItem}
-            myRecipeType={recipeType}
-          />
-        ))}
+        {recipeList === null
+          ? null
+          : recipeList.map((recipeItem) => (
+              <RecipeManageCard
+                key={recipeItem.rcpId}
+                $recipeInfo={recipeItem}
+                myRecipeType={recipeType}
+              />
+            ))}
       </MyRecipeMain>
     </>
   );
