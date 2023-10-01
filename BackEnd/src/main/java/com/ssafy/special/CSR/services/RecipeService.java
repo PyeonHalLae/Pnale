@@ -1,5 +1,6 @@
 package com.ssafy.special.CSR.services;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.special.CSR.dtos.product.ProductInRecipeDTO;
 import com.ssafy.special.CSR.dtos.recipe.*;
 import com.ssafy.special.CSR.repositories.MemberPickRecipeRepository;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 
@@ -38,7 +40,9 @@ public class RecipeService {
     private final RecipeRepository recipeRepository;
     private final RecipeIngredientRepository recipeIngredientRepository;
     private final RecipeReviewRepository recipeReviewRepository;
-    //아니 왜이래
+    private final StringRedisTemplate stringRedisTemplate;
+    private final ObjectMapper objectMapper;
+
 
     /**
      * 레시피를 추가합니다.

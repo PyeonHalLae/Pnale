@@ -51,7 +51,7 @@ public class JwtService {
 
     public void sendAccessToken(HttpServletResponse response, String accessToken){
         Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setMaxAge(1800000);
+        accessCookie.setMaxAge(1800);
         accessCookie.setHttpOnly(true);
         accessCookie.setPath("/");
 
@@ -63,12 +63,12 @@ public class JwtService {
         response.setStatus(HttpServletResponse.SC_OK);
 
         Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setMaxAge(accessPeriod); //1800000
+        accessCookie.setMaxAge(1800); //1800000
         accessCookie.setHttpOnly(true);
         accessCookie.setPath("/api");
 
         Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setMaxAge(refreshPeriod); //1209600000
+        refreshCookie.setMaxAge(1209600); //1209600000
         refreshCookie.setHttpOnly(true);
         refreshCookie.setPath("/api/auth");
 
