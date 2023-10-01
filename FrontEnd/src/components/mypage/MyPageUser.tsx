@@ -148,12 +148,13 @@ const MyPageUser = () => {
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
-                {productInfo.map((value, index) => (
-                  <Product key={value.product.productId + index}>
-                    <ProductImage $imgurl={value.product.productImg} />
-                    <ProductName>{value.product.productName}</ProductName>
-                  </Product>
-                ))}
+                {productInfo &&
+                  productInfo.map((value, index) => (
+                    <Product key={value.product.productId + index}>
+                      <ProductImage $imgurl={value.product.productImg} />
+                      <ProductName>{value.product.productName}</ProductName>
+                    </Product>
+                  ))}
               </Products>
             </div>
           </LikeProduct>
