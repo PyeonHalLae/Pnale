@@ -3,10 +3,7 @@ package com.ssafy.special.CSR.controllers;
 
 
 import com.ssafy.special.entity.Member;
-import com.ssafy.special.exception.CustomErrorCode;
-import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomResponse;
-import com.ssafy.special.exception.DataResponse;
+import com.ssafy.special.exception.*;
 import com.ssafy.special.member.model.JwtService;
 import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.member.model.MemberService;
@@ -61,9 +58,8 @@ public class MemberController {
     }
 
     @GetMapping("/needLogin")
-    @ResponseStatus(HttpStatus.FORBIDDEN)
     public void redirectLogin() {
-
+        throw new AuthException(CustomErrorCode.FORBIDDEN);
     }
 
     @GetMapping("/memberTest")

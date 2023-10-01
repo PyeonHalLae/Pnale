@@ -51,13 +51,13 @@ public class SecurityConfig {
                 .antMatchers(HttpMethod.OPTIONS).permitAll()
                 // 인가
                 .antMatchers("/admin/**").hasAuthority(RoleType.ADMIN.name())
-                .antMatchers("/api/search/**).permitAll()
+                .antMatchers("/api/search/**").permitAll()
                 .anyRequest().permitAll()
 
                 // OAuth 로그인
                 .and()
                 .oauth2Login()
-                .loginPage("https://pnale.online/api/member/login/needLogin")
+                .loginPage("/api/member/needLogin")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint()
