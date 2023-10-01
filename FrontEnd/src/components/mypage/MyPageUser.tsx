@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
-import { MemberInfo } from "@/recoil/memberRecoil";
-import { useRecoilValue } from "recoil";
+import axios from "axios";
+import { ProductComp } from "@/model/commonType";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
@@ -11,28 +11,71 @@ const myPageType = [
   { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
-interface productInfoType {
-  productImage: string;
-  productName: string;
+interface UserInfoType {
+  memberId: number;
+  nickName: string;
+  socialType: string;
+  memberImg: string;
+  email: string;
+  usrEmail: boolean;
+  mailReceive: boolean;
 }
 
 const MyPageUser = () => {
   const navigate = useNavigate();
-  const userInfo = useRecoilValue(MemberInfo);
-  const [productInfo, setProductInfo] = useState<productInfoType[]>([]);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
+  const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
-    setProductInfo([
-      { productImage: "/img/test/image61.png", productName: "농심) 포테토칩 오리지널 120g" },
-      {
-        productImage: "/img/test/image61.png",
-        productName: "농심) 포테토칩 오리지널 120g입니다용효ㅗㅗ호호",
-      },
-      { productImage: "/img/test/image61.png", productName: "!333" },
-      { productImage: "/img/test/image61.png", productName: "!444" },
-      { productImage: "/img/test/image61.png", productName: "!555" },
-      { productImage: "/img/test/image61.png", productName: "!666" },
-    ]);
+    console.log("마이페이지 엑시오스 요청");
+    axios
+      .get("/api/mypage/", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res, "처음 요청");
+        //로그인 된경우
+        const resData = res.data;
+        if (resData.code == 200) {
+          setUserInfo(resData.data.member);
+          setProductInfo(resData.data.content);
+        }
+      })
+      .catch((err) => {
+        //로그인 실패 (엑세스 토큰이 존재하나 만료)
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          console.log("리프레시 토큰을 통한 엑세스 토큰 재발급");
+          axios
+            .get("api/auth/mypage", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              console.log("리프레시로 요청");
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data.member);
+                setProductInfo(resData.data.content);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                console.log("몰라 403오류야");
+              } else {
+                //그외 서버 오류들
+                console.log("몰라 그냥오류야");
+              }
+            });
+        } else {
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+          } else {
+            //그외 서버 오류
+          }
+        }
+      });
   }, []);
 
   const LoginPageMoveHandler = () => {
@@ -41,7 +84,7 @@ const MyPageUser = () => {
 
   return (
     <>
-      {userInfo.member.nickname === null || userInfo.member.nickname === "" ? (
+      {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox onClick={LoginPageMoveHandler}>
@@ -70,9 +113,9 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.member.memberImg} />
+              <UserImage $imgurl={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.member.nickname}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.nickName}</span>님<br />
                 반갑습니다!
                 <div className="text-sm">로그아웃</div>
               </div>
@@ -106,9 +149,9 @@ const MyPageUser = () => {
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
                 {productInfo.map((value, index) => (
-                  <Product key={value.productName + index}>
-                    <ProductImage $imgurl={value.productImage} />
-                    <ProductName>{value.productName}</ProductName>
+                  <Product key={value.product.productId + index}>
+                    <ProductImage $imgurl={value.product.productImg} />
+                    <ProductName>{value.product.productName}</ProductName>
                   </Product>
                 ))}
               </Products>
@@ -168,7 +211,7 @@ const UserImage = styled.div<{ $imgurl: string }>`
   height: 5rem;
   border-radius: 50%;
   background-image: url(${(props) => props.$imgurl});
-  background-size: 4.5rem 4.5rem;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
   margin: auto 1rem;
