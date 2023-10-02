@@ -5,8 +5,10 @@ import { useState, useEffect } from "react";
 import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires } from "@/model/toastMessageJHM";
 
 const MyProduct = () => {
   const navigate = useNavigate();
@@ -21,7 +23,6 @@ const MyProduct = () => {
   };
 
   //유저 정보 만료\
-  const UserInfoExpires = () => toast.warning(`로그인이 만료되어\n로그아웃 되었습니다`);
 
   useEffect(() => {
     axios
