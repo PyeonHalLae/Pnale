@@ -49,7 +49,7 @@ public class RecipeController {
     @GetMapping("/detail")
     public DataResponse<?> getDetailPage(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         DataResponse<RecipeDetailsDTO> response = new DataResponse<>(200, "디테일 페이지를 불러오는 데 성공했습니다.");
         RecipeDetailsDTO detail = recipeService.getDetailRecipe(memberId, rcpId);
 
