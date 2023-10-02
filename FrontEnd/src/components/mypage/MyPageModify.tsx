@@ -1,13 +1,27 @@
 // import React from "react";
+import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+
+interface UserInfoType {
+  memberId: number;
+  nickname: string;
+  socialType: string;
+  email: string;
+  memberImg: string;
+}
+
 const MyPageModify = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState<string>();
   const [userImgSrc, setUserImgSrc] = useState<string>();
+  const [userinfo, setUserInfo] = useState<UserInfoType>();
 
   const inputFileRef = useRef(null);
 
@@ -35,47 +49,97 @@ const MyPageModify = () => {
   };
 
   useEffect(() => {
-    setUserName("김동민");
-    setUserImgSrc("/img/logo/logo-pink.png");
+    axios
+      .get("/api/member/login", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          setUserInfo(resData.data);
+          setUserName(resData.data.nickname);
+          setUserImgSrc(resData.data.memberImg);
+        }
+      })
+      .catch((err) => {
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .get("/api/auth/member/login", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data);
+                setUserName(resData.data.nickname);
+                setUserImgSrc(resData.data.memberImg);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+                setUserInfo(null);
+                navigate("/mypage");
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+            setUserInfo(null);
+            navigate("/mypage");
+          } else {
+            console.log("서버 오류 발생");
+          }
+        }
+      });
   }, []);
 
   return (
     <>
-      <BackGround>
-        <ModifyHeader>
-          <BackBtn
-            onClick={() => {
-              navigate(-1);
-            }}
-          />
-        </ModifyHeader>
-        <ModifyMain>
-          <Title>회원정보수정</Title>
-          <ProfileImg>
-            <img src={userImgSrc} />
-            <HiddenInput type="file" ref={inputFileRef} onChange={changeImgHandler} />
-            <ImgChangBtn onClick={imgChangBtnClickHandler} />
-          </ProfileImg>
-          <NameBox>
-            <input type="text" defaultValue={userName} onChange={nameChagneHandler} />
-          </NameBox>
-          <EmailCheckBox>
-            <EmailInfo>
-              <TypeImg />
-              <EmailText>wjdgusaho@naver.com</EmailText>
-            </EmailInfo>
-            <EmailAgree>
-              <AgreeText>메일 전송 수신 동의 </AgreeText>
-              <input type="checkbox" value="true" />
-            </EmailAgree>
-            <EmailGuide>
-              메일 전송 수신 동의를 하실 경우 관심상품의 행사 정보를 메일로 받을수 있습니다
-            </EmailGuide>
-          </EmailCheckBox>
-          <SubmitBtn />
-          <LeaveAccount>회원 탈퇴</LeaveAccount>
-        </ModifyMain>
-      </BackGround>
+      <ToastContainer position="top-center" />
+      {userinfo && (
+        <BackGround>
+          <ModifyHeader>
+            <BackBtn
+              onClick={() => {
+                navigate(-1);
+              }}
+            />
+          </ModifyHeader>
+          <ModifyMain>
+            <Title>회원정보수정</Title>
+            <ProfileImg>
+              <img src={userImgSrc} />
+              <HiddenInput type="file" ref={inputFileRef} onChange={changeImgHandler} />
+              <ImgChangBtn onClick={imgChangBtnClickHandler} />
+            </ProfileImg>
+            <NameBox>
+              <input type="text" defaultValue={userName} onChange={nameChagneHandler} />
+            </NameBox>
+            <EmailCheckBox>
+              <EmailInfo>
+                <TypeImg $socialType={userinfo.socialType} />
+                <EmailText>{userinfo.email}</EmailText>
+              </EmailInfo>
+              <EmailAgree>
+                <AgreeText>메일 전송 수신 동의 </AgreeText>
+                <input type="checkbox" value="true" />
+              </EmailAgree>
+              <EmailGuide>
+                메일 전송 수신 동의를 하실 경우 관심상품의 행사 정보를 메일로 받을수 있습니다
+              </EmailGuide>
+            </EmailCheckBox>
+            <SubmitBtn />
+            <LeaveAccount>회원 탈퇴</LeaveAccount>
+          </ModifyMain>
+        </BackGround>
+      )}
     </>
   );
 };
@@ -173,10 +237,10 @@ const EmailInfo = styled.div`
   justify-content: center;
 `;
 
-const TypeImg = styled.div`
+const TypeImg = styled.div<{ $socialType: string }>`
   height: 2.5rem;
   width: 2.5rem;
-  background-image: url("/img/test/너굴맨레시피.jpg");
+  background-image: url("/img/icons/${(props) => props.$socialType}-smail-icon.png");
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;

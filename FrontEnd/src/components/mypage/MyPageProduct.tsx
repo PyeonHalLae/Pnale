@@ -22,8 +22,7 @@ const MyProduct = () => {
     });
   };
 
-  //유저 정보 만료\
-
+  //유저 정보 만료
   useEffect(() => {
     axios
       .get("/api/mypage/pick_prod?page=0", {
@@ -39,7 +38,7 @@ const MyProduct = () => {
         if (err.code === 401) {
           //리프레시 토큰 재발급
           axios
-            .get("/api/mypage/pick_prod?page=0", {
+            .get("/api/auth/mypage/pick_prod?page=0", {
               withCredentials: true,
             })
             .then((res) => {
@@ -54,6 +53,7 @@ const MyProduct = () => {
                 //제발급 실패! 재로그인 해주세요!!
                 UserInfoExpires();
                 setProductInfo(null);
+                navigate("/mypage");
               } else {
                 console.log("서버 오류 발생");
               }
@@ -62,6 +62,7 @@ const MyProduct = () => {
           if (err.code === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
             setProductInfo(null);
+            navigate("/mypage");
           } else {
             //그외 서버 오류
             console.log("서버 오류 발생");
