@@ -149,7 +149,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
                   </Price>
                   <Like
                     onClick={() => {
-                      LikeClickHandler;
+                      LikeClickHandler();
                     }}
                   />
                 </div>
