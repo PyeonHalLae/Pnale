@@ -38,7 +38,7 @@ const MyPageUser = () => {
         const resData = res.data;
         if (resData.code == 200) {
           setUserInfo(resData.data.member);
-          setProductInfo(resData.data.content);
+          setProductInfo(resData.data.memberPick.content);
         }
       })
       .catch((err) => {
@@ -56,23 +56,27 @@ const MyPageUser = () => {
               const resData = res.data;
               if (resData.code == 200) {
                 setUserInfo(resData.data.member);
-                setProductInfo(resData.data.content);
+                setProductInfo(resData.data.memberPick.content);
               }
             })
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
-                console.log("몰라 403오류야");
+                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                setUserInfo(null);
+                setProductInfo(null);
               } else {
-                //그외 서버 오류들
-                console.log("몰라 그냥오류야");
+                console.log("서버 오류 발생");
               }
             });
         } else {
           if (err.code === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setUserInfo(null);
+            setProductInfo(null);
           } else {
             //그외 서버 오류
+            console.log("서버 오류 발생");
           }
         }
       });

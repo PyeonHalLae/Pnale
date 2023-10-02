@@ -2,10 +2,10 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
+import { ProductComp } from "@/model/commonType";
 
 interface EventType {
-  state: boolean; //행사중이냐 아니냐
-  type: string; //편의저명
+  pyeneType: string; //편의저명
   eventType: string; //행사중일때 해당하는 행사 ( 1+1 2+1)
 }
 
@@ -13,40 +13,22 @@ interface EventImg {
   imgurl: string;
 }
 
-interface ProductType {
-  name: string;
-  price: number;
-  img: string;
-  category: string;
-  mailState: boolean;
-}
+const pyeneList = ["cu", "seven", "gs", "emart"];
 
-const EventState: EventType[] = [
-  { state: true, type: "CU", eventType: "TPO" },
-  { state: false, type: "EMART", eventType: "" },
-  { state: true, type: "GS", eventType: "DISC" },
-  { state: true, type: "SEVEN", eventType: "MORE" },
-];
-
-const productData: ProductType = {
-  name: " 오리온) 포카칩 오리지널 66g 두줄테스트 응애 ㅇㅁㄴㄹㄴㅇㄹ",
-  price: 2000,
-  img: "/img/test/image61.png",
-  category: "스낵",
-  mailState: true,
-};
-
-const ProductCard = () => {
+const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
 
-  const eventImgCheck = async (eventState) => {
-    const eventImgInfo: EventImg[] = [];
+  const eventImgCheck = async () => {
+    const eventList = pyeneList.map((value) => ({
+      pyeneType: value.toUpperCase(),
+      eventType:
+        $productInfo.event[value + "type"] === null ? "NONE" : $productInfo.event[value + "type"],
+    }));
 
-    eventState.map((eventInfo: EventType) => {
-      const { state, type, eventType } = eventInfo;
-      const eventImgUrl = state
-        ? `/img/event/${type}-${eventType}.png`
-        : `/img/event/${type}-NONE.png`;
+    const eventImgInfo: EventImg[] = [];
+    await eventList.map((eventInfo: EventType) => {
+      const { pyeneType, eventType } = eventInfo;
+      const eventImgUrl = `/img/sticker/event/${pyeneType}-${eventType}.png`;
 
       eventImgInfo.push({ imgurl: eventImgUrl });
     });
@@ -55,27 +37,31 @@ const ProductCard = () => {
   };
 
   useEffect(() => {
-    eventImgCheck(EventState);
-  }, []);
+    eventImgCheck();
+  }, [$productInfo]);
 
   return (
     <>
       <BackSize>
         <Card>
-          <ImageBox $imgurl="/img/test/image61.png" />
+          <ImageBox $imgurl={$productInfo.product.productImg} />
           <InfoBox>
             <ProductInfo>
-              <ProductTitle>{productData.name}</ProductTitle>
+              <ProductTitle>{$productInfo.product.productName}</ProductTitle>
               <div className="flex">
-                <Price> {productData.price}원</Price>
+                <Price>
+                  {" "}
+                  {$productInfo.product.price}
+                  <PriceText>원</PriceText>
+                </Price>
                 <Like />
               </div>
-              <Category> {productData.category}</Category>
+              <Category> {$productInfo.product.category}</Category>
               <MailBox>
                 메일 알림 받기
                 <MailBtn
                   $mailState={
-                    productData.mailState
+                    $productInfo.userLike.received
                       ? "/img/btn/checkbox-true.png"
                       : "/img/btn/checkbox-false.png"
                   }
@@ -134,9 +120,11 @@ const ProductInfo = tw.div`
 `;
 
 const ProductTitle = styled.div`
-  font-size: 0.625rem;
+  font-size: 0.6875rem;
   width: 8.5rem;
-  font-weight: normal;
+  height: 2.125rem;
+  font-weight: bold;
+  color: #1e2b4f;
   word-wrap: break-word;
   overflow: hidden; //숨기는거고
   display: -webkit-box; // webkit-box다
@@ -147,6 +135,12 @@ const ProductTitle = styled.div`
 const Price = tw.div`
   text-[0.9375rem] mx-[0.125rem]
   w-[4.9375rem]
+`;
+
+const PriceText = tw.span`
+ml-[2px]  
+text-[11px]
+text-common-text-color
 `;
 
 const Like = styled.div`
@@ -160,7 +154,7 @@ const Like = styled.div`
 
 const Category = styled.span`
   display: inline-block;
-  margin: 0.125rem 0rem;
+  margin: 4px 0rem 0px 0px;
   min-width: 2.5625rem;
   max-width: 8.125rem;
   overflow: hidden;
