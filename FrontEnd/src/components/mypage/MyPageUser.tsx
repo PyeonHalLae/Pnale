@@ -86,6 +86,21 @@ const MyPageUser = () => {
     navigate("/login");
   };
 
+  const LogoutHandler = () => {
+    axios
+      .post("/api/member/logout")
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          setUserInfo(null);
+          setProductInfo([]);
+        }
+      })
+      .catch((err) => {
+        console.log("로그아웃 실패", err);
+      });
+  };
+
   return (
     <>
       {userInfo === null ? (
@@ -121,7 +136,14 @@ const MyPageUser = () => {
               <div className="text-2xl text-[#AEB0B6] mt-11">
                 <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
-                <div className="text-sm">로그아웃</div>
+                <div
+                  className="text-sm"
+                  onClick={() => {
+                    LogoutHandler();
+                  }}
+                >
+                  로그아웃
+                </div>
               </div>
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">

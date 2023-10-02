@@ -3,6 +3,7 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 import { ProductComp } from "@/model/commonType";
+import axios from "axios";
 
 interface EventType {
   pyeneType: string; //편의저명
@@ -18,6 +19,7 @@ const pyeneList = ["cu", "seven", "gs", "emart"];
 const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
 
+  //이벤트 이미지 세팅
   const eventImgCheck = async () => {
     const eventList = pyeneList.map((value) => ({
       pyeneType: value.toUpperCase(),
@@ -35,6 +37,45 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
 
     await setEventUrl([...eventImgInfo]);
   };
+
+  //메일 체크
+  const MailClickHandler = () => {
+    console.log($productInfo.product.productId);
+    axios
+      .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          $productInfo.userLike.received = !$productInfo.userLike.received;
+        }
+      })
+      .catch((err) => {
+        const code = err.response.status;
+        if (code == 401) {
+          axios
+            .get("/api/auth/product/receive/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              if (res.data.code == 200) {
+                $productInfo.userLike.received = !$productInfo.userLike.received;
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                console.log("재로그인 해주세요");
+              }
+            });
+        } else if (code == 403) {
+          console.log("애초에 로그인 안되어있던 사람");
+        } else {
+          console.log("그외 서버 오류");
+        }
+      });
+  };
+
+  //좋아요 해제
+  // const LikeClickHandler = () => {};
 
   useEffect(() => {
     eventImgCheck();
@@ -60,6 +101,9 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
               <MailBox>
                 메일 알림 받기
                 <MailBtn
+                  onClick={() => {
+                    MailClickHandler();
+                  }}
                   $mailState={
                     $productInfo.userLike.received
                       ? "/img/btn/checkbox-true.png"
