@@ -5,9 +5,9 @@ import { useEffect, useState } from "react";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
 
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 
 interface EventType {
   pyeneType: string; //편의저명
@@ -59,10 +59,6 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
 
   const ProductLikeHandler = () => {
     setProductData(null);
-  };
-
-  const ToastBackMessage = (message: string) => {
-    toast.success(message);
   };
 
   //메일 체크

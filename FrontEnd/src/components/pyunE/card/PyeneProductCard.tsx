@@ -8,6 +8,11 @@ import { ProductComp } from "@/model/commonType";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
+import axios from "axios";
+
 interface pyeneProductEventType {
   type: string;
   date: string;
@@ -30,6 +35,7 @@ const PyeneProductCard = ({
   const [eventInfo, setEventInfo] = useState<pyeneProductEventType>(null);
   const [listType, setListType] = useState<string>();
   const { pyenType } = useParams<string>();
+  const [productData, setProductData] = useState<ProductComp>();
 
   const dumState = false;
 
@@ -43,19 +49,69 @@ const PyeneProductCard = ({
     };
     setEventInfo(pyeneEventInfo);
     setListType($listType);
+    setProductData($productInfo);
   }, [$productInfo]);
 
   const ImageErrorHandler = () => {
     prodctImgRef.current.src = "/img/sticker/noimage.jpg";
   };
 
+  const ProductLikeHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        likeStat: !prevProductData.userLike.likeStat,
+      },
+    }));
+  };
+
+  //좋아요 버튼
+  const LikeClickHandler = () => {
+    axios
+      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          ProductLikeHandler();
+          ToastBackMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        const code = err.response.status;
+        if (code == 401) {
+          axios
+            .get("/api/auth/product/pick/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data.code == 200) {
+                ProductLikeHandler();
+                ToastBackMessage(res.data.message);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                UserInfoExpires();
+              }
+            });
+        } else if (code == 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류");
+        }
+      });
+  };
+
   return (
     <>
       <BackSize>
+        <ToastContainer position="top-center" />
         <ImageBox>
           <ProductImg
             ref={prodctImgRef}
-            src={$productInfo.product.productImg}
+            src={productData.product.productImg}
             onError={ImageErrorHandler}
           />
           {dumState && <ProductDumImg src="/img/test/image61.png" />}
@@ -69,12 +125,12 @@ const PyeneProductCard = ({
         </ImageBox>
         <InfoBox>
           <div className="h-6">
-            <Category>{$productInfo.product.category}</Category>
-            <LikeBtn />
+            <Category>{productData.product.category}</Category>
+            <LikeBtn onClick={() => LikeClickHandler()} />
           </div>
-          <Title>{$productInfo.product.productName}</Title>
+          <Title>{productData.product.productName}</Title>
           <PriceBox>
-            <Price>{$productInfo.product.price}</Price>
+            <Price>{productData.product.price}</Price>
             <span>원</span>
           </PriceBox>
         </InfoBox>
