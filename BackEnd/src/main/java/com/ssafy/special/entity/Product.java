@@ -70,4 +70,19 @@ public class Product {
                 .build();
     }
 
+    public void plusRecommand(){
+        this.recommand +=1;
+    }
+
+    public void minRecommand(){
+        if(this.recommand > 0) this.recommand -=1;
+    }
+
+    public void plusHit(){
+        this.hit +=1;
+    }
+
+    public void minHit(){
+        if(this.hit > 0) this.hit -=1;
+    }
 }

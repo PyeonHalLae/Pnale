@@ -1,6 +1,8 @@
 package com.ssafy.special.CSR.services;
 
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
+import com.ssafy.special.CSR.repositories.RecipeRepository;
+import com.ssafy.special.entity.Recipe;
 import com.ssafy.special.util.ResponseUtil;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.entity.MemberPickProd;
@@ -26,27 +28,32 @@ public class ProductService {
     // Service 및 Repository 의존 규칙
     // CRUD 중 R에 해당될 때만 Repository 사용
     private final ProductRepository productRepository;
-
     private final MemberRepository memberRepository;
     private final MemberPickProdRepository memberPickProdRepository;
+    private final RecipeRepository recipeRepository;
+    private final RecipeService recipeService;
 
     //페이지별 전체 행사상품 반환
-    public Page<Map<String, Object>> findAllEventProducts(Pageable pageable) {
-        return ResponseUtil.getPageProducts(productRepository.findAllProducts(pageable));
+    public Page<Map<String, Object>> findAllEventProducts(Pageable pageable, Long memberId) {
+        return memberId != null
+                ? ResponseUtil.getPageProducts(productRepository.findAllProductsByMemberId(pageable, memberId))
+                : ResponseUtil.getPageProducts(productRepository.findAllProducts(pageable));
     }
 
     //레시피 정보와 추천 상품 반환
-    public Map<String, Object> findMainPageData() {
+    public Map<String, Object> findMainPageData(Long memberId) {
         Map<String, Object> mainData = new HashMap<>();
 
-        mainData.put("recipes", null);
-        mainData.put("recommands", ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4))));
+        mainData.put("recipe", recipeService.getRecommendData(memberId));
+        mainData.put("recommands",findRecommandProducts(memberId));
         return mainData;
     }
 
     //추천상품 반환
-    public List<Map<String, Object>> findRecommandProducts() {
-        return ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4)));
+    public List<Map<String, Object>> findRecommandProducts(Long memberId) {
+        return memberId != null
+                ? ResponseUtil.getListProducts(productRepository.findRecommandProductsByMemberId(PageRequest.of(0, 4), memberId))
+                : ResponseUtil.getListProducts(productRepository.findRecommandProducts(PageRequest.of(0, 4)));
     }
 
     //상품 좋아요
@@ -57,7 +64,7 @@ public class ProductService {
 
         return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(memberId, productId)
                 .map(upp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
-                    updateUserLikeProduct(upp);
+                    updateUserLikeProduct(upp, findProduct);
                     return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
@@ -82,17 +89,7 @@ public class ProductService {
         return ResponseUtil.getPageProducts(memberPickProdRepository.findByMember_MemberIdAndLikeStatTrue(memberId, pageable));
     }
 
-    public Map<String, Object> findSearchDate(Long productId) {
-        Map<String, Object> searchData = new HashMap<>();
-        searchData.put("searchData", null);
-        searchData.put("similar", null);
-        searchData.put("recipes", null);
-        return searchData;
-    }
-
-
     //==============================================
-
     private Member getUserById(Long memberId) {
         return memberRepository.findById(memberId).orElseThrow(() -> new CustomException(CustomErrorCode.MEMBER_NOT_FOUND));
     }
@@ -101,9 +98,15 @@ public class ProductService {
         return productRepository.findById(productId).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    private void updateUserLikeProduct(MemberPickProd upp) {
+    private void updateUserLikeProduct(MemberPickProd upp, Product product) {
         upp.updateLike();
+
+        //recommad +- 1 하는 로직
+        if(upp.isLikeStat()) product.plusRecommand();
+        else product.minRecommand();
+
         memberPickProdRepository.save(upp);
+        productRepository.save(product);
     }
 
     private void updateEmailReceiveStatus(MemberPickProd upp) {
