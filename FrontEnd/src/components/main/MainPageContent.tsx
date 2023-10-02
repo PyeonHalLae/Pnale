@@ -15,7 +15,7 @@ const MainPageContent = () => {
     "mainProduct",
     async () => {
       const response = await axios.get("/api/product/main");
-      console.log("response: ", response);
+      console.log("response: ", response.data.data);
 
       return response.data.data;
     },
@@ -83,7 +83,7 @@ const MainPageContent = () => {
 
   return (
     <MainPage>
-      <MainRecipe />
+      <MainRecipe recipe={data.recipe} />
       <img src="/img/etc/eventBanner.png" onClick={() => navigate("/pyenEevent")}></img>
       <MainProduct recommands={data.recommands} />
     </MainPage>

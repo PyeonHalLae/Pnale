@@ -1,21 +1,46 @@
-import React from "react";
+import { RecipeInfo } from "@/model/commonType";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-const MainRecipeContent = () => {
+
+const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
+  const navigate = useNavigate();
+  const [recipeId, setRecipeId] = useState<number>();
+  const [ingrediendtsToShow, setIngrediendtsToShow] = useState<string[]>();
+
+  useEffect(() => {
+    if (recipe.ingredients) {
+      // console.log("ingrediendtsToShow", ingrediendtsToShow);
+
+      setRecipeId(recipe.rcpId);
+      setIngrediendtsToShow(recipe.ingredients.slice(0, 2));
+    }
+  }, [recipe]);
+  console.log("ingrediendtsToShow", ingrediendtsToShow);
+
   return (
     <div className="bg-white border-2 border-white">
-      <div className="m-3 border-2 shadow-xl border-common-white-divider">
+      <div
+        className="m-3 border-2 shadow-xl border-common-white-divider"
+        onClick={() => navigate(`/recipe/${recipeId}`)}
+      >
         <img src="/img/test/recipeTest.png" alt="레시피 사진" className="h-[210px] w-full"></img>
-        <TextBox>
-          <div className="w-10/12 text-common-text-color">
-            <Title>짜파구리</Title>
-            <Tag>#짜파게티</Tag>
-            <Tag>#너구리</Tag>
-          </div>
-          <div className="my-auto">
-            <Profile src="/img/test/profileTest.png" alt="프로필사진" />
-            <span className="font-[G-sans-light] text-base">김동민</span>
-          </div>
-        </TextBox>
+        {ingrediendtsToShow && (
+          <TextBox>
+            <div className="text-common-text-color">
+              <Title>
+                {recipe.rcpName} {recipe.rcpSimple}
+              </Title>
+              {ingrediendtsToShow.map((ingredient, index) => (
+                <Tag key={index}># {ingredient.slice(ingredient.indexOf(")") + 1)}</Tag>
+              ))}
+            </div>
+            <UserArea>
+              <Profile src="/img/test/profileTest.png" alt="프로필사진" />
+              <div className="font-[G-sans-light] text-sm">김동민</div>
+            </UserArea>
+          </TextBox>
+        )}
       </div>
     </div>
   );
@@ -24,23 +49,30 @@ const MainRecipeContent = () => {
 export default MainRecipeContent;
 
 const TextBox = tw.div`
-relative
 mx-5
-my-2
+my-1
 flex
 `;
 
 const Title = tw.div`
-text-3xl
-mt-1
-mb-1
+
+text-2xl
 `;
 
 const Tag = tw.span`
 font-[G-sans-light]
-text-xl
+text-lg
+block
 `;
 const Profile = tw.img`
-w-10
-mb-1
+w-8
+h-8
+mx-auto
+`;
+
+const UserArea = tw.div`
+m-auto 
+relative
+bottom-[-20px]
+left-[20px]
 `;

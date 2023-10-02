@@ -1,9 +1,9 @@
-import { CompProduct, ProductComp } from "./commonType";
+import { CompProduct, ProductComp, RecipeInfo } from "./commonType";
 
 export type searchData = {
-  recipes?: [];
-  relate: searchDateRelate;
-  search: searchDateSearch;
+  recipes?: RecipeInfo;
+  relate?: searchDateRelate;
+  search?: searchDateSearch;
 };
 
 export type searchDateRelate = {

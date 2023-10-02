@@ -20,15 +20,12 @@ const Header = () => {
   };
 
   const toggleSearch = async (data: SearchResponseToRecommand[]) => {
-    console.log("data", data);
-
     const idsArray = data.map((item) => item.id);
     console.log("전송할 id 값:", idsArray);
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
     });
-
     navigate("/search", { state: { responseData: response.data.data, idsArray } });
     reset();
   };

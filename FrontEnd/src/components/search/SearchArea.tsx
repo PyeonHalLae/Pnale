@@ -11,8 +11,7 @@ type SearchAreaPros = {
 const SearchArea = ({ search, ids }: SearchAreaPros) => {
   const navigate = useNavigate();
   useEffect(() => {
-    console.log("search", search);
-    console.log(ids);
+    console.log("search & ids", search, ids);
   });
 
   const moveToMoreProduct = () => {

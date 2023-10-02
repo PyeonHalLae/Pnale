@@ -14,7 +14,10 @@ const SearchProduct = () => {
     axios.post(`/api/search/product?page=0`, { ids: location.state }).then((res) => {
       setSearchData(res.data.data.content);
     });
-  }, []);
+    /* eslint-disable-next-line */
+  }, [location.state]);
+  console.log("searchData", searchData);
+
   return (
     <div className="bg-white ">
       <div className="p-3.5 relative ">
