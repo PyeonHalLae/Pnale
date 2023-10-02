@@ -48,7 +48,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
           <InfoBox>
             <ProductInfo>
               <ProductTitle>{$productInfo.product.productName}</ProductTitle>
-              <div className="flex">
+              <div className="flex mt-1">
                 <Price>
                   {" "}
                   {$productInfo.product.price}
@@ -56,7 +56,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
                 </Price>
                 <Like />
               </div>
-              <Category> {$productInfo.product.category}</Category>
+              <Category>{$productInfo.product.category}</Category>
               <MailBox>
                 메일 알림 받기
                 <MailBtn
@@ -120,7 +120,7 @@ const ProductInfo = tw.div`
 `;
 
 const ProductTitle = styled.div`
-  font-size: 0.6875rem;
+  font-size: 13px;
   width: 8.5rem;
   height: 2.125rem;
   font-weight: bold;
@@ -133,14 +133,14 @@ const ProductTitle = styled.div`
 `;
 
 const Price = tw.div`
-  text-[0.9375rem] mx-[0.125rem]
-  w-[4.9375rem]
+  text-[1rem] mx-[0.125rem]
+  w-[5.625rem]
 `;
 
 const PriceText = tw.span`
-ml-[2px]  
-text-[11px]
-text-common-text-color
+  ml-[2px]  
+  text-[11px]
+  text-common-text-color
 `;
 
 const Like = styled.div`
@@ -154,13 +154,14 @@ const Like = styled.div`
 
 const Category = styled.span`
   display: inline-block;
-  margin: 4px 0rem 0px 0px;
+  margin: 0.0625rem 0rem 0px 0px;
   min-width: 2.5625rem;
   max-width: 8.125rem;
   overflow: hidden;
   word-break: break-all;
   padding: 0.0625rem 0.3125rem;
   height: 1.125rem;
+  line-height: 1.125rem;
   font-size: 0.625rem;
   text-align: center;
   border: 0.0625rem solid #1e2b4f;
@@ -171,14 +172,14 @@ const Category = styled.span`
 const MailBox = tw.div`
   flex
   text-[0.625rem]
-  leading-[1.125rem]
+  leading-[1rem]
   h-[0.9375rem]
   text-[#aeb0b6]
 `;
 
 const MailBtn = styled.div<{ $mailState: string }>`
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 0.875rem;
+  height: 0.875rem;
   margin-left: 0.25rem;
   background-image: url(${(props) => props.$mailState});
   background-position: center;
@@ -189,7 +190,6 @@ const MailBtn = styled.div<{ $mailState: string }>`
 const EventInfo = tw.div`
   w-[35%]
   my-auto
-
 `;
 
 const EventImg = styled.div<{ $imgurl: string }>`

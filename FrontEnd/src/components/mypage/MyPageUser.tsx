@@ -13,7 +13,7 @@ const myPageType = [
 
 interface UserInfoType {
   memberId: number;
-  nickName: string;
+  nickname: string;
   socialType: string;
   memberImg: string;
   email: string;
@@ -119,7 +119,7 @@ const MyPageUser = () => {
             <UserBox>
               <UserImage $imgurl={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.nickName}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
                 <div className="text-sm">로그아웃</div>
               </div>
