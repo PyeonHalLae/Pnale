@@ -304,24 +304,24 @@ export default PyeneShopProductFilter;
 const BackSide = tw.div`
   fixed
   bg-[rgba(51,51,51,0.8)]
-  min-w-[350xp]
+  min-w-[350px]
   max-w-[450px]
   w-full
   h-full
   top-0
-  z-20
+  z-40
 `;
 
 const FilterBox = tw.div`
   fixed
   bg-white
   w-full
-  min-w-[350xp]
+  min-w-[350px]
   max-w-[450px]
-  h-[80%]
-  bottom-[60px]
+  h-[85%]
+  bottom-[0px]
   rounded-[15px_15px_0px_0px]
-  z-30
+  z-50
   overflow-y-scroll
   transition: transform 0.3s ease-in-out; /* translateY 애니메이션 추가 */
   transform: translateY(100%); /* 초기 위치 설정 (아래에서 위로 올라오는 애니메이션을 위해 100%로 설정) */
@@ -358,7 +358,7 @@ const CloseBtn = styled.img`
   top: 8px;
 `;
 
-const FilterMainBox = tw.div`mt-[52px] overflow-scroll h-[calc(85%-32px)]`;
+const FilterMainBox = tw.div`mt-[52px] overflow-scroll h-[calc(85%-45px)]`;
 
 const SortBox = tw.div`mt-3 ml-[22px]`;
 

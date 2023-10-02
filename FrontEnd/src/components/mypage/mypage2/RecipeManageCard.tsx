@@ -22,13 +22,22 @@ interface recipeInfoType {
   influence: boolean;
 }
 
-function RecipeManageCard({
+const RecipeManageCard = ({
   $recipeInfo,
   myRecipeType,
+  BottomMenuStateHandler,
+  SelectRecipeIdHandler,
 }: {
   $recipeInfo: recipeInfoType;
   myRecipeType: string;
-}) {
+  BottomMenuStateHandler: () => void;
+  SelectRecipeIdHandler: (repid: number) => void;
+}) => {
+  const MenuBtnClickHandler = () => {
+    SelectRecipeIdHandler($recipeInfo.rcpId);
+    BottomMenuStateHandler();
+  };
+
   return (
     <Container>
       {/* 레시피 이미지 */}
@@ -38,7 +47,12 @@ function RecipeManageCard({
       <ContentBox>
         {/* 관리 버튼 */}
         {myRecipeType === "MYRECIPE" ? (
-          <MenuBtn $imgurl={"/img/btn/menu-btn.png"} />
+          <MenuBtn
+            $imgurl={"/img/btn/menu-btn.png"}
+            onClick={() => {
+              MenuBtnClickHandler();
+            }}
+          />
         ) : (
           <MenuBtn $imgurl={"/img/btn/close-btn.png"} />
         )}
@@ -81,7 +95,7 @@ function RecipeManageCard({
       </LikeCommentBox>
     </Container>
   );
-}
+};
 
 export default RecipeManageCard;
 
@@ -116,6 +130,7 @@ const ViewCountBox = tw.div`
 relative 
 top-0 text-[0.6rem]  
 text-common-text-gray-color
+w-[6.25rem]
 `;
 
 const LikeCommentBox = tw.div`
