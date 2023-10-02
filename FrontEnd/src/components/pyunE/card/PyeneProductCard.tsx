@@ -127,7 +127,14 @@ const PyeneProductCard = ({
           <InfoBox>
             <div className="h-6">
               <Category>{productData.product.category}</Category>
-              <LikeBtn onClick={() => LikeClickHandler()} />
+              <LikeBtn
+                onClick={() => LikeClickHandler()}
+                $imgurl={
+                  productData.userLike.likeStat
+                    ? "/img/btn/like-true.png"
+                    : "/img/btn/like-false.png"
+                }
+              />
             </div>
             <Title>{productData.product.productName}</Title>
             <PriceBox>
@@ -197,8 +204,8 @@ const Category = styled.span`
   font-size: 10px;
 `;
 
-const LikeBtn = styled.div`
-  background-image: url("/img/btn/like-false.png");
+const LikeBtn = styled.div<{ $imgurl: string }>`
+  background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-repeat: no-repeat;
   background-size: 15px 15px;
