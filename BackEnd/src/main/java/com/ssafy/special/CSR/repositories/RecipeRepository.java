@@ -23,9 +23,9 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     Page<Recipe> findLikedRecipesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
 
-    @Query("SELECT r FROM RecipeIngredient ri " +
-            "LEFT JOIN Recipe r " +
-            "ON ri.recipe.recipeId = r.recipeId " +
+    @Query("SELECT r FROM Recipe r " +
+            "LEFT JOIN RecipeIngredient ri " +
+            "ON r.recipeId = ri.recipe.recipeId " +
             "where ri.product.productId = :productId ")
     Page<Recipe> findRecipeByProductId(Pageable pageable,
                                        @Param("productId") Long productId);
