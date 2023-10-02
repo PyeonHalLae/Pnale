@@ -67,33 +67,19 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
       .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
       .then((res) => {
         console.log(res);
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           ProductReceiveHandler();
           ToastBackMessage(res.data.message);
         }
-      })
-      .catch((err) => {
-        const code = err.response.status;
-        if (code == 401) {
-          axios
-            .get("/api/auth/product/receive/" + $productInfo.product.productId, {
-              withCredentials: true,
-            })
-            .then((res) => {
-              if (res.data.code == 200) {
-                ProductReceiveHandler();
-                ToastBackMessage(res.data.message);
-              }
-            })
-            .catch((err) => {
-              if (err.response.status === 403) {
-                UserInfoExpires();
-              }
-            });
-        } else if (code == 403) {
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
           UserNotLogin();
         } else {
-          console.log("그외 서버 오류");
+          console.log("그외 서버 오류", res.data);
         }
       });
   };
@@ -104,34 +90,19 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
       .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
       .then((res) => {
         console.log(res);
-        if (res.data.code == 200) {
+        if (res.data.code === 200) {
           ProductLikeHandler();
           ToastBackMessage(res.data.message);
         }
-      })
-      .catch((err) => {
-        const code = err.response.status;
-        if (code == 401) {
-          axios
-            .get("/api/auth/product/pick/" + $productInfo.product.productId, {
-              withCredentials: true,
-            })
-            .then((res) => {
-              console.log(res);
-              if (res.data.code == 200) {
-                ProductLikeHandler();
-                ToastBackMessage(res.data.message);
-              }
-            })
-            .catch((err) => {
-              if (err.response.status === 403) {
-                UserInfoExpires();
-              }
-            });
-        } else if (code == 403) {
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
           UserNotLogin();
         } else {
-          console.log("그외 서버 오류");
+          console.log("그외 서버 오류", res.data);
         }
       });
   };
