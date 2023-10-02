@@ -106,35 +106,37 @@ const PyeneProductCard = ({
 
   return (
     <>
-      <BackSize>
-        <ToastContainer position="top-center" />
-        <ImageBox>
-          <ProductImg
-            ref={prodctImgRef}
-            src={productData.product.productImg}
-            onError={ImageErrorHandler}
-          />
-          {dumState && <ProductDumImg src="/img/test/image61.png" />}
-          {eventInfo && eventInfo.type ? (
-            <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
-          ) : listType === "BEST" ? (
-            <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
-          ) : listType === "NEW" ? (
-            <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
-          ) : null}
-        </ImageBox>
-        <InfoBox>
-          <div className="h-6">
-            <Category>{productData.product.category}</Category>
-            <LikeBtn onClick={() => LikeClickHandler()} />
-          </div>
-          <Title>{productData.product.productName}</Title>
-          <PriceBox>
-            <Price>{productData.product.price}</Price>
-            <span>원</span>
-          </PriceBox>
-        </InfoBox>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <ToastContainer position="top-center" />
+          <ImageBox>
+            <ProductImg
+              ref={prodctImgRef}
+              src={productData.product.productImg}
+              onError={ImageErrorHandler}
+            />
+            {dumState && <ProductDumImg src="/img/test/image61.png" />}
+            {eventInfo && eventInfo.type ? (
+              <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
+            ) : listType === "BEST" ? (
+              <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
+            ) : listType === "NEW" ? (
+              <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
+            ) : null}
+          </ImageBox>
+          <InfoBox>
+            <div className="h-6">
+              <Category>{productData.product.category}</Category>
+              <LikeBtn onClick={() => LikeClickHandler()} />
+            </div>
+            <Title>{productData.product.productName}</Title>
+            <PriceBox>
+              <Price>{productData.product.price}</Price>
+              <span>원</span>
+            </PriceBox>
+          </InfoBox>
+        </BackSize>
+      )}
     </>
   );
 };
