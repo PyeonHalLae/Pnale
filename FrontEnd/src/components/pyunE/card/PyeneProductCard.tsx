@@ -8,7 +8,6 @@ import { ProductComp } from "@/model/commonType";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 import axios from "axios";
@@ -72,16 +71,16 @@ const PyeneProductCard = ({
       .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
       .then((res) => {
         console.log(res);
-        if (res.data.data.code == 200) {
+        if (res.data.code === 200) {
           ProductLikeHandler();
           ToastBackMessage(res.data.message);
         }
         //토큰이 만료되었거나 없는경우
-        else if (res.data.data.code == 401) {
+        else if (res.data.code === 401) {
           UserInfoExpires();
         }
         //로그인 안되어있는경우
-        else if (res.data.data.code == 403) {
+        else if (res.data.code === 403) {
           UserNotLogin();
         } else {
           console.log("그외 서버 오류", res.data);
@@ -93,7 +92,6 @@ const PyeneProductCard = ({
     <>
       {productData && (
         <BackSize>
-          <ToastContainer position="top-center" />
           <ImageBox>
             <ProductImg
               ref={prodctImgRef}
