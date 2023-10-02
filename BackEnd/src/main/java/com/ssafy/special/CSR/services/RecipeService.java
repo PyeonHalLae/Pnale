@@ -128,6 +128,8 @@ public class RecipeService {
                 .rcpName(recipe.getRecipeName())
                 .member(recipe.getWriter().toViewDTO())
                 .ingredients(ingredients)
+                .rcpThumbnail(recipe.getRecipeThumbnail())
+                .rcpVideoUrl(recipe.getRecipeVideoUrl())
                 .rcpSimple(recipe.getRecipeSimple())
                 .likeCnt(recipe.getLikeCnt())
                 .replyCnt(recipe.getReplyCnt())
