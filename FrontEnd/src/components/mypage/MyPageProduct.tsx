@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const MyProduct = () => {
   const navigate = useNavigate();
@@ -17,6 +19,9 @@ const MyProduct = () => {
       return !prev;
     });
   };
+
+  //유저 정보 만료\
+  const UserInfoExpires = () => toast.warning(`로그인이 만료되어\n로그아웃 되었습니다`);
 
   useEffect(() => {
     axios
@@ -48,7 +53,7 @@ const MyProduct = () => {
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
-                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                UserInfoExpires();
                 setProductInfo(null);
               } else {
                 console.log("서버 오류 발생");
@@ -68,6 +73,7 @@ const MyProduct = () => {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       {helpState && (
         <ProductHelp
           helpStateHandler={() => {
