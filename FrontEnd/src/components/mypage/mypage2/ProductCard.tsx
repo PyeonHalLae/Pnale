@@ -5,6 +5,10 @@ import { useEffect, useState } from "react";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
 
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+
 interface EventType {
   pyeneType: string; //편의저명
   eventType: string; //행사중일때 해당하는 행사 ( 1+1 2+1)
@@ -57,6 +61,10 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
     setProductData(null);
   };
 
+  const ToastBackMessage = (message: string) => {
+    toast.success(message);
+  };
+
   //메일 체크
   const MailClickHandler = () => {
     axios
@@ -65,6 +73,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
         console.log(res);
         if (res.data.code == 200) {
           ProductReceiveHandler();
+          ToastBackMessage(res.data.message);
         }
       })
       .catch((err) => {
@@ -77,15 +86,16 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
             .then((res) => {
               if (res.data.code == 200) {
                 ProductReceiveHandler();
+                ToastBackMessage(res.data.message);
               }
             })
             .catch((err) => {
               if (err.response.status === 403) {
-                console.log("재로그인 해주세요");
+                UserInfoExpires();
               }
             });
         } else if (code == 403) {
-          console.log("애초에 로그인 안되어있던 사람");
+          UserNotLogin();
         } else {
           console.log("그외 서버 오류");
         }
@@ -100,6 +110,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
         console.log(res);
         if (res.data.code == 200) {
           ProductLikeHandler();
+          ToastBackMessage(res.data.message);
         }
       })
       .catch((err) => {
@@ -113,15 +124,16 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
               console.log(res);
               if (res.data.code == 200) {
                 ProductLikeHandler();
+                ToastBackMessage(res.data.message);
               }
             })
             .catch((err) => {
               if (err.response.status === 403) {
-                console.log("재로그인 해주세요");
+                UserInfoExpires();
               }
             });
         } else if (code == 403) {
-          console.log("애초에 로그인 안되어있던 사람");
+          UserNotLogin();
         } else {
           console.log("그외 서버 오류");
         }
@@ -134,6 +146,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       {productData && (
         <BackSize>
           <Card>
