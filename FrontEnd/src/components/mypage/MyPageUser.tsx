@@ -5,6 +5,10 @@ import tw from "tailwind-styled-components";
 import axios from "axios";
 import { ProductComp } from "@/model/commonType";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserNotLogin } from "@/model/toastMessageJHM";
+
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
   { icon: "/img/btn/comment.png", text: "댓글 관리", url: "comment" },
@@ -103,6 +107,7 @@ const MyPageUser = () => {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
@@ -116,7 +121,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    UserNotLogin();
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
