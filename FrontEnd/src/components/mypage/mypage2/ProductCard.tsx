@@ -18,6 +18,11 @@ const pyeneList = ["cu", "seven", "gs", "emart"];
 
 const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
+  const [productData, setProductData] = useState<ProductComp>();
+
+  useEffect(() => {
+    setProductData($productInfo);
+  }, [$productInfo]);
 
   //이벤트 이미지 세팅
   const eventImgCheck = async () => {
@@ -38,15 +43,28 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
     await setEventUrl([...eventImgInfo]);
   };
 
+  const ProductReceiveHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        received: !prevProductData.userLike.received,
+      },
+    }));
+  };
+
+  const ProductLikeHandler = () => {
+    setProductData(null);
+  };
+
   //메일 체크
   const MailClickHandler = () => {
-    console.log($productInfo.product.productId);
     axios
       .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
       .then((res) => {
         console.log(res);
         if (res.data.code == 200) {
-          $productInfo.userLike.received = !$productInfo.userLike.received;
+          ProductReceiveHandler();
         }
       })
       .catch((err) => {
@@ -58,7 +76,7 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
             })
             .then((res) => {
               if (res.data.code == 200) {
-                $productInfo.userLike.received = !$productInfo.userLike.received;
+                ProductReceiveHandler();
               }
             })
             .catch((err) => {
@@ -75,7 +93,40 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   };
 
   //좋아요 해제
-  // const LikeClickHandler = () => {};
+  const LikeClickHandler = () => {
+    axios
+      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          ProductLikeHandler();
+        }
+      })
+      .catch((err) => {
+        const code = err.response.status;
+        if (code == 401) {
+          axios
+            .get("/api/auth/product/pick/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              console.log(res);
+              if (res.data.code == 200) {
+                ProductLikeHandler();
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                console.log("재로그인 해주세요");
+              }
+            });
+        } else if (code == 403) {
+          console.log("애초에 로그인 안되어있던 사람");
+        } else {
+          console.log("그외 서버 오류");
+        }
+      });
+  };
 
   useEffect(() => {
     eventImgCheck();
@@ -83,43 +134,49 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
 
   return (
     <>
-      <BackSize>
-        <Card>
-          <ImageBox $imgurl={$productInfo.product.productImg} />
-          <InfoBox>
-            <ProductInfo>
-              <ProductTitle>{$productInfo.product.productName}</ProductTitle>
-              <div className="flex mt-1">
-                <Price>
-                  {" "}
-                  {$productInfo.product.price}
-                  <PriceText>원</PriceText>
-                </Price>
-                <Like />
-              </div>
-              <Category>{$productInfo.product.category}</Category>
-              <MailBox>
-                메일 알림 받기
-                <MailBtn
-                  onClick={() => {
-                    MailClickHandler();
-                  }}
-                  $mailState={
-                    $productInfo.userLike.received
-                      ? "/img/btn/checkbox-true.png"
-                      : "/img/btn/checkbox-false.png"
-                  }
-                />
-              </MailBox>
-            </ProductInfo>
-            <EventInfo>
-              {eventUrl.map((value, index) => (
-                <EventImg key={index} $imgurl={value.imgurl} />
-              ))}
-            </EventInfo>
-          </InfoBox>
-        </Card>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <Card>
+            <ImageBox $imgurl={productData.product.productImg} />
+            <InfoBox>
+              <ProductInfo>
+                <ProductTitle>{productData.product.productName}</ProductTitle>
+                <div className="flex mt-1">
+                  <Price>
+                    {" "}
+                    {productData.product.price}
+                    <PriceText>원</PriceText>
+                  </Price>
+                  <Like
+                    onClick={() => {
+                      LikeClickHandler;
+                    }}
+                  />
+                </div>
+                <Category>{productData.product.category}</Category>
+                <MailBox>
+                  메일 알림 받기
+                  <MailBtn
+                    onClick={() => {
+                      MailClickHandler();
+                    }}
+                    $mailState={
+                      productData.userLike.received
+                        ? "/img/btn/checkbox-true.png"
+                        : "/img/btn/checkbox-false.png"
+                    }
+                  />
+                </MailBox>
+              </ProductInfo>
+              <EventInfo>
+                {eventUrl.map((value, index) => (
+                  <EventImg key={index} $imgurl={value.imgurl} />
+                ))}
+              </EventInfo>
+            </InfoBox>
+          </Card>
+        </BackSize>
+      )}
     </>
   );
 };
