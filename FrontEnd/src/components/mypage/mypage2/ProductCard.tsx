@@ -5,7 +5,6 @@ import { useEffect, useState } from "react";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 
@@ -113,7 +112,6 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       {productData && (
         <BackSize>
           <Card>
