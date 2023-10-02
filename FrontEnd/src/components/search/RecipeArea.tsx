@@ -1,58 +1,16 @@
+import { RecipeInfo } from "@/model/commonType";
 import RecipeCard from "@components/common/RecipeCard";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
-
-const RecipeArea = () => {
+const RecipeArea = ({ recipe }: { recipe: RecipeInfo }) => {
   const navigate = useNavigate();
 
-  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
-  const [recipeList, setRecipeList] = useState<recipeType[]>([]);
+  const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
+  const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
 
-  useEffect(() => {
-    console.log(popularRecipeList);
+  console.log("recipe", recipe);
 
-    setRecipeList([
-      {
-        recipeTitle:
-          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-    setPopularRecipeList([
-      {
-        recipeTitle: "두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-  }, []);
   return (
     <div className="bg-white">
       <div className="p-3.5 relative ">
@@ -67,11 +25,11 @@ const RecipeArea = () => {
           더보기
         </button>
       </div>
-      <div>
+      {/* <div>
         {recipeList.map((recipeItem, index) => (
           <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };

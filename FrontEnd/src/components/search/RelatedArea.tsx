@@ -1,18 +1,13 @@
-import { ProductComp } from "@/model/commonType";
+import { searchDateRelate } from "@/model/searchType";
 import RelatedCard from "@components/common/RelatedCard";
-import axios from "axios";
-import { useState, useEffect } from "react";
 import tw from "tailwind-styled-components";
 
-const RelatedArea = () => {
-  const [related, setRelated] = useState<ProductComp[]>([]);
+type SearchAreaPros = {
+  relate: searchDateRelate;
+};
 
-  useEffect(() => {
-    axios.get("/api/product/main").then((res) => {
-      const saleRes = res.data.data.recommands;
-      setRelated(saleRes);
-    });
-  }, []);
+const RelatedArea = ({ relate }: SearchAreaPros) => {
+  console.log("relate", relate);
 
   return (
     <div className="bg-white">
@@ -23,10 +18,10 @@ const RelatedArea = () => {
         </div>
       </div>
       <Slider>
-        {related.map((info, index) => (
+        {relate.content.map((info, index) => (
           <RelatedCard
-            key={index + "-" + info.product.productId + "-related"}
-            id={index + "-" + info.product.productId + "-related"}
+            key={index + "-" + info.productId + "-related"}
+            id={index + "-" + info.productId + "-related"}
             product={info}
           />
         ))}

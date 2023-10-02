@@ -2,16 +2,22 @@ import { ProductComp } from "@/model/commonType";
 import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 
 const SearchProduct = () => {
+  const location = useLocation();
+  console.log(location.state);
+
   const [searchData, setSearchData] = useState<ProductComp[]>([]);
 
   useEffect(() => {
-    axios.get("/api/product/main").then((res) => {
-      const searchRes = res.data.data.recommands;
-      setSearchData(searchRes);
+    axios.post(`/api/search/product?page=0`, { ids: location.state }).then((res) => {
+      setSearchData(res.data.data.content);
     });
-  }, []);
+    /* eslint-disable-next-line */
+  }, [location.state]);
+  console.log("searchData", searchData);
+
   return (
     <div className="bg-white ">
       <div className="p-3.5 relative ">
