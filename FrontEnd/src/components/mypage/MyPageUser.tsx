@@ -13,7 +13,7 @@ const myPageType = [
 
 interface UserInfoType {
   memberId: number;
-  nickName: string;
+  nickname: string;
   socialType: string;
   memberImg: string;
   email: string;
@@ -38,7 +38,7 @@ const MyPageUser = () => {
         const resData = res.data;
         if (resData.code == 200) {
           setUserInfo(resData.data.member);
-          setProductInfo(resData.data.content);
+          setProductInfo(resData.data.memberPick.content);
         }
       })
       .catch((err) => {
@@ -56,23 +56,27 @@ const MyPageUser = () => {
               const resData = res.data;
               if (resData.code == 200) {
                 setUserInfo(resData.data.member);
-                setProductInfo(resData.data.content);
+                setProductInfo(resData.data.memberPick.content);
               }
             })
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
-                console.log("몰라 403오류야");
+                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                setUserInfo(null);
+                setProductInfo(null);
               } else {
-                //그외 서버 오류들
-                console.log("몰라 그냥오류야");
+                console.log("서버 오류 발생");
               }
             });
         } else {
           if (err.code === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setUserInfo(null);
+            setProductInfo(null);
           } else {
             //그외 서버 오류
+            console.log("서버 오류 발생");
           }
         }
       });
@@ -115,7 +119,7 @@ const MyPageUser = () => {
             <UserBox>
               <UserImage $imgurl={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.nickName}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
                 <div className="text-sm">로그아웃</div>
               </div>
@@ -148,12 +152,13 @@ const MyPageUser = () => {
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
-                {productInfo.map((value, index) => (
-                  <Product key={value.product.productId + index}>
-                    <ProductImage $imgurl={value.product.productImg} />
-                    <ProductName>{value.product.productName}</ProductName>
-                  </Product>
-                ))}
+                {productInfo &&
+                  productInfo.map((value, index) => (
+                    <Product key={value.product.productId + index}>
+                      <ProductImage $imgurl={value.product.productImg} />
+                      <ProductName>{value.product.productName}</ProductName>
+                    </Product>
+                  ))}
               </Products>
             </div>
           </LikeProduct>
@@ -211,11 +216,10 @@ const UserImage = styled.div<{ $imgurl: string }>`
   height: 5rem;
   border-radius: 50%;
   background-image: url(${(props) => props.$imgurl});
-  background-size: contain;
+  background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
   margin: auto 1rem;
-  border: 0.0313rem solid rgba(0, 0, 0, 0.25);
 `;
 
 const LikeProduct = styled.div`

@@ -1,19 +1,70 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductInfo from "@/components/mypage/mypage2/ProductCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
+import { ProductComp } from "@/model/commonType";
+import axios from "axios";
 
 const MyProduct = () => {
   const navigate = useNavigate();
 
   const [helpState, setHelpState] = useState<boolean>(false);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
 
   const helpStateHandler = () => {
     setHelpState((prev) => {
       return !prev;
     });
   };
+
+  useEffect(() => {
+    axios
+      .get("/api/mypage/pick_prod?page=0", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        //로그인 된경우
+        const resData = res.data;
+        if (resData.code == 200) {
+          setProductInfo(resData.data.content);
+        }
+      })
+      .catch((err) => {
+        //로그인 실패 (엑세스 토큰이 존재하나 만료)
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .get("/api/mypage/pick_prod?page=0", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setProductInfo(resData.data.content);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                setProductInfo(null);
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setProductInfo(null);
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
+  }, []);
 
   return (
     <>
@@ -40,10 +91,10 @@ const MyProduct = () => {
         </div>
       </MyProductHeader>
       <ProductInfos>
-        <ProductInfo />
-        <ProductInfo />
-        <ProductInfo />
-        <ProductInfo />
+        {productInfo &&
+          productInfo.map((value) => (
+            <ProductInfo key={value.product.productId} $productInfo={value} />
+          ))}
       </ProductInfos>
     </>
   );
