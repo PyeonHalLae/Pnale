@@ -30,14 +30,12 @@ const MyProduct = () => {
         withCredentials: true,
       })
       .then((res) => {
-        //로그인 된경우
         const resData = res.data;
         if (resData.code == 200) {
           setProductInfo(resData.data.content);
         }
       })
       .catch((err) => {
-        //로그인 실패 (엑세스 토큰이 존재하나 만료)
         if (err.code === 401) {
           //리프레시 토큰 재발급
           axios
