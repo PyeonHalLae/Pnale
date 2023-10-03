@@ -57,7 +57,7 @@ public class SecurityConfig {
                 // OAuth 로그인
                 .and()
                 .oauth2Login()
-                .loginPage("/api/member/needLogin")
+                .loginPage("https://pnale.online/api/member/needLogin")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint()
