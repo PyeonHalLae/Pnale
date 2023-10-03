@@ -14,6 +14,8 @@ const RecipeDetail = () => {
   const { recipeId } = useParams();
   const [recipeInfo, setRecipeInfo] = useState<recipeDetailType>();
   const [loading, setLoading] = useState<boolean>(true);
+  // const [bottomMenuState, setBottomMenuState] = useState<boolean>(true);
+
   useEffect(() => {
     axios
       .get("/api/recipe/detail", {
@@ -35,6 +37,16 @@ const RecipeDetail = () => {
         console.log(err);
       });
   }, []);
+  // const [bottomMenuState, setBottomMenuState] = useState<boolean>(true);
+  // const BottomMenuStateHandler = () => {
+  //   setBottomMenuState((bottomMenuState) => {
+  //     return !bottomMenuState;
+  //   });
+  // };
+  //   <BottomMenu
+  //   $selectRecipeId={Number(recipeId)}
+  //   BottomMenuStateHandler={BottomMenuStateHandler}
+  // ></BottomMenu>
 
   return (
     <>
@@ -53,6 +65,10 @@ const RecipeDetail = () => {
           <RecipeDetailContent content={recipeInfo.rcpDesc} />
 
           <RecipeCommentBox recipeId={Number(recipeId)} />
+          {/* <BottomMenu
+            $selectRecipeId={Number(recipeId)}
+            BottomMenuStateHandler={BottomMenuStateHandler}
+          ></BottomMenu> */}
         </div>
       )}
     </>
