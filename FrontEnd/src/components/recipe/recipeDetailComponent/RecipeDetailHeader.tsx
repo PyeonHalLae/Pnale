@@ -1,57 +1,78 @@
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
+import { recipeDetailType } from "./recipeDetailType";
+import axios from "axios";
 
-const RecipeDetailHeader = ({ mainImgUrl }: { mainImgUrl: string }) => {
-  console.log(mainImgUrl);
-  console.log(typeof mainImgUrl);
+const RecipeDetailHeader = ({ recipeInfo }: { recipeInfo: recipeDetailType }) => {
+  const recipeLikeHanlder = () => {
+    axios
+      .patch("", null, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <div>
-      <RecipeDetailHeaderImg $mainImgUrl={mainImgUrl}>
-        <img
-          className="absolute right-[1.25rem] bottom-[0.56rem] w-[3.125rem] h-[3.125rem]"
-          src="/img/btn/like-btn-pink.png"
-          alt="좋아요 버튼"
-        />
+      <RecipeDetailHeaderImg $mainImgUrl={recipeInfo.rcpThumbnail}>
+        {recipeInfo.like ? (
+          <img
+            className="absolute right-[1.25rem] bottom-[0.56rem] w-[3.125rem] h-[3.125rem]"
+            src="/img/btn/like-btn-pink.png"
+            alt="좋아요 버튼"
+            onClick={recipeLikeHanlder}
+          />
+        ) : (
+          <img
+            className="absolute right-[1.25rem] bottom-[0.56rem] w-[3.125rem] h-[3.125rem]"
+            src="/img/btn/like-btn-gray.png"
+            alt="좋아요 버튼 - 회색"
+            onClick={recipeLikeHanlder}
+          />
+        )}
       </RecipeDetailHeaderImg>
 
       <RecipeDetailHeaderContent>
         {/* 레시피 제목 */}
 
-        <HeaderTitleBox>제목제목</HeaderTitleBox>
+        <HeaderTitleBox>{recipeInfo.rcpName}</HeaderTitleBox>
 
         <HeaderSecondBox>
-          <div className="absolute h-[1rem] left-0 w-auto">2023.09.21</div>
+          <div className="absolute h-[1rem] left-0 w-auto">
+            {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
+          </div>
           <div className="absolute flex h-[1rem] right-0 items-center">
-            <div>유저이름</div>
+            <div>{recipeInfo.writer.nickname}</div>
 
             <img
               className="w-[2.5rem] h-[2.5rem] rounded-[2.5rem] ml-[0.5rem]"
-              src="/img/test/너굴맨레시피.jpg"
+              src={recipeInfo.writer.memberImg}
               alt="유저사진"
             />
           </div>
         </HeaderSecondBox>
 
-        <RecipeIntroBox>
-          인트로인트로인트로인트로인트로인트로인트로인트로인트로인트로인트로
-        </RecipeIntroBox>
+        <RecipeIntroBox>{recipeInfo.rcpSimple}</RecipeIntroBox>
 
         <hr />
 
         <RecipeReactionBox>
           <IconBoxFirst>
             <Icons src="/img/icons/view-icon-pink.png" alt="조회수아이콘" />
-            <div className="h-[0.75rem] ">조회수 {}회</div>
+            <div className="h-[0.75rem] ">조회수 {recipeInfo.viewCnt}회</div>
           </IconBoxFirst>
 
           <IconBoxSecond>
             <Icons src="/img/icons/like-icon-pink.png" alt="좋아요아이콘" />
-            <div className="h-[0.75rem]">좋아요 {}개</div>
+            <div className="h-[0.75rem]">좋아요 {recipeInfo.likeCnt}개</div>
           </IconBoxSecond>
 
           <IconBoxThird>
             <Icons src="/img/icons/comment-icon-pink.png" alt="댓글아이콘" />
-            <div className="h-[0.75rem]">댓글 {}개</div>
+            <div className="h-[0.75rem]">댓글 {recipeInfo.replyCnt}개</div>
           </IconBoxThird>
         </RecipeReactionBox>
       </RecipeDetailHeaderContent>
@@ -121,7 +142,7 @@ left-[39%]
 `;
 
 const IconBoxThird = tw(IconBox)`
-right-[2.1875rem]
+right-[1.5rem]
 `;
 
 const Icons = tw.img`

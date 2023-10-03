@@ -1,23 +1,13 @@
 // import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { popularRecipeType } from "./recipeListType";
 
-interface popularRecipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-  // 인기레시피용 타입을 지정해야함
-  // Intro
-  // 들어가는 재료(상품들) 리스트 []
-}
+// 인기레시피용 타입을 지정해야함
+// Intro
+// 들어가는 재료(상품들) 리스트 []
 
-const PopularRecipeCard = ({ recipeInfo }: { recipeInfo: popularRecipeType }) => {
+const PopularRecipeCard = ({ popularRecipe }: { popularRecipe: popularRecipeType }) => {
   const navigate = useNavigate();
 
   // 카드 눌렀을 시 레시피 디테일로 이동
@@ -28,31 +18,38 @@ const PopularRecipeCard = ({ recipeInfo }: { recipeInfo: popularRecipeType }) =>
   return (
     <Container
       onClick={() => {
-        navigateHandler(recipeInfo.recipeId);
+        navigateHandler(popularRecipe.rcpId);
       }}
     >
-      <Title>{recipeInfo.recipeTitle}</Title>
-      <Img src={recipeInfo.recipeImg} />
+      <Title>{popularRecipe.rcpName}</Title>
+      <Img src={popularRecipe.rcpThumbnail} />
       <Content>
         {/* 재료 */}
-        <Ingredients>재료들재료들재료들재료들재료들재료들재료들재료들재료들재료들</Ingredients>
+        <Ingredients>
+          {popularRecipe.ingredients.length !== 0 &&
+            popularRecipe.ingredients.map((prd) => {
+              return "#" + prd + " ";
+            })}
+        </Ingredients>
 
         <div>
-          <IconImg src="/img/icons/like-icon-pink.png" /> 좋아요 {recipeInfo.likeCnt}개
+          <IconImg src="/img/icons/like-icon-pink.png" /> 좋아요 {popularRecipe.likeCnt}개
         </div>
         <div>
-          <IconImg src="/img/icons/view-icon-pink.png" /> 조회수 {recipeInfo.viewCnt}회
+          <IconImg src="/img/icons/view-icon-pink.png" /> 조회수 {popularRecipe.viewCnt}회
         </div>
         <div>
-          <IconImg src="/img/icons/comment-icon-pink.png" /> 댓글수 {recipeInfo.commentCnt}개
+          <IconImg src="/img/icons/comment-icon-pink.png" /> 댓글수 {popularRecipe.replyCnt}개
         </div>
       </Content>
-      <Intro>
-        냉장고에 채끝살이 없는 자취생들도 맛있는 짜파게티를 먹을 자격이 있다.냉장고에 채끝살이 없는
-        자취생들도 맛있는 짜파게티를 먹을 자격이 있다.냉장고에 채끝살이 없는 자취생들도 맛있는
-        짜파게티를 먹을 자격이 있다.
-      </Intro>
-      <Tag>핫 인플루언서</Tag>
+
+      <Intro>{popularRecipe.rcpSimple}</Intro>
+      {/* 인플루언서 게시물일때 태그 다르게 */}
+      {popularRecipe.member.memberId === 1 ? (
+        <Tag src="/img/sticker/recipe/hot&inf.png" />
+      ) : (
+        <Tag src="/img/sticker/recipe/hot.png" />
+      )}
     </Container>
   );
 };
@@ -162,7 +159,9 @@ const Intro = styled.div`
   -webkit-box-orient: vertical; //...
 `;
 
-const Tag = styled.div`
+const Tag = styled.img`
+  width: 6rem;
+  height: 1.6rem;
   position: absolute;
   top: 0;
   right: 0;

@@ -3,39 +3,50 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { recipeType } from "@/model/commonType";
+import { useSetRecoilState } from "recoil";
+import { recipeDetailInfo } from "@/recoil/khiRecoil";
+import axios from "axios";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  // useEffect(() => {
-  //   setIsAdmin(false);
-  // }, []);
+  const setRecipeDetail = useSetRecoilState(recipeDetailInfo);
+
   const navigate = useNavigate();
+
+  const detailInfoloadHanlder = () => {
+    axios
+      .get("/api/recipe/detail", {
+        params: {
+          rcpId: recipeInfo.rcpId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setRecipeDetail(() => {
+          return res.data.data;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
   };
 
-  recipeInfo = {
-    recipeTitle:
-      "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-    recipeImg: "/img/test/너굴맨레시피.jpg",
-    viewCnt: 1000,
-    likeCnt: 1000,
-    commentCnt: 1000,
-    userName: "정현모",
-    userImg: "/img/test/너굴맨레시피.jpg",
-    createdDate: "2020.20.20",
-    recipeId: 1,
-  };
   return (
     <Container
       onClick={() => {
-        navigateHandler(recipeInfo.recipeId);
+        detailInfoloadHanlder();
+        navigateHandler(recipeInfo.rcpId);
       }}
     >
       {/* 레시피 이미지 */}
-      <RecipeImg src={recipeInfo.recipeImg} alt="레시피이미지" />
+      <RecipeImg src={recipeInfo.rcpThumbnail} alt="레시피이미지" />
 
       {/* 이미지 외의 영역 */}
       <ContentBox>
@@ -45,36 +56,36 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           {recipeInfo.viewCnt}
         </ViewCountBox>
 
-        <ManageBtn src="/img/btn/menu-btn.png" />
+        {recipeInfo.myRecipe && <ManageBtn src="/img/btn/menu-btn.png" />}
 
         {/* 레시피 제목 */}
-        <RecipeTitleBox>{recipeInfo.recipeTitle}</RecipeTitleBox>
+        <RecipeTitleBox>{recipeInfo.rcpName}</RecipeTitleBox>
 
         {/* 유저 닉네임, 유저 이미지 */}
         <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top text-aling">
-          by {recipeInfo.userName}
+          by {recipeInfo.member.nickname}
           <img
             className="w-[1.5rem] h-[1.5rem] rounded-[0.8rem] ml-2 inline-block"
-            src={recipeInfo.userImg}
+            src={recipeInfo.member.memberImg}
             alt="유저이미지"
           />
         </div>
 
         {/* 작성일 */}
         <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {recipeInfo.createdDate}
+          {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
         </div>
       </ContentBox>
 
       {/* 관리자 게시물일경우만 우상단 인플루언서 태그*/}
-      {recipeInfo.userName === "운영자" && <InfluencerBox>인플루언서</InfluencerBox>}
+      {recipeInfo.influence && <InfluencerBox src="/img/sticker/recipe/inf.png" />}
 
       {/* 좋아요 댓글 우하단 박스 */}
       <LikeCommentBox>
         <LikeCommentIcon src="/img/icons/like-icon-pink.png" alt="좋아요" />
         {recipeInfo.likeCnt}
         <LikeCommentIcon src="/img/icons/comment-icon-pink.png" alt="댓글" />
-        {recipeInfo.commentCnt}
+        {recipeInfo.replyCnt}
       </LikeCommentBox>
     </Container>
   );
@@ -118,8 +129,8 @@ const RecipeTitleBox = styled.div`
   -webkit-box-orient: vertical; //...
 `;
 
-const InfluencerBox = tw.div`
- absolute top-0 right-0 w-3.75rem h-0.9rem bg-fa709a text-center text-white text-xs
+const InfluencerBox = tw.img`
+ absolute top-0 right-0 w-[4.4rem] h-[1.16rem]
 `;
 
 const LikeCommentBox = tw.div`

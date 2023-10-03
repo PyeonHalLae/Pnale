@@ -189,7 +189,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
           onClick={() => {
             setProducts([
               ...products,
-              { productId: selectedProd.id, productName: selectedProd.name, isChangeable: false },
+              { prdId: selectedProd.id, prdName: selectedProd.name, changeable: false },
             ]);
             disableModal();
           }}

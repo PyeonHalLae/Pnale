@@ -18,14 +18,11 @@ const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
 
   // 작성하기 버튼 클릭
   const commentCreateHandler = () => {
-    const data = {
-      rcpId: recipeId,
-      revDesc: commentContent,
-    };
+    const data = commentContent;
     customAxios
       .post(`/api/recipe/review?rcpId=${recipeId}`, data, {
         headers: {
-          "Content-Type": "application/json",
+          "Content-Type": "text/plain",
         },
         withCredentials: true,
       })
@@ -38,8 +35,6 @@ const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
       .catch((err) => {
         console.log(err);
       });
-
-    console.log(commentContent);
   };
 
   return (

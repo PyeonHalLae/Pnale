@@ -1,21 +1,28 @@
 // import { useState } from "react";
 import RecipeProductsListItem from "./RecipeProductsListItem";
 import tw from "tailwind-styled-components";
+import { recipePrdInfoType } from "./recipeDetailType";
+import { useEffect } from "react";
+import { useState } from "react";
 
-const RecipeProductsList = () => {
-  // const ingredients, setin
+const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] }) => {
+  const [totalPrice, setTotalPrice] = useState<number>(0);
+  useEffect(() => {}, [ingredients]);
 
   return (
     <Container>
       <Title>
         <span className="text-common-peach">재료</span> <span>리스트</span>
       </Title>
-
-      <RecipeProductsListItem />
-      <RecipeProductsListItem />
+      {ingredients.length !== 0 &&
+        ingredients.map((ingredient, index) => {
+          return (
+            <RecipeProductsListItem key={ingredient.prdId} index={index} ingredient={ingredient} />
+          );
+        })}
 
       <TotalPriceBox>
-        <div className="w-[4rem]">3,400원</div>
+        <div className="w-[4rem]">{totalPrice}원</div>
         <div className="w-[4.5rem] mr-[.625rem] justify-center">총 가격</div>
       </TotalPriceBox>
     </Container>
