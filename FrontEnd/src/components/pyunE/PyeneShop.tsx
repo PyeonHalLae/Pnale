@@ -13,7 +13,6 @@ import PyeneShopDirectList from "./components/PyeneShopDirectList";
 import PyeneShopBanner from "./components/PyeneShopBanner";
 
 import { ProductComp } from "@/model/commonType";
-import { ToastContainer } from "react-toastify";
 
 interface bannerType {
   bannerId: number;
@@ -70,7 +69,6 @@ const PyeneShop = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <PyeneHeader ref={pyeneHeader}>
         <Header />
         <PyeneShopBanner $bannerList={bannerList} />

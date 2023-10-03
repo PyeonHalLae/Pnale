@@ -3,7 +3,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import Slider from "react-slick";
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import tw from "tailwind-styled-components";
 
 interface bannerType {
@@ -23,6 +23,8 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
   const [slideImgSize, setSlideImgSize] = useState<number>();
   const [bannerList, setBannerList] = useState<bannerType[]>();
 
+  const slickRef = useRef<Slider>(null);
+
   const settings = {
     slide: "div",
     dots: false,
@@ -41,7 +43,8 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
   useEffect(() => {
     setSlideImgSize(5);
     setBannerList($bannerList);
-  });
+    slickRef.current.slickGoTo(0);
+  }, [$bannerList]);
 
   const EventPageMoveHandler = () => {
     navigate("EVENT");
@@ -57,7 +60,7 @@ const PyeneShopBanner = ({ $bannerList }: { $bannerList: bannerType[] }) => {
       <SlideSizeInfo>
         {slideState.activeSlide + 1} / {slideImgSize}
       </SlideSizeInfo>
-      <CustomSlick {...settings} className="w-full h-full">
+      <CustomSlick {...settings} className="w-full h-full" ref={slickRef}>
         {bannerList &&
           bannerList.map((value, index) => {
             return (
