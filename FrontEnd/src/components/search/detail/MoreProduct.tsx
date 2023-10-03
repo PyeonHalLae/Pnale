@@ -21,7 +21,6 @@ const SearchProduct = () => {
 
   const callPageData = async (pageNo: number) => {
     const res = await axios.post(`/api/search/product?page=${pageNo}`, { ids: idsArray });
-    console.log("더보기 가져옴: ", res.data.data.content);
 
     return res;
   };
@@ -31,9 +30,6 @@ const SearchProduct = () => {
     ({ pageParam = 0 }) => callPageData(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
-        console.log("allPages: ", allPages);
-        // console.log("lastPage: ", lastPage);
-
         if (lastPage?.data.data.content.last === true) {
           console.log("더이상 불러올 페이지가 없습니다");
           return undefined;

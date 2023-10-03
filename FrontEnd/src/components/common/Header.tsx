@@ -25,7 +25,6 @@ const Header = () => {
     const idsArray = data.map((item) => item.id);
     // console.log("전송할 id 값:", idsArray);
     setIdsArray(idsArray);
-    console.log("idsArrayidsArrayidsArrayidsArrayidsArray", idsArray);
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
@@ -43,7 +42,6 @@ const Header = () => {
   };
 
   const handleDivClick = (name: string) => {
-    console.log(name);
     const fakeEvent = { target: { value: name } } as React.ChangeEvent<HTMLInputElement>;
     handleInputChange(fakeEvent);
   };
@@ -69,7 +67,6 @@ const Header = () => {
         const response = await axios.post("/api/search", {
           name: name.input,
         });
-        console.log("추천", response.data.data);
 
         return response.data.data;
       } else return [];
@@ -124,15 +121,8 @@ const Header = () => {
       {data && data.length >= 1 && (
         <TagBox>
           {data.slice(0, 9).map((index, key) => (
-            <RecommandTag>
-              {/* <img
-                src="/img/icons/recommandImg.png"
-                alt="지난 검색"
-                className="p-1 mr-1 rounded-full w-5"
-              /> */}
-              <p key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
-                {index.name}
-              </p>
+            <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
+              {index.name}
             </RecommandTag>
           ))}
         </TagBox>

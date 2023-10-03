@@ -51,6 +51,7 @@ export type CompUserLike = {
 
 // 제품 공통 카드의 유저 좋아요 - 김동민
 export type RecipeInfo = {
+  content: recipeType[];
   influence: boolean;
   ingredients: string[];
   like: boolean;

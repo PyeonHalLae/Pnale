@@ -60,7 +60,9 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("home")}
           />
-          <NaviText $isActive={iconState.home === "blue"}>홈</NaviText>
+          <NaviText $isActive={iconState.home === "blue"} onClick={() => toggleIconColor("home")}>
+            홈
+          </NaviText>
         </NaviDiv>
 
         <NaviDiv $isActive={iconState.search === "blue"}>
@@ -69,7 +71,12 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("search")}
           />
-          <NaviText $isActive={iconState.search === "blue"}>검색</NaviText>
+          <NaviText
+            $isActive={iconState.search === "blue"}
+            onClick={() => toggleIconColor("search")}
+          >
+            검색
+          </NaviText>
         </NaviDiv>
 
         {/* 편의점 메인 버튼 */}
@@ -81,7 +88,12 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("recipe")}
           />
-          <NaviText $isActive={iconState.recipe === "blue"}>레시피</NaviText>
+          <NaviText
+            $isActive={iconState.recipe === "blue"}
+            onClick={() => toggleIconColor("recipe")}
+          >
+            레시피
+          </NaviText>
         </NaviDiv>
 
         <NaviDiv $isActive={iconState.mypage === "blue"}>
@@ -90,7 +102,12 @@ export default function Navi() {
             alt=""
             onClick={() => toggleIconColor("mypage")}
           />
-          <NaviText $isActive={iconState.mypage === "blue"}>마이</NaviText>
+          <NaviText
+            $isActive={iconState.mypage === "blue"}
+            onClick={() => toggleIconColor("mypage")}
+          >
+            마이
+          </NaviText>
         </NaviDiv>
       </NaviParent>
     </>

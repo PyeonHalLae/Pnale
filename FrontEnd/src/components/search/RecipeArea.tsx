@@ -1,9 +1,8 @@
-import { RecipeInfo } from "@/model/commonType";
+import { recipeType } from "@/model/commonType";
 import RecipeCard from "@components/common/RecipeCard";
-import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const RecipeArea = ({ recipe }: { recipe: RecipeInfo }) => {
+const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
   const navigate = useNavigate();
 
   // const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
@@ -26,9 +25,12 @@ const RecipeArea = ({ recipe }: { recipe: RecipeInfo }) => {
         </button>
       </div>
       <div>
-        {/* {recipeList.map((recipeItem, index) => (
-          <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-        ))} */}
+        {recipe.map((recipeItem) => (
+          <RecipeCard
+            recipeInfo={recipeItem}
+            key={recipeItem.rcpId + "-" + recipeItem.member.memberId}
+          />
+        ))}
       </div>
     </div>
   );

@@ -7,9 +7,8 @@ type SearchAreaPros = {
   ids: number[];
 };
 
-const SearchArea = ({ search, ids }: SearchAreaPros) => {
+const SearchArea = ({ search }: SearchAreaPros) => {
   const navigate = useNavigate();
-  console.log("search & ids", search, ids);
 
   const moveToMoreProduct = () => {
     navigate("/search-product");
