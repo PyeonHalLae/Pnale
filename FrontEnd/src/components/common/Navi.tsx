@@ -3,6 +3,8 @@ import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import NaviPE from "./NaviPE";
 
+import { ToastContainer } from "react-toastify";
+
 interface IconState {
   home: "blue" | "gray";
   search: "blue" | "gray";
@@ -50,6 +52,7 @@ export default function Navi() {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       <div style={{ height: "calc(100vh - 60px)" }} className="overflow-y-scroll ">
         <Outlet />
       </div>
