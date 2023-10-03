@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
@@ -40,13 +39,13 @@ public class Recipe {
     @Column(nullable = false)
     String recipeVideoUrl;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long viewCnt;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long replyCnt;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long likeCnt;
 
     @Column(columnDefinition = "TIMESTAMP")
