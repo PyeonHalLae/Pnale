@@ -49,6 +49,7 @@ export type CompUserLike = {
   received: boolean;
 };
 
+// 제품 공통 카드의 유저 좋아요 - 김동민
 export type RecipeInfo = {
   influence: boolean;
   ingredients: string[];
@@ -64,6 +65,7 @@ export type RecipeInfo = {
   viewCnt: number;
 };
 
+// 제품 공통 카드의 유저 좋아요 - 김동민
 export type memberInfo = {
   memberId: number;
   memberImg: string;
