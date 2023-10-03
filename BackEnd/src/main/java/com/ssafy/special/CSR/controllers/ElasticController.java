@@ -2,6 +2,7 @@ package com.ssafy.special.CSR.controllers;
 
 import com.ssafy.special.CSR.dtos.search.ESRequestDto;
 import com.ssafy.special.CSR.services.ElasticService;
+import com.ssafy.special.CSR.services.RedisService;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.exception.DataResponse;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class ElasticController {
 
     private final ElasticService goodsService;
+    private final RedisService redisService;
 
     //키워드가 포함되는 상품 정보를 유사도 순으로 이름,카테고리,ID를 던져준다.
     @PostMapping("")
@@ -51,6 +53,8 @@ public class ElasticController {
                                          HttpServletRequest request) {
         if(requestData.getIds().size() == 0) throw new CustomException(CustomErrorCode.NO_SEARCH_DATA) ;
         Long memberId = (Long) request.getAttribute("memberId");
+
+        redisService.setSearchList(memberId, requestData.getKeyword());
 
         log.info("{}, 멤버{}", requestData.getIds().size(), memberId);
         return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findIdsResult(pageable, requestData.getIds(), memberId ));
