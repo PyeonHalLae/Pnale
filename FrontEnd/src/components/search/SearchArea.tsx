@@ -33,7 +33,7 @@ const SearchArea = ({ search, ids }: SearchAreaPros) => {
         </button>
       </div>
       <div className="grid grid-cols-2 p-2 gap-y-3 gap-x-3">
-        {search.content.map((info, index) => (
+        {search.content.slice(0, 4).map((info, index) => (
           <ProductCard
             key={index + "-" + info.product.productId}
             id={index + "-" + info.product.productId}

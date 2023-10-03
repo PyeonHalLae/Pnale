@@ -29,7 +29,7 @@ const MainPageContent = () => {
         console.log(error?.response?.status);
       },
       onSettled: () => {
-        // console.log("아무튼 Go");
+        // console.log("아무튼 Go!");
       },
       retry: 2,
     }
