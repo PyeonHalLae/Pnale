@@ -65,7 +65,7 @@ const SearchProduct = () => {
           ))
         )}
         {status === "error" ? (
-          <div className="col-span-2 text-center">더이상 불러올 페이지가 없습니다</div>
+          <div className="col-span-2 text-center my-4">더이상 불러올 페이지가 없습니다</div>
         ) : (
           <button className="col-span-2 text-center my-4" onClick={() => fetchNextPage()}>
             더보기

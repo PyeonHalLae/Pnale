@@ -31,6 +31,7 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
             key={recipeItem.rcpId + "-" + recipeItem.member.memberId}
           />
         ))}
+        {recipe.length === 0 && <div className="text-center pb-5">관련 레시피가 없습니다</div>}
       </div>
     </div>
   );
