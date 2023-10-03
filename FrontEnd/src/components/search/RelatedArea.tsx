@@ -7,7 +7,7 @@ type SearchAreaPros = {
 };
 
 const RelatedArea = ({ relate }: SearchAreaPros) => {
-  console.log("relate", relate);
+  // console.log("relate", relate);
 
   return (
     <div className="bg-white">

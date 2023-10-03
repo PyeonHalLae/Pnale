@@ -6,10 +6,12 @@ import { useRecoilState } from "recoil";
 import { searchInputData } from "@recoil/kdmRecoil";
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
+import { useState } from "react";
 
 const Header = () => {
   const navigate = useNavigate();
   const [name, setName] = useRecoilState<{ input: string }>(searchInputData);
+  const [isFocused, setIsFocused] = useState(false); // 포커스 상태를 관리할 상태 변수
 
   const backBtn = () => {
     navigate(-1);
@@ -49,6 +51,14 @@ const Header = () => {
     // eslint-disable-next-line
   }, []);
 
+  const isFocus = () => {
+    setIsFocused(true);
+    if (!location.pathname.startsWith("/search/what") && isFocused) {
+      navigate("/search/what");
+      setIsFocused(false);
+    }
+  };
+
   // eslint-disable-next-line
   const { data, isLoading, isError, error } = useQuery<SearchResponseToRecommand[], AxiosError>(
     ["searchTag", name.input],
@@ -58,6 +68,7 @@ const Header = () => {
           name: name.input,
         });
         console.log("추천", response.data.data);
+
         return response.data.data;
       } else return [];
     },
@@ -99,7 +110,11 @@ const Header = () => {
           placeholder="코카콜라라고 검색해보세요."
           value={name.input}
           onChange={handleInputChange}
-          // onClick={() => navigate("/search/what")}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              toggleSearch(data);
+            }
+          }}
         />
         <SubtractBtn src="/img/btn/subtract.png" onClick={() => reset()} />
         <SearchBtn src="/img/btn/search-blue.png" onClick={() => toggleSearch(data)} />
