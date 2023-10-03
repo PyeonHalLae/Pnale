@@ -6,10 +6,12 @@ import { recipeType } from "@/model/commonType";
 import { useSetRecoilState } from "recoil";
 import { recipeDetailInfo } from "@/recoil/khiRecoil";
 import axios from "axios";
+import { useState } from "react";
+import BottomMenu from "./BottomMenu";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
+  const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
   const setRecipeDetail = useSetRecoilState(recipeDetailInfo);
-
   const navigate = useNavigate();
 
   const detailInfoloadHanlder = () => {
@@ -38,6 +40,15 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
     navigate(`/recipe/${recipeId}`);
   };
 
+  const BottomMenuStateHandler = () => {
+    setBottomMenuState(!bottomMenuState);
+  };
+
+  const manageBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    BottomMenuStateHandler();
+  };
+
   return (
     <Container
       onClick={() => {
@@ -56,7 +67,29 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           {recipeInfo.viewCnt}
         </ViewCountBox>
 
-        {recipeInfo.myRecipe && <ManageBtn src="/img/btn/menu-btn.png" />}
+        {recipeInfo.myRecipe && (
+          <div
+            className="absolute
+          top-0
+          right-2
+          w-[3rem]"
+            onClick={manageBtnHandler}
+          >
+            <ManageBtn src="/img/btn/menu-btn.png" />
+          </div>
+        )}
+
+        <div
+          className="absolute
+          top-0
+          right-2
+          w-[3rem]
+          h-[1rem]
+          "
+          onClick={manageBtnHandler}
+        >
+          <ManageBtn src="/img/btn/menu-btn.png" />
+        </div>
 
         {/* 레시피 제목 */}
         <RecipeTitleBox>{recipeInfo.rcpName}</RecipeTitleBox>
@@ -87,6 +120,13 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
         <LikeCommentIcon src="/img/icons/comment-icon-pink.png" alt="댓글" />
         {recipeInfo.replyCnt}
       </LikeCommentBox>
+
+      {bottomMenuState && (
+        <BottomMenu
+          $selectRecipeId={recipeInfo.rcpId}
+          BottomMenuStateHandler={manageBtnHandler}
+        ></BottomMenu>
+      )}
     </Container>
   );
 };

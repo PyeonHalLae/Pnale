@@ -1,5 +1,7 @@
 // import styled from "styled-components";
+import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 
 const BottomMenu = ({
@@ -7,30 +9,60 @@ const BottomMenu = ({
   BottomMenuStateHandler,
 }: {
   $selectRecipeId: number;
-  BottomMenuStateHandler: () => void;
+  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }) => {
   useEffect(() => {
     console.log("바텀사이드", $selectRecipeId);
   }, []);
 
+  const navigate = useNavigate();
+
+  // 수정하기 클릭
+  const modifyBtnHandler = () => {
+    navigate(`/recipe/${$selectRecipeId}/modify`);
+  };
+
+  // 삭제하기 클릭
+  const deleteBtnHandler = () => {
+    axios
+      .delete(`/api/recipe/form?rcpId=${$selectRecipeId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res);
+        // 삭제성공시
+        if (res.data.code === "200") {
+          navigate("/recipe");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <BackSize
-        onClick={() => {
-          BottomMenuStateHandler();
-        }}
+        onClick={BottomMenuStateHandler}
+        // onClick={() => {
+        //   BottomMenuStateHandler();
+        // }}
       />
       <MenuBox>
-        <ModifyBtn>
+        <ModifyBtn onClick={modifyBtnHandler}>
           <div className="mx-auto my-auto">수정하기</div>
         </ModifyBtn>
-        <DeleteBtn>
+        <DeleteBtn onClick={deleteBtnHandler}>
           <div className="mx-auto my-auto">삭제하기</div>
         </DeleteBtn>
         <CloseBtn
-          onClick={() => {
-            BottomMenuStateHandler();
-          }}
+          onClick={BottomMenuStateHandler}
+          // onClick={() => {
+          //   BottomMenuStateHandler();
+          // }}
         >
           <div className="mx-auto my-auto">닫기</div>
         </CloseBtn>

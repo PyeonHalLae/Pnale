@@ -82,12 +82,14 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
         withCredentials: true,
       })
       .then((res) => {
-        alert("작성성공");
-        resetForm();
-        restContents();
-        restImg();
-        restProducts();
-        navigate(`/recipe/${res.data.rcpId}`);
+        if (res.data.code == "201") {
+          alert("작성성공");
+          resetForm();
+          restContents();
+          restImg();
+          restProducts();
+          navigate(`/recipe/${res.data.rcpId}`);
+        }
       })
       .catch((err) => {
         console.log(err);
