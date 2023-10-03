@@ -19,6 +19,7 @@ import com.ssafy.special.member.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EmailService {
 
+    @Autowired
     private final JavaMailSender javaMailSender;
     private final MemberRepository memberRepository;
     private final MemberPickProdRepository memberPickProdRepository;
@@ -50,12 +52,10 @@ public class EmailService {
         StringBuilder msgg = new StringBuilder();
         msgg.append(" <table style='width: 100% !important; background: #ffffff; margin: 0; padding: 0; min-width: 100%'> ");
         msgg.append(" <tr> <td style='text-align: center'> ");
-        msgg.append(" <img src='https://damda.s3.ap-northeast-2.amazonaws.com/EMAIL_CONFIRM/EMAIL_CONFIRM.png' alt='header' loading='lazy' /> </td></tr>" );
+        msgg.append(" <img src='https://neighbrew.s3.ap-northeast-2.amazonaws.com/mail_banner.png' alt='header' loading='lazy'  style='width: 700px' /> </td></tr>" );
         msgg.append(" <tr> <td style='text-align: center'> ");
-        msgg.append(" <h2 style='margin: 0px; font-size: 45px; margin-top: 20px'>편할래</h2> ");
-        msgg.append(" <h3 style='margin: 0px; font-size: 15px'>편의점 할인 레시피</h3> <br /> ");
-        msgg.append(" <p style='margin: 0px auto 10px auto; width: 700px; height: 30px'>").append(name).append("회원님의 찜 상품 할인정보</p> ");
-        msgg.append(" <div style='display: grid; grid-template-columns: repeat(3, minmax(0, 170px)); width: 600px; justify-content: center; margin: 0px auto 20px auto; place-items: center; border-bottom: 1px solid #D5D5D5; border-top: 1px solid #D5D5D5; grid-row-gap: 15px; padding: 20px;'>");
+        msgg.append(" <h2 style='margin: 10px auto 15px auto; width: 700px; height: 30px; color: #1e2b4f'>").append(name).append(" 회원님의 찜 상품 할인정보</h2> ");
+        msgg.append(" <div style='display: grid; grid-template-columns: repeat(3, minmax(0, 170px)); width: 660px; justify-content: center; margin: 0px auto 20px auto; place-items: center; border-bottom: 1px solid #D5D5D5; border-top: 1px solid #D5D5D5; grid-row-gap: 15px; padding: 20px;'>");
 
         for(EmailProductDto product : productList){
             msgg.append(" <div style='width: 130px; height: 170px; overflow: hidden; box-shadow: 0px 0px 2px #0000003f'> ");
@@ -65,12 +65,12 @@ public class EmailService {
             msgg.append(" </div></div>");
         }
 
-        msgg.append("</div></td></tr><tr><td><div style=' width: 600px; margin: 10px auto 0px auto; text-align: center'>  ");
+        msgg.append("</div></td></tr><tr><td><div style=' width: 600px; margin: 10px auto 0px auto; text-align: center; color: #1e2b4f; font-weight: 500;'>  ");
         msgg.append("더 많은 정보는 편할래 사이트를 접속해주세요! </div>");
         msgg.append("<div style='width: 600px; margin: 20px auto; text-align: center'>");
         msgg.append("<a href='https://pnale.online/'>편할래 바로가기</a> </div> </td></tr>");
         msgg.append(" <tr> <td style='text-align: center'> ");
-        msgg.append(" <img src='https://damda.s3.ap-northeast-2.amazonaws.com/EMAIL_CONFIRM/EMAIL_CONFIRM.png' alt='footer' loading='lazy' /> ");
+        msgg.append(" <img src='https://neighbrew.s3.ap-northeast-2.amazonaws.com/mail_footer.png' alt='footer' loading='lazy' style='width: 700px' /> ");
         msgg.append(" </td></tr></table>");
 
         message.setText(msgg.toString(), "utf-8", "html");
