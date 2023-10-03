@@ -15,7 +15,7 @@ const RelatedCard: React.FC<RelatedCardProps> = ({ product, id }) => {
 
   return (
     <Card>
-      <div id={`${id}`} className="flex p-1.5 m-auto"></div>
+      <div id={`${id}`} className="flex p-1.5 m-auto  max-h-44"></div>
       <Text>{product.productName.slice(product.productName.indexOf(")") + 1)}</Text>
       <Price>{product.price}원</Price>
     </Card>
