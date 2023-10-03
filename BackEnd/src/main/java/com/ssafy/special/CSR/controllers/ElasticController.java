@@ -27,7 +27,7 @@ public class ElasticController {
 
     //키워드가 포함되는 상품 정보를 유사도 순으로 이름,카테고리,ID를 던져준다.
     @PostMapping("")
-    public DataResponse<?> getNameList(Pageable pageable,
+    public DataResponse<?> getNameList(@PageableDefault(size=120) Pageable pageable,
                                        @RequestBody() Map<String, Object> map,
                                        HttpServletRequest request){
         Long memberId = (Long) request.getAttribute("memberId");
