@@ -4,14 +4,14 @@ import tw from "tailwind-styled-components";
 import { loadImage } from "@model/exportFucKDM";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
-
+import { useState } from "react";
 export type ProductCardProps = {
   product: ProductComp;
   id: string;
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
-  console.log(product.userLike.likeStat);
+  const [likeStat, setLikeStat] = useState(product.userLike.likeStat);
 
   //좋아요 버튼
   const LikeClickHandler = () => {
@@ -40,7 +40,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
-                toast.error(res.data.message, {
+                setLikeStat(true);
+                toast.success(res.data.message, {
                   position: "top-center", // 원하는 포지션 설정
                   autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
                   hideProgressBar: true,
@@ -49,7 +50,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
             })
             .catch((err) => {
               if (err.response.status === 403) {
-                toast.error(err.response.data, {
+                toast.info(err.response.data, {
                   position: "top-center", // 원하는 포지션 설정
                   autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
                   hideProgressBar: true,
@@ -61,9 +62,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
         } else {
           console.log(err);
           if (err.response.status === 403) {
-            console.log(product.product.productId);
-
-            toast.error(err.response.data, {
+            toast.info(err.response.data, {
               position: "top-center", // 원하는 포지션 설정
               autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
               hideProgressBar: true,
@@ -107,7 +106,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
         <div className="flex">
           <Categori>{product.product.category}</Categori>
           <img
-            src={product.userLike.likeStat ? "/img/btn/like-true.png" : "/img/btn/like-false.png"}
+            src={likeStat ? "/img/btn/like-true.png" : "/img/btn/like-false.png"}
             alt="즐겨찾기"
             className="absolute right-0 inline-block w-4 m-1.5"
             onClick={() => LikeClickHandler()}
