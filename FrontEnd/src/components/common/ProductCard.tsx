@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          setLikeStat(true);
+          setLikeStat(!likeStat);
           toast.error(res.data.message, {
             position: "top-center", // 원하는 포지션 설정
             autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
@@ -41,7 +41,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
-                setLikeStat(true);
+                setLikeStat(!likeStat);
                 toast.success(res.data.message, {
                   position: "top-center", // 원하는 포지션 설정
                   autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
