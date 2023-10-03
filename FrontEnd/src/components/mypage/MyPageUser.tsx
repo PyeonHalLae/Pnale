@@ -47,7 +47,7 @@ const MyPageUser = () => {
       })
       .catch((err) => {
         //로그인 실패 (엑세스 토큰이 존재하나 만료)
-        if (err.code === 401) {
+        if (err.response.status === 401) {
           //리프레시 토큰 재발급
           console.log("리프레시 토큰을 통한 엑세스 토큰 재발급");
           axios
@@ -64,7 +64,7 @@ const MyPageUser = () => {
               }
             })
             .catch((err) => {
-              if (err.code === 403) {
+              if (err.response.status === 403) {
                 //제발급 실패! 재로그인 해주세요!!
                 console.log("로그인인 만료되어 재 로그인 해주세요!");
                 setUserInfo(null);
@@ -74,7 +74,7 @@ const MyPageUser = () => {
               }
             });
         } else {
-          if (err.code === 403) {
+          if (err.response.status === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
             setUserInfo(null);
             setProductInfo(null);

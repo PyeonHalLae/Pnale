@@ -67,6 +67,7 @@ const PyeneProductCard = ({
 
   //좋아요 버튼
   const LikeClickHandler = () => {
+    console.log("test");
     axios
       .patch("/api/product/pick/" + $productInfo.product.productId, {
         withCredentials: true,
@@ -79,7 +80,7 @@ const PyeneProductCard = ({
         }
       })
       .catch((err) => {
-        if (err.code === 401) {
+        if (err.response.state === 401) {
           //리프레시 토큰 재발급
           axios
             .patch("/api/auth/product/pick/" + $productInfo.product.productId, {
@@ -94,7 +95,7 @@ const PyeneProductCard = ({
               }
             })
             .catch((err) => {
-              if (err.code === 403) {
+              if (err.response.status === 403) {
                 //제발급 실패! 재로그인 해주세요!!
                 UserInfoExpires();
               } else {
@@ -102,7 +103,8 @@ const PyeneProductCard = ({
               }
             });
         } else {
-          if (err.code === 403) {
+          console.log(err);
+          if (err.response.status === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
             UserNotLogin();
           } else {
