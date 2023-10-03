@@ -277,7 +277,7 @@ public class RecipeService {
     /**
      * RecipeWriteDTO를 실제 엔티티로 변환합니다.
      */
-    public Recipe toRecipeEntity(Long memberId, RecipeWriteDTO recipeInfo){
+    private Recipe toRecipeEntity(Long memberId, RecipeWriteDTO recipeInfo){
         Member member = memberRepository.findById(memberId).orElseThrow();
         boolean influence = member.getRole().name().equals("ADMIN");
         return Recipe.builder()
