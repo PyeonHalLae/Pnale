@@ -57,7 +57,7 @@ public class MemberController {
 
     }
 
-    @GetMapping("/needLogin")
+    @RequestMapping("/needLogin")
     public void redirectLogin() {
         throw new AuthException(CustomErrorCode.FORBIDDEN);
     }

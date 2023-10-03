@@ -35,6 +35,9 @@ public class KakaoOAuth2UserInfo extends OAuth2UserInfo {
             return null;
         }
 
+        String email = (String) account.get("email");
+        if(email.contains("http")) email = email.replace("http", "https");
+
         return (String) account.get("email");
     }
 
