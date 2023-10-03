@@ -77,7 +77,7 @@ function App() {
             </Route>
 
             {/* 로그인 페이지 */}
-            <Route path="loginPage" element={<LoginMain />}></Route>
+            <Route path="sociallogin" element={<LoginMain />}></Route>
             <Route path="temp" element={<LoginTemp />}></Route>
 
             {/* 김효인 개발 페이지*/}
