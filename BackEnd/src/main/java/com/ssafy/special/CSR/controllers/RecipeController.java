@@ -31,14 +31,14 @@ public class RecipeController {
      * 기본적으로 추천 레시피 한가지와 최신 레시피 두가지를 나타내줍니다.
      */
     @GetMapping("")
-    public DataResponse<?> getMainpage(HttpServletRequest request) {
+    public DataResponse<?> getMainpage(HttpServletRequest request,@PageableDefault(page=0, size=10, sort="recipeId", direction = Sort.Direction.DESC) Pageable pageable) {
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) memberId = 0L;
         DataResponse<RecipeMainPageDTO> response = new DataResponse<>(200, "레시피 메인 페이지가 로드되었습니다");
         RecipeRecommendDTO rm = recipeService.getRecommendData(memberId);
-        List<RecipeListDTO> rl = recipeService.getMainListData(memberId);
+        Page<RecipeListDTO> list = recipeService.getAllLists(memberId, pageable);
 
-        response.setData(RecipeMainPageDTO.builder().best(rm).recipes(rl).build());
+        response.setData(RecipeMainPageDTO.builder().best(rm).recipes(list).build());
         return response;
     }
 
