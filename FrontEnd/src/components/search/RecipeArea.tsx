@@ -8,8 +8,6 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
   // const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
   // const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
 
-  console.log("recipe", recipe);
-
   return (
     <div className="bg-white">
       <div className="p-3.5 relative ">

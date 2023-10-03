@@ -1,5 +1,8 @@
 // import { useNavigate } from "react-router-dom";
 import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
+import axios from "axios";
+import { useEffect } from "react";
+import { useQuery } from "react-query";
 import { useRecoilState, useRecoilValue } from "recoil";
 import tw from "tailwind-styled-components";
 
@@ -8,6 +11,69 @@ const SearchInput = () => {
   const [name, setName] = useRecoilState(searchInputData);
   const getSearchTag = useRecoilValue(storedToSearchTag);
 
+  // const { data } = useQuery(
+  //   "getUserSearchTag",
+  //   async () => {
+  //     const response = await axios.get("/api/mylist/search", { withCredentials: true });
+  //     return response;
+  //   },
+  //   {
+  //     onSuccess: (res) => {
+  //       console.log("onSuccess");
+  //       console.log(res);
+  //     },
+  //     onError: (error) => {
+  //       console.log("onError");
+  //       console.log(error?.response?.status);
+  //     },
+  //     retry: 2,
+  //   }
+  // );
+
+  // console.log("data", data);
+
+  const searchList = () => {
+    axios
+      .get("/api/mylist", {
+        withCredentials: true,
+      })
+      .then((response) => {
+        if (response.data.code == 200) {
+          // response.data.code가 200일 경우 리스트 반환
+          console.log(response.data.data); // 데이터
+        } else if (response.data.code == 204) {
+          // response.data.code가 204일 경우
+          // localstorage에서 불러오세요
+        }
+      })
+      .catch((error) => {
+        const code = error.response.status;
+        if (code === 401) {
+          axios
+            .get("/api/auth/mylist", {
+              withCredentials: true,
+            })
+            .then((response) => {
+              if (response.data.code == 200) {
+                // response.data.code가 200일 경우 리스트 반환
+                console.log(response.data.data); // 데이터
+              } else if (response.data.code == 204) {
+                // response.data.code가 204일 경우
+                // localstorage에서 불러오세요
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+            });
+        } else {
+          console.log(error);
+        }
+      });
+  };
+
+  useEffect(() => {
+    searchList();
+  });
   return (
     <SearchMain>
       <div className="flex items-end justify-between px-4 text-common-text-color">
