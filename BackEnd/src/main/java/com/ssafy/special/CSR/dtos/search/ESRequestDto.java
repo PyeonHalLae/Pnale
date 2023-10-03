@@ -9,5 +9,6 @@ import java.util.List;
 @Setter
 public class ESRequestDto {
     private List<Long> ids;
+    private String keyword;
 
 }
