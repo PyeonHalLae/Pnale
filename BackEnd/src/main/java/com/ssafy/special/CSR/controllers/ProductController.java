@@ -45,20 +45,18 @@ public class ProductController {
     }
 
     //상품 좋아요
-    @GetMapping("/pick/{productId}")
+    @PatchMapping("/pick/{productId}")
     public CustomResponse pickProductToggle(@PathVariable("productId") Long productId,
                                             HttpServletRequest request){
         Long memberId = (Long) request.getAttribute("memberId");
-        if(memberId == null) throw new CustomException(CustomErrorCode.FORBIDDEN);
         return new CustomResponse(200, productService.pickToggle(productId, memberId));
     }
 
     //이메일 수신체크
-    @GetMapping("/receive/{productId}")
+    @PatchMapping("/receive/{productId}")
     public CustomResponse receiveEmailToggle(@PathVariable("productId") Long productId,
                                              HttpServletRequest request){
         Long memberId = (Long) request.getAttribute("memberId");
-        if(memberId == null) throw new CustomException(CustomErrorCode.FORBIDDEN);
         return new CustomResponse(200, productService.receiveToggle(productId, memberId));
     }
 }
