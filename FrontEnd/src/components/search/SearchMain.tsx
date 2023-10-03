@@ -9,6 +9,7 @@ const SearchMain = () => {
   const location = useLocation();
   const [searchData, setSearchData] = useState<searchData>();
   const [ids, setIds] = useState<number>();
+
   useEffect(() => {
     if (location.state) {
       const searchData = location.state.responseData;

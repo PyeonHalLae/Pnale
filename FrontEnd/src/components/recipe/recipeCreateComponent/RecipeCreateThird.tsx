@@ -11,7 +11,7 @@ import {
 } from "@/recoil/khiRecoil";
 
 import { useNavigate } from "react-router-dom";
-import { customAxios } from "./../../../api/customAxios";
+import axios from "axios";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
@@ -74,7 +74,7 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     };
     console.log(data);
 
-    customAxios
+    axios
       .post("/api/recipe/form", data, {
         headers: {
           "Content-Type": "application/json",

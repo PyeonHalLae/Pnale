@@ -63,22 +63,47 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   //메일 체크
   const MailClickHandler = () => {
     axios
-      .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
+      .patch("/api/product/receive/" + $productInfo.product.productId, {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res);
-        if (res.data.code === 200) {
+        const resData = res.data;
+        if (resData.code == 200) {
           ProductReceiveHandler();
           ToastBackMessage(res.data.message);
         }
-        //토큰이 만료되었거나 없는경우
-        else if (res.data.code === 401) {
-          UserInfoExpires();
-        }
-        //로그인 안되어있는경우
-        else if (res.data.code === 403) {
-          UserNotLogin();
+      })
+      .catch((err) => {
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .patch("/api/auth/product/receive/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                ProductReceiveHandler();
+                ToastBackMessage(res.data.message);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
         } else {
-          console.log("그외 서버 오류", res.data);
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
         }
       });
   };
@@ -86,22 +111,47 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   //좋아요 해제
   const LikeClickHandler = () => {
     axios
-      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .patch("/api/product/pick/" + $productInfo.product.productId, {
+        withCredentials: true,
+      })
       .then((res) => {
-        console.log(res);
-        if (res.data.code === 200) {
+        const resData = res.data;
+        if (resData.code == 200) {
           ProductLikeHandler();
           ToastBackMessage(res.data.message);
         }
-        //토큰이 만료되었거나 없는경우
-        else if (res.data.code === 401) {
-          UserInfoExpires();
-        }
-        //로그인 안되어있는경우
-        else if (res.data.code === 403) {
-          UserNotLogin();
+      })
+      .catch((err) => {
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .patch("/api/auth/product/pick/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                ProductLikeHandler();
+                ToastBackMessage(res.data.message);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
         } else {
-          console.log("그외 서버 오류", res.data);
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
         }
       });
   };

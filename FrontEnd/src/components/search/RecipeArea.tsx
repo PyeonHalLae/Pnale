@@ -6,8 +6,8 @@ import { useNavigate } from "react-router-dom";
 const RecipeArea = ({ recipe }: { recipe: RecipeInfo }) => {
   const navigate = useNavigate();
 
-  const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
-  const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
+  // const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
+  // const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
 
   console.log("recipe", recipe);
 
@@ -25,11 +25,11 @@ const RecipeArea = ({ recipe }: { recipe: RecipeInfo }) => {
           더보기
         </button>
       </div>
-      {/* <div>
-        {recipeList.map((recipeItem, index) => (
+      <div>
+        {/* {recipeList.map((recipeItem, index) => (
           <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-        ))}
-      </div> */}
+        ))} */}
+      </div>
     </div>
   );
 };

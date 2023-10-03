@@ -33,7 +33,7 @@ export const recipeDetailInfo = atom<recipeDetailType>({
     rcpId: -1, // 레시피ID
     rcpName: "", // 레시피명
     rcpThumbnail: "", // 레시피메인이미지
-    member: {
+    writer: {
       memberId: -1, // 유저정보
       nickname: "",
       memberImg: "",

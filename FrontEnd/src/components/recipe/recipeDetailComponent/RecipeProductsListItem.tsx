@@ -110,12 +110,11 @@ w-[3.625rem]
 `;
 
 const StickerBox = tw.div`
-w-[7rem]
+w-[9rem]
 h-[1.5rem]
 ml-[1.875rem]
-my-[0.25rem]
-border-[1px]
-border-common-bold-back-color
+mb-[1rem]
+
 `;
 
 const StickerImg = tw.img`

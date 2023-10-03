@@ -3,39 +3,45 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { recipeType } from "@/model/commonType";
+import { useSetRecoilState } from "recoil";
+import { recipeDetailInfo } from "@/recoil/khiRecoil";
+import axios from "axios";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  // useEffect(() => {
-  //   setIsAdmin(false);
-  // }, []);
+  const setRecipeDetail = useSetRecoilState(recipeDetailInfo);
+
   const navigate = useNavigate();
+
+  const detailInfoloadHanlder = () => {
+    axios
+      .get("/api/recipe/detail", {
+        params: {
+          rcpId: recipeInfo.rcpId,
+        },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setRecipeDetail(() => {
+          return res.data.data;
+        });
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
   };
 
-  // recipeInfo = {
-  //   rcpName:
-  //     "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-  //   rcpThumbnail: "/img/test/너굴맨레시피.jpg",
-  //   member: {
-  //     nickname: "정현모",
-  //     memberId: 1,
-  //     memberImg: "/img/test/너굴맨레시피.jpg",
-  //   },
-  //   viewCnt: 1000,
-  //   likeCnt: 1000,
-  //   replyCnt: 1000,
-  //   createdAt: "2020.20.20",
-  //   rcpId: 1,
-  //   influence: true,
-  //   like: true,
-  // };
   return (
     <Container
       onClick={() => {
+        detailInfoloadHanlder();
         navigateHandler(recipeInfo.rcpId);
       }}
     >
@@ -67,7 +73,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 
         {/* 작성일 */}
         <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {recipeInfo.createdAt}
+          {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
         </div>
       </ContentBox>
 

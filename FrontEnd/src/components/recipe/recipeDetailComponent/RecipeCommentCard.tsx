@@ -57,7 +57,7 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
         )}
 
         <div className="text-[0.625rem] text-common-text-gray-color font-medium">
-          {commentInfo.createdAt.substring(0, 10)} {commentInfo.createdAt.substring(11)}
+          {commentInfo.createdAt.substring(0, 10)} {commentInfo.createdAt.substring(11, 16)}
         </div>
       </ContentBox>
     </CommentCardContainer>

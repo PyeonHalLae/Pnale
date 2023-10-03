@@ -1,11 +1,11 @@
 import tw from "tailwind-styled-components";
 import styled from "styled-components";
 import { recipeDetailType } from "./recipeDetailType";
-import { customAxios } from "@/api/customAxios";
+import axios from "axios";
 
 const RecipeDetailHeader = ({ recipeInfo }: { recipeInfo: recipeDetailType }) => {
   const recipeLikeHanlder = () => {
-    customAxios
+    axios
       .patch("", null, { withCredentials: true })
       .then((res) => {
         console.log(res);
@@ -41,13 +41,15 @@ const RecipeDetailHeader = ({ recipeInfo }: { recipeInfo: recipeDetailType }) =>
         <HeaderTitleBox>{recipeInfo.rcpName}</HeaderTitleBox>
 
         <HeaderSecondBox>
-          <div className="absolute h-[1rem] left-0 w-auto">{recipeInfo.createdAt}</div>
+          <div className="absolute h-[1rem] left-0 w-auto">
+            {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
+          </div>
           <div className="absolute flex h-[1rem] right-0 items-center">
-            <div>{recipeInfo.member.nickname}</div>
+            <div>{recipeInfo.writer.nickname}</div>
 
             <img
               className="w-[2.5rem] h-[2.5rem] rounded-[2.5rem] ml-[0.5rem]"
-              src={recipeInfo.member.memberImg}
+              src={recipeInfo.writer.memberImg}
               alt="유저사진"
             />
           </div>
@@ -140,7 +142,7 @@ left-[39%]
 `;
 
 const IconBoxThird = tw(IconBox)`
-right-[2.1875rem]
+right-[1.5rem]
 `;
 
 const Icons = tw.img`

@@ -35,7 +35,7 @@ export interface recipeDetailType {
   rcpId: number;
   rcpName: string;
   rcpThumbnail: string;
-  member: memberInfoType; // 작성유저정보
+  writer: memberInfoType; // 작성유저정보
   ingredients: recipePrdInfoType[]; //디테일 재료 정보
   createdAt: string;
   rcpSimple: string; // 요약

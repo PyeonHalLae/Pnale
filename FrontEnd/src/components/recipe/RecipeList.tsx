@@ -8,9 +8,9 @@ import { recipeType } from "@/model/commonType";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
-import { customAxios } from "@/api/customAxios";
 import { popularRecipeType } from "./recipeListComponent/recipeListType";
 import PopularRecipeCard from "./recipeListComponent/PopularRecipeCard";
+import axios from "axios";
 
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
@@ -18,149 +18,101 @@ const RecipeList = () => {
   const [popularRecipe, setPopularRecipe] = useState<popularRecipeType>();
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
   const [listSortBy, setListSortBy] = useState<string>("latest");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    customAxios
+    axios
       .get("/api/recipe", {
         headers: {
           "Content-Type": "application/json",
         },
-        // params: {
-        //   page: 0,
-        //   size: 5,
-        // },
-        withCredentials: true,
       })
       .then((res) => {
         console.log(res);
         // 인기레시피
-        setPopularRecipe(res.data.best);
+        setPopularRecipe(res.data.data.best);
         // 그냥 레시피 리스트
-        setRecipeList(res.data.recipes);
+        setRecipeList(res.data.data.recipes);
+        setLoading(false);
       })
       .catch((err) => {
-        const code = err.response.status;
-        if (code === 401) {
-          customAxios
-            .get("http://pnale.online/api/auth/recipe", {
-              withCredentials: true,
-            })
-            .then((response) => {
-              console.log(response.data);
-            })
-            .catch((err) => {
-              console.log(err);
-            });
-        } else {
-          console.log(err);
-        }
+        console.log(err);
       });
-    // setPopularRecipe({
-    //   rcpName:
-    //     "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-    //   rcpThumbnail: "/img/test/너굴맨레시피.jpg",
-    //   rcpSimple: "한줄설명",
-    //   member: {
-    //     memberId: 1,
-    //     nickname: "정현모",
-    //     memberImg: "/img/test/너굴맨레시피.jpg",
-    //   },
-    //   ingredients: ["짜파게티", "너구리", "짜파게티", "너구리", "짜파게티", "너구리"],
-    //   viewCnt: 1000,
-    //   likeCnt: 1000,
-    //   replyCnt: 1000,
-    //   rcpId: 1,
-    //   influence: true,
-    //   like: true,
-    // });
-    // setRecipeList([
-    //   {
-    //     rcpName:
-    //       "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-    //     rcpThumbnail: "/img/test/너굴맨레시피.jpg",
-    //     member: {
-    //       memberId: 1,
-    //       nickname: "정현모",
-    //       memberImg: "/img/test/너굴맨레시피.jpg",
-    //     },
-    //     viewCnt: 1000,
-    //     likeCnt: 1000,
-    //     replyCnt: 1000,
-    //     createdAt: "2020.20.20",
-    //     rcpId: 1,
-    //     influence: true,
-    //     like: true,
-    //     myRecipe: false,
-    //   },
-    // ]);
   }, []);
 
   return (
-    <Container>
-      {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
-      <RecipeListHeaderBar />
-
-      <ContentTitle>
-        <TitleTextPeach>인기</TitleTextPeach>
-        <TitleText>레시피</TitleText>
-      </ContentTitle>
-
-      {/* 인기 레시피 컨테이너 */}
-      {popularRecipe === undefined ? (
-        <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
+    <>
+      {loading ? (
+        <></>
       ) : (
-        <PopularRecipeCard popularRecipe={popularRecipe} />
+        <Container>
+          {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
+          <RecipeListHeaderBar />
+
+          <ContentTitle>
+            <TitleTextPeach>인기</TitleTextPeach>
+            <TitleText>레시피</TitleText>
+          </ContentTitle>
+
+          {/* 인기 레시피 컨테이너 */}
+          {popularRecipe === undefined ? (
+            <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
+          ) : (
+            <PopularRecipeCard popularRecipe={popularRecipe} />
+          )}
+
+          {/* 전체 레시피 컨테이너 */}
+
+          <ContentTitle>
+            <TitleTextOrange>전체 </TitleTextOrange>
+            <TitleText>레시피</TitleText>
+
+            <SortSelectBox
+              value={listSortBy}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setListSortBy(() => {
+                  return e.target.value;
+                });
+              }}
+            >
+              <option value="latest">최신순</option>
+              <option value="popular">인기순</option>
+            </SortSelectBox>
+          </ContentTitle>
+
+          {/* 5개씩 늘어날 것. */}
+          {recipeList !== undefined &&
+            recipeList.map((recipeItem, index) => (
+              <RecipeCard
+                // onClick={navigateHandler(recipeItem.recipeId)}
+                key={recipeItem.rcpName + index}
+                recipeInfo={recipeItem}
+              />
+            ))}
+
+          {/* 새 레시피 등록 버튼 */}
+          <ViewMoreBtnBox>
+            <ViewMoreBtn
+              onClick={() => {
+                console.log("ㅎㅎ");
+              }}
+            >
+              더보기
+            </ViewMoreBtn>
+          </ViewMoreBtnBox>
+
+          <CreateBtn
+            onClick={() => {
+              navigate("/recipe/create");
+            }}
+            src="/img/btn/create-recipe.png"
+          />
+        </Container>
       )}
-
-      {/* 전체 레시피 컨테이너 */}
-
-      <ContentTitle>
-        <TitleTextOrange>전체 </TitleTextOrange>
-        <TitleText>레시피</TitleText>
-
-        <SortSelectBox
-          value={listSortBy}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setListSortBy(() => {
-              return e.target.value;
-            });
-          }}
-        >
-          <option value="latest">최신순</option>
-          <option value="popular">인기순</option>
-        </SortSelectBox>
-      </ContentTitle>
-
-      {/* 5개씩 늘어날 것. */}
-      {recipeList.map((recipeItem, index) => (
-        <RecipeCard
-          // onClick={navigateHandler(recipeItem.recipeId)}
-          key={recipeItem.rcpName + index}
-          recipeInfo={recipeItem}
-        />
-      ))}
-
-      {/* 새 레시피 등록 버튼 */}
-      <ViewMoreBtnBox>
-        <ViewMoreBtn
-          onClick={() => {
-            console.log("ㅎㅎ");
-          }}
-        >
-          더보기
-        </ViewMoreBtn>
-      </ViewMoreBtnBox>
-
-      <CreateBtn
-        onClick={() => {
-          navigate("/recipe/create");
-        }}
-        src="/img/btn/create-recipe.png"
-      />
-    </Container>
+    </>
   );
 };
 
