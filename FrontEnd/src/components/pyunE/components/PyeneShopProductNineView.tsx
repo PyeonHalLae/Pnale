@@ -135,9 +135,8 @@ const PyeneShopProductNineView = ({
   useEffect(() => {
     const fetchData = async () => {
       prePyenType.current = $pyenType;
-      if (currentPage !== 1) return;
-      await setCurrentPage(0);
-      AxiosHandler();
+      if (currentPage !== 0) await setCurrentPage(0);
+      await setCurrentPage(1);
     };
     if ($pyenType !== prePyenType.current) {
       fetchData();
