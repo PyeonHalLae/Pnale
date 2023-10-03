@@ -49,6 +49,7 @@ public class SecurityConfig {
                 .antMatchers("/api/conv/filter/**").permitAll()
                 .antMatchers("/api/product/pick/**").authenticated()
                 .antMatchers("/api/product/receive/**").authenticated()
+                .antMatchers("/api/member/needLogin").permitAll()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
@@ -61,7 +62,7 @@ public class SecurityConfig {
                 // OAuth 로그인
                 .and()
                 .oauth2Login()
-                .loginPage("https://pnale.online/sociallogin")
+                .loginPage("https://pnale.online/api/member/needLogin")
                 .successHandler(oAuth2LoginSuccessHandler)
                 .failureHandler(oAuth2LoginFailureHandler)
                 .userInfoEndpoint()
