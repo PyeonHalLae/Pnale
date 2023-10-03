@@ -87,7 +87,7 @@ const MyPageUser = () => {
   }, []);
 
   const LoginPageMoveHandler = () => {
-    navigate("/login");
+    navigate("/sociallogin");
   };
 
   const LogoutHandler = () => {
