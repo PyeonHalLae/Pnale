@@ -18,7 +18,8 @@ public enum CustomErrorCode {
     NO_SEARCH_DATA(1004, "검색 데이터가 입력되지 않았습니다."),
 
     //USER LIKE PRODUCT 관련
-    ULP_NOT_FOUND(2000, "해당 상품에 유저 좋아요 정보를 찾을 수 없습니다."),
+    ULP_NOT_FOUND(2000, "해당 상품에 좋아요 정보를 찾을 수 없습니다."),
+    INVALID_ULP_REQUEST(2001, "올바른 접근이 아닙니다.(상품 좋아요 접근)"),
 
     //MEMBER 관련
     MEMBER_NOT_FOUND(3000, "해당 유저를 찾을 수 없습니다."),

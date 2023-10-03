@@ -3,6 +3,7 @@ package com.ssafy.special.CSR.services;
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
 import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.entity.Recipe;
+import com.ssafy.special.exception.AuthException;
 import com.ssafy.special.util.ResponseUtil;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.entity.MemberPickProd;
@@ -59,6 +60,7 @@ public class ProductService {
     //상품 좋아요
     @Transactional
     public String pickToggle(Long productId, Long memberId) {
+        if(memberId == null) throw new AuthException(CustomErrorCode.INVALID_ULP_REQUEST);
         Member findUser = getUserById(memberId);
         Product findProduct = getProductById(productId);
 
@@ -75,6 +77,7 @@ public class ProductService {
     //이메일 수신체크
     @Transactional
     public String receiveToggle(Long productId, Long memberId) {
+        if(memberId == null) throw new AuthException(CustomErrorCode.INVALID_ULP_REQUEST);
         Member findUser = getUserById(memberId);
         Product findProduct = getProductById(productId);
 

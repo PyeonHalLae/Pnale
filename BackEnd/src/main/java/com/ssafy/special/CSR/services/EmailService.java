@@ -13,10 +13,14 @@ import com.ssafy.special.CSR.dtos.product.EventInfoDto;
 import com.ssafy.special.CSR.dtos.product.ProductInfoDto;
 import com.ssafy.special.CSR.repositories.MemberPickProdRepository;
 import com.ssafy.special.entity.Member;
+import com.ssafy.special.exception.CustomErrorCode;
+import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Slice;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -31,7 +35,6 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class EmailService {
-
 
     private final JavaMailSender javaMailSender;
     private final MemberRepository memberRepository;
@@ -83,7 +86,9 @@ public class EmailService {
         //리스트가 있을때만 실행해!
         memberListOptional.ifPresent(memberList -> {
             for(Member member : memberList ){
-                Optional<List<EmailProductDto>> mailLikeListOptional = memberPickProdRepository.findByMember_MemberIdAndLikeStatTrueAndReceivedTrue(member.getMemberId());
+                Optional<List<EmailProductDto>> mailLikeListOptional = memberPickProdRepository
+                        .findByMember_MemberIdAndLikeStatTrueAndReceivedTrue(PageRequest.of(0,6),member.getMemberId())
+                        .map(Slice::getContent);
                 mailLikeListOptional.ifPresent(mailLikeList -> {
                     try {
                         MimeMessage message = createMessageProductEvent(member.getEmail(), member.getNickname(), mailLikeList);

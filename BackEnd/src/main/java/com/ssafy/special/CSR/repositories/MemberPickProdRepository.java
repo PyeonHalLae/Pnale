@@ -32,5 +32,5 @@ public interface MemberPickProdRepository extends JpaRepository<MemberPickProd, 
             "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true AND mpp.isReceived = true " +
             " AND( ep.CUType IS NOT NULL OR ep.GSType IS NOT NULL OR ep.SEVENType IS NOT NULL OR ep.EMARTType IS NOT NULL ) " +
             "ORDER BY FUNCTION('RAND')" )
-    Optional<List<EmailProductDto>> findByMember_MemberIdAndLikeStatTrueAndReceivedTrue(@Param("memberId")Long memberId);
+    Optional<Page<EmailProductDto>> findByMember_MemberIdAndLikeStatTrueAndReceivedTrue(Pageable pageable, @Param("memberId")Long memberId);
 }

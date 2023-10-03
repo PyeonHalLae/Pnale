@@ -47,6 +47,8 @@ public class SecurityConfig {
                 .antMatchers("/api/search/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
                 .antMatchers("/api/conv/filter/**").permitAll()
+                .antMatchers("/api/product/pick/**").authenticated()
+                .antMatchers("/api/product/receive/**").authenticated()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
