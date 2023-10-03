@@ -5,7 +5,6 @@ import tw from "tailwind-styled-components";
 import axios from "axios";
 import { ProductComp } from "@/model/commonType";
 
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserNotLogin } from "@/model/toastMessageJHM";
 
@@ -107,7 +106,6 @@ const MyPageUser = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
