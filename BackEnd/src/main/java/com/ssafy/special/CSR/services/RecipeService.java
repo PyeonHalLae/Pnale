@@ -87,12 +87,15 @@ public class RecipeService {
     /**
      * 디테일페이지에 출력할 레시피입니다.
      */
+    @Transactional
     public RecipeDetailsDTO getDetailRecipe(Long memberId, Long recipeId){
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        if(!recipe.getWriter().getMemberId().equals(memberId)) recipe.setViewCnt(recipe.getViewCnt()+1);
         List<ProductInRecipeDTO> ingredients = recipeIngredientRepository.findProductsInRecipe(recipe.getRecipeId());
         boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
         boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
                 .map(isDeleted -> !isDeleted).orElse(false);
+        recipeRepository.save(recipe);
         return RecipeDetailsDTO.builder()
                 .rcpId(recipe.getRecipeId())
                 .rcpName(recipe.getRecipeName())

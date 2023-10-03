@@ -33,7 +33,7 @@ public class RecipeController {
     @GetMapping("")
     public DataResponse<?> getMainpage(HttpServletRequest request) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         DataResponse<RecipeMainPageDTO> response = new DataResponse<>(200, "레시피 메인 페이지가 로드되었습니다");
         RecipeRecommendDTO rm = recipeService.getRecommendData(memberId);
         List<RecipeListDTO> rl = recipeService.getMainListData(memberId);
@@ -65,7 +65,7 @@ public class RecipeController {
     public DataResponse<?> getAllLists(HttpServletRequest request,
                                        @PageableDefault(page=0, size=10, sort="recipeId", direction = Sort.Direction.DESC) Pageable pageable) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         Page<RecipeListDTO> list = recipeService.getAllLists(memberId, pageable);
 
         if(list.isEmpty()) {
@@ -132,7 +132,7 @@ public class RecipeController {
     public DataResponse<?> readReview(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId, @PageableDefault(page=0, size=5, sort="reviewId", direction = Sort.Direction.DESC) Pageable pageable){
         DataResponse<Page<RecipeReviewDTO>> response;
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
 
         Page<RecipeReviewDTO> list = recipeService.readAllReviews(rcpId, memberId, pageable);
 
