@@ -13,6 +13,7 @@ import java.util.List;
 // 어째서 setter이 없어졌었을까?
 @Entity
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
