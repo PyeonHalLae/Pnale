@@ -2,10 +2,14 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
+import { ProductComp } from "@/model/commonType";
+import axios from "axios";
+
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 
 interface EventType {
-  state: boolean; //행사중이냐 아니냐
-  type: string; //편의저명
+  pyeneType: string; //편의저명
   eventType: string; //행사중일때 해당하는 행사 ( 1+1 2+1)
 }
 
@@ -13,40 +17,28 @@ interface EventImg {
   imgurl: string;
 }
 
-interface ProductType {
-  name: string;
-  price: number;
-  img: string;
-  category: string;
-  mailState: boolean;
-}
+const pyeneList = ["cu", "seven", "gs", "emart"];
 
-const EventState: EventType[] = [
-  { state: true, type: "CU", eventType: "TPO" },
-  { state: false, type: "EMART", eventType: "" },
-  { state: true, type: "GS", eventType: "DISC" },
-  { state: true, type: "SEVEN", eventType: "MORE" },
-];
-
-const productData: ProductType = {
-  name: " 오리온) 포카칩 오리지널 66g 두줄테스트 응애 ㅇㅁㄴㄹㄴㅇㄹ",
-  price: 2000,
-  img: "/img/test/image61.png",
-  category: "스낵",
-  mailState: true,
-};
-
-const ProductCard = () => {
+const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
+  const [productData, setProductData] = useState<ProductComp>();
 
-  const eventImgCheck = async (eventState) => {
+  useEffect(() => {
+    setProductData($productInfo);
+  }, [$productInfo]);
+
+  //이벤트 이미지 세팅
+  const eventImgCheck = async () => {
+    const eventList = pyeneList.map((value) => ({
+      pyeneType: value.toUpperCase(),
+      eventType:
+        $productInfo.event[value + "type"] === null ? "NONE" : $productInfo.event[value + "type"],
+    }));
+
     const eventImgInfo: EventImg[] = [];
-
-    eventState.map((eventInfo: EventType) => {
-      const { state, type, eventType } = eventInfo;
-      const eventImgUrl = state
-        ? `/img/event/${type}-${eventType}.png`
-        : `/img/event/${type}-NONE.png`;
+    await eventList.map((eventInfo: EventType) => {
+      const { pyeneType, eventType } = eventInfo;
+      const eventImgUrl = `/img/sticker/event/${pyeneType}-${eventType}.png`;
 
       eventImgInfo.push({ imgurl: eventImgUrl });
     });
@@ -54,42 +46,115 @@ const ProductCard = () => {
     await setEventUrl([...eventImgInfo]);
   };
 
+  const ProductReceiveHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        received: !prevProductData.userLike.received,
+      },
+    }));
+  };
+
+  const ProductLikeHandler = () => {
+    setProductData(null);
+  };
+
+  //메일 체크
+  const MailClickHandler = () => {
+    axios
+      .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          ProductReceiveHandler();
+          ToastBackMessage(res.data.message);
+        }
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류", res.data);
+        }
+      });
+  };
+
+  //좋아요 해제
+  const LikeClickHandler = () => {
+    axios
+      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          ProductLikeHandler();
+          ToastBackMessage(res.data.message);
+        }
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류", res.data);
+        }
+      });
+  };
+
   useEffect(() => {
-    eventImgCheck(EventState);
-  }, []);
+    eventImgCheck();
+  }, [$productInfo]);
 
   return (
     <>
-      <BackSize>
-        <Card>
-          <ImageBox $imgurl="/img/test/image61.png" />
-          <InfoBox>
-            <ProductInfo>
-              <ProductTitle>{productData.name}</ProductTitle>
-              <div className="flex">
-                <Price> {productData.price}원</Price>
-                <Like />
-              </div>
-              <Category> {productData.category}</Category>
-              <MailBox>
-                메일 알림 받기
-                <MailBtn
-                  $mailState={
-                    productData.mailState
-                      ? "/img/btn/checkbox-true.png"
-                      : "/img/btn/checkbox-false.png"
-                  }
-                />
-              </MailBox>
-            </ProductInfo>
-            <EventInfo>
-              {eventUrl.map((value, index) => (
-                <EventImg key={index} $imgurl={value.imgurl} />
-              ))}
-            </EventInfo>
-          </InfoBox>
-        </Card>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <Card>
+            <ImageBox $imgurl={productData.product.productImg} />
+            <InfoBox>
+              <ProductInfo>
+                <ProductTitle>{productData.product.productName}</ProductTitle>
+                <div className="flex mt-1">
+                  <Price>
+                    {" "}
+                    {productData.product.price}
+                    <PriceText>원</PriceText>
+                  </Price>
+                  <Like
+                    onClick={() => {
+                      LikeClickHandler();
+                    }}
+                  />
+                </div>
+                <Category>{productData.product.category}</Category>
+                <MailBox>
+                  메일 알림 받기
+                  <MailBtn
+                    onClick={() => {
+                      MailClickHandler();
+                    }}
+                    $mailState={
+                      productData.userLike.received
+                        ? "/img/btn/checkbox-true.png"
+                        : "/img/btn/checkbox-false.png"
+                    }
+                  />
+                </MailBox>
+              </ProductInfo>
+              <EventInfo>
+                {eventUrl.map((value, index) => (
+                  <EventImg key={index} $imgurl={value.imgurl} />
+                ))}
+              </EventInfo>
+            </InfoBox>
+          </Card>
+        </BackSize>
+      )}
     </>
   );
 };
@@ -134,9 +199,11 @@ const ProductInfo = tw.div`
 `;
 
 const ProductTitle = styled.div`
-  font-size: 0.625rem;
+  font-size: 13px;
   width: 8.5rem;
-  font-weight: normal;
+  height: 2.125rem;
+  font-weight: bold;
+  color: #1e2b4f;
   word-wrap: break-word;
   overflow: hidden; //숨기는거고
   display: -webkit-box; // webkit-box다
@@ -145,8 +212,14 @@ const ProductTitle = styled.div`
 `;
 
 const Price = tw.div`
-  text-[0.9375rem] mx-[0.125rem]
-  w-[4.9375rem]
+  text-[1rem] mx-[0.125rem]
+  w-[5.625rem]
+`;
+
+const PriceText = tw.span`
+  ml-[2px]  
+  text-[11px]
+  text-common-text-color
 `;
 
 const Like = styled.div`
@@ -160,13 +233,14 @@ const Like = styled.div`
 
 const Category = styled.span`
   display: inline-block;
-  margin: 0.125rem 0rem;
+  margin: 0.0625rem 0rem 0px 0px;
   min-width: 2.5625rem;
   max-width: 8.125rem;
   overflow: hidden;
   word-break: break-all;
   padding: 0.0625rem 0.3125rem;
   height: 1.125rem;
+  line-height: 1.125rem;
   font-size: 0.625rem;
   text-align: center;
   border: 0.0625rem solid #1e2b4f;
@@ -177,14 +251,14 @@ const Category = styled.span`
 const MailBox = tw.div`
   flex
   text-[0.625rem]
-  leading-[1.125rem]
+  leading-[1rem]
   h-[0.9375rem]
   text-[#aeb0b6]
 `;
 
 const MailBtn = styled.div<{ $mailState: string }>`
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 0.875rem;
+  height: 0.875rem;
   margin-left: 0.25rem;
   background-image: url(${(props) => props.$mailState});
   background-position: center;
@@ -195,7 +269,6 @@ const MailBtn = styled.div<{ $mailState: string }>`
 const EventInfo = tw.div`
   w-[35%]
   my-auto
-
 `;
 
 const EventImg = styled.div<{ $imgurl: string }>`

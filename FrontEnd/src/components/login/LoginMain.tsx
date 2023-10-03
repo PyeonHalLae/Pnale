@@ -10,14 +10,8 @@ const LoginMain = () => {
       <BackSize>
         <LogImg src="/img/logo/logo-pink.png" />
         <BtnBox>
-          <KakaoLoginBtn
-            src="/img/test/kakao-login-임시.png"
-            onClick={() => LoginHandler("kakao")}
-          />
-          <GoogleLoginBtn
-            src="/img/test/google-login-임시.png"
-            onClick={() => LoginHandler("google")}
-          />
+          <KakaoLoginBtn src="/img/btn/kakao-login.png" onClick={() => LoginHandler("kakao")} />
+          <GoogleLoginBtn src="/img/btn/google-login.png" onClick={() => LoginHandler("google")} />
         </BtnBox>
       </BackSize>
     </>

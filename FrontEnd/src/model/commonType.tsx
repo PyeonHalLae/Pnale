@@ -1,31 +1,35 @@
-// 상품 정보 카드
-
-//제품 공통 카드 메인
+// 메인화면 정보 카드 - 김동민
+export type RecipeAndRecommand = {
+  recipe: RecipeInfo;
+  recommands: ProductComp[];
+};
+//제품 공통 카드 메인 - 김동민
 export type ProductComp = {
   event: CompEvent;
   product: CompProduct;
   userLike: CompUserLike;
 };
 
-// 제품 공통 카드의 할인 정보;
+// 제품 공통 카드의 할인 정보 - 김동민
 export type CompEvent = {
-  cudate: string;
+  cuprice: string;
   cutype: string;
-  emartdate: string;
+  emartprice: string;
   emarttype: string;
-  gsdate: string;
+  gsprice: string;
   gstype: string;
-  sevendate: string;
+  sevenprice: string;
   seventype: string;
 };
 
-// 검색창 입력시 자동 완성 추천 타입
+// 검색창 입력시 자동 완성 추천 타입 - 김동민
 export type SearchResponseToRecommand = {
   category: string;
   id: number;
   name: string;
 };
-// 제품 공통 카드의 제품정보
+
+// 제품 공통 카드의 제품정보 - 김동민
 export type CompProduct = {
   category: string;
   hit: number;
@@ -36,16 +40,39 @@ export type CompProduct = {
   productImg: string;
   productName: string;
   recommand: number;
-  // 다른 필드들도 여기에 추가
 };
 
-// 제품 공통 카드의 유저 좋아요
+// 제품 공통 카드의 유저 좋아요 - 김동민
 export type CompUserLike = {
   likeStat: boolean;
   pickProdId?: string;
   received: boolean;
 };
 
+<<<<<<< HEAD
+=======
+export type RecipeInfo = {
+  influence: boolean;
+  ingredients: string[];
+  like: boolean;
+  likeCnt: number;
+  member: memberInfo;
+  rcpId: number;
+  rcpName: string;
+  rcpSimple: string;
+  rcpThumnail: string;
+  rcpVideoUrl: string;
+  replyCnt: number;
+  viewCnt: number;
+};
+
+export type memberInfo = {
+  memberId: number;
+  memberImg: string;
+  nickname: string;
+};
+
+>>>>>>> 16cce6c2b9664a17b522c5cda08050bea0e725e2
 // 레시피 카드 타입
 export type recipeType = {
   rcpId: number;

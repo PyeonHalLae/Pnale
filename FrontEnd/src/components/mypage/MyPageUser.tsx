@@ -3,6 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
 import axios from "axios";
+import { ProductComp } from "@/model/commonType";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserNotLogin } from "@/model/toastMessageJHM";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
@@ -10,34 +15,34 @@ const myPageType = [
   { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
-// interface likeProductType {
-//   prodId: number;
-//   prdName: string;
-// }
-
 interface UserInfoType {
-  usrId: number;
-  nickName: string;
-  usrImg: string;
+  memberId: number;
+  nickname: string;
+  socialType: string;
+  memberImg: string;
   email: string;
   usrEmail: boolean;
+  mailReceive: boolean;
 }
 
 const MyPageUser = () => {
   const navigate = useNavigate();
-  // const [productInfo, setProductInfo] = useState<likeProductType[]>([]);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
   const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
+    console.log("마이페이지 엑시오스 요청");
     axios
       .get("/api/mypage/", {
         withCredentials: true,
       })
       .then((res) => {
-        const resData = res.data;
+        console.log(res, "처음 요청");
         //로그인 된경우
+        const resData = res.data;
         if (resData.code == 200) {
-          setUserInfo(resData.data.user);
+          setUserInfo(resData.data.member);
+          setProductInfo(resData.data.memberPick.content);
         }
       })
       .catch((err) => {
@@ -50,21 +55,32 @@ const MyPageUser = () => {
               withCredentials: true,
             })
             .then((res) => {
+              console.log("리프레시로 요청");
               //재발급이 잘되서 정보를 받아온경우
-              console.log(res.data.data.user);
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data.member);
+                setProductInfo(resData.data.memberPick.content);
+              }
             })
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
+                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                setUserInfo(null);
+                setProductInfo(null);
               } else {
-                //그외 서버 오류들
+                console.log("서버 오류 발생");
               }
             });
         } else {
           if (err.code === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setUserInfo(null);
+            setProductInfo(null);
           } else {
             //그외 서버 오류
+            console.log("서버 오류 발생");
           }
         }
       });
@@ -74,8 +90,24 @@ const MyPageUser = () => {
     navigate("/login");
   };
 
+  const LogoutHandler = () => {
+    axios
+      .post("/api/member/logout")
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          setUserInfo(null);
+          setProductInfo([]);
+        }
+      })
+      .catch((err) => {
+        console.log("로그아웃 실패", err);
+      });
+  };
+
   return (
     <>
+      <ToastContainer position="top-center" />
       {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
@@ -89,7 +121,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    UserNotLogin();
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -105,11 +143,18 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.usrImg} />
+              <UserImage $imgurl={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.nickName}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
-                <div className="text-sm">로그아웃</div>
+                <div
+                  className="text-sm"
+                  onClick={() => {
+                    LogoutHandler();
+                  }}
+                >
+                  로그아웃
+                </div>
               </div>
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
@@ -140,12 +185,13 @@ const MyPageUser = () => {
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
-                {/* {productInfo.map((value, index) => (
-                  <Product key={value.prodId + index}>
-                    <ProductImage $imgurl={value.productImage} />
-                    <ProductName>{value.productName}</ProductName>
-                  </Product>
-                ))} */}
+                {productInfo &&
+                  productInfo.map((value, index) => (
+                    <Product key={value.product.productId + index}>
+                      <ProductImage $imgurl={value.product.productImg} />
+                      <ProductName>{value.product.productName}</ProductName>
+                    </Product>
+                  ))}
               </Products>
             </div>
           </LikeProduct>
@@ -203,11 +249,10 @@ const UserImage = styled.div<{ $imgurl: string }>`
   height: 5rem;
   border-radius: 50%;
   background-image: url(${(props) => props.$imgurl});
-  background-size: contain;
+  background-size: auto;
   background-position: center;
   background-repeat: no-repeat;
   margin: auto 1rem;
-  border: 0.0313rem solid rgba(0, 0, 0, 0.25);
 `;
 
 const LikeProduct = styled.div`
@@ -228,33 +273,33 @@ const Products = tw.div`
   grid grid-cols-3 
 `;
 
-// const Product = styled.div`
-//   height: 8.75rem;
-//   width: 6.875rem;
-//   margin: 0.5rem auto 0rem auto;
-// `;
+const Product = styled.div`
+  height: 8.75rem;
+  width: 6.875rem;
+  margin: 0.5rem auto 0rem auto;
+`;
 
-// const ProductImage = styled.div<{ $imgurl: string }>`
-//   width: 5.9375rem;
-//   height: 6.25rem;
-//   margin: 0rem auto;
-//   background-image: url(${(props) => props.$imgurl});
-//   background-size: 5.9375rem 6.25rem;
-//   background-position: center;
-//   background-repeat: no-repeat;
-// `;
+const ProductImage = styled.div<{ $imgurl: string }>`
+  width: 5.9375rem;
+  height: 6.25rem;
+  margin: 0rem auto;
+  background-image: url(${(props) => props.$imgurl});
+  background-size: 5.9375rem 6.25rem;
+  background-position: center;
+  background-repeat: no-repeat;
+`;
 
-// const ProductName = styled.div`
-//   width: 6.25rem;
-//   height: 1.875rem;
-//   margin: 0.3125rem auto 0rem auto;
-//   font-size: 0.625rem;
-//   color: #1e2b4f;
-//   font-weight: normal;
-//   text-align: center;
-//   word-wrap: break-word;
-//   overflow: hidden;
-//   display: -webkit-box;
-//   -webkit-line-clamp: 2;
-//   -webkit-box-orient: vertical;
-// `;
+const ProductName = styled.div`
+  width: 6.25rem;
+  height: 1.875rem;
+  margin: 0.3125rem auto 0rem auto;
+  font-size: 0.625rem;
+  color: #1e2b4f;
+  font-weight: normal;
+  text-align: center;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+`;

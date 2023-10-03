@@ -8,6 +8,10 @@ import { ProductComp } from "@/model/commonType";
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router-dom";
 
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
+import axios from "axios";
+
 interface pyeneProductEventType {
   type: string;
   date: string;
@@ -30,6 +34,7 @@ const PyeneProductCard = ({
   const [eventInfo, setEventInfo] = useState<pyeneProductEventType>(null);
   const [listType, setListType] = useState<string>();
   const { pyenType } = useParams<string>();
+  const [productData, setProductData] = useState<ProductComp>();
 
   const dumState = false;
 
@@ -43,42 +48,85 @@ const PyeneProductCard = ({
     };
     setEventInfo(pyeneEventInfo);
     setListType($listType);
+    setProductData($productInfo);
   }, [$productInfo]);
 
   const ImageErrorHandler = () => {
     prodctImgRef.current.src = "/img/sticker/noimage.jpg";
   };
 
+  const ProductLikeHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        likeStat: !prevProductData.userLike.likeStat,
+      },
+    }));
+  };
+
+  //좋아요 버튼
+  const LikeClickHandler = () => {
+    axios
+      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          ProductLikeHandler();
+          ToastBackMessage(res.data.message);
+        }
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류", res.data);
+        }
+      });
+  };
+
   return (
     <>
-      <BackSize>
-        <ImageBox>
-          <ProductImg
-            ref={prodctImgRef}
-            src={$productInfo.product.productImg}
-            onError={ImageErrorHandler}
-          />
-          {dumState && <ProductDumImg src="/img/test/image61.png" />}
-          {eventInfo && eventInfo.type ? (
-            <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
-          ) : listType === "BEST" ? (
-            <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
-          ) : listType === "NEW" ? (
-            <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
-          ) : null}
-        </ImageBox>
-        <InfoBox>
-          <div className="h-6">
-            <Category>{$productInfo.product.category}</Category>
-            <LikeBtn />
-          </div>
-          <Title>{$productInfo.product.productName}</Title>
-          <PriceBox>
-            <Price>{$productInfo.product.price}</Price>
-            <span>원</span>
-          </PriceBox>
-        </InfoBox>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <ImageBox>
+            <ProductImg
+              ref={prodctImgRef}
+              src={productData.product.productImg}
+              onError={ImageErrorHandler}
+            />
+            {dumState && <ProductDumImg src="/img/test/image61.png" />}
+            {eventInfo && eventInfo.type ? (
+              <ProductEventImg src={`/img/sticker/event/sticker-${eventInfo.type}.png`} />
+            ) : listType === "BEST" ? (
+              <ProductEventImg src="/img/sticker/event/sticker-BEST.png" />
+            ) : listType === "NEW" ? (
+              <ProductEventImg src="/img/sticker/event/sticker-NEW.png" />
+            ) : null}
+          </ImageBox>
+          <InfoBox>
+            <div className="h-6">
+              <Category>{productData.product.category}</Category>
+              <LikeBtn
+                onClick={() => LikeClickHandler()}
+                $imgurl={
+                  productData.userLike.likeStat
+                    ? "/img/btn/like-true.png"
+                    : "/img/btn/like-false.png"
+                }
+              />
+            </div>
+            <Title>{productData.product.productName}</Title>
+            <PriceBox>
+              <Price>{productData.product.price}</Price>
+              <span>원</span>
+            </PriceBox>
+          </InfoBox>
+        </BackSize>
+      )}
     </>
   );
 };
@@ -139,8 +187,8 @@ const Category = styled.span`
   font-size: 10px;
 `;
 
-const LikeBtn = styled.div`
-  background-image: url("/img/btn/like-false.png");
+const LikeBtn = styled.div<{ $imgurl: string }>`
+  background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-repeat: no-repeat;
   background-size: 15px 15px;

@@ -1,13 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import ProductInfo from "@/components/mypage/mypage2/ProductCard";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
+import { ProductComp } from "@/model/commonType";
+import axios from "axios";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires } from "@/model/toastMessageJHM";
 
 const MyProduct = () => {
   const navigate = useNavigate();
 
   const [helpState, setHelpState] = useState<boolean>(false);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
 
   const helpStateHandler = () => {
     setHelpState((prev) => {
@@ -15,8 +22,58 @@ const MyProduct = () => {
     });
   };
 
+  //유저 정보 만료
+  useEffect(() => {
+    axios
+      .get("/api/mypage/pick_prod?page=0", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          setProductInfo(resData.data.content);
+        }
+      })
+      .catch((err) => {
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .get("/api/auth/mypage/pick_prod?page=0", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setProductInfo(resData.data.content);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+                setProductInfo(null);
+                navigate("/mypage");
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setProductInfo(null);
+            navigate("/mypage");
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
+  }, []);
+
   return (
     <>
+      <ToastContainer position="top-center" />
       {helpState && (
         <ProductHelp
           helpStateHandler={() => {
@@ -40,10 +97,10 @@ const MyProduct = () => {
         </div>
       </MyProductHeader>
       <ProductInfos>
-        <ProductInfo />
-        <ProductInfo />
-        <ProductInfo />
-        <ProductInfo />
+        {productInfo &&
+          productInfo.map((value) => (
+            <ProductInfo key={value.product.productId} $productInfo={value} />
+          ))}
       </ProductInfos>
     </>
   );

@@ -25,7 +25,7 @@ export const EventFilterDefault = atom<{ data: FilterType[] }>({
       { name: "3 + 1", state: false, engName: "THPO" },
       { name: "할인", state: false, engName: "DISC" },
       { name: "덤 증정", state: false, engName: "MORE" },
-      { name: "기타", state: false, engName: "" },
+      { name: "기타", state: false, engName: "ETC" },
     ],
   },
 });
@@ -105,6 +105,7 @@ export const CategoryLifeDefault = atom<{ data: FilterType[] }>({
     data: [
       { name: "의학용품", state: false, engName: "" },
       { name: "생활용품", state: false, engName: "" },
+      { name: "건강용품", state: false, engName: "" },
       { name: "펫용품", state: false, engName: "" },
       { name: "취미", state: false, engName: "" },
       { name: "레저", state: false, engName: "" },
