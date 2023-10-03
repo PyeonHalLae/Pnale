@@ -3,6 +3,10 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
 import { ProductComp } from "@/model/commonType";
+import axios from "axios";
+
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 
 interface EventType {
   pyeneType: string; //편의저명
@@ -17,7 +21,13 @@ const pyeneList = ["cu", "seven", "gs", "emart"];
 
 const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
+  const [productData, setProductData] = useState<ProductComp>();
 
+  useEffect(() => {
+    setProductData($productInfo);
+  }, [$productInfo]);
+
+  //이벤트 이미지 세팅
   const eventImgCheck = async () => {
     const eventList = pyeneList.map((value) => ({
       pyeneType: value.toUpperCase(),
@@ -36,46 +46,115 @@ const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
     await setEventUrl([...eventImgInfo]);
   };
 
+  const ProductReceiveHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        received: !prevProductData.userLike.received,
+      },
+    }));
+  };
+
+  const ProductLikeHandler = () => {
+    setProductData(null);
+  };
+
+  //메일 체크
+  const MailClickHandler = () => {
+    axios
+      .get("/api/product/receive/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          ProductReceiveHandler();
+          ToastBackMessage(res.data.message);
+        }
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류", res.data);
+        }
+      });
+  };
+
+  //좋아요 해제
+  const LikeClickHandler = () => {
+    axios
+      .get("/api/product/pick/" + $productInfo.product.productId, { withCredentials: true })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          ProductLikeHandler();
+          ToastBackMessage(res.data.message);
+        }
+        //토큰이 만료되었거나 없는경우
+        else if (res.data.code === 401) {
+          UserInfoExpires();
+        }
+        //로그인 안되어있는경우
+        else if (res.data.code === 403) {
+          UserNotLogin();
+        } else {
+          console.log("그외 서버 오류", res.data);
+        }
+      });
+  };
+
   useEffect(() => {
     eventImgCheck();
   }, [$productInfo]);
 
   return (
     <>
-      <BackSize>
-        <Card>
-          <ImageBox $imgurl={$productInfo.product.productImg} />
-          <InfoBox>
-            <ProductInfo>
-              <ProductTitle>{$productInfo.product.productName}</ProductTitle>
-              <div className="flex mt-1">
-                <Price>
-                  {" "}
-                  {$productInfo.product.price}
-                  <PriceText>원</PriceText>
-                </Price>
-                <Like />
-              </div>
-              <Category>{$productInfo.product.category}</Category>
-              <MailBox>
-                메일 알림 받기
-                <MailBtn
-                  $mailState={
-                    $productInfo.userLike.received
-                      ? "/img/btn/checkbox-true.png"
-                      : "/img/btn/checkbox-false.png"
-                  }
-                />
-              </MailBox>
-            </ProductInfo>
-            <EventInfo>
-              {eventUrl.map((value, index) => (
-                <EventImg key={index} $imgurl={value.imgurl} />
-              ))}
-            </EventInfo>
-          </InfoBox>
-        </Card>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <Card>
+            <ImageBox $imgurl={productData.product.productImg} />
+            <InfoBox>
+              <ProductInfo>
+                <ProductTitle>{productData.product.productName}</ProductTitle>
+                <div className="flex mt-1">
+                  <Price>
+                    {" "}
+                    {productData.product.price}
+                    <PriceText>원</PriceText>
+                  </Price>
+                  <Like
+                    onClick={() => {
+                      LikeClickHandler();
+                    }}
+                  />
+                </div>
+                <Category>{productData.product.category}</Category>
+                <MailBox>
+                  메일 알림 받기
+                  <MailBtn
+                    onClick={() => {
+                      MailClickHandler();
+                    }}
+                    $mailState={
+                      productData.userLike.received
+                        ? "/img/btn/checkbox-true.png"
+                        : "/img/btn/checkbox-false.png"
+                    }
+                  />
+                </MailBox>
+              </ProductInfo>
+              <EventInfo>
+                {eventUrl.map((value, index) => (
+                  <EventImg key={index} $imgurl={value.imgurl} />
+                ))}
+              </EventInfo>
+            </InfoBox>
+          </Card>
+        </BackSize>
+      )}
     </>
   );
 };

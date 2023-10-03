@@ -5,6 +5,10 @@ import tw from "tailwind-styled-components";
 import axios from "axios";
 import { ProductComp } from "@/model/commonType";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserNotLogin } from "@/model/toastMessageJHM";
+
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
   { icon: "/img/btn/comment.png", text: "댓글 관리", url: "comment" },
@@ -86,8 +90,24 @@ const MyPageUser = () => {
     navigate("/login");
   };
 
+  const LogoutHandler = () => {
+    axios
+      .post("/api/member/logout")
+      .then((res) => {
+        console.log(res);
+        if (res.data.code == 200) {
+          setUserInfo(null);
+          setProductInfo([]);
+        }
+      })
+      .catch((err) => {
+        console.log("로그아웃 실패", err);
+      });
+  };
+
   return (
     <>
+      <ToastContainer position="top-center" />
       {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
@@ -101,7 +121,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    UserNotLogin();
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -121,7 +147,14 @@ const MyPageUser = () => {
               <div className="text-2xl text-[#AEB0B6] mt-11">
                 <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
-                <div className="text-sm">로그아웃</div>
+                <div
+                  className="text-sm"
+                  onClick={() => {
+                    LogoutHandler();
+                  }}
+                >
+                  로그아웃
+                </div>
               </div>
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">

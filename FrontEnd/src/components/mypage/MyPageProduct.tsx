@@ -6,6 +6,10 @@ import ProductHelp from "@/components/mypage/mypage2/ProductHelp";
 import { ProductComp } from "@/model/commonType";
 import axios from "axios";
 
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires } from "@/model/toastMessageJHM";
+
 const MyProduct = () => {
   const navigate = useNavigate();
 
@@ -18,24 +22,23 @@ const MyProduct = () => {
     });
   };
 
+  //유저 정보 만료
   useEffect(() => {
     axios
       .get("/api/mypage/pick_prod?page=0", {
         withCredentials: true,
       })
       .then((res) => {
-        //로그인 된경우
         const resData = res.data;
         if (resData.code == 200) {
           setProductInfo(resData.data.content);
         }
       })
       .catch((err) => {
-        //로그인 실패 (엑세스 토큰이 존재하나 만료)
         if (err.code === 401) {
           //리프레시 토큰 재발급
           axios
-            .get("/api/mypage/pick_prod?page=0", {
+            .get("/api/auth/mypage/pick_prod?page=0", {
               withCredentials: true,
             })
             .then((res) => {
@@ -48,8 +51,9 @@ const MyProduct = () => {
             .catch((err) => {
               if (err.code === 403) {
                 //제발급 실패! 재로그인 해주세요!!
-                console.log("로그인인 만료되어 재 로그인 해주세요!");
+                UserInfoExpires();
                 setProductInfo(null);
+                navigate("/mypage");
               } else {
                 console.log("서버 오류 발생");
               }
@@ -58,6 +62,7 @@ const MyProduct = () => {
           if (err.code === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
             setProductInfo(null);
+            navigate("/mypage");
           } else {
             //그외 서버 오류
             console.log("서버 오류 발생");
@@ -68,6 +73,7 @@ const MyProduct = () => {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       {helpState && (
         <ProductHelp
           helpStateHandler={() => {
