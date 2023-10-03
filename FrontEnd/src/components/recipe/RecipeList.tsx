@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-import PopularRecipeRoller from "./recipeListComponent/PopularRecipeRoller";
 
 // 레시피 카드
 import { recipeType } from "@/model/commonType";
@@ -9,108 +8,111 @@ import { recipeType } from "@/model/commonType";
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
 import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
+import { popularRecipeType } from "./recipeListComponent/recipeListType";
+import PopularRecipeCard from "./recipeListComponent/PopularRecipeCard";
+import axios from "axios";
 
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
 const RecipeList = () => {
-  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
+  const [popularRecipe, setPopularRecipe] = useState<popularRecipeType>();
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
   const [listSortBy, setListSortBy] = useState<string>("latest");
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setRecipeList([
-      {
-        recipeTitle:
-          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-    setPopularRecipeList([
-      {
-        recipeTitle: "두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
+    axios
+      .get("/api/recipe", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        // 인기레시피
+        setPopularRecipe(res.data.data.best);
+        // 그냥 레시피 리스트
+        setRecipeList(res.data.data.recipes);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }, []);
 
   return (
-    <Container>
-      {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
-      <RecipeListHeaderBar />
+    <>
+      {loading ? (
+        <></>
+      ) : (
+        <Container>
+          {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
+          <RecipeListHeaderBar />
 
-      <ContentTitle>
-        <TitleTextPeach>인기</TitleTextPeach>
-        <TitleText>레시피</TitleText>
-      </ContentTitle>
+          <ContentTitle>
+            <TitleTextPeach>인기</TitleTextPeach>
+            <TitleText>레시피</TitleText>
+          </ContentTitle>
 
-      {/* 인기 레시피 컨테이너 */}
-      <PopularRecipeRoller popularRecipeList={popularRecipeList} />
+          {/* 인기 레시피 컨테이너 */}
+          {popularRecipe === undefined ? (
+            <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
+          ) : (
+            <PopularRecipeCard popularRecipe={popularRecipe} />
+          )}
 
-      {/* 전체 레시피 컨테이너 */}
+          {/* 전체 레시피 컨테이너 */}
 
-      <ContentTitle>
-        <TitleTextOrange>전체 </TitleTextOrange>
-        <TitleText>레시피</TitleText>
+          <ContentTitle>
+            <TitleTextOrange>전체 </TitleTextOrange>
+            <TitleText>레시피</TitleText>
 
-        <SortSelectBox
-          value={listSortBy}
-          onChange={(e) => {
-            console.log(e.target.value);
-            setListSortBy(() => {
-              return e.target.value;
-            });
-          }}
-        >
-          <option value="latest">최신순</option>
-          <option value="popular">인기순</option>
-        </SortSelectBox>
-      </ContentTitle>
+            <SortSelectBox
+              value={listSortBy}
+              onChange={(e) => {
+                console.log(e.target.value);
+                setListSortBy(() => {
+                  return e.target.value;
+                });
+              }}
+            >
+              <option value="latest">최신순</option>
+              <option value="popular">인기순</option>
+            </SortSelectBox>
+          </ContentTitle>
 
-      {/* 5개씩 늘어날 것. */}
-      {recipeList.map((recipeItem, index) => (
-        <RecipeCard
-          // onClick={navigateHandler(recipeItem.recipeId)}
-          key={recipeItem.recipeTitle + index}
-          recipeInfo={recipeItem}
-        />
-      ))}
+          {/* 5개씩 늘어날 것. */}
+          {recipeList !== undefined &&
+            recipeList.map((recipeItem, index) => (
+              <RecipeCard
+                // onClick={navigateHandler(recipeItem.recipeId)}
+                key={recipeItem.rcpName + index}
+                recipeInfo={recipeItem}
+              />
+            ))}
 
-      {/* 새 레시피 등록 버튼 */}
-      <ViewMoreBtnBox>
-        <ViewMoreBtn
-          onClick={() => {
-            console.log("ㅎㅎ");
-          }}
-        >
-          더보기
-        </ViewMoreBtn>
-      </ViewMoreBtnBox>
+          {/* 새 레시피 등록 버튼 */}
+          <ViewMoreBtnBox>
+            <ViewMoreBtn
+              onClick={() => {
+                console.log("ㅎㅎ");
+              }}
+            >
+              더보기
+            </ViewMoreBtn>
+          </ViewMoreBtnBox>
 
-      <CreateBtn
-        onClick={() => {
-          navigate("/recipe/create");
-        }}
-        src="/img/btn/create-recipe.png"
-      />
-    </Container>
+          <CreateBtn
+            onClick={() => {
+              navigate("/recipe/create");
+            }}
+            src="/img/btn/create-recipe.png"
+          />
+        </Container>
+      )}
+    </>
   );
 };
 
@@ -157,3 +159,15 @@ const ViewMoreBtn = tw.button`
 const CreateBtn = tw.img`
   w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[calc(50%-11rem)]
 `;
+
+const PopularRecipeContainer = tw.div`  
+relatvie
+bg-white
+min-w-[22.5rem]
+max-w-[28.125rem]
+h-[18.125rem]
+mt-[0.62rem]
+mb-[0.625rem]
+position: relative;
+text-center
+py-24`;

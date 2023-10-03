@@ -13,16 +13,22 @@ const RecipeSearch = () => {
   useEffect(() => {
     setRecipeList([
       {
-        recipeTitle:
+        rcpName:
           "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
+        rcpThumbnail: "/img/test/너굴맨레시피.jpg",
         viewCnt: 1000,
         likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
+        replyCnt: 1000,
+        member: {
+          nickname: "",
+          memberId: 1,
+          memberImg: "",
+        },
+        createdAt: "2020.20.20",
+        rcpId: 1,
+        myRecipe: false,
+        influence: false,
+        like: false,
         // recipeId 도 받아와야함
       },
     ]);
@@ -52,7 +58,7 @@ const RecipeSearch = () => {
       {recipeList.map((recipeItem, index) => (
         <RecipeCard
           // onClick={navigateHandler(recipeItem.recipeId)}
-          key={recipeItem.recipeTitle + index}
+          key={recipeItem.rcpName + index}
           recipeInfo={recipeItem}
         />
       ))}

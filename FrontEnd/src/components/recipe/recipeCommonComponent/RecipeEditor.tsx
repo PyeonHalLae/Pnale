@@ -7,11 +7,11 @@ import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
 
 interface Props {
-  contents: string;
-  setContents: Dispatch<SetStateAction<string>>;
+  rcpDesc: string;
+  setRcpDesc: Dispatch<SetStateAction<string>>;
 }
 
-export const RecipeEditor = ({ contents, setContents }: Props) => {
+export const RecipeEditor = ({ rcpDesc, setRcpDesc }: Props) => {
   const QuillRef = useRef<ReactQuill>();
   // 이미지를 업로드 하기 위한 함수
 
@@ -91,8 +91,8 @@ export const RecipeEditor = ({ contents, setContents }: Props) => {
             QuillRef.current = element;
           }
         }}
-        value={contents}
-        onChange={setContents}
+        value={rcpDesc}
+        onChange={setRcpDesc}
         modules={modules}
         theme="snow"
         placeholder="내용을 입력해주세요."

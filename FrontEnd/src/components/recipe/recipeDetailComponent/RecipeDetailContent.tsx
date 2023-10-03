@@ -1,7 +1,7 @@
 import tw from "tailwind-styled-components";
 
 const RecipeDetailContent = ({ content }: { content: string }) => {
-  return <Container>{content}</Container>;
+  return <Container dangerouslySetInnerHTML={{ __html: content }}></Container>;
 };
 
 export default RecipeDetailContent;

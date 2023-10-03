@@ -74,13 +74,22 @@ export type memberInfo = {
 
 // 레시피 카드 타입
 export type recipeType = {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
+  rcpId: number;
+  rcpName: string;
+  rcpThumbnail: string;
+
+  member: {
+    memberId: number;
+    nickname: string;
+    memberImg: string;
+  };
+
+  createdAt: string;
   likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
+  replyCnt: number;
+  viewCnt: number;
+
+  influence: boolean;
+  like: boolean;
+  myRecipe: boolean;
 };
