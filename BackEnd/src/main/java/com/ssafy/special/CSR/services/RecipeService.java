@@ -52,7 +52,6 @@ public class RecipeService {
         Recipe recipe = toRecipeEntity(memberId, info);
         List<RecipeIngredient> lists = recipeIngredientService.writeIngredients(recipe, info.getIngredients());
         recipe.setIngredients(lists);
-
         recipe = recipeRepository.save(recipe);
 
         return recipe.getRecipeId();
