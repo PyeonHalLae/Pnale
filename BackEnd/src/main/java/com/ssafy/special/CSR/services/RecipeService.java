@@ -289,6 +289,9 @@ public class RecipeService {
                 .recipeVideoUrl(recipeInfo.getRcpVideo())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .replyCnt(0L)
+                .viewCnt(0L)
+                .likeCnt(0L)
                 .isDeleted(false)
                 .influence(influence)
                 .build();
