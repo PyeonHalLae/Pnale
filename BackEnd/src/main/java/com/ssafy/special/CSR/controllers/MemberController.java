@@ -76,8 +76,7 @@ public class MemberController {
 
     @PatchMapping("/update")
     public CustomResponse updateUserInfo(HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) {
-        String token = jwtService.getAccessToken(request).orElseThrow(()-> new CustomException(CustomErrorCode.TOKEN_UNDEFINED_ERROR));
-        Long memberId = jwtService.getMemberId(token).orElseThrow(() -> new CustomException(CustomErrorCode.TOKEN_UNDEFINED_ERROR));
+        Long memberId = (Long)request.getAttribute("memberId");
 
         memberService.updateMemberInMyPage(memberId, memberUpdateDTO);
 

@@ -46,6 +46,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 .antMatchers("/api/search/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
+                .antMatchers("/api/conv/filter/**").permitAll()
                 .antMatchers(HttpMethod.POST).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
                 .antMatchers(HttpMethod.DELETE).authenticated()
