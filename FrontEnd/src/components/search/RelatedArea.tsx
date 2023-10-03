@@ -11,7 +11,7 @@ const RelatedArea = ({ relate }: SearchAreaPros) => {
 
   return (
     <div className="bg-white">
-      <div className="p-3.5 relative ">
+      <div className="px-3.5 pt-3.5 relative ">
         <div className="inline-block ">
           <span className="text-2xl font-bold text-center text-common-orange">관련</span>
           <span className="text-2xl font-bold text-center text-common-text-color"> 상품</span>

@@ -10,13 +10,12 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
 
   useEffect(() => {
     if (recipe.ingredients) {
-      // console.log("ingrediendtsToShow", ingrediendtsToShow);
+      console.log(recipe);
 
       setRecipeId(recipe.rcpId);
       setIngrediendtsToShow(recipe.ingredients.slice(0, 2));
     }
   }, [recipe]);
-  console.log("ingrediendtsToShow", ingrediendtsToShow);
 
   return (
     <div className="bg-white border-2 border-white">
@@ -36,8 +35,8 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
               ))}
             </div>
             <UserArea>
-              <Profile src="/img/test/profileTest.png" alt="프로필사진" />
-              <div className="font-[G-sans-light] text-sm">김동민</div>
+              <Profile src={recipe.member.memberImg} alt="프로필사진" />
+              <div className="font-[G-sans-light] text-sm">{recipe.member.nickname}</div>
             </UserArea>
           </TextBox>
         )}
@@ -68,6 +67,7 @@ const Profile = tw.img`
 w-8
 h-8
 mx-auto
+rounded-full
 `;
 
 const UserArea = tw.div`

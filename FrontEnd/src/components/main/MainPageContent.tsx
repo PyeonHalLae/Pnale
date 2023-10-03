@@ -15,7 +15,6 @@ const MainPageContent = () => {
     "mainProduct",
     async () => {
       const response = await axios.get("/api/product/main");
-      console.log("response: ", response.data.data);
 
       return response.data.data;
     },

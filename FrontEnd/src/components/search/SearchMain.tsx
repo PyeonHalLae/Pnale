@@ -16,8 +16,6 @@ const SearchMain = () => {
     if (location.state) {
       const searchData = location.state.responseData;
       setSearchData(searchData);
-      console.log("searchData", searchData);
-      console.log("@@@@@@@@@@@@@", IdsArray);
     }
   }, [location.state, IdsArray]);
 
@@ -27,7 +25,7 @@ const SearchMain = () => {
         <>
           <SearchArea search={searchData.search} ids={IdsArray} />
           <RelatedArea relate={searchData.relate} />
-          <RecipeArea recipe={searchData.recipes} />
+          <RecipeArea recipe={searchData.recipes.content} />
         </>
       )}
     </div>

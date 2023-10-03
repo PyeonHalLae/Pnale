@@ -2,17 +2,18 @@ import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
-import { useRecoilState } from "recoil";
-import { searchInputData, searchIdsArray } from "@recoil/kdmRecoil";
+import { useRecoilState, useSetRecoilState } from "recoil";
+import { searchInputData, searchIdsArray, storedToSearchTag } from "@recoil/kdmRecoil";
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
-import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 const Header = () => {
   const navigate = useNavigate();
   const [name, setName] = useRecoilState<{ input: string }>(searchInputData);
+  const addSearchTag = useSetRecoilState(storedToSearchTag);
   // const [isFocused, setIsFocused] = useState(false);  포커스 상태를 관리할 상태 변수
-  const [idsArray, setIdsArray] = useRecoilState(searchIdsArray);
+  const setIdsArray = useSetRecoilState(searchIdsArray);
   const backBtn = () => {
     navigate(-1);
   };
@@ -25,12 +26,22 @@ const Header = () => {
     const idsArray = data.map((item) => item.id);
     // console.log("전송할 id 값:", idsArray);
     setIdsArray(idsArray);
-    console.log("idsArrayidsArrayidsArrayidsArrayidsArray", idsArray);
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
     });
-    navigate("/search", { state: { responseData: response.data.data } });
+
+    if (response.data.code !== 1004) {
+      addSearchTag((prev) => [name.input, ...prev]);
+      // addSearchTag([]);
+      navigate("/search", { state: { responseData: response.data.data } });
+    } else if (response.data.code === 1004 || name.input.trim.length === 0) {
+      toast.error("검색어를 입력하세요", {
+        position: "top-center", // 원하는 포지션 설정
+        autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
+        hideProgressBar: true,
+      });
+    }
     reset();
   };
 
@@ -43,7 +54,6 @@ const Header = () => {
   };
 
   const handleDivClick = (name: string) => {
-    console.log(name);
     const fakeEvent = { target: { value: name } } as React.ChangeEvent<HTMLInputElement>;
     handleInputChange(fakeEvent);
   };
@@ -62,14 +72,13 @@ const Header = () => {
   // };
 
   // eslint-disable-next-line
-  const { data, isLoading, isError, error } = useQuery<SearchResponseToRecommand[], AxiosError>(
+  const { data, isLoading, isError } = useQuery<SearchResponseToRecommand[], AxiosError>(
     ["searchTag", name.input],
     async () => {
       if (name.input !== "") {
         const response = await axios.post("/api/search", {
           name: name.input,
         });
-        console.log("추천", response.data.data);
 
         return response.data.data;
       } else return [];
@@ -79,10 +88,8 @@ const Header = () => {
         console.log("onError");
         console.log(error?.response?.status);
       },
-      onSettled: () => {
-        // console.log("아무튼 Go");
-      },
       retry: 2,
+      cacheTime: 0,
     }
   );
 
@@ -105,6 +112,7 @@ const Header = () => {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       <SearchBar>
         <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
         <Input
@@ -124,15 +132,8 @@ const Header = () => {
       {data && data.length >= 1 && (
         <TagBox>
           {data.slice(0, 9).map((index, key) => (
-            <RecommandTag>
-              {/* <img
-                src="/img/icons/recommandImg.png"
-                alt="지난 검색"
-                className="p-1 mr-1 rounded-full w-5"
-              /> */}
-              <p key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
-                {index.name}
-              </p>
+            <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
+              {index.name}
             </RecommandTag>
           ))}
         </TagBox>
