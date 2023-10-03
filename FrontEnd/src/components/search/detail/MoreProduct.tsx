@@ -1,12 +1,13 @@
 import { ProductComp } from "@/model/commonType";
+import { searchIdsArray } from "@/recoil/kdmRecoil";
 import ProductCard from "@components/common/ProductCard";
 import axios from "axios";
 import { useInfiniteQuery } from "react-query";
-import { useLocation } from "react-router-dom";
+import { useRecoilValue } from "recoil";
 
 const SearchProduct = () => {
-  const location = useLocation();
-  console.log(location.state);
+  const idsArray = useRecoilValue(searchIdsArray);
+  console.log("************", idsArray);
 
   // const [searchData, setSearchData] = useState<ProductComp[]>([]);
 
@@ -19,7 +20,9 @@ const SearchProduct = () => {
   // console.log(searchData);
 
   const callPageData = async (pageNo: number) => {
-    const res = await axios.post(`/api/search/product?page=${pageNo}`, { ids: location.state });
+    const res = await axios.post(`/api/search/product?page=${pageNo}`, { ids: idsArray });
+    console.log("더보기 가져옴: ", res.data.data.content);
+
     return res;
   };
 
@@ -28,18 +31,24 @@ const SearchProduct = () => {
     ({ pageParam = 0 }) => callPageData(pageParam),
     {
       getNextPageParam: (lastPage, allPages) => {
-        // console.log("allPages: ", allPages);
-        console.log("lastPage: ", lastPage);
+        console.log("allPages: ", allPages);
+        // console.log("lastPage: ", lastPage);
 
         if (lastPage?.data.data.content.last === true) {
           console.log("더이상 불러올 페이지가 없습니다");
-          return;
+          return undefined;
         }
         return allPages.length;
       },
       retry: 1,
+      cacheTime: 0,
     }
   );
+
+  // useEffect(() => {
+  //   // 컴포넌트가 마운트된 후에 데이터를 가져오도록 설정
+  //   fetchNextPage();
+  // }, [fetchNextPage]);
 
   return (
     <div className="bg-white ">

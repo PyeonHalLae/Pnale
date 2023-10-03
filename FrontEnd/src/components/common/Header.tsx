@@ -3,7 +3,7 @@ import tw from "tailwind-styled-components";
 import { useEffect } from "react";
 import axios, { AxiosError } from "axios";
 import { useRecoilState } from "recoil";
-import { searchInputData } from "@recoil/kdmRecoil";
+import { searchInputData, searchIdsArray } from "@recoil/kdmRecoil";
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
 import { useState } from "react";
@@ -11,8 +11,8 @@ import { useState } from "react";
 const Header = () => {
   const navigate = useNavigate();
   const [name, setName] = useRecoilState<{ input: string }>(searchInputData);
-  const [isFocused, setIsFocused] = useState(false); // 포커스 상태를 관리할 상태 변수
-
+  // const [isFocused, setIsFocused] = useState(false);  포커스 상태를 관리할 상태 변수
+  const [idsArray, setIdsArray] = useRecoilState(searchIdsArray);
   const backBtn = () => {
     navigate(-1);
   };
@@ -23,12 +23,14 @@ const Header = () => {
 
   const toggleSearch = async (data: SearchResponseToRecommand[]) => {
     const idsArray = data.map((item) => item.id);
-    console.log("전송할 id 값:", idsArray);
+    // console.log("전송할 id 값:", idsArray);
+    setIdsArray(idsArray);
+    console.log("idsArrayidsArrayidsArrayidsArrayidsArray", idsArray);
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
     });
-    navigate("/search", { state: { responseData: response.data.data, idsArray } });
+    navigate("/search", { state: { responseData: response.data.data } });
     reset();
   };
 
@@ -51,13 +53,13 @@ const Header = () => {
     // eslint-disable-next-line
   }, []);
 
-  const isFocus = () => {
-    setIsFocused(true);
-    if (!location.pathname.startsWith("/search/what") && isFocused) {
-      navigate("/search/what");
-      setIsFocused(false);
-    }
-  };
+  // const isFocus = () => {
+  //   setIsFocused(true);
+  //   if (!location.pathname.startsWith("/search/what") && isFocused) {
+  //     navigate("/search/what");
+  //     setIsFocused(false);
+  //   }
+  // };
 
   // eslint-disable-next-line
   const { data, isLoading, isError, error } = useQuery<SearchResponseToRecommand[], AxiosError>(
@@ -121,9 +123,16 @@ const Header = () => {
       </SearchBar>
       {data && data.length >= 1 && (
         <TagBox>
-          {data.map((index, key) => (
-            <RecommandTag key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
-              {index.name}
+          {data.slice(0, 9).map((index, key) => (
+            <RecommandTag>
+              {/* <img
+                src="/img/icons/recommandImg.png"
+                alt="지난 검색"
+                className="p-1 mr-1 rounded-full w-5"
+              /> */}
+              <p key={index.id + "-" + key} onClick={() => handleDivClick(index.name)}>
+                {index.name}
+              </p>
             </RecommandTag>
           ))}
         </TagBox>
@@ -175,15 +184,21 @@ left-[-1.5rem]
 `;
 
 const TagBox = tw.div`
-pb-3
 pl-4
 z-20
 absolute
  w-full 
-bg-gray-500
+bg-common-back-color
 max-w-[450px]
+rounded-lg
+border-2
+border-common-orange
 `;
 
 const RecommandTag = tw.div`
-mt-2
+flex
+text-sm
+my-2
+px-1
+items-center
 `;

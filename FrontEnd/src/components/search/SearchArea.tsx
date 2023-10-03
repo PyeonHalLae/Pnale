@@ -1,21 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import { searchDateSearch } from "@/model/searchType";
 import ProductCard from "@components/common/ProductCard";
-import { useEffect } from "react";
 
 type SearchAreaPros = {
   search: searchDateSearch;
-  ids: number;
+  ids: number[];
 };
 
 const SearchArea = ({ search, ids }: SearchAreaPros) => {
   const navigate = useNavigate();
-  useEffect(() => {
-    console.log("search & ids", search, ids);
-  });
+  console.log("search & ids", search, ids);
 
   const moveToMoreProduct = () => {
-    navigate("/search-product", { state: ids });
+    navigate("/search-product");
   };
 
   return (

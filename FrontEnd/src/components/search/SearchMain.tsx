@@ -4,27 +4,28 @@ import RecipeArea from "./RecipeArea";
 import { useLocation } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { searchData } from "@/model/searchType";
+import { useRecoilValue } from "recoil";
+import { searchIdsArray } from "@/recoil/kdmRecoil";
 
 const SearchMain = () => {
   const location = useLocation();
   const [searchData, setSearchData] = useState<searchData>();
-  const [ids, setIds] = useState<number>();
+  const IdsArray = useRecoilValue(searchIdsArray);
 
   useEffect(() => {
     if (location.state) {
       const searchData = location.state.responseData;
-      const ids = location.state.idsArray;
       setSearchData(searchData);
-      setIds(ids);
       console.log("searchData", searchData);
+      console.log("@@@@@@@@@@@@@", IdsArray);
     }
-  }, [location.state]);
+  }, [location.state, IdsArray]);
 
   return (
     <div className="grid-cols-3 gird bg-common-back-color">
       {searchData && (
         <>
-          <SearchArea search={searchData.search} ids={ids} />
+          <SearchArea search={searchData.search} ids={IdsArray} />
           <RelatedArea relate={searchData.relate} />
           <RecipeArea recipe={searchData.recipes} />
         </>
