@@ -23,7 +23,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
     console.log($selectCommentId);
     BottomMenuStateHandler(e);
     axios
-      .delete("/api/recipe/review?revld=" + $selectCommentId, {
+      .delete("/api/recipe/review?revId=" + $selectCommentId, {
         withCredentials: true,
       })
       .then((res) => {
@@ -35,7 +35,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
       .catch((err) => {
         if (err.response.status === 401) {
           axios
-            .get("/api/auth/recipe/review?revld=" + $selectCommentId, {
+            .delete("/api/auth/recipe/review?revId=" + $selectCommentId, {
               withCredentials: true,
             })
             .then((res) => {
