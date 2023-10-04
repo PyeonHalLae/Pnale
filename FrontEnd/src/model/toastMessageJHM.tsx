@@ -17,3 +17,10 @@ export const ToastBackMessage = (message: string) => {
     hideProgressBar: true,
   });
 };
+
+export const ToastErrorMessage = (message: string) => {
+  toast.error(message, {
+    autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
+    hideProgressBar: true,
+  });
+};
