@@ -96,7 +96,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 export default RecipeCard;
 
 const Container = tw.div`
-  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center;
+  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center ;
 `;
 
 const RecipeImg = tw.img`
@@ -124,6 +124,7 @@ inline-block
 `;
 
 const RecipeTitleBox = styled.div`
+  color: #1e2b4f;
   font-size: 1.1rem;
   overflow: clip;
   display: -webkit-box; // webkit-box
