@@ -18,17 +18,6 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class ResponseUtil {
-    public static Map<String, Object> toResponseData(Object[] resultSet) {
-        Product pd = (Product) resultSet[0];
-        EventProduct ed = (EventProduct) resultSet[1];
-        MemberPickProd mpp = (MemberPickProd) resultSet[2];
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
-        response.put("event", (ed != null) ? ed.toInfoDto() : EventInfoDto.builder().build());
-        response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
-        return response;
-    }
 
     public static Page<Map<String, Object>> getPageProducts(Page<Object[]> data) {
         return data.map(ResponseUtil::toResponseData);
@@ -38,5 +27,22 @@ public class ResponseUtil {
         return resultSets.stream()
                 .map(ResponseUtil::toResponseData)
                 .collect(Collectors.toList());
+    }
+
+    private static Map<String, Object> toResponseData(Object[] resultSet) {
+        Map<String, Object> response = new HashMap<>();
+
+        Product pd = (Product) resultSet[0];
+        EventProduct ep = (EventProduct) resultSet[1];
+        response.put("product", (pd != null) ? pd.toInfoDto() : ProductInfoDto.builder().build());
+        response.put("event", (ep != null) ? ep.toInfoDto() : EventInfoDto.builder().build());
+
+        if(resultSet.length == 2){
+            response.put("userLike", MemberPickProdInfoDto.builder().build());
+        } else{
+            MemberPickProd mpp = (MemberPickProd) resultSet[2];
+            response.put("userLike", (mpp != null) ? mpp.toInfoDto() : MemberPickProdInfoDto.builder().build());
+        }
+        return response;
     }
 }

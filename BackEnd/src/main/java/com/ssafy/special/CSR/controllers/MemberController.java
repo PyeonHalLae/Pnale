@@ -2,7 +2,9 @@ package com.ssafy.special.CSR.controllers;
 
 
 
+import com.ssafy.special.CSR.services.S3Service;
 import com.ssafy.special.entity.Member;
+import com.ssafy.special.enums.UploadType;
 import com.ssafy.special.exception.*;
 import com.ssafy.special.member.model.JwtService;
 import com.ssafy.special.member.model.MemberRepository;
@@ -13,10 +15,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @RestController
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class MemberController {
     private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final JwtService jwtService;
+    private final S3Service s3UploadService;
 
     @GetMapping("/login")
     @ResponseStatus(HttpStatus.OK)
@@ -76,9 +81,10 @@ public class MemberController {
     }
 
     @PatchMapping("/update")
-    public CustomResponse updateUserInfo(HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) {
+    public CustomResponse updateUserInfo(@RequestPart("image") MultipartFile multipartFile, HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) throws IOException {
         Long memberId = (Long)request.getAttribute("memberId");
-
+        String imgUrl = s3UploadService.upload(UploadType.USERPROFILE, multipartFile);
+        memberUpdateDTO.setMemberImg(imgUrl);
         memberService.updateMemberInMyPage(memberId, memberUpdateDTO);
 
         return new CustomResponse(200, "멤버 정보가 업데이트 되었습니다.");

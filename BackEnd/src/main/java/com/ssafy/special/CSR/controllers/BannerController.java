@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BannerController {
     private final BannerService bannerService;
     @GetMapping("/{corpType}")
-    public DataResponse<?> getCorpBanner(@PageableDefault(size = 10) Pageable pageable,
+    public DataResponse<?> getCorpBanner(Pageable pageable,
                                          @PathVariable CorpType corpType){
         return new DataResponse<>(200, corpType + "에 해당되는 배너들을 출력합니다.", bannerService.findCorpBanner(pageable, corpType));
     }

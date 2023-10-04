@@ -37,6 +37,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<?> authException(AuthException e) {
         if(e.getCustomErrorCode().equals(CustomErrorCode.EXPIRED_TOKEN)){
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("액세스 토큰이 유효하지 않습니다.");
+        } else if(e.getCustomErrorCode().equals(CustomErrorCode.EXPIRED_TOKEN)){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("삭제되었거나 접근 불가능합니다.");
         }
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body("재로그인이 필요합니다.");
     }
