@@ -175,20 +175,23 @@ const MyPageRecipe = () => {
         setMyRecipeState(false);
         setLikeRecipeState(true);
         setRecipeType("LIKERECIPE");
-        LikeAxiosHandler();
       }
       if (type === "MYRECIPE") {
         setMyRecipeState(true);
         setLikeRecipeState(false);
         setRecipeType("MYRECIPE");
-        MyRecipeAxiosHandler();
       }
     }, 0);
   };
 
   useEffect(() => {
-    ChangeRecipe(recipeType);
-  }, []);
+    if (recipeType === "LIKERECIPE") {
+      LikeAxiosHandler();
+    }
+    if (recipeType === "MYRECIPE") {
+      MyRecipeAxiosHandler();
+    }
+  }, [recipeType]);
 
   return (
     <>
