@@ -22,7 +22,8 @@ const RecipeManagerCardLike = ({
 }: Props) => {
   const navigate = useNavigate();
   //좋아요 해제 로직
-  const likeBtnHandler = () => {
+  const likeBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    LikeMenuStateHandler(e);
     axios
       .patch("/api/recipe/like?rcpId=" + $selectRecipeId, {
         withCredentials: true,
