@@ -18,8 +18,8 @@ public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     @Query("SELECT r FROM Recipe r WHERE r.isDeleted = false ORDER BY r.createdAt DESC")
     List<Recipe> findTop2ByOrderByCreatedAtDesc();
 
-    Page<Recipe> findByDeletedFalse(Pageable pageable);
-    Page<Recipe> findByWriterMemberIdAndDeletedFalse(Pageable pageable, Long writerId);
+    Page<Recipe> findByIsDeletedFalse(Pageable pageable);
+    Page<Recipe> findByWriterMemberIdAndIsDeletedFalse(Pageable pageable, Long writerId);
 
     @Query("SELECT mpr.recipe FROM MemberPickRecipe mpr WHERE mpr.member.memberId = :memberId AND mpr.recipe.isDeleted = false AND mpr.isDeleted = false")
     Page<Recipe> findLikedRecipesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
