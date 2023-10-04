@@ -45,6 +45,7 @@ const RecipeModify = () => {
         const newPrd = res.data.data.ingredients.map((ingredient) => {
           return {
             prdId: ingredient.prdId,
+            prdName: ingredient.prdName,
             changeable: ingredient.changeable,
           };
         });
