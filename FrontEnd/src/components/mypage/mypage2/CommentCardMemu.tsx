@@ -1,5 +1,11 @@
-// import styled from "styled-components";
-// import axios from "axios";
+import {
+  ToastBackMessage,
+  ToastErrorMessage,
+  UserInfoExpires,
+  UserNotLogin,
+} from "@/model/toastMessageJHM";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -9,12 +15,54 @@ interface Props {
 }
 
 const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) => {
+  const navigate = useNavigate();
+
   // 삭제하기 클릭
   const deleteBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     console.log($selectCommentId);
-    // BottomMenuStateHandler(e);
+    BottomMenuStateHandler(e);
+    axios
+      .delete("/api/recipe/review?revld=" + $selectCommentId, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          ToastBackMessage(resData.message);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          axios
+            .get("/api/auth/recipe/review?revld=" + $selectCommentId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              const resData = res.data;
+              if (resData.code == 200) {
+                ToastBackMessage(resData.message);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                UserInfoExpires();
+                navigate("/mypage");
+              } else {
+                ToastErrorMessage("댓글 삭제에 실패했습니다");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            UserNotLogin();
+            navigate("/mypage");
+          } else {
+            ToastErrorMessage("댓글 삭제에 실패했습니다");
+          }
+        }
+      });
   };
+
   return (
     <>
       <BackSize onClick={BottomMenuStateHandler}>
@@ -23,7 +71,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
             e.stopPropagation();
           }}
         >
-          <CommentTitle>레시피 삭제</CommentTitle>
+          <CommentTitle>댓글 관리</CommentTitle>
           <CommentText>
             <div>
               댓글을 <span>삭제</span> 하시겠습니까?
@@ -57,19 +105,66 @@ const CommentBox = tw.div`
     absolute
     bg-white
     w-[90%]
-    h-[300px]
+    h-[200px]
     left-[5%]
     top-[35%]
-    rounded-[0.625rem_0.625rem_0.625rem_0.625rem]
+    rounded-[5px_5px_5px_5px]
     z-50
 `;
 
-const DelteBtn = tw.div``;
+const DelteBtn = tw.div`
+  w-40
+  h-10
+  border-[2px]
+  rounded-[8px]
+  bg-common-text-color
+  border-common-text-color
+  text-white
+  text-center
+  font-bold
+  text-[17px]
+  leading-[40px]  
 
-const CommentTitle = tw.div``;
+`;
 
-const CommentText = styled.div``;
+const CommentTitle = tw.div`
+  w-[full]
+  text-center
 
-const CommentBtn = tw.div``;
+  h-[60px]
+  font-bold
+  text-[25px]
+  leading-[80px]
+  text-common-text-color
+`;
 
-const CloseBtn = tw.div``;
+const CommentText = styled.div`
+  margin: 15px 0px;
+  width: 100%;
+  color: #1e2b4f;
+  font-size: 17px;
+  div {
+    text-align: center;
+    span {
+      font-weight: bold;
+      color: #e30613;
+    }
+  }
+`;
+
+const CommentBtn = tw.div`
+  flex justify-center gap-5
+`;
+
+const CloseBtn = tw.div`
+  w-24
+  h-10
+  border-[2px]
+  rounded-[8px]
+  border-common-text-color
+  text-common-text-color
+  text-center
+  font-bold
+  text-[17px]
+  leading-[40px]
+`;

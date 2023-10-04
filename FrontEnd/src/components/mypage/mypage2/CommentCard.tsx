@@ -42,7 +42,9 @@ const CommentCard = ({ commentInfo, BottomMenuStateHandler, SelectCommentIdHandl
           </DetailBox>
           <DetailBox>
             <Field>작성 일:</Field>
-            <Content>{commentInfo.createdAt}</Content>
+            <Content>
+              {commentInfo.createdAt.substring(0, commentInfo.createdAt.indexOf("T"))}
+            </Content>
           </DetailBox>
         </MainBox>
       </BackSize>
@@ -104,10 +106,10 @@ const Content = tw.div`
 const MenuBtn = styled.div`
   float: right;
   margin-right: 0.3125rem;
-  margin-top: 0.125rem;
-  width: 0.9375rem;
-  height: 0.9375rem;
-  background-image: url("/img/btn/menu-btn.png");
+  margin-top: 0.0625rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  background-image: url("/img/btn/close-btn.png");
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
