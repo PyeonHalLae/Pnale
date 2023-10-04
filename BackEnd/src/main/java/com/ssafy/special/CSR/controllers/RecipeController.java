@@ -78,24 +78,24 @@ public class RecipeController {
      * 레시피를 작성하는 컨트롤러입니다.
      */
     @PostMapping("/form")
-    public CustomResponse createRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO){
+    public DataResponse<?> createRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO){
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
-        recipeService.writeRecipe(memberId, recipeWriteDTO);
+        Long recipeId = recipeService.writeRecipe(memberId, recipeWriteDTO);
 
-        return new CustomResponse(201, "레시피 등록 성공");
+        return new DataResponse<>(201, "레시피 등록 성공", recipeId);
     }
 
     /**
      * 레시피를 수정하는 컨트롤러입니다.
      */
     @PatchMapping("/form")
-    public CustomResponse updateRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO, @RequestParam(value="rcpId") Long rcpId){
+    public DataResponse<?> updateRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO, @RequestParam(value="rcpId") Long rcpId){
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
-        recipeService.updateRecipe(rcpId, recipeWriteDTO);
+        Long recipeId = recipeService.updateRecipe(rcpId, recipeWriteDTO);
 
-        return new CustomResponse(200, "레시피 수정 성공");
+        return new DataResponse<>(200, "레시피 수정 성공", recipeId);
     }
 
     /**
