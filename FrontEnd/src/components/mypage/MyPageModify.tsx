@@ -72,8 +72,9 @@ const MyPageModify = () => {
     }
 
     const additionalData = {
-      nickname: userName + "",
-      emailReceive: mailState.current.checked + "",
+      nickname: userName,
+      emailReceive: mailState.current.checked,
+      memberImg: null,
     };
 
     formData.append("additionalData", JSON.stringify(additionalData));
@@ -116,7 +117,7 @@ const MyPageModify = () => {
                 UserInfoExpires();
                 navigate("/mypage");
               } else {
-                ToastErrorMessage("유저 정보 업데이트에 실패했습니다.");
+                ToastErrorMessage("회원정보 업데이트에 실패했습니다");
               }
             });
         } else {
@@ -126,7 +127,7 @@ const MyPageModify = () => {
             navigate("/mypage");
           } else {
             //그외 서버 오류
-            ToastErrorMessage("유저 정보 업데이트에 실패했습니다.");
+            ToastErrorMessage("회원정보 업데이트에 실패했습니다");
           }
         }
       });
