@@ -249,7 +249,7 @@ const MyPageRecipe = () => {
               />
             ))}
         <RecipeAddBox>
-          {totalPage > 1 && currentPage + 1 < totalPage && (
+          {totalPage > 1 && currentPage < totalPage && (
             <AddBtn
               onClick={() => {
                 if (recipeType === "MYRECIPE") MyRecipeAxiosHandler();
