@@ -25,12 +25,12 @@ const PopularRecipeCard = ({ popularRecipe }: { popularRecipe: popularRecipeType
       <Img src={popularRecipe.rcpThumbnail} />
       <Content>
         {/* 재료 */}
-        <Ingredients>
-          {popularRecipe.ingredients.length !== 0 &&
-            popularRecipe.ingredients.map((prd) => {
-              return "#" + prd + " ";
-            })}
-        </Ingredients>
+        {popularRecipe.ingredients.length !== 0 &&
+          popularRecipe.ingredients.map((prd, index) => {
+            if (index < 2) {
+              return <Ingredients key={index}># {prd}</Ingredients>;
+            }
+          })}
 
         <div>
           <IconImg src="/img/icons/like-icon-pink.png" /> 좋아요 {popularRecipe.likeCnt}개
@@ -117,10 +117,11 @@ const Img = styled.img`
 `;
 
 const Ingredients = styled.div`
+  font-size: 1rem;
   margin-right: 1rem;
   overflow: clip;
   display: -webkit-box; // webkit-box
-  -webkit-line-clamp: 2; // 2줄까지
+  -webkit-line-clamp: 1; // 2줄까지
   -webkit-box-orient: vertical; //...
 `;
 
@@ -133,7 +134,7 @@ const IconImg = styled.img<{ src: string }>`
 
 const Content = styled.div`
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
   align-items: center;
   margin: 0.1rem;
   font-size: 0.8rem;
@@ -146,11 +147,13 @@ const Content = styled.div`
 `;
 
 const Intro = styled.div`
+  height: 2.8rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   color: rgb(174 176 182);
   font-size: 0.75rem;
   font-weight: lighter;
   grid-area: Intro;
-  height: 2rem;
   margin-left: 1.125rem;
   margin-right: 1.125rem;
   overflow: hidden;

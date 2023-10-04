@@ -10,6 +10,7 @@ interface Props {
 
 const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
   const [isModifying, setIsModifying] = useState<boolean>(false);
+  const [modifyContent, setModifyContent] = useState<string>(commentInfo.content);
 
   const commentDeleteHandler = () => {
     axios
@@ -28,9 +29,33 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
   };
   const commentModifyHandler = () => {
     setIsModifying(true);
-    setRefresh((prev) => {
-      return !prev;
+  };
+
+  const contentChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setModifyContent(() => {
+      return e.target.value;
     });
+  };
+
+  const modifySubmitHandler = () => {
+    axios
+      .patch(`/api/recipe/review?revId=${commentInfo.revId}`, modifyContent, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "text/plain", // Content-Type을 text/plain으로 설정
+        },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          setIsModifying(false);
+          setRefresh((prev) => {
+            return !prev;
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -54,8 +79,20 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
             <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
           </div>
         </CommentNameBox>
+
         {isModifying ? (
-          <CommentContentBox>{commentInfo.content}</CommentContentBox>
+          <CommentContentTextBox>
+            <CommentContentBoxTextarea
+              value={modifyContent}
+              onChange={contentChangeHandler}
+            ></CommentContentBoxTextarea>
+            <div
+              className="absolute bottom-[0.5rem] right-[0.5rem] w-[2rem] h-[1rem] bg-common-text-gray-color"
+              onClick={modifySubmitHandler}
+            >
+              완료
+            </div>
+          </CommentContentTextBox>
         ) : (
           <CommentContentBox>{commentInfo.content}</CommentContentBox>
         )}
@@ -92,6 +129,15 @@ flex text-[1rem] font-medium
 const CommentContentBox = tw.div`
 flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center
 `;
+
+const CommentContentTextBox = tw.div`
+flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center relative
+`;
+
+const CommentContentBoxTextarea = tw.textarea`
+flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center relative border bg-common-back-color
+`;
+
 const CommentManageBtn = tw.div`
 mx-[0.8rem] text-[0.75rem] font-medium text-common-bold-back-color
 `;
