@@ -79,18 +79,6 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           </div>
         )}
 
-        <div
-          className="absolute
-          top-0
-          right-2
-          w-[3rem]
-          h-[1rem]
-          "
-          onClick={manageBtnHandler}
-        >
-          <ManageBtn src="/img/btn/menu-btn.png" />
-        </div>
-
         {/* 레시피 제목 */}
         <RecipeTitleBox>{recipeInfo.rcpName}</RecipeTitleBox>
 
