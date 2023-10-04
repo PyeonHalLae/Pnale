@@ -43,7 +43,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
         // 액세스 토큰이 없거나, 전혀 관계없는 요청들(favicon 요청 및 oauth2관련 요청)은 다음 필터로 진행합니다.
         // 따라서 로그인이 반드시 필요한 API는 이후 SpringSecurity의 Authentication 필터에서 걸려 403오류를 보냅니다.
         if(accessToken == null || request.getRequestURI().contains(NO_CHECK_URL) || request.getRequestURI().contains("favicon")){
-            request.setAttribute("memberId", null);
+            //request.setAttribute("memberId", null);
             filterChain.doFilter(request, response);
             return;
         }
