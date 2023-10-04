@@ -13,7 +13,6 @@ import {
   UserInfoExpires,
   UserNotLogin,
 } from "@/model/toastMessageJHM";
-import MyPage from "./MyPage";
 
 interface UserInfoType {
   memberId: number;
@@ -66,14 +65,10 @@ const MyPageModify = () => {
     }
 
     const formData = new FormData();
+
     formData.append("image", redirectFile);
-
-    const additionalData = {
-      nickname: userName,
-      emailReceive: mailState.current.checked,
-    };
-
-    formData.append("additionalData", JSON.stringify(additionalData));
+    formData.append("nickname", userName);
+    formData.append("emailReceive", mailState.current.checked);
 
     axios
       .patch("/api/member/update", formData, {
