@@ -22,7 +22,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     String defaultQuery = "SELECT p, ep " +
             "FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId ";
-            //"LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId mpp.member.memberId";
+    //"LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId mpp.member.memberId";
     String memberIdQeury = "SELECT p, ep, mpp " +
             "FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep on p.productId = ep.product.productId " +
@@ -61,13 +61,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                       @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.CUType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findCUBestProduct(Pageable pageable,
                                      @Param("all") CorpType all,
                                      @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.CUType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findCUNewProduct(Pageable pageable,
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
@@ -81,14 +82,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                                 @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.CUType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findCUBestProductByMemberId(Pageable pageable,
                                                @Param("all") CorpType all,
                                                @Param("corp") CorpType corpType,
                                                @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.CUType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findCUNewProductByMemberId(Pageable pageable,
                                               @Param("all") CorpType all,
                                               @Param("corp") CorpType corpType,
@@ -103,13 +105,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                       @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.GSType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findGSBestProduct(Pageable pageable,
                                      @Param("all") CorpType all,
                                      @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.GSType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findGSNewProduct(Pageable pageable,
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
@@ -122,14 +125,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                                 @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.GSType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findGSBestProductByMemberId(Pageable pageable,
                                                @Param("all") CorpType all,
                                                @Param("corp") CorpType corpType,
                                                @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.GSType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findGSNewProductByMemberId(Pageable pageable,
                                               @Param("all") CorpType all,
                                               @Param("corp") CorpType corpType,
@@ -143,13 +147,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                          @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.SEVENType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findSEVENBestProduct(Pageable pageable,
                                         @Param("all") CorpType all,
                                         @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.SEVENType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findSEVENNewProduct(Pageable pageable,
                                        @Param("all") CorpType all,
                                        @Param("corp") CorpType corpType);
@@ -162,14 +167,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                                    @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.SEVENType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findSEVENBestProductByMemberId(Pageable pageable,
                                                   @Param("all") CorpType all,
                                                   @Param("corp") CorpType corpType,
                                                   @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.SEVENType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findSEVENNewProductByMemberId(Pageable pageable,
                                                  @Param("all") CorpType all,
                                                  @Param("corp") CorpType corpType,
@@ -183,13 +189,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                          @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.EMARTType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findEMARTBestProduct(Pageable pageable,
                                         @Param("all") CorpType all,
                                         @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.EMARTType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findEMARTNewProduct(Pageable pageable,
                                        @Param("all") CorpType all,
                                        @Param("corp") CorpType corpType);
@@ -202,14 +209,15 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                                    @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 AND ep.EMARTType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
     Page<Object[]> findEMARTBestProductByMemberId(Pageable pageable,
                                                   @Param("all") CorpType all,
                                                   @Param("corp") CorpType corpType,
                                                   @Param("memberId") Long memberId);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true AND ep.EMARTType is not null")
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
+            " ORDER FUNCTION('RAND') ")
     Page<Object[]> findEMARTNewProductByMemberId(Pageable pageable,
                                                  @Param("all") CorpType all,
                                                  @Param("corp") CorpType corpType,
