@@ -14,6 +14,7 @@ import com.ssafy.special.exception.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -74,7 +75,7 @@ public class MyPageController {
 
     //내가 작서한 댓글 목록
     @GetMapping("/comment")
-    public DataResponse<?> getUserComments(HttpServletRequest request,@PageableDefault(size = 9) Pageable pageable){
+    public DataResponse<?> getUserComments(HttpServletRequest request, @PageableDefault(page=0, size=9, sort="reviewId", direction = Sort.Direction.DESC)Pageable pageable){
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
 
