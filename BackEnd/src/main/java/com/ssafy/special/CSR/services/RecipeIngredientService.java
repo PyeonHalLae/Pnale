@@ -30,6 +30,7 @@ public class RecipeIngredientService {
      */
     public List<RecipeIngredient> writeIngredients(Recipe recipe, List<RecipeWriteDTO.Ingredients> ingredients){
         // 스트림을 통해, 재료들을 모두 엔티티로 변화하고 리스트로 만듭니다.
+        System.out.println(ingredients.toString());
         return ingredients.stream()
                 .map(ingredient -> toIngredientEntity(recipe, ingredient))
                 .collect(Collectors.toList());

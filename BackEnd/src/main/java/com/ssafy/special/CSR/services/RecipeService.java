@@ -64,6 +64,7 @@ public class RecipeService {
     @Transactional
     public Long updateRecipe(Long rcpId, RecipeWriteDTO info){
         Recipe recipe = recipeRepository.findById(rcpId).orElseThrow();
+        recipeIngredientService.deleteIngredients(rcpId);
         List<RecipeIngredient> lists = recipeIngredientService.writeIngredients(recipe, info.getIngredients());
         recipe.updateRecipe(info.getRcpName(),info.getRcpThumbnail(), info.getRcpSimple(),info.getRcpDesc(), info.getRcpVideo(), lists);
 

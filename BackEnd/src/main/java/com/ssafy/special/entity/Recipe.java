@@ -61,11 +61,11 @@ public class Recipe {
 
     boolean influence;
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<RecipeIngredient> ingredients = new LinkedList<>();
 
-    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "recipe", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @Builder.Default
     private List<RecipeReview> reviews = new LinkedList<>();
 
