@@ -170,7 +170,6 @@ const ProductInfos = styled.div`
   height: calc(100% - 8.125rem);
   overflow: scroll;
   overflow-x: hidden;
-  border: 1px solid black;
 `;
 
 const ProductAddBox = tw.div`
