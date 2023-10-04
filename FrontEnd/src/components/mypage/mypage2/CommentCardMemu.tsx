@@ -1,7 +1,6 @@
 // import styled from "styled-components";
-import axios from "axios";
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+// import axios from "axios";
+import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 interface Props {
@@ -10,65 +9,33 @@ interface Props {
 }
 
 const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("바텀사이드", $selectCommentId);
-  }, []);
-
-  // 수정하기 클릭
-  const modifyBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    BottomMenuStateHandler(e);
-    navigate(`/recipe/${$selectCommentId}/modify`);
-  };
-
   // 삭제하기 클릭
   const deleteBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    BottomMenuStateHandler(e);
-
-    axios
-      .delete(`/api/recipe/form?rcpId=${$selectCommentId}`, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res);
-        // 삭제성공시
-        if (res.data.code === "200") {
-          navigate("/recipe");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    e.stopPropagation();
+    console.log($selectCommentId);
+    // BottomMenuStateHandler(e);
   };
-
   return (
     <>
-      <BackSize
-        onClick={BottomMenuStateHandler}
-        // onClick={() => {
-        //   BottomMenuStateHandler();
-        // }}
-      />
-      <MenuBox>
-        <ModifyBtn onClick={modifyBtnHandler}>
-          <div className="mx-auto my-auto">수정하기</div>
-        </ModifyBtn>
-        <DeleteBtn onClick={deleteBtnHandler}>
-          <div className="mx-auto my-auto">삭제하기</div>
-        </DeleteBtn>
-        <CloseBtn
-          onClick={BottomMenuStateHandler}
-          // onClick={() => {
-          //   BottomMenuStateHandler();
-          // }}
+      <BackSize onClick={BottomMenuStateHandler}>
+        <CommentBox
+          onClick={(e: React.MouseEvent<HTMLDivElement>) => {
+            e.stopPropagation();
+          }}
         >
-          <div className="mx-auto my-auto">닫기</div>
-        </CloseBtn>
-      </MenuBox>
+          <CommentTitle>레시피 삭제</CommentTitle>
+          <CommentText>
+            <div>
+              댓글을 <span>삭제</span> 하시겠습니까?
+            </div>
+            <div>삭제후 복구 하실수 없습니다</div>
+          </CommentText>
+          <CommentBtn>
+            <CloseBtn onClick={BottomMenuStateHandler}>닫기</CloseBtn>
+            <DelteBtn onClick={deleteBtnHandler}>삭제하기</DelteBtn>
+          </CommentBtn>
+        </CommentBox>
+      </BackSize>
     </>
   );
 };
@@ -76,51 +43,33 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
 export default CommentCardMemu;
 
 const BackSize = tw.div`
-fixed
-bg-[rgba(51,51,51,0.8)]
-min-w-[350xp]
-max-w-[450px]
-w-full
-h-full
-top-0
-z-40
+    fixed
+    bg-[rgba(51,51,51,0.8)]
+    min-w-[350xp]
+    max-w-[450px]
+    w-full
+    h-full
+    top-0
+    z-40
 `;
 
-const MenuBox = tw.div`
-fixed
-bg-white
-w-full
-min-w-[21.875rem]
-max-w-[28.125rem]
-h-[8.125rem]
-bottom-[0rem]
-rounded-[0.625rem_0.625rem_0rem_0rem]
-z-50
+const CommentBox = tw.div`
+    absolute
+    bg-white
+    w-[90%]
+    h-[300px]
+    left-[5%]
+    top-[35%]
+    rounded-[0.625rem_0.625rem_0.625rem_0.625rem]
+    z-50
 `;
 
-const ModifyBtn = tw.div`
-    h-[2.8125rem]
-    flex
-    text-[0.9375rem]
-    text-common-text-color
-    font-bold
-    border-b-[0.0938rem]
-    border-common-back-color
-`;
+const DelteBtn = tw.div``;
 
-const CloseBtn = tw.div`
-    flex
-    h-[2.8125rem]
-    text-[0.9375rem]
-    font-bold
-    text-common-text-color
-`;
+const CommentTitle = tw.div``;
 
-const DeleteBtn = tw.div`    
-    h-[2.5rem]
-    flex
-    text-[0.9375rem]
-    text-seven-r
-    font-bold
-    border-b-[0.0938rem]
-    border-common-white-divider`;
+const CommentText = styled.div``;
+
+const CommentBtn = tw.div``;
+
+const CloseBtn = tw.div``;

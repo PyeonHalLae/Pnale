@@ -21,6 +21,7 @@ interface commentInfoType {
 const MyPageComment = () => {
   const [CommentList, setCommentList] = useState<commentInfoType[]>([]);
   const navigate = useNavigate();
+  //하단 메뉴 상태
   const [bottomMenuState, setBottomMenuState] = useState<boolean>();
   const [selectCommentId, setSelectCommentId] = useState<number>();
 
@@ -90,34 +91,36 @@ const MyPageComment = () => {
 
   return (
     <>
-      {bottomMenuState && (
-        <CommentCardMemu
-          $selectCommentId={selectCommentId}
-          BottomMenuStateHandler={BottomMenuStateHandler}
-        />
-      )}
-      <MyCommentHeader>
-        <BackBtn
-          onClick={() => {
-            navigate(-1);
-          }}
-        />
-        <Title>댓글 관리</Title>
-        <SideBtn>
-          <MyCommentBtn>내 댓글</MyCommentBtn>
-        </SideBtn>
-      </MyCommentHeader>
-      <MyCommentMain>
-        {CommentList &&
-          CommentList.map((commentItme, index) => (
-            <CommentCard
-              key={commentItme.revId + index}
-              commentInfo={commentItme}
-              BottomMenuStateHandler={BottomMenuStateHandler}
-              SelectCommentIdHandler={SelectCommentIdHandler}
-            />
-          ))}
-      </MyCommentMain>
+      <div className="relative">
+        {bottomMenuState && (
+          <CommentCardMemu
+            $selectCommentId={selectCommentId}
+            BottomMenuStateHandler={BottomMenuStateHandler}
+          />
+        )}
+        <MyCommentHeader>
+          <BackBtn
+            onClick={() => {
+              navigate(-1);
+            }}
+          />
+          <Title>댓글 관리</Title>
+          <SideBtn>
+            <MyCommentBtn>내 댓글</MyCommentBtn>
+          </SideBtn>
+        </MyCommentHeader>
+        <MyCommentMain>
+          {CommentList &&
+            CommentList.map((commentItme, index) => (
+              <CommentCard
+                key={commentItme.revId + index}
+                commentInfo={commentItme}
+                BottomMenuStateHandler={BottomMenuStateHandler}
+                SelectCommentIdHandler={SelectCommentIdHandler}
+              />
+            ))}
+        </MyCommentMain>
+      </div>
     </>
   );
 };
