@@ -7,7 +7,8 @@ import tw from "tailwind-styled-components";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+import { ToastBackMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+import MyPage from "./MyPage";
 
 interface UserInfoType {
   memberId: number;
@@ -15,6 +16,7 @@ interface UserInfoType {
   socialType: string;
   email: string;
   memberImg: string;
+  mailRecieve: boolean;
 }
 
 const MyPageModify = () => {
@@ -22,6 +24,8 @@ const MyPageModify = () => {
   const [userName, setUserName] = useState<string>();
   const [userImgSrc, setUserImgSrc] = useState<string>();
   const [userinfo, setUserInfo] = useState<UserInfoType>();
+
+  const mailState = useRef(null);
 
   const inputFileRef = useRef(null);
 
@@ -46,6 +50,73 @@ const MyPageModify = () => {
         setUserImgSrc(render.result as string);
       };
     }
+  };
+
+  const UpdateUserInfo = () => {
+    const fileImg = inputFileRef.current;
+
+    let redirectFile = null;
+    if (fileImg && fileImg.files.length > 0) {
+      redirectFile = fileImg.files[0];
+    }
+
+    const formData = new FormData();
+
+    if (redirectFile) {
+      formData.append("image", redirectFile);
+    }
+
+    const additionalData = {
+      nickname: userName,
+      emailReceive: mailState.current.checked,
+    };
+
+    formData.append("additionalData", JSON.stringify(additionalData));
+
+    axios
+      .patch("/api/member/update", { withCredentials: true })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          ToastBackMessage(resData.message);
+          navigate("/mypage");
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .get("/api/auth/member/update", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                ToastBackMessage(resData.message);
+                navigate("/mypage");
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+                navigate("/mypage");
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+            navigate("/mypage");
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
   };
 
   useEffect(() => {
@@ -129,13 +200,13 @@ const MyPageModify = () => {
               </EmailInfo>
               <EmailAgree>
                 <AgreeText>메일 전송 수신 동의 </AgreeText>
-                <input type="checkbox" value="true" />
+                <input type="checkbox" checked={userinfo.mailRecieve} ref={mailState} />
               </EmailAgree>
               <EmailGuide>
                 메일 전송 수신 동의를 하실 경우 관심상품의 행사 정보를 메일로 받을수 있습니다
               </EmailGuide>
             </EmailCheckBox>
-            <SubmitBtn />
+            <SubmitBtn onClick={() => UpdateUserInfo()} />
             <LeaveAccount>회원 탈퇴</LeaveAccount>
           </ModifyMain>
         </BackGround>
