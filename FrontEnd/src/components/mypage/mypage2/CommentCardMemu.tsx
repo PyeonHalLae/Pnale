@@ -12,9 +12,14 @@ import tw from "tailwind-styled-components";
 interface Props {
   $selectCommentId: number;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  UpdateCommentList: () => void;
 }
 
-const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) => {
+const CommentCardMemu = ({
+  $selectCommentId,
+  BottomMenuStateHandler,
+  UpdateCommentList,
+}: Props) => {
   const navigate = useNavigate();
 
   // 삭제하기 클릭
@@ -29,6 +34,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
+          UpdateCommentList();
           ToastBackMessage(resData.message);
         }
       })
@@ -41,6 +47,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
             .then((res) => {
               const resData = res.data;
               if (resData.code == 200) {
+                UpdateCommentList();
                 ToastBackMessage(resData.message);
               }
             })

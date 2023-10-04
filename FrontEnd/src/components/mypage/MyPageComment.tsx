@@ -19,7 +19,7 @@ interface commentInfoType {
 }
 
 const MyPageComment = () => {
-  const [CommentList, setCommentList] = useState<commentInfoType[]>([]);
+  const [commentList, setCommentList] = useState<commentInfoType[]>([]);
   const navigate = useNavigate();
   //하단 메뉴 상태
   const [bottomMenuState, setBottomMenuState] = useState<boolean>();
@@ -31,9 +31,15 @@ const MyPageComment = () => {
     setBottomMenuState(!bottomMenuState);
   };
 
-  //하단 메뉴 레시피아이디 변경
+  //하단 메뉴 댓글 아이디 변경
   const SelectCommentIdHandler = (revId) => {
     setSelectCommentId(revId);
+  };
+
+  //댓글 삭제시 List에서 제거
+  const UpdateCommentList = () => {
+    const updatedCommentList = commentList.filter((comment) => comment.revId !== selectCommentId);
+    setCommentList(updatedCommentList);
   };
 
   useEffect(() => {
@@ -96,6 +102,7 @@ const MyPageComment = () => {
           <CommentCardMemu
             $selectCommentId={selectCommentId}
             BottomMenuStateHandler={BottomMenuStateHandler}
+            UpdateCommentList={UpdateCommentList}
           />
         )}
         <MyCommentHeader>
@@ -110,8 +117,8 @@ const MyPageComment = () => {
           </SideBtn>
         </MyCommentHeader>
         <MyCommentMain>
-          {CommentList &&
-            CommentList.map((commentItme, index) => (
+          {commentList &&
+            commentList.map((commentItme, index) => (
               <CommentCard
                 key={commentItme.revId + index}
                 commentInfo={commentItme}
