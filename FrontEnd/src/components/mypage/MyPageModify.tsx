@@ -29,7 +29,7 @@ const MyPageModify = () => {
   const [userImgSrc, setUserImgSrc] = useState<string>();
   const [userinfo, setUserInfo] = useState<UserInfoType>();
 
-  const mailState = useRef(null);
+  const [mailState, setMailState] = useState<boolean>(null);
 
   const inputFileRef = useRef(null);
 
@@ -56,6 +56,60 @@ const MyPageModify = () => {
     }
   };
 
+  useEffect(() => {
+    axios
+      .get("/api/member/login", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          setUserInfo(resData.data);
+          setUserName(resData.data.nickname);
+          setUserImgSrc(resData.data.memberImg);
+          setMailState(resData.data.mailReceive);
+        }
+      })
+      .catch((err) => {
+        if (err.code === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .get("/api/auth/member/login", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data);
+                setUserName(resData.data.nickname);
+                setUserImgSrc(resData.data.memberImg);
+                setMailState(resData.data.mailReceive);
+              }
+            })
+            .catch((err) => {
+              if (err.code === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+                setUserInfo(null);
+                navigate("/mypage");
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.code === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+            setUserInfo(null);
+            navigate("/mypage");
+          } else {
+            console.log("서버 오류 발생");
+          }
+        }
+      });
+  }, []);
+
   const UpdateUserInfo = () => {
     const fileImg = inputFileRef.current;
 
@@ -68,7 +122,7 @@ const MyPageModify = () => {
 
     formData.append("image", redirectFile);
     formData.append("nickname", userName);
-    formData.append("emailReceive", mailState.current.checked);
+    formData.append("emailReceive", mailState + "");
 
     axios
       .patch("/api/member/update", formData, {
@@ -124,58 +178,6 @@ const MyPageModify = () => {
       });
   };
 
-  useEffect(() => {
-    axios
-      .get("/api/member/login", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        const resData = res.data;
-        if (resData.code == 200) {
-          setUserInfo(resData.data);
-          setUserName(resData.data.nickname);
-          setUserImgSrc(resData.data.memberImg);
-        }
-      })
-      .catch((err) => {
-        if (err.code === 401) {
-          //리프레시 토큰 재발급
-          axios
-            .get("/api/auth/member/login", {
-              withCredentials: true,
-            })
-            .then((res) => {
-              //재발급이 잘되서 정보를 받아온경우
-              const resData = res.data;
-              if (resData.code == 200) {
-                setUserInfo(resData.data);
-                setUserName(resData.data.nickname);
-                setUserImgSrc(resData.data.memberImg);
-              }
-            })
-            .catch((err) => {
-              if (err.code === 403) {
-                //제발급 실패! 재로그인 해주세요!!
-                UserInfoExpires();
-                setUserInfo(null);
-                navigate("/mypage");
-              } else {
-                console.log("서버 오류 발생");
-              }
-            });
-        } else {
-          if (err.code === 403) {
-            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
-            UserNotLogin();
-            setUserInfo(null);
-            navigate("/mypage");
-          } else {
-            console.log("서버 오류 발생");
-          }
-        }
-      });
-  }, []);
-
   return (
     <>
       <ToastContainer position="top-center" />
@@ -205,7 +207,13 @@ const MyPageModify = () => {
               </EmailInfo>
               <EmailAgree>
                 <AgreeText>메일 전송 수신 동의 </AgreeText>
-                <input type="checkbox" checked={userinfo.mailReceive} ref={mailState} />
+                <input
+                  type="checkbox"
+                  checked={mailState}
+                  onChange={() => {
+                    setMailState(!mailState);
+                  }}
+                />
               </EmailAgree>
               <EmailGuide>
                 메일 전송 수신 동의를 하실 경우 관심상품의 행사 정보를 메일로 받을수 있습니다
