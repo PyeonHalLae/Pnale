@@ -47,5 +47,6 @@ text-lg
 const ImgBox = styled.div`
   img {
     height: 8rem;
+    margin: 0rem auto;
   }
 `;
