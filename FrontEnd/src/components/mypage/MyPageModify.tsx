@@ -7,7 +7,12 @@ import tw from "tailwind-styled-components";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { ToastBackMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+import {
+  ToastBackMessage,
+  ToastErrorMessage,
+  UserInfoExpires,
+  UserNotLogin,
+} from "@/model/toastMessageJHM";
 import MyPage from "./MyPage";
 
 interface UserInfoType {
@@ -67,8 +72,8 @@ const MyPageModify = () => {
     }
 
     const additionalData = {
-      nickname: userName,
-      emailReceive: mailState.current.checked,
+      nickname: userName + "",
+      emailReceive: mailState.current.checked + "",
     };
 
     formData.append("additionalData", JSON.stringify(additionalData));
@@ -111,7 +116,7 @@ const MyPageModify = () => {
                 UserInfoExpires();
                 navigate("/mypage");
               } else {
-                console.log("서버 오류 발생");
+                ToastErrorMessage("유저 정보 업데이트에 실패했습니다.");
               }
             });
         } else {
@@ -121,7 +126,7 @@ const MyPageModify = () => {
             navigate("/mypage");
           } else {
             //그외 서버 오류
-            console.log("서버 오류 발생");
+            ToastErrorMessage("유저 정보 업데이트에 실패했습니다.");
           }
         }
       });
