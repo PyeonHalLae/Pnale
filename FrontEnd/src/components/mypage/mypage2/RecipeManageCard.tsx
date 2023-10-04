@@ -29,6 +29,7 @@ interface Props {
   myRecipeType: string;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
   SelectRecipeIdHandler: (repid: number) => void;
+  LikeMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const RecipeManageCard = ({
@@ -36,12 +37,18 @@ const RecipeManageCard = ({
   myRecipeType,
   BottomMenuStateHandler,
   SelectRecipeIdHandler,
+  LikeMenuStateHandler,
 }: Props) => {
   const navigate = useNavigate();
 
   const MenuBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     SelectRecipeIdHandler($recipeInfo.rcpId);
     BottomMenuStateHandler(e);
+  };
+
+  const LikeBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    SelectRecipeIdHandler($recipeInfo.rcpId);
+    LikeMenuStateHandler(e);
   };
 
   const recipeImgRef = useRef(null);
@@ -83,7 +90,7 @@ const RecipeManageCard = ({
         {myRecipeType === "MYRECIPE" ? (
           <MenuBtn $imgurl={"/img/btn/menu-btn.png"} onClick={MenuBtnClickHandler} />
         ) : (
-          <MenuBtn $imgurl={"/img/btn/close-btn.png"} />
+          <MenuBtn $imgurl={"/img/btn/close-btn.png"} onClick={LikeBtnClickHandler} />
         )}
         {/* 조회수박스 */}
         <ViewCountBox>

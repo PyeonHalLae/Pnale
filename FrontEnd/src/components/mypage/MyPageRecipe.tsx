@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
 import axios from "axios";
 import RecipeManageCardMenu from "./mypage2/RecipeManageCardMenu";
+import RecipeManagerCardLike from "./mypage2/RecipeManagerCardLike";
 
 interface recipeMemberType {
   memberId: number;
@@ -34,14 +35,21 @@ const MyPageRecipe = () => {
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
   const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
 
-  //하단 메뉴를 위한 State
+  //메뉴를 위한 State
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
+  const [likeMenuState, setLikeMenuState] = useState<boolean>(false);
   const [selectRecipeId, setSelectRecipeId] = useState<number>(null);
 
-  //하단 메뉴 출력 State 변경
+  //하단 메뉴 (내레시피) 출력 State 변경
   const BottomMenuStateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     e.stopPropagation();
     setBottomMenuState(!bottomMenuState);
+  };
+
+  //중앙 메뉴 (종아요 레시피) 출력 state 변경
+  const LikeMenuStateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setLikeMenuState(!likeMenuState);
   };
 
   //하단 메뉴 레시피아이디 변경
@@ -166,6 +174,13 @@ const MyPageRecipe = () => {
           UpdateRecipeList={UpdateRecipeList}
         />
       )}
+      {likeMenuState && (
+        <RecipeManagerCardLike
+          $selectRecipeId={selectRecipeId}
+          LikeMenuStateHandler={LikeMenuStateHandler}
+          UpdateRecipeList={UpdateRecipeList}
+        />
+      )}
       <MyRecipeHeader>
         <BackBtn
           onClick={() => {
@@ -202,6 +217,7 @@ const MyPageRecipe = () => {
                 myRecipeType={recipeType}
                 BottomMenuStateHandler={BottomMenuStateHandler}
                 SelectRecipeIdHandler={SelectRecipeIdHandler}
+                LikeMenuStateHandler={LikeMenuStateHandler}
               />
             ))}
       </MyRecipeMain>
