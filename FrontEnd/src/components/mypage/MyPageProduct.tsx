@@ -113,7 +113,7 @@ const MyProduct = () => {
           ))}
 
         <ProductAddBox>
-          {totalPage > 1 && (
+          {totalPage > 1 && currentPage + 1 < totalPage && (
             <AddBtn
               onClick={() => {
                 AxiosHandler();
@@ -174,7 +174,7 @@ const ProductInfos = styled.div`
 `;
 
 const ProductAddBox = tw.div`
-  flex h-24 border
+  flex h-24
 `;
 
 const AddBtn = tw.div`mx-auto my-auto text-common-text-color text-[20px]`;

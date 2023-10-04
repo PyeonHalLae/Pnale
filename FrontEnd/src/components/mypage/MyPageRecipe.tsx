@@ -35,6 +35,10 @@ const MyPageRecipe = () => {
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
   const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
 
+  //페이지를 위한 state
+  const [totalPage, setTotalPage] = useState<number>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+
   //메뉴를 위한 State
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
   const [likeMenuState, setLikeMenuState] = useState<boolean>(false);
@@ -63,101 +67,120 @@ const MyPageRecipe = () => {
     setRecipeList(updatedRecipeList);
   };
 
+  const MyRecipeAxiosHandler = () => {
+    axios
+      .get("/api/mypage/recipe?page=" + currentPage, { withCredentials: true })
+      .then((res) => {
+        if (res.data.code === 200) {
+          setRecipeList([...recipeList, ...res.data.data.content]);
+          setCurrentPage(currentPage + 1);
+          setTotalPage(res.data.data.totalPages);
+        }
+        if (res.data.code === 204) {
+          setRecipeList(null);
+        }
+      })
+      .catch((err) => {
+        const code = err.response.status;
+        //토큰이 있었으나 만료된 경우
+        if (code === 401) {
+          axios
+            .get("/api/auth/mypage/recipe?page=" + currentPage, { withCredentials: true })
+            .then((res) => {
+              if (res.data.code === 200) {
+                setRecipeList([...recipeList, ...res.data.data.content]);
+                setCurrentPage(currentPage + 1);
+                setTotalPage(res.data.data.totalPages);
+              }
+              if (res.data.code === 204) {
+                setRecipeList(null);
+              }
+            })
+            .catch((err) => {
+              console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
+              if (err.response.status === 403) {
+                setRecipeList(null);
+              }
+            });
+        } else {
+          console.log("로그인이 안되어있었나봐요! ", err);
+          if (code === 403) {
+            setRecipeList(null);
+          }
+        }
+      });
+  };
+
+  const LikeAxiosHandler = () => {
+    axios
+      .get("/api/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
+      .then((res) => {
+        console.log(res, "성공");
+        if (res.data.code === 200) {
+          setRecipeList([...recipeList, ...res.data.data.content]);
+          setCurrentPage(currentPage + 1);
+          setTotalPage(res.data.data.totalPages);
+        }
+        if (res.data.code === 204) {
+          setRecipeList(null);
+        }
+      })
+      .catch((error) => {
+        const code = error.response.status;
+        //토큰이 있었으나 만료된 경우
+        if (code === 401) {
+          console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
+          axios
+            .get("/api/auth/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
+            .then((res) => {
+              console.log(res, "성공");
+              if (res.data.code === 200) {
+                setRecipeList([...recipeList, ...res.data.data.content]);
+                setCurrentPage(currentPage + 1);
+                setTotalPage(res.data.data.totalPages);
+              }
+              if (res.data.code === 204) {
+                setRecipeList(null);
+              }
+            })
+            .catch((err) => {
+              console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
+              if (err.response.status === 403) {
+                setRecipeList(null);
+              }
+            });
+        } else {
+          console.log("로그인이 안되어있었나봐요! ", error);
+          if (code === 403) {
+            setRecipeList(null);
+          }
+        }
+      });
+  };
+
   const OnMyRecipe = () => {
     if (!myRecipeState) {
+      setRecipeList([]);
       setMyRecipeState(true);
       setLikeRecipeState(false);
       setRecipeType("MYRECIPE");
-      axios
-        .get("/api/mypage/recipe?page=0", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          if (res.data.code === 200) {
-            setRecipeList(res.data.data.content);
-          }
-          if (res.data.code === 204) {
-            setRecipeList(null);
-          }
-        })
-        .catch((err) => {
-          const code = err.response.status;
-          //토큰이 있었으나 만료된 경우
-          if (code === 401) {
-            axios
-              .get("/api/auth/mypage/recipe?page=0", { withCredentials: true })
-              .then((res) => {
-                if (res.data.code === 200) {
-                  setRecipeList(res.data.data.content);
-                }
-                if (res.data.code === 204) {
-                  setRecipeList(null);
-                }
-              })
-              .catch((err) => {
-                console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
-                if (err.response.status === 403) {
-                  setRecipeList(null);
-                }
-              });
-          } else {
-            console.log("로그인이 안되어있었나봐요! ", err);
-            if (code === 403) {
-              setRecipeList(null);
-            }
-          }
-        });
+      setCurrentPage(0);
+      setTotalPage(null);
+      //마이레시피 요청
+      MyRecipeAxiosHandler();
     }
   };
 
   const OnLikeRecipe = () => {
     if (!likeRecipeState) {
+      setRecipeList([]);
       setMyRecipeState(false);
       setLikeRecipeState(true);
       setRecipeType("LIKERECIPE");
-      //엑시오스 들어갈 예정
-      axios
-        .get("/api/mypage/pick_recipe?page=0", {
-          withCredentials: true,
-        })
-        .then((res) => {
-          console.log(res, "성공");
-          if (res.data.code === 200) {
-            setRecipeList(res.data.data.content);
-          }
-          if (res.data.code === 204) {
-            setRecipeList(null);
-          }
-        })
-        .catch((error) => {
-          const code = error.response.status;
-          //토큰이 있었으나 만료된 경우
-          if (code === 401) {
-            console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
-            axios
-              .get("/api/auth/mypage/pick_recipe?page=0", { withCredentials: true })
-              .then((res) => {
-                console.log(res, "성공");
-                if (res.data.code === 200) {
-                  setRecipeList(res.data.data.content);
-                }
-                if (res.data.code === 204) {
-                  setRecipeList(null);
-                }
-              })
-              .catch((err) => {
-                console.log("토큰이 만료 되었으니 재로그인 부탁드립니다", err);
-                if (err.response.status === 403) {
-                  setRecipeList(null);
-                }
-              });
-          } else {
-            console.log("로그인이 안되어있었나봐요! ", error);
-            if (code === 403) {
-              setRecipeList(null);
-            }
-          }
-        });
+      setCurrentPage(0);
+      setTotalPage(null);
+      //좋아요 요청
+      LikeAxiosHandler();
     }
   };
 
@@ -220,6 +243,18 @@ const MyPageRecipe = () => {
                 LikeMenuStateHandler={LikeMenuStateHandler}
               />
             ))}
+        <RecipeAddBox>
+          {totalPage > 1 && currentPage + 1 < totalPage && (
+            <AddBtn
+              onClick={() => {
+                if (recipeType === "MYRECIPE") MyRecipeAxiosHandler();
+                if (recipeType === "LIKERECIPE") LikeAxiosHandler();
+              }}
+            >
+              더보기 +
+            </AddBtn>
+          )}
+        </RecipeAddBox>
       </MyRecipeMain>
     </>
   );
@@ -275,3 +310,9 @@ const MyRecipeMain = tw.div`
   h-[calc(100%-9.375rem)]
 
 `;
+
+const RecipeAddBox = tw.div`
+  flex h-24
+`;
+
+const AddBtn = tw.div`mx-auto my-auto text-common-text-color text-[20px]`;
