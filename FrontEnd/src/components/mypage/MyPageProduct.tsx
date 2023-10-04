@@ -113,7 +113,7 @@ const MyProduct = () => {
           ))}
 
         <ProductAddBox>
-          {totalPage > 1 && currentPage + 1 < totalPage && (
+          {totalPage > 1 && currentPage < totalPage && (
             <AddBtn
               onClick={() => {
                 AxiosHandler();
