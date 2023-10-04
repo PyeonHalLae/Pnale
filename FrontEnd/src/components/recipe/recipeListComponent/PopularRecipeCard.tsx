@@ -94,6 +94,7 @@ const Title = styled.div`
   font-size: 1.625rem;
   font-style: normal;
   font-weight: 500;
+  color: #1e2b4f;
   align-items: center;
   width: 70%;
   margin-top: 0.5rem;
