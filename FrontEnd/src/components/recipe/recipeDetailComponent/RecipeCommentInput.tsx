@@ -46,7 +46,8 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
       })
       .then((res) => {
         // 작성 성공시
-        if (res.data.code === "201") {
+        console.log(res);
+        if (res.data.code === "200") {
           setCommentContent("");
           setRefresh((prev) => {
             return !prev;

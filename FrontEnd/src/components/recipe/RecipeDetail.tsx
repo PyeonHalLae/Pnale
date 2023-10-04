@@ -19,10 +19,6 @@ const RecipeDetail = () => {
   // const [bottomMenuState, setBottomMenuState] = useState<boolean>(true);
 
   useEffect(() => {
-    setLoading(() => {
-      return true;
-    });
-
     axios
       .get("/api/recipe/detail", {
         params: {
@@ -37,7 +33,9 @@ const RecipeDetail = () => {
         setRecipeInfo(() => {
           return res.data.data;
         });
-        setLoading(false);
+        if (loading) {
+          setLoading(false);
+        }
       })
       .catch((err) => {
         if (err.response.state === 401) {
