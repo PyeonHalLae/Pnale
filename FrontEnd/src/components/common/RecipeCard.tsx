@@ -3,37 +3,12 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { recipeType } from "@/model/commonType";
-import { useSetRecoilState } from "recoil";
-import { recipeDetailInfo } from "@/recoil/khiRecoil";
-import axios from "axios";
 import { useState } from "react";
 import BottomMenu from "./BottomMenu";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
-  const setRecipeDetail = useSetRecoilState(recipeDetailInfo);
   const navigate = useNavigate();
-
-  const detailInfoloadHanlder = () => {
-    axios
-      .get("/api/recipe/detail", {
-        params: {
-          rcpId: recipeInfo.rcpId,
-        },
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        console.log(res.data);
-        setRecipeDetail(() => {
-          return res.data.data;
-        });
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
 
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
@@ -52,7 +27,6 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   return (
     <Container
       onClick={() => {
-        detailInfoloadHanlder();
         navigateHandler(recipeInfo.rcpId);
       }}
     >
