@@ -7,7 +7,7 @@ import {
 } from "@/recoil/khiRecoil";
 import { useResetRecoilState } from "recoil";
 
-const CancelBtn = () => {
+const CancelBtn = ({ action }: { action: string }) => {
   const navigate = useNavigate();
 
   const resetForm = useResetRecoilState(recipeFormState);
@@ -28,7 +28,7 @@ const CancelBtn = () => {
       className="absolute top-[-2rem] right-[2.5rem] text-[1.25rem] text-common-text-color"
       onClick={cancleBtn}
     >
-      작성 취소
+      {action} 취소
     </div>
   );
 };

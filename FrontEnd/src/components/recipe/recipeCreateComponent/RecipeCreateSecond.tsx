@@ -9,9 +9,10 @@ import { useRecoilState } from "recoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
+  action: string;
 }
 
-const RecipeCreateSecond = ({ stepHandler }: Props) => {
+const RecipeCreateSecond = ({ stepHandler, action }: Props) => {
   const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
@@ -30,7 +31,7 @@ const RecipeCreateSecond = ({ stepHandler }: Props) => {
 
   return (
     <Container>
-      <CancelBtn />
+      <CancelBtn action={action} />
       <ProductsBox>
         {isModalActive && (
           <RecipeCommonModal

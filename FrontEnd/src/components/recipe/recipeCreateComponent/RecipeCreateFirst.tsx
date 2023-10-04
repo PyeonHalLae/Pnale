@@ -7,9 +7,10 @@ import { recipeFormState, recipeFormImg } from "@/recoil/khiRecoil";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
+  action: string;
 }
 
-const RecipeCreateFirst = ({ stepHandler }: Props) => {
+const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
   const [{ rcpName, rcpSimple, rcpVideo }, setRecipeForm] = useRecoilState(recipeFormState);
   const [rcpThumbnail, setRcpThumbnail] = useRecoilState(recipeFormImg);
 
@@ -72,7 +73,7 @@ const RecipeCreateFirst = ({ stepHandler }: Props) => {
 
   return (
     <Container>
-      <CancelBtn />
+      <CancelBtn action={action} />
       <FormBox>
         <FormTitle>
           미리보기 사진<span className="text-common-orange">*</span>

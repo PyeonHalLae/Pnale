@@ -19,7 +19,6 @@ const RecipeList = () => {
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
   const [listSortBy, setListSortBy] = useState<string>("latest");
   const [loading, setLoading] = useState<boolean>(true);
-
   const [page, setPage] = useState<number>(0);
   const [totalRecipeNum, setTotalRecipeNum] = useState<number>(0);
 

@@ -21,7 +21,6 @@ const RecipeDetailHeaderBar = ({ recipeId, myRecipe }: { recipeId: number; myRec
         {myRecipe && (
           <DetailManageBtn src="/img/btn/menu-btn.png" onClick={BottomMenuStateHandler} />
         )}
-        <DetailManageBtn src="/img/btn/menu-btn.png" onClick={BottomMenuStateHandler} />
       </DetailManageBtnBox>
       {bottomMenuState && (
         <BottomMenu

@@ -33,9 +33,9 @@ const RecipeCreate = () => {
   };
 
   const stepSelector = {
-    "1": <RecipeCreateFirst stepHandler={stepHandler}></RecipeCreateFirst>,
-    "2": <RecipeCreateSecond stepHandler={stepHandler}></RecipeCreateSecond>,
-    "3": <RecipeCreateThird stepHandler={stepHandler}></RecipeCreateThird>,
+    "1": <RecipeCreateFirst stepHandler={stepHandler} action="작성"></RecipeCreateFirst>,
+    "2": <RecipeCreateSecond stepHandler={stepHandler} action="작성"></RecipeCreateSecond>,
+    "3": <RecipeCreateThird stepHandler={stepHandler} action="작성"></RecipeCreateThird>,
   };
 
   return <Container>{stepSelector[step]}</Container>;

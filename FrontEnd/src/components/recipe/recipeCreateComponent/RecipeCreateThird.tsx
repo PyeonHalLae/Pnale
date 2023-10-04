@@ -12,12 +12,15 @@ import {
 
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { ToastBackMessage } from "@/model/toastMessageJHM";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
+  action: string;
+  recipeId?: number;
 }
 
-const RecipeCreateThird = ({ stepHandler }: Props) => {
+const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
   const navigate = useNavigate();
   const [rcpDesc, setRcpDesc] = useRecoilState(recipeFormContent);
   const products = useRecoilValue(recipeFormProduct);
@@ -30,22 +33,6 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
   const restProducts = useResetRecoilState(recipeFormProduct);
 
   const submitHandler = () => {
-    console.log(recipeForm);
-    console.log("레시피폼");
-
-    console.log(products);
-    console.log("상품리스트");
-
-    console.log(rcpThumbnail);
-    console.log("레시피이미지");
-
-    console.log(rcpDesc);
-    console.log("레시피내용");
-
-    resetForm();
-    restContents();
-    restImg();
-    restProducts();
     // json으로 보내야함
     // recipeData = {
     //   ...recipeForm,
@@ -73,28 +60,48 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
       rcpVideo: recipeForm.rcpVideo, // 레시피 관련 영상
     };
     console.log(data);
-
-    axios
-      .post("/api/recipe/form", data)
-      .then((res) => {
-        if (res.data.code == "201") {
-          console.log(res.data);
-          alert("작성성공");
-          resetForm();
-          restContents();
-          restImg();
-          restProducts();
-          navigate(`/recipe/${res.data.rcpId}`);
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if (action == "작성") {
+      // 작성
+      axios
+        .post("/api/recipe/form", data)
+        .then((res) => {
+          if (res.data.code == "201") {
+            console.log(res.data);
+            ToastBackMessage("레시피 작성 완료");
+            resetForm();
+            restContents();
+            restImg();
+            restProducts();
+            navigate(`/recipe/${res.data.data}`);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      // 수정
+      axios
+        .patch(`/api/recipe/form/${recipeId}`, data)
+        .then((res) => {
+          if (res.data.code == "201") {
+            console.log(res.data);
+            ToastBackMessage("레시피 수정 완료");
+            resetForm();
+            restContents();
+            restImg();
+            restProducts();
+            navigate(`/recipe/${recipeId}`);
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   };
 
   return (
     <Container>
-      <CancelBtn />
+      <CancelBtn action={action} />
       <div className="bg-white w-[100%] h-[calc(31.25rem-6px)] mb-[3rem] rounded-[0.625rem]">
         <RecipeEditor rcpDesc={rcpDesc} setRcpDesc={setRcpDesc} />
       </div>
@@ -108,7 +115,7 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
           이전으로
         </WhiteBtn>
 
-        <BlueBtn onClick={submitHandler}>작성완료</BlueBtn>
+        <BlueBtn onClick={submitHandler}>{action}완료</BlueBtn>
       </BtnBox>
     </Container>
   );
