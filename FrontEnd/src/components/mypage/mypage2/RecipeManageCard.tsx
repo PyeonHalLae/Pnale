@@ -31,12 +31,12 @@ const RecipeManageCard = ({
 }: {
   $recipeInfo: recipeInfoType;
   myRecipeType: string;
-  BottomMenuStateHandler: () => void;
+  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
   SelectRecipeIdHandler: (repid: number) => void;
 }) => {
-  const MenuBtnClickHandler = () => {
+  const MenuBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     SelectRecipeIdHandler($recipeInfo.rcpId);
-    BottomMenuStateHandler();
+    BottomMenuStateHandler(e);
   };
 
   const navigate = useNavigate();
@@ -54,12 +54,7 @@ const RecipeManageCard = ({
       <ContentBox>
         {/* 관리 버튼 */}
         {myRecipeType === "MYRECIPE" ? (
-          <MenuBtn
-            $imgurl={"/img/btn/menu-btn.png"}
-            onClick={() => {
-              MenuBtnClickHandler();
-            }}
-          />
+          <MenuBtn $imgurl={"/img/btn/menu-btn.png"} onClick={MenuBtnClickHandler} />
         ) : (
           <MenuBtn $imgurl={"/img/btn/close-btn.png"} />
         )}
