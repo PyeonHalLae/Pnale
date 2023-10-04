@@ -15,7 +15,7 @@ interface Props {
   UpdateCommentList: () => void;
 }
 
-const CommentCardMemu = ({
+const CommentCardMenu = ({
   $selectCommentId,
   BottomMenuStateHandler,
   UpdateCommentList,
@@ -24,8 +24,6 @@ const CommentCardMemu = ({
 
   // 삭제하기 클릭
   const deleteBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    console.log($selectCommentId);
     BottomMenuStateHandler(e);
     axios
       .delete("/api/recipe/review?revId=" + $selectCommentId, {
@@ -35,7 +33,7 @@ const CommentCardMemu = ({
         const resData = res.data;
         if (resData.code == 200) {
           UpdateCommentList();
-          ToastBackMessage(resData.message);
+          ToastBackMessage("댓글을 삭제하였습니다");
         }
       })
       .catch((err) => {
@@ -48,7 +46,7 @@ const CommentCardMemu = ({
               const resData = res.data;
               if (resData.code == 200) {
                 UpdateCommentList();
-                ToastBackMessage(resData.message);
+                ToastBackMessage("댓글을 삭제하였습니다");
               }
             })
             .catch((err) => {
@@ -95,7 +93,7 @@ const CommentCardMemu = ({
   );
 };
 
-export default CommentCardMemu;
+export default CommentCardMenu;
 
 const BackSize = tw.div`
     fixed

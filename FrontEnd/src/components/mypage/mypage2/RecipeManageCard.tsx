@@ -1,5 +1,5 @@
 // import { useEffect, useState } from "react";
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
@@ -45,10 +45,23 @@ const RecipeManageCard = ({
   };
 
   const recipeImgRef = useRef(null);
-
+  const titleRef = useRef(null);
+  const [titleStyleState, setTitleStyleState] = useState<boolean>(false);
   const ImageErrorHandler = () => {
     recipeImgRef.current.src = "/img/sticker/noimage.jpg";
   };
+
+  //높이 설정
+  useEffect(() => {
+    const titleStyle = window.getComputedStyle(titleRef.current);
+    const titleHeight = parseFloat(titleStyle.height);
+    //한줄이라면
+    if (titleHeight < 40) {
+      setTitleStyleState(true);
+    } else {
+      setTitleStyleState(false);
+    }
+  }, []);
 
   return (
     <Container
@@ -79,7 +92,9 @@ const RecipeManageCard = ({
         </ViewCountBox>
 
         {/* 레시피 제목 */}
-        <Title>{$recipeInfo.rcpName}</Title>
+        <Title ref={titleRef} className={titleStyleState && "mt-[0.9375rem] mb-[0.3125rem]"}>
+          {$recipeInfo.rcpName}
+        </Title>
 
         {/* 유저 닉네임, 유저 이미지 */}
         {$recipeInfo.influence === true ? (
@@ -175,8 +190,8 @@ const MenuBtn = styled.div<{ $imgurl: string }>`
   float: right;
   margin-right: 0.625rem;
   margin-top: -0.125rem;
-  width: 0.9375rem;
-  height: 0.9375rem;
+  width: 1.25rem;
+  height: 1.25rem;
   background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-size: contain;

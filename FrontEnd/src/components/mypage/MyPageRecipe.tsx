@@ -4,7 +4,7 @@ import tw from "tailwind-styled-components";
 import { useState, useEffect } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
 import axios from "axios";
-import BottomMenu from "@components/common/BottomMenu";
+import RecipeManageCardMenu from "./mypage2/RecipeManageCardMenu";
 
 interface recipeMemberType {
   memberId: number;
@@ -47,6 +47,12 @@ const MyPageRecipe = () => {
   //하단 메뉴 레시피아이디 변경
   const SelectRecipeIdHandler = (recipeId) => {
     setSelectRecipeId(recipeId);
+  };
+
+  //레시피 삭제시 List에서 제거
+  const UpdateRecipeList = () => {
+    const updatedRecipeList = recipeList.filter((comment) => comment.rcpId !== selectRecipeId);
+    setRecipeList(updatedRecipeList);
   };
 
   const OnMyRecipe = () => {
@@ -154,9 +160,10 @@ const MyPageRecipe = () => {
   return (
     <>
       {bottomMenuState && (
-        <BottomMenu
+        <RecipeManageCardMenu
           $selectRecipeId={selectRecipeId}
           BottomMenuStateHandler={BottomMenuStateHandler}
+          UpdateRecipeList={UpdateRecipeList}
         />
       )}
       <MyRecipeHeader>
