@@ -68,7 +68,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findCUNewProduct(Pageable pageable,
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
@@ -90,7 +90,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findCUNewProductByMemberId(Pageable pageable,
                                               @Param("all") CorpType all,
                                               @Param("corp") CorpType corpType,
@@ -112,7 +112,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findGSNewProduct(Pageable pageable,
                                     @Param("all") CorpType all,
                                     @Param("corp") CorpType corpType);
@@ -133,7 +133,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findGSNewProductByMemberId(Pageable pageable,
                                               @Param("all") CorpType all,
                                               @Param("corp") CorpType corpType,
@@ -154,7 +154,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findSEVENNewProduct(Pageable pageable,
                                        @Param("all") CorpType all,
                                        @Param("corp") CorpType corpType);
@@ -175,7 +175,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findSEVENNewProductByMemberId(Pageable pageable,
                                                  @Param("all") CorpType all,
                                                  @Param("corp") CorpType corpType,
@@ -196,7 +196,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findEMARTNewProduct(Pageable pageable,
                                        @Param("all") CorpType all,
                                        @Param("corp") CorpType corpType);
@@ -217,7 +217,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER FUNCTION('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findEMARTNewProductByMemberId(Pageable pageable,
                                                  @Param("all") CorpType all,
                                                  @Param("corp") CorpType corpType,
