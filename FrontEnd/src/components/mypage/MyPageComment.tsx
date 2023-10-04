@@ -147,7 +147,7 @@ const MyPageComment = () => {
                   AxiosHandler();
                 }}
               >
-                더보기 +
+                더보기
               </AddBtn>
             )}
           </CommentAddBox>
@@ -209,4 +209,4 @@ const CommentAddBox = tw.div`
   flex h-24
 `;
 
-const AddBtn = tw.div`mx-auto my-auto text-common-text-color text-[20px]`;
+const AddBtn = tw.div`mx-auto my-auto  text-common-text-gray-color  text-[20px]`;
