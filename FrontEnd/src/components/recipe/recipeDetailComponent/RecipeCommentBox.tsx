@@ -57,6 +57,9 @@ const RecipeCommentBox = ({
         if (res.data.code === 200) {
           setCommentList(res.data.data.content);
           setTotalCommentNum(res.data.data.totalElements);
+        } else if (res.data.code === 204) {
+          setCommentList([]);
+          setTotalCommentNum(0);
         }
         console.log(res);
       })
