@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -9,11 +10,28 @@ interface commentInfoType {
   createdAt: string;
 }
 
-const CommentCard = ({ commentInfo }: { commentInfo: commentInfoType }) => {
+interface Props {
+  commentInfo: commentInfoType;
+  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  SelectCommentIdHandler: (repid: number) => void;
+}
+
+const CommentCard = ({ commentInfo, BottomMenuStateHandler, SelectCommentIdHandler }: Props) => {
+  const navigate = useNavigate();
+
+  const MemnuClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    SelectCommentIdHandler(commentInfo.revId);
+    BottomMenuStateHandler(e);
+  };
+
   return (
     <>
-      <BackSize>
-        <MenuBtn></MenuBtn>
+      <BackSize
+        onClick={() => {
+          navigate("/recipe/" + commentInfo.rcpId);
+        }}
+      >
+        <MenuBtn onClick={MemnuClickHandler} />
         <TitleBox>
           <Title>{commentInfo.rcpName}</Title>
         </TitleBox>

@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { ToastErrorMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
 import axios from "axios";
+import CommentCardMemu from "./mypage2/CommentCardMemu";
 
 interface commentInfoType {
   rcpId: number;
@@ -20,10 +21,23 @@ interface commentInfoType {
 const MyPageComment = () => {
   const [CommentList, setCommentList] = useState<commentInfoType[]>([]);
   const navigate = useNavigate();
+  const [bottomMenuState, setBottomMenuState] = useState<boolean>();
+  const [selectCommentId, setSelectCommentId] = useState<number>();
+
+  //하단 메뉴 출력 State 변경
+  const BottomMenuStateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    setBottomMenuState(!bottomMenuState);
+  };
+
+  //하단 메뉴 레시피아이디 변경
+  const SelectCommentIdHandler = (revId) => {
+    setSelectCommentId(revId);
+  };
 
   useEffect(() => {
     axios
-      .patch("/api/mypage/comment?page=0", {
+      .get("/api/mypage/comment?page=0", {
         withCredentials: true,
       })
       .then((res) => {
@@ -39,7 +53,7 @@ const MyPageComment = () => {
         if (err.response.status === 401) {
           //리프레시 토큰 재발급
           axios
-            .patch("/api/auth/mypage/comment?page=0", {
+            .get("/api/auth/mypage/comment?page=0", {
               withCredentials: true,
             })
             .then((res) => {
@@ -76,6 +90,12 @@ const MyPageComment = () => {
 
   return (
     <>
+      {bottomMenuState && (
+        <CommentCardMemu
+          $selectCommentId={selectCommentId}
+          BottomMenuStateHandler={BottomMenuStateHandler}
+        />
+      )}
       <MyCommentHeader>
         <BackBtn
           onClick={() => {
@@ -88,16 +108,14 @@ const MyPageComment = () => {
         </SideBtn>
       </MyCommentHeader>
       <MyCommentMain>
-        {/* {CommentList.map((commentItem, index) => (
-          <CommentCard
-          // key={recipeItem.recipeTitle + index}
-          // recipeInfo={recipeItem}
-          // myRecipeType={recipeType}
-          />
-        ))} */}
         {CommentList &&
           CommentList.map((commentItme, index) => (
-            <CommentCard key={commentItme.revId + index} commentInfo={commentItme} />
+            <CommentCard
+              key={commentItme.revId + index}
+              commentInfo={commentItme}
+              BottomMenuStateHandler={BottomMenuStateHandler}
+              SelectCommentIdHandler={SelectCommentIdHandler}
+            />
           ))}
       </MyCommentMain>
     </>
