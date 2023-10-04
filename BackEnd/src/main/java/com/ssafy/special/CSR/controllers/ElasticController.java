@@ -54,7 +54,7 @@ public class ElasticController {
         if(requestData.getIds().size() == 0) throw new CustomException(CustomErrorCode.NO_SEARCH_DATA) ;
         Long memberId = (Long) request.getAttribute("memberId");
 
-        redisService.setSearchList(memberId, requestData.getKeyword());
+        //redisService.setSearchList(memberId, requestData.getKeyword());
 
         log.info("{}, 멤버{}", requestData.getIds().size(), memberId);
         return new DataResponse<>(200, "검색 결과를 반환합니다.", goodsService.findIdsResult(pageable, requestData.getIds(), memberId ));
