@@ -23,23 +23,25 @@ interface recipeInfoType {
   influence: boolean;
 }
 
+interface Props {
+  $recipeInfo: recipeInfoType;
+  myRecipeType: string;
+  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  SelectRecipeIdHandler: (repid: number) => void;
+}
+
 const RecipeManageCard = ({
   $recipeInfo,
   myRecipeType,
   BottomMenuStateHandler,
   SelectRecipeIdHandler,
-}: {
-  $recipeInfo: recipeInfoType;
-  myRecipeType: string;
-  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
-  SelectRecipeIdHandler: (repid: number) => void;
-}) => {
+}: Props) => {
+  const navigate = useNavigate();
+
   const MenuBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
     SelectRecipeIdHandler($recipeInfo.rcpId);
     BottomMenuStateHandler(e);
   };
-
-  const navigate = useNavigate();
 
   return (
     <Container
