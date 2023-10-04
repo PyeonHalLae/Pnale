@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 @RestController
@@ -23,46 +24,57 @@ public class ConvController {
 
     @GetMapping("/{corpType}")
     public DataResponse<?> getConvData(@PageableDefault(size = 9) Pageable pageable,
-                                       @PathVariable("corpType") CorpType corpType) {
+                                       @PathVariable("corpType") CorpType corpType, HttpServletRequest request){
+        Long memberId = (Long) request.getAttribute("memberId");
         log.info("{}", corpType);
         return new DataResponse<>(200, corpType.name() + "의 데이터를 반환합니다.",
-                                    convService.findCorpData(pageable, corpType));
+                                    convService.findCorpData(pageable, corpType, memberId));
     }
 
     @GetMapping("/best/{corpType}")
     public DataResponse<?> getBestProduct(@PageableDefault(size = 9) Pageable pageable,
-                                       @PathVariable("corpType") CorpType corpType){
-        return new DataResponse<>(200, corpType.name() + "의 Best상품들을 반환합니다.", convService.findBestProduct(pageable, corpType));
+                                          @PathVariable("corpType") CorpType corpType,
+                                          HttpServletRequest request){
+        Long memberId = (Long) request.getAttribute("memberId");
+        return new DataResponse<>(200, corpType.name() + "의 Best상품들을 반환합니다.", convService.findBestProduct(pageable, corpType, memberId));
     }
     @GetMapping("/new/{corpType}")
     public DataResponse<?> getNewProduct(@PageableDefault(size = 9) Pageable pageable,
-                                       @PathVariable("corpType") CorpType corpType){
-        return new DataResponse<>(200, corpType.name() + "의 신상품을 반환합니다.", convService.findNewProduct(pageable, corpType));
+                                         @PathVariable("corpType") CorpType corpType,
+                                         HttpServletRequest request){
+        Long memberId = (Long) request.getAttribute("memberId");
+        return new DataResponse<>(200, corpType.name() + "의 신상품을 반환합니다.", convService.findNewProduct(pageable, corpType, memberId));
     }
 
     @GetMapping("/event/{corpType}")
     public DataResponse<?> getEventProduct(@PageableDefault(size = 9) Pageable pageable,
-                                         @PathVariable("corpType") CorpType corpType){
-        return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.", convService.findEventProduct(pageable, corpType));
+                                           @PathVariable("corpType") CorpType corpType,
+                                           HttpServletRequest request){
+        Long memberId = (Long) request.getAttribute("memberId");
+        return new DataResponse<>(200, corpType.name() + "의 행사중인 상품을 반환합니다.", convService.findEventProduct(pageable, corpType, memberId));
     }
     @GetMapping("/pb/{corpType}")
     public DataResponse<?> getPBProduct(@PageableDefault(size = 9) Pageable pageable,
-                                         @PathVariable("corpType") CorpType corpType){
-        return new DataResponse<>(200, corpType.name() + "의 PB(독점) 상품을 반환합니다.", convService.findPbProduct(pageable, corpType));
+                                        @PathVariable("corpType") CorpType corpType,
+                                        HttpServletRequest request){
+        Long memberId = (Long) request.getAttribute("memberId");
+        return new DataResponse<>(200, corpType.name() + "의 PB(독점) 상품을 반환합니다.", convService.findPbProduct(pageable, corpType, memberId));
     }
 
     @PostMapping("/filter")
     public DataResponse<?> getDetailData(@PageableDefault(size =9 ) Pageable pageable,
-                                         @RequestBody FilterDTO filter){
+                                         @RequestBody FilterDTO filter,
+                                         HttpServletRequest request){
         if(!(filter.getSort() >= 0 && filter.getSort() <= 2))
-            return new DataResponse<>(CustomErrorCode.INVALID_SORT_DATA.getCode(), CustomErrorCode.INVALID_SORT_DATA.getMessage());
+            throw new CustomException(CustomErrorCode.INVALID_SORT_DATA);
         if(!(filter.getDataType().equals("EVENT") || filter.getDataType().equals("PB")))
-            return new DataResponse<>(CustomErrorCode.INVALID_REQUEST_DATA.getCode(), CustomErrorCode.INVALID_REQUEST_DATA.getMessage());
+            throw new CustomException(CustomErrorCode.INVALID_REQUEST_DATA);
         if(!(filter.getCorp().equals(CorpType.CU) || filter.getCorp().equals(CorpType.GS)
                 || filter.getCorp().equals(CorpType.SEVEN) || filter.getCorp().equals(CorpType.EMART)))
-            return new DataResponse<>(CustomErrorCode.CONV_DATA_NOT_FOUND.getCode(), CustomErrorCode.CONV_DATA_NOT_FOUND.getMessage());
+            throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
 
-        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findProductByFilter(pageable, filter));
+        Long memberId = (Long) request.getAttribute("memberId");
+        return new DataResponse<>(200, "필터에 따른 결과를 반환합니다.", convService.findProductByFilter(pageable, filter, memberId));
     }
 
 

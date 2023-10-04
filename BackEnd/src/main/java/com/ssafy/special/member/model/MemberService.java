@@ -34,8 +34,6 @@ public class MemberService {
     public Map<String, Object> findMemberInfo(Long memberId) {
         Map<String, Object> response = new HashMap<>();
 
-
-
         response.put("member", memberRepository.findByMemberId(memberId)
                         .map(Member::toInfoDTO)
                                 .orElseThrow(() -> new CustomException(CustomErrorCode.INVALID_MEMBER)));

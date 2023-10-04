@@ -1,5 +1,6 @@
 package com.ssafy.special.CSR.dtos.recipe;
 import lombok.*;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ import java.util.List;
 @Builder
 public class RecipeMainPageDTO {
     private RecipeRecommendDTO best;
-    private List<RecipeListDTO> recipes;
+    private Page<RecipeListDTO> recipes;
 }

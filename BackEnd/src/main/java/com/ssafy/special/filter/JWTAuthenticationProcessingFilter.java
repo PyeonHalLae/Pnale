@@ -23,6 +23,7 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
+    // https://pnale.online/oaut2
     private static final String NO_CHECK_URL = "oauth";
 
     private final JwtService jwtService;
@@ -38,8 +39,9 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .orElse(null);
 
 
-        // 액세스 토큰이 없다면 다음 필터로 진행합니다.
-        // 따라서 로그인이 반드시 필요한 API는 SpringSecurity에서 401오류를 보냅니다.
+        System.out.println(request.getRequestURI());
+        // 액세스 토큰이 없거나, 전혀 관계없는 요청들(favicon 요청 및 oauth2관련 요청)은 다음 필터로 진행합니다.
+        // 따라서 로그인이 반드시 필요한 API는 이후 SpringSecurity의 Authentication 필터에서 걸려 403오류를 보냅니다.
         if(accessToken == null || request.getRequestURI().contains(NO_CHECK_URL) || request.getRequestURI().contains("favicon")){
             request.setAttribute("memberId", 8L);
             filterChain.doFilter(request, response);
@@ -53,7 +55,7 @@ public class JWTAuthenticationProcessingFilter extends OncePerRequestFilter {
                 .filter(jwtService::isTokenValid)
                 .orElse(null);
 
-        System.out.println(refreshToken);
+
         // 리프레시 토큰이 유효할 경우, AccessToken을 새롭게 추가하면서 메서드를 진행합니다.
         if (refreshToken!=null) {
             checkRefreshTokenAndReIssueAccessToken(request, response, refreshToken);

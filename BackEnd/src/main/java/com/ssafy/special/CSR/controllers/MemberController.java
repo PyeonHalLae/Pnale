@@ -3,10 +3,7 @@ package com.ssafy.special.CSR.controllers;
 
 
 import com.ssafy.special.entity.Member;
-import com.ssafy.special.exception.CustomErrorCode;
-import com.ssafy.special.exception.CustomException;
-import com.ssafy.special.exception.CustomResponse;
-import com.ssafy.special.exception.DataResponse;
+import com.ssafy.special.exception.*;
 import com.ssafy.special.member.model.JwtService;
 import com.ssafy.special.member.model.MemberRepository;
 import com.ssafy.special.member.model.MemberService;
@@ -35,6 +32,7 @@ public class MemberController {
     public DataResponse<?> getUserInfo(HttpServletRequest request) {
 
         Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
         MemberInfoDTO memberInfo = MemberInfoDTO.builder()
@@ -60,10 +58,9 @@ public class MemberController {
 
     }
 
-    @GetMapping("/needLogin")
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @RequestMapping("/needLogin")
     public void redirectLogin() {
-
+        throw new AuthException(CustomErrorCode.FORBIDDEN);
     }
 
     @GetMapping("/memberTest")
@@ -80,8 +77,7 @@ public class MemberController {
 
     @PatchMapping("/update")
     public CustomResponse updateUserInfo(HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) {
-        String token = jwtService.getAccessToken(request).orElseThrow(()-> new CustomException(CustomErrorCode.TOKEN_UNDEFINED_ERROR));
-        Long memberId = jwtService.getMemberId(token).orElseThrow(() -> new CustomException(CustomErrorCode.TOKEN_UNDEFINED_ERROR));
+        Long memberId = (Long)request.getAttribute("memberId");
 
         memberService.updateMemberInMyPage(memberId, memberUpdateDTO);
 

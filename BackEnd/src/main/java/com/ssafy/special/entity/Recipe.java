@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+// 어째서 setter이 없어졌었을까?
 @Entity
 @Getter
 @Setter
@@ -40,13 +41,13 @@ public class Recipe {
     @Column(nullable = false)
     String recipeVideoUrl;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long viewCnt;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long replyCnt;
 
-    @Column(columnDefinition = "bigint default 0")
+    @Column(columnDefinition = "default 0")
     Long likeCnt;
 
     @Column(columnDefinition = "TIMESTAMP")

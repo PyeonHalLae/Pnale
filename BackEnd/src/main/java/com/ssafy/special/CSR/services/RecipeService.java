@@ -52,7 +52,6 @@ public class RecipeService {
         Recipe recipe = toRecipeEntity(memberId, info);
         List<RecipeIngredient> lists = recipeIngredientService.writeIngredients(recipe, info.getIngredients());
         recipe.setIngredients(lists);
-
         recipe = recipeRepository.save(recipe);
 
         return recipe.getRecipeId();
@@ -87,12 +86,15 @@ public class RecipeService {
     /**
      * 디테일페이지에 출력할 레시피입니다.
      */
+    @Transactional
     public RecipeDetailsDTO getDetailRecipe(Long memberId, Long recipeId){
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        if(!recipe.getWriter().getMemberId().equals(memberId)) recipe.setViewCnt(recipe.getViewCnt()+1);
         List<ProductInRecipeDTO> ingredients = recipeIngredientRepository.findProductsInRecipe(recipe.getRecipeId());
         boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
         boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
                 .map(isDeleted -> !isDeleted).orElse(false);
+        recipeRepository.save(recipe);
         return RecipeDetailsDTO.builder()
                 .rcpId(recipe.getRecipeId())
                 .rcpName(recipe.getRecipeName())
@@ -128,6 +130,8 @@ public class RecipeService {
                 .rcpName(recipe.getRecipeName())
                 .member(recipe.getWriter().toViewDTO())
                 .ingredients(ingredients)
+                .rcpThumbnail(recipe.getRecipeThumbnail())
+                .rcpVideoUrl(recipe.getRecipeVideoUrl())
                 .rcpSimple(recipe.getRecipeSimple())
                 .likeCnt(recipe.getLikeCnt())
                 .replyCnt(recipe.getReplyCnt())
@@ -272,7 +276,7 @@ public class RecipeService {
     /**
      * RecipeWriteDTO를 실제 엔티티로 변환합니다.
      */
-    public Recipe toRecipeEntity(Long memberId, RecipeWriteDTO recipeInfo){
+    private Recipe toRecipeEntity(Long memberId, RecipeWriteDTO recipeInfo){
         Member member = memberRepository.findById(memberId).orElseThrow();
         boolean influence = member.getRole().name().equals("ADMIN");
         return Recipe.builder()
@@ -284,6 +288,9 @@ public class RecipeService {
                 .recipeVideoUrl(recipeInfo.getRcpVideo())
                 .createdAt(LocalDateTime.now())
                 .updatedAt(LocalDateTime.now())
+                .replyCnt(0L)
+                .viewCnt(0L)
+                .likeCnt(0L)
                 .isDeleted(false)
                 .influence(influence)
                 .build();

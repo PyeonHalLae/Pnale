@@ -31,14 +31,14 @@ public class RecipeController {
      * 기본적으로 추천 레시피 한가지와 최신 레시피 두가지를 나타내줍니다.
      */
     @GetMapping("")
-    public DataResponse<?> getMainpage(HttpServletRequest request) {
+    public DataResponse<?> getMainpage(HttpServletRequest request,@PageableDefault(page=0, size=10, sort="recipeId", direction = Sort.Direction.DESC) Pageable pageable) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         DataResponse<RecipeMainPageDTO> response = new DataResponse<>(200, "레시피 메인 페이지가 로드되었습니다");
         RecipeRecommendDTO rm = recipeService.getRecommendData(memberId);
-        List<RecipeListDTO> rl = recipeService.getMainListData(memberId);
+        Page<RecipeListDTO> list = recipeService.getAllLists(memberId, pageable);
 
-        response.setData(RecipeMainPageDTO.builder().best(rm).recipes(rl).build());
+        response.setData(RecipeMainPageDTO.builder().best(rm).recipes(list).build());
         return response;
     }
 
@@ -49,7 +49,7 @@ public class RecipeController {
     @GetMapping("/detail")
     public DataResponse<?> getDetailPage(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId){
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         DataResponse<RecipeDetailsDTO> response = new DataResponse<>(200, "디테일 페이지를 불러오는 데 성공했습니다.");
         RecipeDetailsDTO detail = recipeService.getDetailRecipe(memberId, rcpId);
 
@@ -65,7 +65,7 @@ public class RecipeController {
     public DataResponse<?> getAllLists(HttpServletRequest request,
                                        @PageableDefault(page=0, size=10, sort="recipeId", direction = Sort.Direction.DESC) Pageable pageable) {
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
         Page<RecipeListDTO> list = recipeService.getAllLists(memberId, pageable);
 
         if(list.isEmpty()) {
@@ -78,24 +78,24 @@ public class RecipeController {
      * 레시피를 작성하는 컨트롤러입니다.
      */
     @PostMapping("/form")
-    public CustomResponse createRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO){
+    public DataResponse<?> createRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO){
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
-        recipeService.writeRecipe(memberId, recipeWriteDTO);
+        Long recipeId = recipeService.writeRecipe(memberId, recipeWriteDTO);
 
-        return new CustomResponse(201, "레시피 등록 성공");
+        return new DataResponse<>(201, "레시피 등록 성공", recipeId);
     }
 
     /**
      * 레시피를 수정하는 컨트롤러입니다.
      */
     @PatchMapping("/form")
-    public CustomResponse updateRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO, @RequestParam(value="rcpId") Long rcpId){
+    public DataResponse<?> updateRecipe(HttpServletRequest request, @RequestBody RecipeWriteDTO recipeWriteDTO, @RequestParam(value="rcpId") Long rcpId){
         Long memberId = (Long)request.getAttribute("memberId");
         if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
-        recipeService.updateRecipe(rcpId, recipeWriteDTO);
+        Long recipeId = recipeService.updateRecipe(rcpId, recipeWriteDTO);
 
-        return new CustomResponse(200, "레시피 수정 성공");
+        return new DataResponse<>(200, "레시피 수정 성공", recipeId);
     }
 
     /**
@@ -132,7 +132,7 @@ public class RecipeController {
     public DataResponse<?> readReview(HttpServletRequest request, @RequestParam(value = "rcpId") Long rcpId, @PageableDefault(page=0, size=5, sort="reviewId", direction = Sort.Direction.DESC) Pageable pageable){
         DataResponse<Page<RecipeReviewDTO>> response;
         Long memberId = (Long)request.getAttribute("memberId");
-        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        if(memberId == null) memberId = 0L;
 
         Page<RecipeReviewDTO> list = recipeService.readAllReviews(rcpId, memberId, pageable);
 
