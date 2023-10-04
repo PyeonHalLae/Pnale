@@ -66,15 +66,11 @@ const MyPageModify = () => {
     }
 
     const formData = new FormData();
-
-    if (redirectFile) {
-      formData.append("image", redirectFile);
-    }
+    formData.append("image", redirectFile);
 
     const additionalData = {
       nickname: userName,
       emailReceive: mailState.current.checked,
-      memberImg: null,
     };
 
     formData.append("additionalData", JSON.stringify(additionalData));
