@@ -12,7 +12,7 @@ import tw from "tailwind-styled-components";
 interface Props {
   $selectCommentId: number;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
-  UpdateCommentList: () => void;
+  UpdateCommentList: (commentId: number) => void;
 }
 
 const CommentCardMenu = ({
@@ -32,7 +32,7 @@ const CommentCardMenu = ({
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          UpdateCommentList();
+          UpdateCommentList($selectCommentId);
           ToastBackMessage("댓글을 삭제하였습니다");
         }
       })
@@ -45,7 +45,7 @@ const CommentCardMenu = ({
             .then((res) => {
               const resData = res.data;
               if (resData.code == 200) {
-                UpdateCommentList();
+                UpdateCommentList($selectCommentId);
                 ToastBackMessage("댓글을 삭제하였습니다");
               }
             })
