@@ -43,7 +43,7 @@ const CommentCard = ({ commentInfo, BottomMenuStateHandler, SelectCommentIdHandl
           <DetailBox>
             <Field>작성 일:</Field>
             <Content>
-              {commentInfo.createdAt.substring(0, commentInfo.content.indexOf("T"))}
+              {commentInfo.createdAt.substring(0, commentInfo.createdAt.indexOf("T"))}
             </Content>
           </DetailBox>
         </MainBox>

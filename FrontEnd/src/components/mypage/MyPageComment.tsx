@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { ToastErrorMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
 import axios from "axios";
-import CommentCardMemu from "./mypage2/CommentCardMemu";
+import CommentCardMenu from "./mypage2/CommentCardMenu";
 
 interface commentInfoType {
   rcpId: number;
@@ -99,7 +99,7 @@ const MyPageComment = () => {
     <>
       <div className="relative">
         {bottomMenuState && (
-          <CommentCardMemu
+          <CommentCardMenu
             $selectCommentId={selectCommentId}
             BottomMenuStateHandler={BottomMenuStateHandler}
             UpdateCommentList={UpdateCommentList}
