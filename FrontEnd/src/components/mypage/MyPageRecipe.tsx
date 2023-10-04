@@ -68,6 +68,9 @@ const MyPageRecipe = () => {
   };
 
   const MyRecipeAxiosHandler = () => {
+    console.log("===== MyRecipe =====");
+    console.log(currentPage, "currentPage");
+    console.log(totalPage, "totalPage");
     axios
       .get("/api/mypage/recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
@@ -112,6 +115,9 @@ const MyPageRecipe = () => {
   };
 
   const LikeAxiosHandler = () => {
+    console.log("===== Like =====");
+    console.log(currentPage, "currentPage");
+    console.log(totalPage, "totalPage");
     axios
       .get("/api/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
@@ -158,27 +164,29 @@ const MyPageRecipe = () => {
       });
   };
 
-  const OnMyRecipe = () => {
+  const OnMyRecipe = async () => {
     if (!myRecipeState) {
-      setRecipeList([]);
+      const newList = [];
+      await setRecipeList(newList);
+      await setCurrentPage(0);
+      await setTotalPage(null);
       setMyRecipeState(true);
       setLikeRecipeState(false);
       setRecipeType("MYRECIPE");
-      setCurrentPage(0);
-      setTotalPage(null);
       //마이레시피 요청
       MyRecipeAxiosHandler();
     }
   };
 
-  const OnLikeRecipe = () => {
+  const OnLikeRecipe = async () => {
     if (!likeRecipeState) {
-      setRecipeList([]);
+      const newList = [];
+      await setRecipeList(newList);
+      await setCurrentPage(0);
+      await setTotalPage(null);
       setMyRecipeState(false);
       setLikeRecipeState(true);
       setRecipeType("LIKERECIPE");
-      setCurrentPage(0);
-      setTotalPage(null);
       //좋아요 요청
       LikeAxiosHandler();
     }
