@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum CustomErrorCode {
     //글로벌한 것
     EXPIRED_TOKEN(401, "액세스 토큰이 존재하나 유효하지 않습니다."),
-    FORBIDDEN(403, "로그인 정보가 없거나 만료되어 재로그인이 필요합니다"),
+    FORBIDDEN(403, "로그인 정보가 없거나 만료되어 재로그인이 필요합니다."),
+    NOT_AVAILABLE(404, "데이터가 접근불가능하거나 삭제가 되었습니다."),
 
     //상품관련
     PRODUCT_NOT_FOUND(1000, "해당 상품 정보를 찾을 수 없습니다."),

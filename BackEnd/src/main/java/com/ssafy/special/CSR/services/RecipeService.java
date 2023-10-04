@@ -9,6 +9,7 @@ import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
 import com.ssafy.special.entity.*;
 import com.ssafy.special.enums.ReviewStatusType;
+import com.ssafy.special.exception.AuthException;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
@@ -89,6 +90,7 @@ public class RecipeService {
     @Transactional
     public RecipeDetailsDTO getDetailRecipe(Long memberId, Long recipeId){
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        if(recipe.isDeleted()) throw new AuthException(CustomErrorCode.NOT_AVAILABLE);
         if(!recipe.getWriter().getMemberId().equals(memberId)) recipe.setViewCnt(recipe.getViewCnt()+1);
         List<ProductInRecipeDTO> ingredients = recipeIngredientRepository.findProductsInRecipe(recipe.getRecipeId());
         boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
