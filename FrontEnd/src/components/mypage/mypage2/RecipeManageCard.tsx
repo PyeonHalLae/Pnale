@@ -1,4 +1,5 @@
 // import { useEffect, useState } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
@@ -43,6 +44,12 @@ const RecipeManageCard = ({
     BottomMenuStateHandler(e);
   };
 
+  const recipeImgRef = useRef(null);
+
+  const ImageErrorHandler = () => {
+    recipeImgRef.current.src = "/img/sticker/noimage.jpg";
+  };
+
   return (
     <Container
       onClick={() => {
@@ -50,7 +57,12 @@ const RecipeManageCard = ({
       }}
     >
       {/* 레시피 이미지 */}
-      <RecipeImg src={$recipeInfo.rcpThumbnail} alt="레시피이미지" />
+      <RecipeImg
+        src={$recipeInfo.rcpThumbnail}
+        alt="레시피이미지"
+        onError={ImageErrorHandler}
+        ref={recipeImgRef}
+      />
 
       {/* 이미지 외의 영역 */}
       <ContentBox>
@@ -86,7 +98,7 @@ const RecipeManageCard = ({
         )}
         {/* 작성일 */}
         <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {$recipeInfo.createdAt}
+          {$recipeInfo.createdAt.substring(0, $recipeInfo.createdAt.indexOf("T"))}
         </div>
       </ContentBox>
 
