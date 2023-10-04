@@ -74,6 +74,12 @@ public class Recipe {
         review.setRecipe(this);
     }
 
+    public void likeChange(boolean like) {
+        if(like) this.likeCnt = this.likeCnt+1;
+        else this.likeCnt = this.likeCnt-1;
+    }
+
+
     /**
      * CRUD와 관련된 엔티티 내부의 연산입니다.
      */
