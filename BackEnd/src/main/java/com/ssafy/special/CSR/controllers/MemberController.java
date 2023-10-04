@@ -91,6 +91,4 @@ public class MemberController {
 
         return new CustomResponse(200, "멤버 정보가 업데이트 되었습니다.");
     }
-
-
 }
