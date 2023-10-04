@@ -164,31 +164,33 @@ const MyPageRecipe = () => {
       });
   };
 
-  const OnMyRecipe = async () => {
-    if (!myRecipeState) {
-      const newList = [];
-      await setRecipeList(newList);
-      await setCurrentPage(0);
-      await setTotalPage(null);
-      setMyRecipeState(true);
-      setLikeRecipeState(false);
-      setRecipeType("MYRECIPE");
-      //마이레시피 요청
-      MyRecipeAxiosHandler();
-    }
+  const ClearSettingHandler = async () => {
+    const newList: [] = [];
+    setRecipeList(newList);
+    setCurrentPage(0);
+    setTotalPage(null);
+    return true;
   };
 
   const OnLikeRecipe = async () => {
     if (!likeRecipeState) {
-      const newList = [];
-      await setRecipeList(newList);
-      await setCurrentPage(0);
-      await setTotalPage(null);
+      const setting = await ClearSettingHandler();
       setMyRecipeState(false);
       setLikeRecipeState(true);
       setRecipeType("LIKERECIPE");
       //좋아요 요청
-      LikeAxiosHandler();
+      if (setting) LikeAxiosHandler();
+    }
+  };
+
+  const OnMyRecipe = async () => {
+    if (!myRecipeState) {
+      const setting = await ClearSettingHandler();
+      setMyRecipeState(true);
+      setLikeRecipeState(false);
+      setRecipeType("MYRECIPE");
+      //마이레시피 요청'
+      if (setting) MyRecipeAxiosHandler();
     }
   };
 
