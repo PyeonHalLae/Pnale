@@ -58,8 +58,10 @@ const MyPageRecipe = () => {
   };
 
   //레시피 삭제시 List에서 제거
-  const UpdateRecipeList = () => {
-    const updatedRecipeList = recipeList.filter((comment) => comment.rcpId !== selectRecipeId);
+  const UpdateRecipeList = async () => {
+    const updatedRecipeList = await recipeList.filter(
+      (comment) => comment.rcpId !== selectRecipeId
+    );
     setRecipeList(updatedRecipeList);
   };
 
