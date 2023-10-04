@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
 import axios from "axios";
 import RecipeManageCardMenu from "./mypage2/RecipeManageCardMenu";
@@ -36,8 +36,8 @@ const MyPageRecipe = () => {
   const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
 
   //페이지를 위한 state
-  const [totalPage, setTotalPage] = useState<number>(null);
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const totalPage = useRef(null);
+  const currentPage = useRef(0);
 
   //메뉴를 위한 State
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
@@ -76,8 +76,8 @@ const MyPageRecipe = () => {
       .then((res) => {
         if (res.data.code === 200) {
           setRecipeList([...recipeList, ...res.data.data.content]);
-          setCurrentPage(currentPage + 1);
-          setTotalPage(res.data.data.totalPages);
+          currentPage.current += 1;
+          totalPage.current = res.data.data.totalPages;
         }
         if (res.data.code === 204) {
           setRecipeList(null);
@@ -92,8 +92,8 @@ const MyPageRecipe = () => {
             .then((res) => {
               if (res.data.code === 200) {
                 setRecipeList([...recipeList, ...res.data.data.content]);
-                setCurrentPage(currentPage + 1);
-                setTotalPage(res.data.data.totalPages);
+                currentPage.current += 1;
+                totalPage.current = res.data.data.totalPages;
               }
               if (res.data.code === 204) {
                 setRecipeList(null);
@@ -124,8 +124,8 @@ const MyPageRecipe = () => {
         console.log(res, "성공");
         if (res.data.code === 200) {
           setRecipeList([...recipeList, ...res.data.data.content]);
-          setCurrentPage(currentPage + 1);
-          setTotalPage(res.data.data.totalPages);
+          currentPage.current += 1;
+          totalPage.current = res.data.data.totalPages;
         }
         if (res.data.code === 204) {
           setRecipeList(null);
@@ -142,8 +142,8 @@ const MyPageRecipe = () => {
               console.log(res, "성공");
               if (res.data.code === 200) {
                 setRecipeList([...recipeList, ...res.data.data.content]);
-                setCurrentPage(currentPage + 1);
-                setTotalPage(res.data.data.totalPages);
+                currentPage.current += 1;
+                totalPage.current = res.data.data.totalPages;
               }
               if (res.data.code === 204) {
                 setRecipeList(null);
@@ -167,8 +167,8 @@ const MyPageRecipe = () => {
   const ClearSettingHandler = async () => {
     const newList: [] = [];
     setRecipeList(newList);
-    setCurrentPage(0);
-    setTotalPage(null);
+    totalPage.current = null;
+    currentPage.current = 0;
     return true;
   };
 
@@ -254,7 +254,7 @@ const MyPageRecipe = () => {
               />
             ))}
         <RecipeAddBox>
-          {totalPage > 1 && currentPage + 1 < totalPage && (
+          {totalPage.current > 1 && currentPage.current + 1 < totalPage.current && (
             <AddBtn
               onClick={() => {
                 if (recipeType === "MYRECIPE") MyRecipeAxiosHandler();
