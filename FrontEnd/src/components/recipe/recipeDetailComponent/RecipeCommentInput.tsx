@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 import { Dispatch, SetStateAction, useState } from "react";
-import { customAxios } from "./../../../api/customAxios";
+import axios from "axios";
 
 interface Props {
   recipeId: number;
@@ -19,18 +19,21 @@ const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
   // 작성하기 버튼 클릭
   const commentCreateHandler = () => {
     const data = commentContent;
-    customAxios
+    axios
       .post(`/api/recipe/review?rcpId=${recipeId}`, data, {
         headers: {
           "Content-Type": "text/plain",
         },
         withCredentials: true,
       })
-      .then(() => {
-        setCommentContent("");
-        setRefresh((prev) => {
-          return !prev;
-        });
+      .then((res) => {
+        // 작성 성공시
+        if (res.data.code === "201") {
+          setCommentContent("");
+          setRefresh((prev) => {
+            return !prev;
+          });
+        }
       })
       .catch((err) => {
         console.log(err);

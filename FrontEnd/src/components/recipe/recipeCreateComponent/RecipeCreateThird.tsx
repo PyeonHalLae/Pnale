@@ -75,12 +75,7 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
     console.log(data);
 
     axios
-      .post("/api/recipe/form", data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        withCredentials: true,
-      })
+      .post("/api/recipe/form", data)
       .then((res) => {
         if (res.data.code == "201") {
           alert("작성성공");

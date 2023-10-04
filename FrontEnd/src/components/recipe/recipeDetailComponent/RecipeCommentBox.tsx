@@ -3,11 +3,12 @@ import tw from "tailwind-styled-components";
 import RecipeCommentCard from "./RecipeCommentCard";
 import RecipeCommentInput from "./RecipeCommentInput";
 import { useEffect, useState } from "react";
-import { customAxios } from "./../../../api/customAxios";
 import { commentInfoType } from "./recipeDetailType";
+import axios from "axios";
 
 const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
   const [commentList, setCommentList] = useState<commentInfoType[]>([]);
+  const [totalCommentNum, setTotalCommentNum] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
   const [page, setPage] = useState<number>(0);
 
@@ -19,8 +20,8 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
 
   useEffect(() => {
     // 처음 렌더링될 때 받아옴
-    customAxios
-      .get(`/api/recipe/review?${recipeId}=1`, {
+    axios
+      .get(`/api/recipe/review?rcpId=${recipeId}`, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -29,8 +30,9 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
       .then((res) => {
         if (res.data.code === 200) {
           setCommentList((prev) => {
-            return [...prev, ...res.data.data];
+            return [...prev, ...res.data.data.content];
           });
+          setTotalCommentNum(res.data.data.totalElements);
         }
         console.log(res);
       })
@@ -44,21 +46,22 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
       <CommentBoxHeader>
         <div className="inline-block">댓글</div>
         {/* 댓글 리스트 length 넣어야함 */}
-        <div className="inline-block ml-[0.625rem] text-common-orange">{commentList.length}</div>
+        <div className="inline-block ml-[0.625rem] text-common-orange">{totalCommentNum}</div>
       </CommentBoxHeader>
 
       {commentList.length != 0 &&
-        commentList.map((commentItem, index) => (
+        commentList.map((commentItem) => (
           <RecipeCommentCard
-            key={commentItem.revId + index}
+            key={commentItem.revId}
             commentInfo={commentItem}
             setRefresh={setRefresh}
           />
         ))}
-
-      <ViewMoreBtnBox>
-        <ViewMoreBtn onClick={viewMoreHanlder}>더보기</ViewMoreBtn>
-      </ViewMoreBtnBox>
+      {commentList.length !== totalCommentNum && (
+        <ViewMoreBtnBox>
+          <ViewMoreBtn onClick={viewMoreHanlder}>더보기</ViewMoreBtn>
+        </ViewMoreBtnBox>
+      )}
 
       <RecipeCommentInput recipeId={recipeId} setRefresh={setRefresh} />
     </Container>
