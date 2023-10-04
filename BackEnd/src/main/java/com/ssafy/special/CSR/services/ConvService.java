@@ -31,7 +31,7 @@ public class ConvService {
     //=======================================================
     public Map<String, Object> findCorpData(Pageable pageable, CorpType corpType, Long memberId) {
         Map<String, Object> response = new HashMap<>();
-        response.put("banners", bannerService.findCorpBanner(pageable, corpType));
+        response.put("banners", bannerService.findCorpBanner(PageRequest.of(0,5), corpType));
         response.put("bestProduct", findBestProduct(pageable, corpType, memberId));
         response.put("newProduct", findNewProduct(pageable, corpType, memberId));
         return response;

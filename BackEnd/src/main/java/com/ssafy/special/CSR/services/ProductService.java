@@ -66,8 +66,7 @@ public class ProductService {
 
         return memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(memberId, productId)
                 .map(upp -> { //객체가 존재함 likeStat을 true, false 토글형태로 전환한다.
-                    updateUserLikeProduct(upp, findProduct);
-                    return findProduct.getProductName() + "에 대한 상태를 업데이트 했습니다.";
+                    return updateUserLikeProduct(upp, findProduct);
                 }).orElseGet(() -> {
                     //객체가 존재하지 않음
                     addUserLikeProduct(findUser, findProduct);
@@ -83,8 +82,7 @@ public class ProductService {
 
         MemberPickProd upp = memberPickProdRepository.findByMember_MemberIdAndProduct_ProductId(memberId, productId)
                 .orElseThrow(() -> new CustomException(CustomErrorCode.ULP_NOT_FOUND));
-        updateEmailReceiveStatus(upp);
-        return upp.getProduct().getProductName() + "의 이메일 수신 여부 정보를 업데이트 했습니다.";
+        return updateEmailReceiveStatus(upp);
     }
 
     //유저가 좋아요한 목록 반환
@@ -101,7 +99,7 @@ public class ProductService {
         return productRepository.findById(productId).orElseThrow(() -> new CustomException(CustomErrorCode.PRODUCT_NOT_FOUND));
     }
 
-    private void updateUserLikeProduct(MemberPickProd upp, Product product) {
+    private String updateUserLikeProduct(MemberPickProd upp, Product product) {
         upp.updateLike();
 
         //recommad +- 1 하는 로직
@@ -110,11 +108,18 @@ public class ProductService {
 
         memberPickProdRepository.save(upp);
         productRepository.save(product);
+        return upp.isLikeStat()
+                ? upp.getProduct().getProductName() + "을 좋아요 하셨습니다."
+                : upp.getProduct().getProductName() + "을 좋아요 취소하셨습니다.";
     }
 
-    private void updateEmailReceiveStatus(MemberPickProd upp) {
+    private String updateEmailReceiveStatus(MemberPickProd upp) {
         upp.updateEmailReceive();
         memberPickProdRepository.save(upp);
+
+        return upp.isReceived()
+                ? upp.getProduct().getProductName() + "의 이메일 수신여부에 동의하셨습니다."
+                : upp.getProduct().getProductName() + "의 이메일 수신 거절하셨습니다.";
     }
 
     private void addUserLikeProduct(Member member, Product product) {

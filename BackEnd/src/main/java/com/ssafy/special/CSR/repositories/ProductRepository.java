@@ -19,10 +19,10 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    String defaultQuery = "SELECT p, ep, mpp " +
+    String defaultQuery = "SELECT p, ep " +
             "FROM Product p " +
-            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
-            "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId ";
+            "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId ";
+            //"LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId mpp.member.memberId";
     String memberIdQeury = "SELECT p, ep, mpp " +
             "FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep on p.productId = ep.product.productId " +
