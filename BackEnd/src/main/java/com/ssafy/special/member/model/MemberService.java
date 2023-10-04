@@ -28,7 +28,7 @@ public class MemberService {
     public Member updateMemberInMyPage(Long memberId, MemberUpdateDTO memberUpdateDTO){
         return memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("No user founded."))
-                .updateMemberInfo(memberUpdateDTO.getMemberImg(), memberUpdateDTO.getNickname(), memberUpdateDTO.isEmailRecieve());
+                .updateMemberInfo(memberUpdateDTO.getMemberImg(), memberUpdateDTO.getNickname(), memberUpdateDTO.isEmailReceive());
     }
 
     public Map<String, Object> findMemberInfo(Long memberId) {
