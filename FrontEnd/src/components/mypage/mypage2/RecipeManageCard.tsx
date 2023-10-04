@@ -1,4 +1,5 @@
 // import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
@@ -38,8 +39,14 @@ const RecipeManageCard = ({
     BottomMenuStateHandler();
   };
 
+  const navigate = useNavigate();
+
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        navigate("/recipe/" + $recipeInfo.rcpId);
+      }}
+    >
       {/* 레시피 이미지 */}
       <RecipeImg src={$recipeInfo.rcpThumbnail} alt="레시피이미지" />
 
