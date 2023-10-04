@@ -66,7 +66,7 @@ const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
       axios
         .post("/api/recipe/form", data)
         .then((res) => {
-          if (res.data.code == "201") {
+          if (res.data.code == 201) {
             console.log(res.data);
             ToastBackMessage("레시피 작성 완료");
             resetForm();
@@ -90,7 +90,7 @@ const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
         })
         .then((res) => {
           console.log(res.data);
-          if (res.data.code == "200") {
+          if (res.data.code == 200) {
             ToastBackMessage("레시피 수정 완료");
             resetForm();
             restContents();
