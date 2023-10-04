@@ -1,7 +1,7 @@
 // import { useNavigate } from "react-router-dom";
 import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "react-query";
 import { useRecoilState, useRecoilValue } from "recoil";
 import tw from "tailwind-styled-components";
@@ -10,7 +10,8 @@ const SearchInput = () => {
   // const navigate = useNavigate();
   const [name, setName] = useRecoilState(searchInputData);
   const getSearchTag = useRecoilValue(storedToSearchTag);
-
+  const [loginState, setLoginState] = useState<boolean>(false);
+  const [userSearchTag, setUserSearchTag] = useState<string[]>();
   // const { data } = useQuery(
   //   "getUserSearchTag",
   //   async () => {
@@ -40,10 +41,13 @@ const SearchInput = () => {
       .then((response) => {
         if (response.data.code == 200) {
           // response.data.code가 200일 경우 리스트 반환
-          console.log(response.data.data); // 데이터
+          setUserSearchTag(response.data.data);
+          console.log(response, "200"); // 데이터
         } else if (response.data.code == 204) {
           // response.data.code가 204일 경우
           // localstorage에서 불러오세요
+          setLoginState(true);
+          console.log(response, "204"); // 데이터
         }
       })
       .catch((error) => {
@@ -56,10 +60,13 @@ const SearchInput = () => {
             .then((response) => {
               if (response.data.code == 200) {
                 // response.data.code가 200일 경우 리스트 반환
-                console.log(response.data.data); // 데이터
+                setUserSearchTag(response.data.data);
+                console.log(response.data.data, "401-200"); // 데이터
               } else if (response.data.code == 204) {
                 // response.data.code가 204일 경우
                 // localstorage에서 불러오세요
+                console.log(response, "401-204"); // 데이터
+                setLoginState(true);
               }
             })
             .catch((error) => {
@@ -73,25 +80,41 @@ const SearchInput = () => {
 
   useEffect(() => {
     searchList();
-  });
+  }, []);
+
   return (
     <SearchMain>
       <div className="flex items-end justify-between px-4 text-common-text-color">
         <p className="text-2xl font-bold">최근 검색어</p>
         <button className="text-common-text-gray-color">전체삭제</button>
       </div>
-      {getSearchTag.slice(0, 9).map((data, index) => (
-        <RecentTag key={index + "-" + data.length}>
-          <img
-            src="/img/icons/recentTag.png"
-            alt="지난 검색"
-            className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
-          />
-          <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
-            {data}
-          </p>
-        </RecentTag>
-      ))}
+      {loginState &&
+        getSearchTag.slice(0, 9).map((data, index) => (
+          <RecentTag key={index + "-" + data.length}>
+            <img
+              src="/img/icons/recentTag.png"
+              alt="지난 검색"
+              className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
+            />
+            <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
+              {data}
+            </p>
+          </RecentTag>
+        ))}
+      {userSearchTag &&
+        userSearchTag.length > 0 &&
+        userSearchTag.slice(0, 9).map((data, index) => (
+          <RecentTag key={index + "-" + data.length}>
+            <img
+              src="/img/icons/recentTag.png"
+              alt="지난 검색"
+              className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
+            />
+            <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
+              {data}
+            </p>
+          </RecentTag>
+        ))}
     </SearchMain>
   );
 };

@@ -5,6 +5,7 @@ import { loadImage } from "@model/exportFucKDM";
 import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
+import { ToastBackMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
 export type ProductCardProps = {
   product: ProductComp;
   id: string;
@@ -23,11 +24,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
         const resData = res.data;
         if (resData.code == 200) {
           setLikeStat(!likeStat);
-          toast.success(res.data.message, {
-            position: "top-center", // 원하는 포지션 설정
-            autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
-            hideProgressBar: true,
-          });
+          ToastBackMessage(res.data.message);
         }
       })
       .catch((err) => {
@@ -42,20 +39,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
               const resData = res.data;
               if (resData.code == 200) {
                 setLikeStat(!likeStat);
-                toast.success(res.data.message, {
-                  position: "top-center", // 원하는 포지션 설정
-                  autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
-                  hideProgressBar: true,
-                });
+                ToastBackMessage(res.data.message);
               }
             })
             .catch((err) => {
               if (err.response.status === 403) {
-                toast.info(err.response.data, {
-                  position: "top-center", // 원하는 포지션 설정
-                  autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
-                  hideProgressBar: true,
-                });
+                UserInfoExpires();
               } else {
                 console.log("서버 오류 발생");
               }
@@ -63,11 +52,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
         } else {
           console.log(err);
           if (err.response.status === 403) {
-            toast.info(err.response.data, {
-              position: "top-center", // 원하는 포지션 설정
-              autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
-              hideProgressBar: true,
-            });
+            UserNotLogin();
           } else {
             //그외 서버 오류
             console.log("서버 오류 발생");
@@ -82,7 +67,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
 
   return (
     <Card>
-      <ToastContainer position="top-center" />
       <ImageArea id={`${id}`}></ImageArea>
       <div className="flex p-1.5 m-auto">
         {product.event.cutype !== null && (
