@@ -231,7 +231,7 @@ const MyPageModify = () => {
 export default MyPageModify;
 
 const BackGround = tw.div`
-    w-full h-full bg-white overflow-scroll 
+    w-full h-full bg-white overflow-scroll
 `;
 
 const ModifyHeader = tw.div`
