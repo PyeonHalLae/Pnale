@@ -21,6 +21,7 @@ import axios from "axios";
 const RecipeModify = () => {
   const [step, setStep] = useState<string>("1");
   const [loading, setLoading] = useState<boolean>(true);
+
   const setRecipeForm = useSetRecoilState(recipeFormState);
   const setRecipeContents = useSetRecoilState(recipeFormContent);
   const setRecipeImg = useSetRecoilState(recipeFormImg);
@@ -44,7 +45,6 @@ const RecipeModify = () => {
         const newPrd = res.data.data.ingredients.map((ingredient) => {
           return {
             prdId: ingredient.prdId,
-            prdName: ingredient.prdName,
             changeable: ingredient.changeable,
           };
         });
