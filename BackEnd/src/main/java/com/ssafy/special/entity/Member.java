@@ -74,7 +74,7 @@ public class Member {
                 .build();
     }
     public Member updateMemberInfo(String memberImg, String nickname, boolean mailReceive){
-        this.memberImg = memberImg;
+        this.memberImg = memberImg==null?this.memberImg:memberImg;
         this.nickname = nickname;
         this.updatedAt = LocalDateTime.now();
         this.mailReceive = mailReceive;

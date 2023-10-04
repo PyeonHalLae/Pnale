@@ -24,7 +24,6 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final MemberPickProdRepository memberPickProdRepository;
 
-
     public Member updateMemberInMyPage(Long memberId, MemberUpdateDTO memberUpdateDTO){
         return memberRepository.findByMemberId(memberId)
                 .orElseThrow(() -> new RuntimeException("No user founded."))
