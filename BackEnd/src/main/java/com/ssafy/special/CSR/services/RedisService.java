@@ -41,6 +41,10 @@ public class RedisService {
         }
     }
 
+    public void deleteList(Long memberId){
+        redisTemplate.delete(memberId+"search");
+    }
+
     public List<String> getSearchList(Long memberId){
         ZSetOperations<String, String> zop = redisTemplate.opsForZSet();
 
