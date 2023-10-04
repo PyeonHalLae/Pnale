@@ -150,7 +150,7 @@ public class RecipeService {
      * 페이지네이션한 리스트를 반환하는 칭구칭구
      */
     public Page<RecipeListDTO> getAllLists(Long memberId, Pageable pageable){
-        Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+        Page<Recipe> recipePage = recipeRepository.findByDeletedFalse(pageable);
         return makePages(memberId, recipePage, false, false);
     }
 
@@ -158,7 +158,7 @@ public class RecipeService {
      * 내가 쓴 레시피 리스트를 반환합니다.
      */
     public Page<RecipeListDTO> getMyLists(Long memberId, Pageable pageable){
-        Page<Recipe> recipePage = recipeRepository.findByWriterMemberId(pageable,memberId);
+        Page<Recipe> recipePage = recipeRepository.findByWriterMemberIdAndDeletedFalse(pageable,memberId);
         return makePages(memberId, recipePage, false, true);
     }
 

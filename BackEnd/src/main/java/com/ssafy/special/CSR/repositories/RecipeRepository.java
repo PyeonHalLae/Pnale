@@ -13,20 +13,22 @@ import java.util.List;
 @Repository
 public interface RecipeRepository extends JpaRepository<Recipe, Long> {
     // JPQL을 사용해 가중치를 적용하고 가장 높은 값을 갖는 Recipe를 조회합니다.
-    @Query("SELECT r FROM Recipe r ORDER BY (r.likeCnt * 0.5 + r.viewCnt * 0.01) DESC")
+    @Query("SELECT r FROM Recipe r WHERE r.isDeleted = false ORDER BY (r.likeCnt * 0.5 + r.viewCnt * 0.01) DESC")
     List<Recipe> findRecipeByWeightedValue();
+    @Query("SELECT r FROM Recipe r WHERE r.isDeleted = false ORDER BY r.createdAt DESC")
     List<Recipe> findTop2ByOrderByCreatedAtDesc();
 
-    Page<Recipe> findByWriterMemberId(Pageable pageable, Long writerId);
+    Page<Recipe> findByDeletedFalse(Pageable pageable);
+    Page<Recipe> findByWriterMemberIdAndDeletedFalse(Pageable pageable, Long writerId);
 
-    @Query("SELECT mpr.recipe FROM MemberPickRecipe mpr WHERE mpr.member.memberId = :memberId AND mpr.isDeleted = false")
+    @Query("SELECT mpr.recipe FROM MemberPickRecipe mpr WHERE mpr.member.memberId = :memberId AND mpr.recipe.isDeleted = false AND mpr.isDeleted = false")
     Page<Recipe> findLikedRecipesByMemberId(@Param("memberId") Long memberId, Pageable pageable);
 
 
     @Query("SELECT r FROM Recipe r " +
             "LEFT JOIN RecipeIngredient ri " +
             "ON r.recipeId = ri.recipe.recipeId " +
-            "where ri.product.productId = :productId ")
+            "where ri.product.productId = :productId and r.isDeleted = false")
     Page<Recipe> findRecipeByProductId(Pageable pageable,
                                        @Param("productId") Long productId);
 
