@@ -29,7 +29,9 @@ const Header = () => {
 
     const response = await axios.post("/api/search/result", {
       ids: idsArray,
+      keyword: name.input,
     });
+    console.log(response);
 
     if (response.data.code !== 1004) {
       addSearchTag((prev) => [name.input, ...prev]);
@@ -112,7 +114,6 @@ const Header = () => {
 
   return (
     <>
-      <ToastContainer position="top-center" />
       <SearchBar>
         <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
         <Input
