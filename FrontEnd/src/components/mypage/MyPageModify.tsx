@@ -20,7 +20,7 @@ interface UserInfoType {
   socialType: string;
   email: string;
   memberImg: string;
-  mailRecieve: boolean;
+  mailReceive: boolean;
 }
 
 const MyPageModify = () => {
@@ -205,7 +205,7 @@ const MyPageModify = () => {
               </EmailInfo>
               <EmailAgree>
                 <AgreeText>메일 전송 수신 동의 </AgreeText>
-                <input type="checkbox" checked={userinfo.mailRecieve} ref={mailState} />
+                <input type="checkbox" checked={userinfo.mailReceive} ref={mailState} />
               </EmailAgree>
               <EmailGuide>
                 메일 전송 수신 동의를 하실 경우 관심상품의 행사 정보를 메일로 받을수 있습니다
