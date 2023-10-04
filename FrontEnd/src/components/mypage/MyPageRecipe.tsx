@@ -69,10 +69,10 @@ const MyPageRecipe = () => {
 
   const MyRecipeAxiosHandler = () => {
     console.log("===== MyRecipe =====");
-    console.log(currentPage, "currentPage");
-    console.log(totalPage, "totalPage");
+    console.log(currentPage.current, "currentPage");
+    console.log(totalPage.current, "totalPage");
     axios
-      .get("/api/mypage/recipe?page=" + currentPage, { withCredentials: true })
+      .get("/api/mypage/recipe?page=" + currentPage.current, { withCredentials: true })
       .then((res) => {
         if (res.data.code === 200) {
           setRecipeList([...recipeList, ...res.data.data.content]);
@@ -88,7 +88,7 @@ const MyPageRecipe = () => {
         //토큰이 있었으나 만료된 경우
         if (code === 401) {
           axios
-            .get("/api/auth/mypage/recipe?page=" + currentPage, { withCredentials: true })
+            .get("/api/auth/mypage/recipe?page=" + currentPage.current, { withCredentials: true })
             .then((res) => {
               if (res.data.code === 200) {
                 setRecipeList([...recipeList, ...res.data.data.content]);
@@ -116,10 +116,10 @@ const MyPageRecipe = () => {
 
   const LikeAxiosHandler = () => {
     console.log("===== Like =====");
-    console.log(currentPage, "currentPage");
-    console.log(totalPage, "totalPage");
+    console.log(currentPage.current, "currentPage");
+    console.log(totalPage.current, "totalPage");
     axios
-      .get("/api/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
+      .get("/api/mypage/pick_recipe?page=" + currentPage.current, { withCredentials: true })
       .then((res) => {
         console.log(res, "성공");
         if (res.data.code === 200) {
@@ -137,7 +137,9 @@ const MyPageRecipe = () => {
         if (code === 401) {
           console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
           axios
-            .get("/api/auth/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
+            .get("/api/auth/mypage/pick_recipe?page=" + currentPage.current, {
+              withCredentials: true,
+            })
             .then((res) => {
               console.log(res, "성공");
               if (res.data.code === 200) {
