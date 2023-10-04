@@ -9,7 +9,7 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
   // const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
 
   return (
-    <div className="bg-white">
+    <div className="mt-2 bg-white">
       <div className="p-3.5 relative ">
         <div className="inline-block ">
           <span className="text-2xl font-bold text-center text-common-orange">관련</span>
@@ -29,7 +29,7 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
             key={recipeItem.rcpId + "-" + recipeItem.member.memberId}
           />
         ))}
-        {recipe.length === 0 && <div className="text-center pb-5">관련 레시피가 없습니다</div>}
+        {recipe.length === 0 && <div className="pb-5 text-center">관련 레시피가 없습니다</div>}
       </div>
     </div>
   );
