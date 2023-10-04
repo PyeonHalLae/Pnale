@@ -74,7 +74,12 @@ const MyPageModify = () => {
     formData.append("additionalData", JSON.stringify(additionalData));
 
     axios
-      .patch("/api/member/update", { withCredentials: true })
+      .patch("/api/member/update", formData, {
+        withCredentials: true,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
@@ -86,8 +91,11 @@ const MyPageModify = () => {
         if (err.response.status === 401) {
           //리프레시 토큰 재발급
           axios
-            .get("/api/auth/member/update", {
+            .patch("/api/auth/member/update", formData, {
               withCredentials: true,
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
             })
             .then((res) => {
               //재발급이 잘되서 정보를 받아온경우
