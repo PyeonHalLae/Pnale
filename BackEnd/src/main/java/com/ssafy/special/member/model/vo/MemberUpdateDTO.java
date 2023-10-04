@@ -3,6 +3,7 @@ package com.ssafy.special.member.model.vo;
 import lombok.*;
 
 @Getter
+@Setter
 @Builder
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor
