@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import RecipeManageCard from "@components/mypage/mypage2/RecipeManageCard";
 import axios from "axios";
 import RecipeManageCardMenu from "./mypage2/RecipeManageCardMenu";
@@ -36,8 +36,8 @@ const MyPageRecipe = () => {
   const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
 
   //페이지를 위한 state
-  const totalPage = useRef(null);
-  const currentPage = useRef(0);
+  const [totalPage, setTotalPage] = useState<number>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   //메뉴를 위한 State
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
@@ -69,15 +69,15 @@ const MyPageRecipe = () => {
 
   const MyRecipeAxiosHandler = () => {
     console.log("===== MyRecipe =====");
-    console.log(currentPage.current, "currentPage");
-    console.log(totalPage.current, "totalPage");
+    console.log(currentPage, "currentPage");
+    console.log(totalPage, "totalPage");
     axios
-      .get("/api/mypage/recipe?page=" + currentPage.current, { withCredentials: true })
+      .get("/api/mypage/recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
         if (res.data.code === 200) {
           setRecipeList([...recipeList, ...res.data.data.content]);
-          currentPage.current += 1;
-          totalPage.current = res.data.data.totalPages;
+          setCurrentPage((prev) => prev + 1);
+          setTotalPage(res.data.data.totalPages);
         }
         if (res.data.code === 204) {
           setRecipeList(null);
@@ -88,12 +88,12 @@ const MyPageRecipe = () => {
         //토큰이 있었으나 만료된 경우
         if (code === 401) {
           axios
-            .get("/api/auth/mypage/recipe?page=" + currentPage.current, { withCredentials: true })
+            .get("/api/auth/mypage/recipe?page=" + currentPage, { withCredentials: true })
             .then((res) => {
               if (res.data.code === 200) {
                 setRecipeList([...recipeList, ...res.data.data.content]);
-                currentPage.current += 1;
-                totalPage.current = res.data.data.totalPages;
+                setCurrentPage((prev) => prev + 1);
+                setTotalPage(res.data.data.totalPages);
               }
               if (res.data.code === 204) {
                 setRecipeList(null);
@@ -116,16 +116,16 @@ const MyPageRecipe = () => {
 
   const LikeAxiosHandler = () => {
     console.log("===== Like =====");
-    console.log(currentPage.current, "currentPage");
-    console.log(totalPage.current, "totalPage");
+    console.log(currentPage, "currentPage");
+    console.log(totalPage, "totalPage");
     axios
-      .get("/api/mypage/pick_recipe?page=" + currentPage.current, { withCredentials: true })
+      .get("/api/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
         console.log(res, "성공");
         if (res.data.code === 200) {
           setRecipeList([...recipeList, ...res.data.data.content]);
-          currentPage.current += 1;
-          totalPage.current = res.data.data.totalPages;
+          setCurrentPage((prev) => prev + 1);
+          setTotalPage(res.data.data.totalPages);
         }
         if (res.data.code === 204) {
           setRecipeList(null);
@@ -137,15 +137,13 @@ const MyPageRecipe = () => {
         if (code === 401) {
           console.log("토큰은 있으나 만료되어 다시 재발급 합니다!");
           axios
-            .get("/api/auth/mypage/pick_recipe?page=" + currentPage.current, {
-              withCredentials: true,
-            })
+            .get("/api/auth/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
             .then((res) => {
               console.log(res, "성공");
               if (res.data.code === 200) {
                 setRecipeList([...recipeList, ...res.data.data.content]);
-                currentPage.current += 1;
-                totalPage.current = res.data.data.totalPages;
+                setCurrentPage((prev) => prev + 1);
+                setTotalPage(res.data.data.totalPages);
               }
               if (res.data.code === 204) {
                 setRecipeList(null);
@@ -166,38 +164,30 @@ const MyPageRecipe = () => {
       });
   };
 
-  const ClearSettingHandler = async () => {
+  const ChangeRecipe = async (type: string) => {
     const newList: [] = [];
     setRecipeList(newList);
-    totalPage.current = null;
-    currentPage.current = 0;
-    return true;
-  };
+    setCurrentPage(0);
+    setTotalPage(null);
 
-  const OnLikeRecipe = async () => {
-    if (!likeRecipeState) {
-      const setting = await ClearSettingHandler();
-      setMyRecipeState(false);
-      setLikeRecipeState(true);
-      setRecipeType("LIKERECIPE");
-      //좋아요 요청
-      if (setting) LikeAxiosHandler();
-    }
-  };
-
-  const OnMyRecipe = async () => {
-    if (!myRecipeState) {
-      const setting = await ClearSettingHandler();
-      setMyRecipeState(true);
-      setLikeRecipeState(false);
-      setRecipeType("MYRECIPE");
-      //마이레시피 요청'
-      if (setting) MyRecipeAxiosHandler();
-    }
+    setTimeout(() => {
+      if (type === "LIKERECIPE") {
+        setMyRecipeState(false);
+        setLikeRecipeState(true);
+        setRecipeType("LIKERECIPE");
+        LikeAxiosHandler();
+      }
+      if (type === "MYRECIPE") {
+        setMyRecipeState(true);
+        setLikeRecipeState(false);
+        setRecipeType("MYRECIPE");
+        MyRecipeAxiosHandler();
+      }
+    }, 0);
   };
 
   useEffect(() => {
-    OnMyRecipe();
+    ChangeRecipe(recipeType);
   }, []);
 
   return (
@@ -227,7 +217,7 @@ const MyPageRecipe = () => {
           <MyRecipeBtn
             className={`${myRecipeState ? "border-b-4" : "border-b-0"}`}
             onClick={() => {
-              OnMyRecipe();
+              if (recipeType !== "MYRECIPE") ChangeRecipe("MYRECIPE");
             }}
           >
             내 레시피
@@ -235,7 +225,7 @@ const MyPageRecipe = () => {
           <LikeRecipeBtn
             className={`${likeRecipeState ? "border-b-4" : "border-b-0"}`}
             onClick={() => {
-              OnLikeRecipe();
+              if (recipeType !== "LIKERECIPE") ChangeRecipe("LIKERECIPE");
             }}
           >
             좋아요한 레시피
@@ -256,7 +246,7 @@ const MyPageRecipe = () => {
               />
             ))}
         <RecipeAddBox>
-          {totalPage.current > 1 && currentPage.current + 1 < totalPage.current && (
+          {totalPage > 1 && currentPage + 1 < totalPage && (
             <AddBtn
               onClick={() => {
                 if (recipeType === "MYRECIPE") MyRecipeAxiosHandler();
