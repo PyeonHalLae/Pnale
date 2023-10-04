@@ -32,7 +32,7 @@ const MyPageComment = () => {
   };
 
   //하단 메뉴 댓글 아이디 변경
-  const SelectCommentIdHandler = (revId) => {
+  const SelectCommentIdHandler = (revId: number) => {
     setSelectCommentId(revId);
   };
 

@@ -53,7 +53,7 @@ const MyPageRecipe = () => {
   };
 
   //하단 메뉴 레시피아이디 변경
-  const SelectRecipeIdHandler = (recipeId) => {
+  const SelectRecipeIdHandler = (recipeId: number) => {
     setSelectRecipeId(recipeId);
   };
 

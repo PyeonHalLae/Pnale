@@ -13,7 +13,7 @@ interface commentInfoType {
 interface Props {
   commentInfo: commentInfoType;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
-  SelectCommentIdHandler: (repid: number) => void;
+  SelectCommentIdHandler: (revId: number) => void;
 }
 
 const CommentCard = ({ commentInfo, BottomMenuStateHandler, SelectCommentIdHandler }: Props) => {
