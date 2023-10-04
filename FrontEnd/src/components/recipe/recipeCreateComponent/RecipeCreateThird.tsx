@@ -81,7 +81,7 @@ const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
     } else {
       // 수정
       axios
-        .patch(`/api/recipe/form/${recipeId}`, data)
+        .patch(`/api/recipe/form/rcpId=${recipeId}`, data)
         .then((res) => {
           if (res.data.code == "201") {
             console.log(res.data);
