@@ -40,7 +40,7 @@ const MyPageComment = () => {
   const UpdateCommentList = (commentId: number) => {
     const updatedCommentList = commentList.filter((comment) => comment.revId !== commentId);
     console.log(updatedCommentList);
-    setCommentList(updatedCommentList);
+    setCommentList([...updatedCommentList]);
   };
 
   useEffect(() => {
@@ -119,9 +119,9 @@ const MyPageComment = () => {
         </MyCommentHeader>
         <MyCommentMain>
           {commentList &&
-            commentList.map((commentItme, index) => (
+            commentList.map((commentItme) => (
               <CommentCard
-                key={commentItme.revId + index}
+                key={commentItme.revId}
                 commentInfo={commentItme}
                 BottomMenuStateHandler={BottomMenuStateHandler}
                 SelectCommentIdHandler={SelectCommentIdHandler}
