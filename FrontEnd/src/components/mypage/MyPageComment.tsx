@@ -37,8 +37,10 @@ const MyPageComment = () => {
   };
 
   //댓글 삭제시 List에서 제거
-  const UpdateCommentList = () => {
-    const updatedCommentList = commentList.filter((comment) => comment.revId !== selectCommentId);
+  const UpdateCommentList = async () => {
+    const updatedCommentList = await commentList.filter(
+      (comment) => comment.revId !== selectCommentId
+    );
     setCommentList(updatedCommentList);
   };
 
