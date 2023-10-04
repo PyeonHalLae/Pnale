@@ -9,6 +9,7 @@ import com.ssafy.special.CSR.repositories.RecipeRepository;
 import com.ssafy.special.CSR.repositories.RecipeReviewRepository;
 import com.ssafy.special.entity.*;
 import com.ssafy.special.enums.ReviewStatusType;
+import com.ssafy.special.exception.AuthException;
 import com.ssafy.special.exception.CustomErrorCode;
 import com.ssafy.special.exception.CustomException;
 import com.ssafy.special.member.model.MemberRepository;
@@ -89,6 +90,7 @@ public class RecipeService {
     @Transactional
     public RecipeDetailsDTO getDetailRecipe(Long memberId, Long recipeId){
         Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        if(recipe.isDeleted()) throw new AuthException(CustomErrorCode.NOT_AVAILABLE);
         if(!recipe.getWriter().getMemberId().equals(memberId)) recipe.setViewCnt(recipe.getViewCnt()+1);
         List<ProductInRecipeDTO> ingredients = recipeIngredientRepository.findProductsInRecipe(recipe.getRecipeId());
         boolean myRecipe = recipe.getWriter().getMemberId().equals(memberId);
@@ -148,7 +150,7 @@ public class RecipeService {
      * 페이지네이션한 리스트를 반환하는 칭구칭구
      */
     public Page<RecipeListDTO> getAllLists(Long memberId, Pageable pageable){
-        Page<Recipe> recipePage = recipeRepository.findAll(pageable);
+        Page<Recipe> recipePage = recipeRepository.findByDeletedFalse(pageable);
         return makePages(memberId, recipePage, false, false);
     }
 
@@ -156,7 +158,7 @@ public class RecipeService {
      * 내가 쓴 레시피 리스트를 반환합니다.
      */
     public Page<RecipeListDTO> getMyLists(Long memberId, Pageable pageable){
-        Page<Recipe> recipePage = recipeRepository.findByWriterMemberId(pageable,memberId);
+        Page<Recipe> recipePage = recipeRepository.findByWriterMemberIdAndDeletedFalse(pageable,memberId);
         return makePages(memberId, recipePage, false, true);
     }
 
