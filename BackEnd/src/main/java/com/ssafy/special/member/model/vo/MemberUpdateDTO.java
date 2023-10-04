@@ -9,6 +9,6 @@ import lombok.*;
 @NoArgsConstructor
 public class MemberUpdateDTO {
     private String nickname;
-    private boolean emailRecieve;
+    private boolean emailReceive;
     private String memberImg;
 }
