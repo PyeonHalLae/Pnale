@@ -4,6 +4,7 @@ import axios from "axios";
 import CancelBtn from "./CancelBtn";
 import { useRecoilState } from "recoil";
 import { recipeFormState, recipeFormImg } from "@/recoil/khiRecoil";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
@@ -71,6 +72,18 @@ const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
       });
   };
 
+  const formCheckHandler = () => {
+    if (rcpThumbnail === "") {
+      ToastErrorMessage("레시피 미리보기 사진을 추가해주세요.");
+    } else if (rcpName === "") {
+      ToastErrorMessage("레시피 제목을 입력해주세요.");
+    } else if (rcpSimple === "") {
+      ToastErrorMessage("레시피 간단 설명을 입력해주세요.");
+    } else {
+      stepHandler("2");
+    }
+  };
+
   return (
     <Container>
       <CancelBtn action={action} />
@@ -133,13 +146,7 @@ const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
       </FormBox>
 
       <BtnBox>
-        <BlueBtn
-          onClick={() => {
-            stepHandler("2");
-          }}
-        >
-          다음으로
-        </BlueBtn>
+        <BlueBtn onClick={formCheckHandler}>다음으로</BlueBtn>
       </BtnBox>
     </Container>
   );

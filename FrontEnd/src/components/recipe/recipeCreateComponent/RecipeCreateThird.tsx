@@ -59,6 +59,7 @@ const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
       rcpDesc: rcpDesc, // 본문
       rcpVideo: recipeForm.rcpVideo, // 레시피 관련 영상
     };
+
     console.log(data);
     if (action == "작성") {
       // 작성
@@ -88,8 +89,8 @@ const RecipeCreateThird = ({ stepHandler, action, recipeId }: Props) => {
           withCredentials: true,
         })
         .then((res) => {
-          if (res.data.code == "201") {
-            console.log(res.data);
+          console.log(res.data);
+          if (res.data.code == "200") {
             ToastBackMessage("레시피 수정 완료");
             resetForm();
             restContents();
