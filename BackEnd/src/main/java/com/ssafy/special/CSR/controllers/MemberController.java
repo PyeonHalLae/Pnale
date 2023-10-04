@@ -32,6 +32,7 @@ public class MemberController {
     public DataResponse<?> getUserInfo(HttpServletRequest request) {
 
         Long memberId = (Long)request.getAttribute("memberId");
+        if(memberId == null) throw new AuthException(CustomErrorCode.FORBIDDEN);
         Member member = memberRepository.findByMemberId(memberId).orElseThrow(() -> new RuntimeException("Member not found"));
 
         MemberInfoDTO memberInfo = MemberInfoDTO.builder()
