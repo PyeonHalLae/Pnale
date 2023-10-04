@@ -2,10 +2,11 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
 interface commentInfoType {
-  commentTitle: string;
-  commentDetail: string;
-  commentDate: string;
-  commentId: number;
+  rcpId: number;
+  rcpName: string;
+  revId: number;
+  content: string;
+  createdAt: string;
 }
 
 const CommentCard = ({ commentInfo }: { commentInfo: commentInfoType }) => {
@@ -14,16 +15,16 @@ const CommentCard = ({ commentInfo }: { commentInfo: commentInfoType }) => {
       <BackSize>
         <MenuBtn></MenuBtn>
         <TitleBox>
-          <Title>{commentInfo.commentTitle}</Title>
+          <Title>{commentInfo.rcpName}</Title>
         </TitleBox>
         <MainBox>
           <DetailBox>
             <Field>내 댓글:</Field>
-            <Content>{commentInfo.commentDetail}</Content>
+            <Content>{commentInfo.content}</Content>
           </DetailBox>
           <DetailBox>
             <Field>작성 일:</Field>
-            <Content>{commentInfo.commentDate}</Content>
+            <Content>{commentInfo.createdAt}</Content>
           </DetailBox>
         </MainBox>
       </BackSize>

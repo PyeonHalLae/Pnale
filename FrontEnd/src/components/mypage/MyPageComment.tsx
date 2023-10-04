@@ -6,12 +6,15 @@ import tw from "tailwind-styled-components";
 import CommentCard from "@/components/mypage/mypage2/CommentCard";
 import { useState } from "react";
 import { useEffect } from "react";
+import { ToastErrorMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
+import axios from "axios";
 
 interface commentInfoType {
-  commentTitle: string;
-  commentDetail: string;
-  commentDate: string;
-  commentId: number;
+  rcpId: number;
+  rcpName: string;
+  revId: number;
+  content: string;
+  createdAt: string;
 }
 
 const MyPageComment = () => {
@@ -19,29 +22,56 @@ const MyPageComment = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    setCommentList([
-      {
-        commentTitle: "인생 짜빠구리 만드는 방법 입니다 그렇게...",
-        commentDetail:
-          "너무 맛있게 잘먹었습니다! 좋아요 누를게요!! ㄴㅁ이라ㅓㄴ러ㅏㅣㄴㅁ어리ㅏㅓㅣㅏㅁㄴ어라ㅣ;ㅁㄴ어리ㅏㅁ",
-        commentDate: "2021.11.12",
-        commentId: 1,
-      },
-      {
-        commentTitle: "인생 짜빠구리 만드는 방법 입니다 그렇게...",
-        commentDetail:
-          "너무 맛있게 잘먹었습니다! 좋아요 누를게요!! ㄴㅁ이라ㅓㄴ러ㅏㅣㄴㅁ어리ㅏㅓㅣㅏㅁㄴ어라ㅣ;ㅁㄴ어리ㅏㅁ",
-        commentDate: "2021.11.12",
-        commentId: 2,
-      },
-      {
-        commentTitle: "인생 짜빠구리 만드는 방법 입니다 그렇게...",
-        commentDetail:
-          "너무 맛있게 잘먹었습니다! 좋아요 누를게요!! ㄴㅁ이라ㅓㄴ러ㅏㅣㄴㅁ어리ㅏㅓㅣㅏㅁㄴ어라ㅣ;ㅁㄴ어리ㅏㅁ",
-        commentDate: "2021.11.12",
-        commentId: 3,
-      },
-    ]);
+    axios
+      .patch("/api/mypage/comment?page=0", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          setCommentList(resData.data.content);
+        }
+        if (resData.code == 204) {
+          setCommentList(null);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .patch("/api/auth/mypage/comment?page=0", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setCommentList(resData.data.content);
+              }
+              if (resData.code == 204) {
+                setCommentList(null);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+                navigate("/mypage");
+              } else {
+                ToastErrorMessage("댓글 정보를 불러오는데 실패했습니다");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+            navigate("/mypage");
+          } else {
+            //그외 서버 오류
+            ToastErrorMessage("댓글 정보를 불러오는데 실패했습니다");
+          }
+        }
+      });
   }, []);
 
   return (
@@ -65,9 +95,10 @@ const MyPageComment = () => {
           // myRecipeType={recipeType}
           />
         ))} */}
-        {CommentList.map((commentItme, index) => (
-          <CommentCard key={commentItme.commentId + index} commentInfo={commentItme} />
-        ))}
+        {CommentList &&
+          CommentList.map((commentItme, index) => (
+            <CommentCard key={commentItme.revId + index} commentInfo={commentItme} />
+          ))}
       </MyCommentMain>
     </>
   );
