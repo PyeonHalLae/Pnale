@@ -6,7 +6,7 @@ import axios from "axios";
 const RecipeDetailHeader = ({ recipeInfo }: { recipeInfo: recipeDetailType }) => {
   const recipeLikeHanlder = () => {
     axios
-      .patch("", null, { withCredentials: true })
+      .patch(`/api/recipe/like?rcpId=${recipeInfo.rcpId}`, null, { withCredentials: true })
       .then((res) => {
         console.log(res);
       })

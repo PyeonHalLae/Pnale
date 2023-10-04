@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { useState } from "react";
 
 const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] }) => {
+  const [boxIngredients, setBoxIngredients] = useState<recipePrdInfoType[]>(ingredients);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   useEffect(() => {}, [ingredients]);
 
@@ -14,10 +15,15 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
       <Title>
         <span className="text-common-peach">재료</span> <span>리스트</span>
       </Title>
-      {ingredients.length !== 0 &&
-        ingredients.map((ingredient, index) => {
+      {boxIngredients.length !== 0 &&
+        boxIngredients.map((ingredient, index) => {
           return (
-            <RecipeProductsListItem key={ingredient.prdId} index={index} ingredient={ingredient} />
+            <RecipeProductsListItem
+              key={ingredient.prdId}
+              index={index}
+              ingredient={ingredient}
+              setBoxIngredients={setBoxIngredients}
+            />
           );
         })}
 

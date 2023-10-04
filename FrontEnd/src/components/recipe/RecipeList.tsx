@@ -20,6 +20,9 @@ const RecipeList = () => {
   const [listSortBy, setListSortBy] = useState<string>("latest");
   const [loading, setLoading] = useState<boolean>(true);
 
+  const [page, setPage] = useState<number>(0);
+  const [totalRecipeNum, setTotalRecipeNum] = useState<number>(0);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,19 +31,45 @@ const RecipeList = () => {
         headers: {
           "Content-Type": "application/json",
         },
+        params: {
+          page: page,
+        },
       })
       .then((res) => {
         console.log(res);
         // 인기레시피
         setPopularRecipe(res.data.data.best);
         // 그냥 레시피 리스트
-        setRecipeList(res.data.data.recipes);
+        setRecipeList(res.data.data.recipes.content);
+        setTotalRecipeNum(res.data.data.recipes.totalElements);
         setLoading(false);
       })
       .catch((err) => {
         console.log(err);
       });
   }, []);
+
+  const viewMoreHandler = () => {
+    setPage((prev) => {
+      return prev + 1;
+    });
+    axios
+      .get(`/api/recipe/all?page=${page}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(totalRecipeNum);
+        // if (res.data.code === "200") {
+        //   setRecipeList((recipeList) => {
+        //     return [...recipeList, ...res.data.data.content];
+        //   });
+        // }
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   return (
     <>
@@ -93,16 +122,11 @@ const RecipeList = () => {
               />
             ))}
 
-          {/* 새 레시피 등록 버튼 */}
-          <ViewMoreBtnBox>
-            <ViewMoreBtn
-              onClick={() => {
-                console.log("ㅎㅎ");
-              }}
-            >
-              더보기
-            </ViewMoreBtn>
-          </ViewMoreBtnBox>
+          {recipeList.length !== totalRecipeNum && (
+            <ViewMoreBtnBox>
+              <ViewMoreBtn onClick={viewMoreHandler}>더보기</ViewMoreBtn>
+            </ViewMoreBtnBox>
+          )}
 
           <CreateBtn
             onClick={() => {

@@ -1,24 +1,61 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 // import { ingredientState } from "@/recoil/khiRecoil";
 // import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
+import { recipePrdInfoType } from "./recipeDetailType";
+import axios from "axios";
 
-const RecipeProductsModalContent = () => {
+interface searchPrdInfoType {
+  id: number;
+  name: string;
+  category: string;
+}
+
+const RecipeProductsModalContent = ({
+  index,
+  setBoxIngredients,
+}: {
+  index: number;
+  setBoxIngredients: Dispatch<SetStateAction<recipePrdInfoType[]>>;
+}) => {
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const [productList, setProductList] = useState<string[]>([]);
-  const [selectedProd, setSelectedProd] = useState<string>("");
-  //   const [keyword, setKeyword] = useRecoilState(ingredientState);
-  useEffect(() => {
-    setProductList(["1", "2", "3", "4"]);
-  }, []);
+  const [productList, setProductList] = useState<searchPrdInfoType[]>([]);
+  const [selectedProd, setSelectedProd] = useState<searchPrdInfoType>({
+    id: -1,
+    name: "",
+    category: "",
+  });
 
+  const searchBarEnterHandler = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      productSearchHandler();
+    }
+  };
   const InputChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchKeyword(e.target.value);
   };
-  const ItemClickHandler = (selectedProd: string) => {
+
+  const ItemClickHandler = (selectedProd: searchPrdInfoType) => {
     setSelectedProd(selectedProd);
   };
+
+  const productSearchHandler = () => {
+    const data = {
+      name: searchKeyword,
+    };
+    axios
+      .post("/api/search", data)
+      .then((res) => {
+        console.log(res);
+        setProductList(res.data.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const choiceHandler = () => {};
 
   return (
     <>
@@ -29,8 +66,15 @@ const RecipeProductsModalContent = () => {
           className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem]"
           value={searchKeyword}
           onChange={InputChangeHandler}
+          onKeyDown={searchBarEnterHandler}
           placeholder="재료 검색"
         />
+        <div
+          className="w-[3rem] py-1 mr-2 font-light bg-common-text-color text-[0.8rem] text-center text-white rounded-[0.5rem]"
+          onClick={productSearchHandler}
+        >
+          검색
+        </div>
       </SearchBar>
       <SearchResultBox>
         <CategoryListBox>
@@ -39,15 +83,15 @@ const RecipeProductsModalContent = () => {
 
         <ProductsListBox>
           {productList &&
-            productList.map((productItem: string) => (
+            productList.map((productItem: searchPrdInfoType) => (
               <ListItem
-                key={productItem}
+                key={productItem.id}
                 selected={productItem == selectedProd}
                 onClick={() => {
                   ItemClickHandler(productItem);
                 }}
               >
-                {productItem}
+                {productItem.name}
               </ListItem>
             ))}
         </ProductsListBox>
@@ -109,7 +153,7 @@ overflow-scroll
 `;
 const ListItem = styled.div<{ selected: boolean }>`
   width: 100%;
-  height: 2rem;
+  min-height: 2rem;
   border-bottom: 0.5px solid #d9d9d9;
   padding: 0.3rem 0;
   box-sizing: border-box;
