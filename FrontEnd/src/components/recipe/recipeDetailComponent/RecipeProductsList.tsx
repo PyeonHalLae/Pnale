@@ -8,7 +8,13 @@ import { useState } from "react";
 const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] }) => {
   const [boxIngredients, setBoxIngredients] = useState<recipePrdInfoType[]>(ingredients);
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  useEffect(() => {}, [ingredients]);
+  useEffect(() => {
+    if (boxIngredients.length !== 0) {
+      setTotalPrice(
+        boxIngredients.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
+      );
+    }
+  }, [boxIngredients]);
 
   return (
     <Container>
@@ -28,8 +34,17 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
         })}
 
       <TotalPriceBox>
-        <div className="w-[4rem]">{totalPrice}원</div>
-        <div className="w-[4.5rem] mr-[.625rem] justify-center">총 가격</div>
+        <div className="w-[5rem]">{totalPrice}원</div>
+        <div className="w-[4.5rem]  justify-center">총 가격</div>
+        <div
+          className="bg-common-orange"
+          onClick={() => {
+            setBoxIngredients(ingredients);
+          }}
+        >
+          {" "}
+          초기화{" "}
+        </div>
       </TotalPriceBox>
     </Container>
   );

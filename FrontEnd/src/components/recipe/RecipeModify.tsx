@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 import RecipeCreateFirst from "./recipeCreateComponent/RecipeCreateFirst";
 import RecipeCreateSecond from "./recipeCreateComponent/RecipeCreateSecond";
 import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
-import { recipeDetailType } from "./recipeDetailComponent/recipeDetailType";
 import { useParams } from "react-router-dom";
 
 import { useSetRecoilState } from "recoil";

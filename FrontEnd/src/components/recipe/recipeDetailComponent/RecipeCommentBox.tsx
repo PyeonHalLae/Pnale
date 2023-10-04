@@ -6,7 +6,13 @@ import { useEffect, useState } from "react";
 import { commentInfoType } from "./recipeDetailType";
 import axios from "axios";
 
-const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
+const RecipeCommentBox = ({
+  recipeId,
+  detailRefreshHandler,
+}: {
+  recipeId: number;
+  detailRefreshHandler: () => void;
+}) => {
   const [commentList, setCommentList] = useState<commentInfoType[]>([]);
   const [totalCommentNum, setTotalCommentNum] = useState<number>(0);
   const [refresh, setRefresh] = useState<boolean>(false);
@@ -73,6 +79,7 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
             key={commentItem.revId}
             commentInfo={commentItem}
             setRefresh={setRefresh}
+            detailRefreshHandler={detailRefreshHandler}
           />
         ))}
       {commentList.length !== totalCommentNum && (
@@ -81,7 +88,11 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
         </ViewMoreBtnBox>
       )}
 
-      <RecipeCommentInput recipeId={recipeId} setRefresh={setRefresh} />
+      <RecipeCommentInput
+        recipeId={recipeId}
+        setRefresh={setRefresh}
+        detailRefreshHandler={detailRefreshHandler}
+      />
     </Container>
   );
 };

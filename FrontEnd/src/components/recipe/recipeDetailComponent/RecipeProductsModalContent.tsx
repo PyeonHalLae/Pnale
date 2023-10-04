@@ -55,7 +55,46 @@ const RecipeProductsModalContent = ({
       });
   };
 
-  const choiceHandler = () => {};
+  const choiceHandler = () => {
+    axios
+      .post("/api/search/result", {
+        ids: [selectedProd.id],
+      })
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          const newItem = {
+            prdId: res.data.data.search.content[0].product.productId,
+            prdName: res.data.data.search.content[0].product.productName,
+            price: res.data.data.search.content[0].product.price,
+            changeable: true,
+
+            cuprice: null,
+            cutype: res.data.data.search.content[0].event.cutype,
+
+            gsprice: null,
+            gstype: res.data.data.search.content[0].event.gstype,
+
+            sevenprice: null,
+            seventype: res.data.data.search.content[0].event.seventype,
+
+            emartprice: null,
+            emarttype: res.data.data.search.content[0].event.emarttype,
+          };
+
+          setBoxIngredients((prev) => {
+            return prev.map((item, i) => {
+              if (i === index) {
+                return newItem;
+              } else {
+                return item;
+              }
+            });
+          });
+        }
+      })
+      .catch();
+  };
 
   return (
     <>
@@ -97,13 +136,7 @@ const RecipeProductsModalContent = ({
         </ProductsListBox>
       </SearchResultBox>
       <BtnBox>
-        <ChoiceBtn
-          onClick={() => {
-            console.log(selectedProd);
-          }}
-        >
-          선택하기
-        </ChoiceBtn>
+        <ChoiceBtn onClick={choiceHandler}>선택하기</ChoiceBtn>
       </BtnBox>
     </>
   );
