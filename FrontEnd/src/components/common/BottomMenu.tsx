@@ -1,6 +1,5 @@
 // import styled from "styled-components";
 import axios from "axios";
-import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
 
@@ -11,10 +10,6 @@ const BottomMenu = ({
   $selectRecipeId: number;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }) => {
-  useEffect(() => {
-    console.log("바텀사이드", $selectRecipeId);
-  }, []);
-
   const navigate = useNavigate();
 
   // 수정하기 클릭

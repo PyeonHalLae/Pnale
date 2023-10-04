@@ -6,6 +6,7 @@ import RecipeCommonModal from "./../recipeCommonComponent/RecipeCommonModal";
 import RecipeProductsAddModalContent from "./RecipeProductsAddModalContent";
 import { recipeFormProduct } from "@/recoil/khiRecoil";
 import { useRecoilState } from "recoil";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 interface Props {
   stepHandler: Dispatch<SetStateAction<string>>;
@@ -20,6 +21,7 @@ const RecipeCreateSecond = ({ stepHandler, action }: Props) => {
     const newProducts = products.filter((product) => product.prdId !== deleteId);
     setProducts(newProducts);
   };
+
   const checkHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newProducts = products.map((product) => {
       return product.prdName === e.target.value
@@ -27,6 +29,14 @@ const RecipeCreateSecond = ({ stepHandler, action }: Props) => {
         : product;
     });
     setProducts(newProducts);
+  };
+
+  const prdCheckHandler = () => {
+    if (products.length === 0) {
+      ToastErrorMessage("재료 리스트가 비었습니다.");
+    } else {
+      stepHandler("3");
+    }
   };
 
   return (
@@ -100,13 +110,7 @@ const RecipeCreateSecond = ({ stepHandler, action }: Props) => {
         >
           이전으로
         </WhiteBtn>
-        <BlueBtn
-          onClick={() => {
-            stepHandler("3");
-          }}
-        >
-          다음으로
-        </BlueBtn>
+        <BlueBtn onClick={prdCheckHandler}>다음으로</BlueBtn>
       </BtnBox>
     </Container>
   );

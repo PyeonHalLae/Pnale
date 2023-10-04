@@ -47,7 +47,7 @@ const RecipeProductsListItem = ({
           )}
         </ChangeBtnBox>
 
-        <PriceBox>{ingredient.price}</PriceBox>
+        <PriceBox>{ingredient.price}원</PriceBox>
       </ProductInfo>
 
       <StickerBox>

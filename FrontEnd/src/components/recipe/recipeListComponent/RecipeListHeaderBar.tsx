@@ -1,20 +1,34 @@
 import { useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
+import { useState } from "react";
 
 const RecipeListHeaderBar = () => {
   const navigate = useNavigate();
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const backBtn = () => {
     navigate(-1);
   };
   const searchBtn = () => {
-    navigate("/recipe/search");
+    navigate("/recipe/search", {
+      state: {
+        searchKeyword: searchKeyword,
+      },
+    });
+  };
+  const changeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchKeyword(e.target.value);
   };
 
   return (
     <SearchBar>
       <BackBtn src="/img/btn/left-btn.png" onClick={backBtn} />
-      <Input type="text" placeholder="코카콜라라고 검색해보세요." />
+      <Input
+        type="text"
+        value={searchKeyword}
+        placeholder="코카콜라라고 검색해보세요."
+        onChange={changeHandler}
+      />
       <SubtractBtn src="/img/btn/subtract.png" />
       <SearchBtn src="/img/btn/search-blue.png" onClick={searchBtn} />
     </SearchBar>

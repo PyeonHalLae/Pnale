@@ -3,12 +3,21 @@ import styled from "styled-components";
 import { recipeDetailType } from "./recipeDetailType";
 import axios from "axios";
 
-const RecipeDetailHeader = ({ recipeInfo }: { recipeInfo: recipeDetailType }) => {
+const RecipeDetailHeader = ({
+  recipeInfo,
+  detailRefreshHandler,
+}: {
+  recipeInfo: recipeDetailType;
+  detailRefreshHandler: () => void;
+}) => {
   const recipeLikeHanlder = () => {
     axios
       .patch(`/api/recipe/like?rcpId=${recipeInfo.rcpId}`, null, { withCredentials: true })
       .then((res) => {
         console.log(res);
+        if (res.data.code === 200) {
+          detailRefreshHandler();
+        }
       })
       .catch((err) => {
         console.log(err);

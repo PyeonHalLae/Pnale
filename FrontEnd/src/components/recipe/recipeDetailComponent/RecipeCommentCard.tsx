@@ -6,9 +6,10 @@ import axios from "axios";
 interface Props {
   commentInfo: commentInfoType;
   setRefresh: Dispatch<SetStateAction<boolean>>;
+  detailRefreshHandler: () => void;
 }
 
-const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
+const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Props) => {
   const [isModifying, setIsModifying] = useState<boolean>(false);
   const [modifyContent, setModifyContent] = useState<string>(commentInfo.content);
 
@@ -20,12 +21,18 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
         },
         withCredentials: true,
       })
-      .then(() => {
-        setRefresh((prev) => {
-          return !prev;
-        });
+      .then((res) => {
+        console.log(res);
+        if (res.data.code === 200) {
+          setRefresh((prev) => {
+            return !prev;
+          });
+          detailRefreshHandler();
+        }
       })
-      .catch();
+      .catch((err) => {
+        console.log(err);
+      });
   };
   const commentModifyHandler = () => {
     setIsModifying(true);
@@ -74,10 +81,6 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
               <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
             </div>
           )}
-          <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
-            <CommentManageBtn onClick={commentDeleteHandler}>삭제</CommentManageBtn>
-            <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
-          </div>
         </CommentNameBox>
 
         {isModifying ? (

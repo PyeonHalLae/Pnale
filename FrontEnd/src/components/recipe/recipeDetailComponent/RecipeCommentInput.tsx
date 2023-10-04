@@ -1,14 +1,32 @@
 import tw from "tailwind-styled-components";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useState, useEffect } from "react";
 import axios from "axios";
 
 interface Props {
   recipeId: number;
   setRefresh: Dispatch<SetStateAction<boolean>>;
+  detailRefreshHandler: () => void;
 }
 
-const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
+const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Props) => {
   const [commentContent, setCommentContent] = useState("");
+  const [nickname, setNickname] = useState<string>("작성자명");
+
+  useEffect(() => {
+    // 유저이름 받아옴
+    axios
+      .get("/api/member/login", {
+        headers: {
+          "Content-Type": "application/json",
+          withCredentials: true,
+        },
+      })
+      .then((res) => {
+        setNickname(() => {
+          return res.data.data.nickname;
+        });
+      });
+  }, []);
 
   // 댓글 내용 입력
   const inputChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -33,6 +51,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
           setRefresh((prev) => {
             return !prev;
           });
+          detailRefreshHandler();
         }
       })
       .catch((err) => {
@@ -42,7 +61,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh }: Props) => {
 
   return (
     <Container>
-      <NameBox>작성자 명</NameBox>
+      <NameBox>{nickname}</NameBox>
       <InputBox
         onChange={inputChangeHandler}
         placeholder="내용을 입력하세요"
