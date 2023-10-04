@@ -83,7 +83,9 @@ public class MemberController {
     @PatchMapping("/update")
     public CustomResponse updateUserInfo(@RequestPart("image") MultipartFile multipartFile, HttpServletRequest request, MemberUpdateDTO memberUpdateDTO) throws IOException {
         Long memberId = (Long)request.getAttribute("memberId");
-        String imgUrl = s3UploadService.upload(UploadType.USERPROFILE, multipartFile);
+        String imgUrl = null;
+        if(!multipartFile.isEmpty())
+            imgUrl = s3UploadService.upload(UploadType.USERPROFILE, multipartFile);
         memberUpdateDTO.setMemberImg(imgUrl);
         memberService.updateMemberInMyPage(memberId, memberUpdateDTO);
 
