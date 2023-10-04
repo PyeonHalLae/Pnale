@@ -39,7 +39,8 @@ const MyPageRecipe = () => {
   const [selectRecipeId, setSelectRecipeId] = useState<number>(null);
 
   //하단 메뉴 출력 State 변경
-  const BottomMenuStateHandler = () => {
+  const BottomMenuStateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
     setBottomMenuState(!bottomMenuState);
   };
 
