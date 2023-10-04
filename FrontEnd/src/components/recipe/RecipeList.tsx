@@ -59,11 +59,11 @@ const RecipeList = () => {
       })
       .then((res) => {
         console.log(totalRecipeNum);
-        // if (res.data.code === "200") {
-        //   setRecipeList((recipeList) => {
-        //     return [...recipeList, ...res.data.data.content];
-        //   });
-        // }
+        if (res.data.code === "200") {
+          setRecipeList((recipeList) => {
+            return [...recipeList, ...res.data.data.content];
+          });
+        }
         console.log(res);
       })
       .catch((err) => {
@@ -86,10 +86,10 @@ const RecipeList = () => {
           </ContentTitle>
 
           {/* 인기 레시피 컨테이너 */}
-          {popularRecipe === undefined ? (
-            <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
-          ) : (
+          {popularRecipe ? (
             <PopularRecipeCard popularRecipe={popularRecipe} />
+          ) : (
+            <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
           )}
 
           {/* 전체 레시피 컨테이너 */}
@@ -113,7 +113,7 @@ const RecipeList = () => {
           </ContentTitle>
 
           {/* 5개씩 늘어날 것. */}
-          {recipeList !== undefined &&
+          {recipeList &&
             recipeList.map((recipeItem, index) => (
               <RecipeCard
                 // onClick={navigateHandler(recipeItem.recipeId)}

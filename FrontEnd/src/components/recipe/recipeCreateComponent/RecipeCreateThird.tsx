@@ -78,6 +78,7 @@ const RecipeCreateThird = ({ stepHandler }: Props) => {
       .post("/api/recipe/form", data)
       .then((res) => {
         if (res.data.code == "201") {
+          console.log(res.data);
           alert("작성성공");
           resetForm();
           restContents();

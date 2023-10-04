@@ -64,7 +64,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
         {/* 조회수박스 */}
         <ViewCountBox>
           <ViewIcon src="/img/icons/view-icon-gray.png" alt="조회" />
-          {recipeInfo.viewCnt}
+          <div className="inline h-[100%] py-1">{recipeInfo.viewCnt}</div>
         </ViewCountBox>
 
         {recipeInfo.myRecipe && (
@@ -105,7 +105,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
         </div>
 
         {/* 작성일 */}
-        <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
+        <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color mt-[0.2rem]">
           {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
         </div>
       </ContentBox>
@@ -167,6 +167,8 @@ const RecipeTitleBox = styled.div`
   display: -webkit-box; // webkit-box
   -webkit-line-clamp: 2; // 2줄까지
   -webkit-box-orient: vertical; //...
+  margin-top: 0.5rem;
+  margin-bottom: 0.3rem;
 `;
 
 const InfluencerBox = tw.img`
@@ -178,7 +180,7 @@ const LikeCommentBox = tw.div`
 `;
 
 const ViewIcon = tw.img`
-  w-[0.75rem] h-[0.75rem] inline-block mr-[0.3rem]
+  w-[0.7rem] h-[0.7rem] inline-block mr-[0.3rem] ml-[0.1rem]
 `;
 
 const LikeCommentIcon = tw(ViewIcon)`

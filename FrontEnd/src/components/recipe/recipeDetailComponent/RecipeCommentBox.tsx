@@ -16,10 +16,7 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
     setPage((prev) => {
       return prev + 1;
     });
-  };
 
-  useEffect(() => {
-    // 처음 렌더링될 때 받아옴
     axios
       .get(`/api/recipe/review?rcpId=${recipeId}`, {
         headers: {
@@ -39,7 +36,28 @@ const RecipeCommentBox = ({ recipeId }: { recipeId: number }) => {
       .catch((err) => {
         console.log(err);
       });
-  }, [recipeId, refresh, page]);
+  };
+
+  useEffect(() => {
+    // 처음 렌더링될 때 받아옴
+    axios
+      .get(`/api/recipe/review?rcpId=${recipeId}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: { page: 0 },
+      })
+      .then((res) => {
+        if (res.data.code === 200) {
+          setCommentList(res.data.data.content);
+          setTotalCommentNum(res.data.data.totalElements);
+        }
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [recipeId, refresh]);
 
   return (
     <Container>

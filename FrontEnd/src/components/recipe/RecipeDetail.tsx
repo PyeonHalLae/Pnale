@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import RecipeCommentBox from "./recipeDetailComponent/RecipeCommentBox";
 import RecipeDetailContent from "./recipeDetailComponent/RecipeDetailContent";
@@ -11,6 +11,7 @@ import axios from "axios";
 import { recipeDetailType } from "./recipeDetailComponent/recipeDetailType";
 
 const RecipeDetail = () => {
+  const location = useLocation();
   const { recipeId } = useParams();
   const [recipeInfo, setRecipeInfo] = useState<recipeDetailType>();
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,16 +38,6 @@ const RecipeDetail = () => {
         console.log(err);
       });
   }, []);
-  // const [bottomMenuState, setBottomMenuState] = useState<boolean>(true);
-  // const BottomMenuStateHandler = () => {
-  //   setBottomMenuState((bottomMenuState) => {
-  //     return !bottomMenuState;
-  //   });
-  // };
-  //   <BottomMenu
-  //   $selectRecipeId={Number(recipeId)}
-  //   BottomMenuStateHandler={BottomMenuStateHandler}
-  // ></BottomMenu>
 
   return (
     <>
@@ -54,7 +45,11 @@ const RecipeDetail = () => {
         <></>
       ) : (
         <div>
-          <RecipeDetailHeaderBar recipeId={recipeInfo.rcpId} myRecipe={recipeInfo.myRecipe} />
+          <RecipeDetailHeaderBar
+            recipeId={recipeInfo.rcpId}
+            myRecipe={recipeInfo.myRecipe}
+            // setRecipeInfo={setRecipeInfo}
+          />
 
           <RecipeDetailHeader recipeInfo={recipeInfo} />
 
@@ -65,10 +60,6 @@ const RecipeDetail = () => {
           <RecipeDetailContent content={recipeInfo.rcpDesc} />
 
           <RecipeCommentBox recipeId={Number(recipeId)} />
-          {/* <BottomMenu
-            $selectRecipeId={Number(recipeId)}
-            BottomMenuStateHandler={BottomMenuStateHandler}
-          ></BottomMenu> */}
         </div>
       )}
     </>

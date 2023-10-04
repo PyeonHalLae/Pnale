@@ -18,12 +18,15 @@ const BottomMenu = ({
   const navigate = useNavigate();
 
   // 수정하기 클릭
-  const modifyBtnHandler = () => {
+  const modifyBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    BottomMenuStateHandler(e);
     navigate(`/recipe/${$selectRecipeId}/modify`);
   };
 
   // 삭제하기 클릭
-  const deleteBtnHandler = () => {
+  const deleteBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    BottomMenuStateHandler(e);
+
     axios
       .delete(`/api/recipe/form?rcpId=${$selectRecipeId}`, {
         headers: {
