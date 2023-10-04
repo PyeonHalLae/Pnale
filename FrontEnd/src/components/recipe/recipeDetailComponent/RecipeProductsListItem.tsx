@@ -1,5 +1,5 @@
 import tw from "tailwind-styled-components";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 
 import RecipeProductsModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
@@ -8,9 +8,11 @@ import { recipePrdInfoType } from "./recipeDetailType";
 const RecipeProductsListItem = ({
   ingredient,
   index,
+  setBoxIngredients,
 }: {
   ingredient: recipePrdInfoType;
   index: number;
+  setBoxIngredients: Dispatch<SetStateAction<recipePrdInfoType[]>>;
 }) => {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
@@ -19,9 +21,11 @@ const RecipeProductsListItem = ({
       {isModalActive && (
         <RecipeCommonModal
           setModal={setIsModalActive}
-          width="20"
-          height="32"
-          element={<RecipeProductsModalContent />}
+          width="22"
+          height="36"
+          element={
+            <RecipeProductsModalContent index={index} setBoxIngredients={setBoxIngredients} />
+          }
         />
       )}
       <ProductInfo>

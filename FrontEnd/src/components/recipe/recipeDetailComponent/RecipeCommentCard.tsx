@@ -1,7 +1,7 @@
 import tw from "tailwind-styled-components";
 import { commentInfoType } from "./recipeDetailType";
 import { Dispatch, SetStateAction, useState } from "react";
-import { customAxios } from "@/api/customAxios";
+import axios from "axios";
 
 interface Props {
   commentInfo: commentInfoType;
@@ -12,7 +12,7 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
   const [isModifying, setIsModifying] = useState<boolean>(false);
 
   const commentDeleteHandler = () => {
-    customAxios
+    axios
       .delete(`/api/recipe/review?revId=${commentInfo.revId}`, {
         headers: {
           "Content-Type": "application/json",
@@ -49,6 +49,10 @@ const RecipeCommentCard = ({ commentInfo, setRefresh }: Props) => {
               <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
             </div>
           )}
+          <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
+            <CommentManageBtn onClick={commentDeleteHandler}>삭제</CommentManageBtn>
+            <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
+          </div>
         </CommentNameBox>
         {isModifying ? (
           <CommentContentBox>{commentInfo.content}</CommentContentBox>
