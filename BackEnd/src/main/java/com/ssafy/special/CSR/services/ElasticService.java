@@ -48,9 +48,9 @@ public class ElasticService {
                 .stream().map(Elastic::toDto).collect(Collectors.toList());
     }
 
-    public List<ESListDto> findSearchRecipeCategoryList(Pageable pageable, String category) {
+    public Page<ESListDto> findSearchRecipeCategoryList(Pageable pageable, String category) {
         return GoodsRepository.findByCategory(pageable, category)
-                .stream().map(Elastic::toDto).collect(Collectors.toList());
+                .map(Elastic::toDto);
     }
 
     public Map<String, Object> findIdsResult(Pageable pageable, List<Long> productIds, Long memberId) {
