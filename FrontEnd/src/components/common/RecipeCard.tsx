@@ -3,13 +3,26 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { recipeType } from "@/model/commonType";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import BottomMenu from "./BottomMenu";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
   const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [titleStyleState, setTitleStyleState] = useState<boolean>(false);
+  const titleRef = useRef(null);
+  //높이 설정
 
+  useEffect(() => {
+    const titleStyle = window.getComputedStyle(titleRef.current);
+    const titleHeight = parseFloat(titleStyle.height);
+    //한줄이라면
+    if (titleHeight < 40) {
+      setTitleStyleState(true);
+    } else {
+      setTitleStyleState(false);
+    }
+  }, []);
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
     navigate(`/recipe/${recipeId}`);
@@ -54,7 +67,12 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
         )}
 
         {/* 레시피 제목 */}
-        <RecipeTitleBox>{recipeInfo.rcpName}</RecipeTitleBox>
+        <RecipeTitleBox
+          ref={titleRef}
+          className={titleStyleState && "mt-[0.9375rem] mb-[0.3125rem]"}
+        >
+          {recipeInfo.rcpName}
+        </RecipeTitleBox>
 
         {/* 유저 닉네임, 유저 이미지 */}
         <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top text-aling">
@@ -96,7 +114,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 export default RecipeCard;
 
 const Container = tw.div`
-  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center;
+  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center ;
 `;
 
 const RecipeImg = tw.img`
@@ -124,13 +142,14 @@ inline-block
 `;
 
 const RecipeTitleBox = styled.div`
-  font-size: 1.1rem;
-  overflow: clip;
-  display: -webkit-box; // webkit-box
-  -webkit-line-clamp: 2; // 2줄까지
-  -webkit-box-orient: vertical; //...
-  margin-top: 0.5rem;
-  margin-bottom: 0.3rem;
+  color: #1e2b4f;
+  font-size: 1rem;
+  width: 13.75rem;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
 const InfluencerBox = tw.img`

@@ -19,7 +19,7 @@ const RecipeList = () => {
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
   const [listSortBy, setListSortBy] = useState<string>("latest");
   const [loading, setLoading] = useState<boolean>(true);
-  const [page, setPage] = useState<number>(0);
+  const [page, setPage] = useState<number>(1);
   const [totalRecipeNum, setTotalRecipeNum] = useState<number>(0);
 
   const navigate = useNavigate();
@@ -31,7 +31,8 @@ const RecipeList = () => {
           "Content-Type": "application/json",
         },
         params: {
-          page: page,
+          page: 0,
+          size: 3,
         },
       })
       .then((res) => {
@@ -49,18 +50,19 @@ const RecipeList = () => {
   }, []);
 
   const viewMoreHandler = () => {
-    setPage((prev) => {
-      return prev + 1;
-    });
     axios
-      .get(`/api/recipe/all?page=${page}`, {
+      .get(`/api/recipe/all`, {
         withCredentials: true,
+        params: { page: page, size: 3 },
       })
       .then((res) => {
         console.log(totalRecipeNum);
-        if (res.data.code === "200") {
+        if (res.data.code === 200) {
           setRecipeList((recipeList) => {
             return [...recipeList, ...res.data.data.content];
+          });
+          setPage((prev) => {
+            return prev + 1;
           });
         }
         console.log(res);
@@ -168,7 +170,7 @@ const TitleTextOrange = tw(TitleTextPeach)`
 const SortSelectBox = tw.select`
   absolute
   w-[4.6875rem] h-[1.5rem] text-[1rem]
-  bottom-[0.625rem] right-[1rem] outline-0
+  bottom-[0.625rem] right-[1rem] outline-0 text-common-text-color
 `;
 
 const ViewMoreBtnBox = tw.div`
