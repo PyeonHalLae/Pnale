@@ -178,7 +178,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
       <SearchBar>
         <img className="w-[1.2rem] h-[1.2rem]" src="/img/btn/search-blue.png" alt="ggg" />
         <input
-          className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem]"
+          className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem] max-w-[14.6875rem]"
           value={searchKeyword}
           onChange={inputChangeHandler}
           onKeyDown={searchBarEnterHandler}
