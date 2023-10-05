@@ -8,12 +8,18 @@ import { useState } from "react";
 const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] }) => {
   const [boxIngredients, setBoxIngredients] = useState<recipePrdInfoType[]>(ingredients);
   const [totalPrice, setTotalPrice] = useState<number>(0);
+  const [changedList, setChangedList] = useState<boolean[]>([false]);
   useEffect(() => {
     if (boxIngredients.length !== 0) {
       setTotalPrice(
         boxIngredients.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
       );
     }
+    setChangedList(() =>
+      boxIngredients.map((ingredient, index) => {
+        return boxIngredients[index] !== ingredients[index];
+      })
+    );
   }, [boxIngredients]);
 
   return (
@@ -29,7 +35,7 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
               index={index}
               ingredient={ingredient}
               setBoxIngredients={setBoxIngredients}
-              isChanged={ingredient === ingredients[index]}
+              isChanged={changedList[index]}
             />
           );
         })}
@@ -37,7 +43,7 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
       <TotalPriceBox>
         <div className="w-[5rem]">{totalPrice}원</div>
         <div className="w-[4rem]  justify-center">총 가격</div>
-        {boxIngredients == ingredients && (
+        {changedList.filter((item) => item).length > 0 && (
           <div
             className="text-common-peach mr-[3.125rem] absolute left-[1.75rem]"
             onClick={() => {

@@ -326,10 +326,11 @@ mt-[0.75rem]
 `;
 
 const CategoryListBox = tw.div`
+relative
 w-[5rem]
 h-[100%]
 border-[1px]
-overflow-scroll
+overflow-auto
 `;
 const ProductsListBox = tw.div`
 w-[calc(100%-5rem)]
@@ -349,6 +350,19 @@ const ListItem = styled.div<{ selected: boolean }>`
   font-weight: 500;
   text-align: center;
 `;
+
+// const SelctedListItem = styled.div`
+//   width: 100%;
+//   min-height: 2rem;
+//   border-bottom: 0.5px solid #d9d9d9;
+//   padding: 0.3rem 0;
+//   box-sizing: border-box;
+//   background-color: #1e2b4f;
+//   color: #ffffff;
+//   font-size: 1.125rem;
+//   font-weight: 500;
+//   text-align: center;
+// `;
 
 const BtnBox = tw.div`
 flex 
