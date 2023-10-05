@@ -37,7 +37,7 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
       <TotalPriceBox>
         <div className="w-[5rem]">{totalPrice}원</div>
         <div className="w-[4rem]  justify-center">총 가격</div>
-        {boxIngredients !== ingredients && (
+        {boxIngredients == ingredients && (
           <div
             className="text-common-peach mr-[3.125rem] absolute left-[1.75rem]"
             onClick={() => {
