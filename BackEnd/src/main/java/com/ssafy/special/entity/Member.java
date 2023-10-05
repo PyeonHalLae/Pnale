@@ -81,6 +81,9 @@ public class Member {
         return this;
     }
 
+    public void signout(){
+        this.role=RoleType.DELETED;
+    }
     public void updateRefreshToken(String refreshToken){
         this.refreshToken=refreshToken;
     }

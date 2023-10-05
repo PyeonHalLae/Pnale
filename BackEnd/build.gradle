@@ -52,8 +52,8 @@ dependencies {
     //REDIS
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
-    // https://mvnrepository.com/artifact/org.apache.hadoop/hadoop-client-api
-    implementation group: 'org.apache.hadoop', name: 'hadoop-client-api', version: '3.2.4'
+    // 웹 통신 관련
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {

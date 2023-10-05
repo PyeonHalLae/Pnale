@@ -1,6 +1,7 @@
 package com.ssafy.special.member.model;
 
 
+import com.ssafy.special.CSR.services.RedisService;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.enums.RoleType;
 import com.ssafy.special.enums.SocialType;

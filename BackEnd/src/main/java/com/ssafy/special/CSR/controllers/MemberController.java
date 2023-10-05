@@ -2,7 +2,9 @@ package com.ssafy.special.CSR.controllers;
 
 
 
+import com.ssafy.special.CSR.services.RedisService;
 import com.ssafy.special.CSR.services.S3Service;
+import com.ssafy.special.CSR.services.WebService;
 import com.ssafy.special.entity.Member;
 import com.ssafy.special.enums.UploadType;
 import com.ssafy.special.exception.*;
@@ -53,6 +55,16 @@ public class MemberController {
         //return new DataResponse<MemberInfoDTO>(200, "유저 정보를 출력합니다.", memberRepository.findByMemberId(memberId).map(Member::toInfoDTO).orElseThrow(() -> new RuntimeException("Member not found")););
     }
 
+    @PatchMapping("/signout")
+    public CustomResponse signout(HttpServletRequest request, HttpServletResponse response){
+        Long memberId = (Long)request.getAttribute("memberId");
+        boolean isOk = memberService.signout(memberId);
+
+        if(!isOk) throw new AuthException(CustomErrorCode.FORBIDDEN);
+        jwtService.sendDeletedToken(memberId, response);
+        return new CustomResponse(200, "회원탈퇴가 완료되었습니다.");
+    }
+
     @PostMapping("/logout")
     public CustomResponse logout(HttpServletRequest request, HttpServletResponse response) {
         Long memberId = (Long)request.getAttribute("memberId");
@@ -71,7 +83,6 @@ public class MemberController {
     @GetMapping("/memberTest")
     public CustomResponse memberNotLoginTest(HttpServletRequest req)  {
         Long memberId = (Long) req.getAttribute("memberId");
-        System.out.println(memberId);
 
         if (memberId != null) {
             return new CustomResponse(200, memberId+"유저가 로그인");
