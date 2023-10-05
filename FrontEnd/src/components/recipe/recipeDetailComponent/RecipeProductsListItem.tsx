@@ -4,15 +4,18 @@ import { Dispatch, SetStateAction, useState } from "react";
 import RecipeProductsModalContent from "./RecipeProductsModalContent";
 import RecipeCommonModal from "../recipeCommonComponent/RecipeCommonModal";
 import { recipePrdInfoType } from "./recipeDetailType";
+import styled from "styled-components";
 
 const RecipeProductsListItem = ({
   ingredient,
   index,
   setBoxIngredients,
+  isChanged,
 }: {
   ingredient: recipePrdInfoType;
   index: number;
   setBoxIngredients: Dispatch<SetStateAction<recipePrdInfoType[]>>;
+  isChanged: boolean;
 }) => {
   const [isModalActive, setIsModalActive] = useState<boolean>(false);
 
@@ -35,15 +38,16 @@ const RecipeProductsListItem = ({
 
         <ChangeBtnBox>
           {ingredient.changeable ? (
-            <ChangBtn
+            <ChangeBtn
               onClick={() => {
                 setIsModalActive(true);
               }}
+              $ischanged={isChanged}
             >
               변경하기
-            </ChangBtn>
+            </ChangeBtn>
           ) : (
-            <ChangeBtnWhite>변경불가</ChangeBtnWhite>
+            <ChangeBtnWhite $ischanged={isChanged}>변경불가</ChangeBtnWhite>
           )}
         </ChangeBtnBox>
 
@@ -94,19 +98,19 @@ text-left
 const ChangeBtnBox = tw.div`
 w-[5rem] justify-start text-start
 `;
-const ChangBtn = tw.div`
-w-[3.875rem]
-h-[1rem]
-bg-common-peach
 
-rounded-[0.3125rem]
-
-text-center
-text-white
+const ChangeBtn = styled.div<{ $ischanged: boolean }>`
+  width: 3.875rem;
+  height: 1rem;
+  background-color: ${(props) => (props.$ischanged ? `#FA709A` : `#FB9B77`)};
+  border-radius: 0.3125rem;
+  text-align: center;
+  color: white;
 `;
-const ChangeBtnWhite = tw(ChangBtn)`
-bg-white
-text-common-text-color
+
+const ChangeBtnWhite = styled(ChangeBtn)`
+  background-color: white;
+  color: #1e2b4f;
 `;
 
 const PriceBox = tw.div`

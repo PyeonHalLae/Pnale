@@ -53,7 +53,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           <ViewIcon src="/img/icons/view-icon-gray.png" alt="조회" />
           <div className="inline h-[100%] py-1">{recipeInfo.viewCnt}</div>
         </ViewCountBox>
-
+        {/* 
         {recipeInfo.myRecipe && (
           <div
             className="absolute
@@ -64,7 +64,7 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
           >
             <ManageBtn src="/img/btn/menu-btn.png" />
           </div>
-        )}
+        )} */}
 
         {/* 레시피 제목 */}
         <RecipeTitleBox
@@ -133,13 +133,13 @@ text-[0.6rem]
 text-common-text-gray-color
 `;
 
-const ManageBtn = tw.img`
-absolute
-top-0
-right-2
-w-[1rem]
-inline-block
-`;
+// const ManageBtn = tw.img`
+// absolute
+// top-0
+// right-2
+// w-[1rem]
+// inline-block
+// `;
 
 const RecipeTitleBox = styled.div`
   color: #1e2b4f;
