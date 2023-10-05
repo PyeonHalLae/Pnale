@@ -70,14 +70,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     //새상품 랜덤 =============================================
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY RAND('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findNewProductRand(Pageable pageable,
                                         @Param("all") CorpType all,
                                         @Param("corp") CorpType corpType);
 
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
-            " ORDER BY RAND('RAND') ")
+            " ORDER BY FUNCTION('RAND') ")
     Page<Object[]> findNewProductRandByMemberId(Pageable pageable,
                                                   @Param("all") CorpType all,
                                                   @Param("corp") CorpType corpType,
