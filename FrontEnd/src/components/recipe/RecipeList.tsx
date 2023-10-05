@@ -185,7 +185,7 @@ const ContentTitle = tw.div`
 relative
   min-w-[22.5rem] max-w-[28.125rem] h-[3.75rem] 
   pt-[1rem] pb-[.625rem] pl-[1.125rem] 
-  my-[.625rem] bg-white 
+  mb-[.625rem] bg-white 
 `;
 
 const TitleText = tw.div`
