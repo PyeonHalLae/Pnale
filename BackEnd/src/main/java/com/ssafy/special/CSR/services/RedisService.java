@@ -4,10 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.special.CSR.dtos.search.RedisSearchDTO;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.redis.core.HashOperations;
-import org.springframework.data.redis.core.ListOperations;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.data.redis.core.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -21,6 +18,16 @@ public class RedisService {
 
     private final RedisTemplate<String, String> redisTemplate;
     private final ObjectMapper objectMapper;
+
+    public void setOauth2token(Long memberId, String token){
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        vop.set(String.valueOf(memberId), token);
+    }
+
+    public String getOauth2token(Long memberId){
+        ValueOperations<String, String> vop = redisTemplate.opsForValue();
+        return vop.get(String.valueOf(memberId));
+    }
 
     public void setSearchList(Long memberId, String keyword){
         long currentTime = System.currentTimeMillis();
