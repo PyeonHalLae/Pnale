@@ -5,6 +5,7 @@ import "react-quill/dist/quill.snow.css";
 
 import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
+import { imageCompression } from "browser-image-compression";
 
 interface Props {
   rcpDesc: string;
@@ -26,9 +27,18 @@ export const RecipeEditor = ({ rcpDesc, setRcpDesc }: Props) => {
 
     // 파일이 input 태그에 담기면 실행 될 함수
     input.onchange = async () => {
-      const file = input.files;
+      const file = input.files[0];
+
+      const options = {
+        maxSizeMB: 0.2,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+      };
+
+      const newImage = await imageCompression(file, options);
+
       if (file !== null) {
-        formData.append("image", file[0]);
+        formData.append("image", newImage);
         // axios를 통해 백엔드 개발자분과 통신했고, 데이터는 폼데이터로 주고받았습니다.
         axios
           .post("/api/img/recipe", formData, {
