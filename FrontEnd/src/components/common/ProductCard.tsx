@@ -12,6 +12,7 @@ export type ProductCardProps = {
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   const [likeStat, setLikeStat] = useState(false);
+  console.log(product.userLike.likeStat);
 
   //좋아요 버튼
   const LikeClickHandler = () => {
@@ -67,8 +68,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   }, [product.product.productImg, id]);
 
   useEffect(() => {
+    console.log(likeStat);
+
     setLikeStat(product?.userLike?.likeStat);
-  }, [product?.userLike?.likeStat]);
+  }, [product?.userLike?.likeStat, likeStat]);
 
   return (
     <Card>
