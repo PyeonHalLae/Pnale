@@ -1,6 +1,6 @@
 // import React from 'react'
 import Header from "@components/common/Header";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import tw from "tailwind-styled-components";
 import { useEffect, useRef } from "react";
 import { useState } from "react";
@@ -35,6 +35,7 @@ const PyeneShop = () => {
   const { pyenType } = useParams<string>();
   const [pyeneText, setPyeneText] = useState<string>();
   const pyeneHeader = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   const [bestList, setBestList] = useState<ProductComp[]>([]);
   const [newList, setNewList] = useState<ProductComp[]>([]);
@@ -74,7 +75,14 @@ const PyeneShop = () => {
         <PyeneShopBanner $bannerList={bannerList} />
       </PyeneHeader>
       <PyeneBestBox>
-        <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
+        <AddBtn
+          $pyeneColor={pyeneText}
+          onClick={() => {
+            navigate("more", { state: "BEST" });
+          }}
+        >
+          더보기
+        </AddBtn>
         <SideTitle $pyeneColor={pyeneText}>
           <img src={`/img/icons/${pyenType}-icon.png`} />
           <div>베스트</div>
@@ -83,7 +91,14 @@ const PyeneShop = () => {
         <PyeneShopThreeView $productList={bestList} $listViewType={"BEST"} />
       </PyeneBestBox>
       <PyeneNewBox>
-        <AddBtn $pyeneColor={pyeneText}>더보기</AddBtn>
+        <AddBtn
+          $pyeneColor={pyeneText}
+          onClick={() => {
+            navigate("more", { state: "NEW" });
+          }}
+        >
+          더보기
+        </AddBtn>
         <SideTitle $pyeneColor={pyeneText}>
           <img src={`/img/icons/${pyenType}-icon.png`} />
           <div>NEW</div>
