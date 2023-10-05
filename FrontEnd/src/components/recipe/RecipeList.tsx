@@ -11,6 +11,7 @@ import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
 import { popularRecipeType } from "./recipeListComponent/recipeListType";
 import PopularRecipeCard from "./recipeListComponent/PopularRecipeCard";
 import axios from "axios";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
@@ -73,6 +74,39 @@ const RecipeList = () => {
       });
   };
 
+  const createBtnClickHandler = () => {
+    axios
+      .get("/api/member/login", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        navigate("/recipe/create"); // 데이터
+      })
+      .catch((error) => {
+        const code = error.response.status;
+        if (code === 401) {
+          // 액세스토큰이 있으나 유효하지 않은 경우
+          axios
+            .get("/api/auth/member/login", {
+              withCredentials: true,
+            })
+            .then(() => {
+              navigate("/recipe/create");
+            })
+            .catch(() => {
+              ToastErrorMessage("로그인이 필요합니다");
+              navigate("/sociallogin");
+            });
+        } else {
+          ToastErrorMessage("로그인이 필요합니다");
+          navigate("/sociallogin");
+        }
+      });
+  };
+
   return (
     <>
       {loading ? (
@@ -132,12 +166,7 @@ const RecipeList = () => {
             </ViewMoreBtnBox>
           )}
 
-          <CreateBtn
-            onClick={() => {
-              navigate("/recipe/create");
-            }}
-            src="/img/btn/create-recipe.png"
-          />
+          <CreateBtn onClick={createBtnClickHandler} src="/img/btn/create-recipe.png" />
         </Container>
       )}
     </>
