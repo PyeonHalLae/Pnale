@@ -24,6 +24,7 @@ import PyeneShop from "@components/pyunE/PyeneShop";
 import PyeneEvent from "@components/pyunE/PyeneEvent";
 import PyeneEventList from "@components/pyunE/PyeneEventList";
 import PyeneEventDetail from "@components/pyunE/PyeneEventDetail";
+import PyeneAddList from "@components/pyunE/PyeneAddList";
 import LoginMain from "@components/login/LoginMain";
 import LoginTemp from "@components/login/LoginTemp";
 
@@ -74,6 +75,7 @@ function App() {
                 <Route index element={<PyeneEventList />} />
                 <Route path=":eventId" element={<PyeneEventDetail />} />
               </Route>
+              <Route path=":pyenType/more" element={<PyeneAddList />}></Route>
             </Route>
 
             {/* 로그인 페이지 */}
