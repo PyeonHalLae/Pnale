@@ -39,7 +39,7 @@ const RecipeProductsList = ({ ingredients }: { ingredients: recipePrdInfoType[] 
         <div className="w-[4rem]  justify-center">총 가격</div>
         {boxIngredients !== ingredients && (
           <div
-            className="text-common-peach mr-[3.125rem]"
+            className="text-common-peach mr-[3.125rem] absolute left-[1.75rem]"
             onClick={() => {
               setBoxIngredients(ingredients);
             }}
@@ -67,6 +67,7 @@ py-[0.625rem]
 text-[1.25rem] 
 `;
 const TotalPriceBox = tw.div`
+relative
 flex 
 flex-row-reverse
 text-center
