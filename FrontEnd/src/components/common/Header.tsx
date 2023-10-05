@@ -6,7 +6,7 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { searchInputData, searchIdsArray, storedToSearchTag } from "@recoil/kdmRecoil";
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 
 const Header = () => {
   const navigate = useNavigate();

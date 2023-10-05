@@ -60,7 +60,7 @@ export type RecipeInfo = {
   rcpId: number;
   rcpName: string;
   rcpSimple: string;
-  rcpThumnail: string;
+  rcpThumbnail: string;
   rcpVideoUrl: string;
   replyCnt: number;
   viewCnt: number;

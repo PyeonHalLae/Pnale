@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useRecoilState, useRecoilValue } from "recoil";
+import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import tw from "tailwind-styled-components";
 import { useQuery } from "react-query";
 import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
@@ -11,7 +11,7 @@ const SearchInput = () => {
   const [loginState, setLoginState] = useState<boolean>(false);
   const [userSearchTag, setUserSearchTag] = useState<string[]>();
   const [deleteBtn, setDeleteBtn] = useState(false);
-
+  const addSearchTag = useSetRecoilState(storedToSearchTag);
   //검색어 삭제
   const { data: deleteData } = useQuery(
     "deleteSearchTag",
@@ -19,7 +19,7 @@ const SearchInput = () => {
       const res = await axios.delete("/api/mylist", {
         withCredentials: true,
       });
-      return res;
+      return res.data;
     },
     {
       onError: (error: AxiosError) => {
@@ -35,6 +35,7 @@ const SearchInput = () => {
                     break;
                   case 204:
                     console.log("로컬에서 삭제");
+                    addSearchTag([]);
                     break;
                   default:
                     console.log("auth 예외: ", res.data.code);
@@ -43,6 +44,10 @@ const SearchInput = () => {
               .catch((error) => {
                 console.log("401 예외:", error);
               });
+            break;
+          default:
+            // 그 외의 오류 코드인 경우 콘솔에 출력
+            console.error("error status:", error.response?.status);
         }
       },
       retry: 2,
@@ -91,12 +96,15 @@ const SearchInput = () => {
                 console.error(error);
               });
             break;
+          case 403:
+            console.log("로그인 좀 해");
+            break;
           default:
             // 그 외의 오류 코드인 경우 콘솔에 출력
             console.error("error status:", error.response?.status);
         }
       },
-      retry: 2,
+      retry: 1,
       staleTime: 0,
       cacheTime: 0,
     }
@@ -117,7 +125,15 @@ const SearchInput = () => {
 
   useEffect(() => {
     console.log(deleteData);
-  });
+    if (deleteData?.code === 200) {
+      console.log("유져 검색 기록 삭제");
+    } else if (deleteData?.code === 204) {
+      addSearchTag([]);
+      console.log("로컬 검색 기록 삭제");
+    }
+    /* eslint-disable-next-line */
+  }, [deleteData]);
+
   return (
     <SearchMain>
       <div className="flex items-end justify-between px-4 text-common-text-color">
