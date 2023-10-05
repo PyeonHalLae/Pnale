@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface RecipeReviewRepository extends JpaRepository<RecipeReview, Long> {
     Long countByRecipeAndStatusNot(Recipe recipe, ReviewStatusType status);
-    Page<RecipeReview> findByMemberMemberIdAndStatusNot(Pageable pageable, Long memberId, ReviewStatusType status);
+    Page<RecipeReview> findByMemberMemberIdAndStatusNotAndRecipeIsDeletedFalse(Pageable pageable, Long memberId, ReviewStatusType status);
     Page<RecipeReview> findAllByRecipeAndStatusNot(Recipe recipe, ReviewStatusType status, Pageable pageable);
 
 }
