@@ -18,7 +18,7 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
         <a
           href={videoUrl}
           className="w-[100%]
-          h-[1.8125rem]
+          h-[1.6875rem]
           text-[.75rem] 
           line-clamp-1 
           mb-[.625rem] 
