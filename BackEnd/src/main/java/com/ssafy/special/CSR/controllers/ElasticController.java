@@ -46,6 +46,14 @@ public class ElasticController {
         log.info("{} {}", name,category);
         return new DataResponse(200, name + " " + category + "에 대한 검색 리스트를 반환합니다.", goodsService.findSearchRecipeList(pageable, name,category));
     }
+
+    @PostMapping("/recipe/category")
+    public DataResponse<?> getNameonRecipeCategoryList(@PageableDefault(size = 10) Pageable pageable,
+                                               @RequestBody() Map<String, Object> map) {
+        String category = (String) map.get("category");
+        log.info("{}",category);
+        return new DataResponse(200, category + "에 대한 검색 리스트를 반환합니다.", goodsService.findSearchRecipeCategoryList(pageable,category));
+    }
     //검색 결과 반환 - 상품 검색시 가장 먼저 보이는 아이템들 검색상품 12개, 관련상품, 관련레시피
     @PostMapping("/result")
     public DataResponse<?> getNameResult(@PageableDefault(size = 12) Pageable pageable,
