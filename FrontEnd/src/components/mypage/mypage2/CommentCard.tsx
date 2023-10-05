@@ -60,6 +60,7 @@ const BackSize = tw.div`
     my-[0.625rem]
     mx-auto
     p-[0.625rem]
+    shadow-[0px_0px_2px_rgba(0,0,0,0.2)]
 `;
 
 const TitleBox = tw.div`
