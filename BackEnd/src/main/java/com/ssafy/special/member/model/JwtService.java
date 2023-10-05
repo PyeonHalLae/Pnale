@@ -5,6 +5,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -63,36 +64,48 @@ public class JwtService {
     public void sendAccessAndRefreshToken(HttpServletResponse response, String accessToken, String refreshToken){
         response.setStatus(HttpServletResponse.SC_OK);
 
-        Cookie accessCookie = new Cookie("accessToken", accessToken);
-        accessCookie.setMaxAge(1800+3600*9); //1800000
-        accessCookie.setHttpOnly(true);
-        accessCookie.setPath("/api");
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", accessToken)
+                .path("/api")
+                .sameSite("Lax")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(1800+3600*9)
+                .build();
 
-        Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
-        refreshCookie.setMaxAge(120960+3600*9); //1209600000
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/api/auth");
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken)
+                .path("/api/auth")
+                .sameSite("Lax")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(120960+3600*9)
+                .build();
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
     }
 
     @Transactional
     public void sendDeletedToken(Long memberId, HttpServletResponse response){
         response.setStatus(HttpServletResponse.SC_OK);
 
-        Cookie accessCookie = new Cookie("accessToken", "");
-        accessCookie.setMaxAge(0);
-        accessCookie.setHttpOnly(true);
-        accessCookie.setPath("/api");
+        ResponseCookie accessCookie = ResponseCookie.from("accessToken", "")
+                .path("/api")
+                .sameSite("Lax")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(0)
+                .build();
 
-        Cookie refreshCookie = new Cookie("refreshToken", "");
-        refreshCookie.setMaxAge(0);
-        refreshCookie.setHttpOnly(true);
-        refreshCookie.setPath("/api/auth");
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", "")
+                .path("/api/auth")
+                .sameSite("Lax")
+                .httpOnly(true)
+                .secure(true)
+                .maxAge(0)
+                .build();
 
-        response.addCookie(accessCookie);
-        response.addCookie(refreshCookie);
+        response.addHeader("Set-Cookie", accessCookie.toString());
+        response.addHeader("Set-Cookie", refreshCookie.toString());
 
         updateRefreshToken(memberId, "");
     }
