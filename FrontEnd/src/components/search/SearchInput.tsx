@@ -2,7 +2,7 @@ import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
 import { useRecoilState, useRecoilValue, useSetRecoilState } from "recoil";
 import tw from "tailwind-styled-components";
-import { useQuery } from "react-query";
+import { QueryClient, useMutation, useQuery } from "react-query";
 import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
 
 const SearchInput = () => {
@@ -12,8 +12,9 @@ const SearchInput = () => {
   const [userSearchTag, setUserSearchTag] = useState<string[]>();
   const [deleteBtn, setDeleteBtn] = useState(false);
   const addSearchTag = useSetRecoilState(storedToSearchTag);
+  const queryClient = new QueryClient();
   //검색어 삭제
-  const { data: deleteData } = useQuery(
+  const { data: deleteData } = useMutation(
     "deleteSearchTag",
     async () => {
       const res = await axios.delete("/api/mylist", {
@@ -22,6 +23,17 @@ const SearchInput = () => {
       return res.data;
     },
     {
+      onSettled: (data) => {
+        if (data?.code === 200) {
+          // 200일 때 recentSearch 쿼리를 재요청합니다.
+          queryClient.invalidateQueries("recentSearch");
+          console.log("유져 검색 기록 삭제");
+        }
+        if (data?.code === 204) {
+          addSearchTag([]);
+          console.log("로컬 검색 기록 삭제");
+        }
+      },
       onError: (error: AxiosError) => {
         console.log("error", error);
         switch (error.response?.status) {
@@ -32,6 +44,7 @@ const SearchInput = () => {
                 switch (res.data.code) {
                   case 200:
                     console.log("재로그인 - 삭제성공");
+                    queryClient.invalidateQueries("recentSearch");
                     break;
                   case 204:
                     console.log("로컬에서 삭제");
@@ -51,7 +64,6 @@ const SearchInput = () => {
         }
       },
       retry: 2,
-      enabled: deleteBtn,
     }
   );
 
@@ -122,16 +134,6 @@ const SearchInput = () => {
       }
     }
   }, [recentSearchLoading, recentSearchData]);
-
-  useEffect(() => {
-    console.log(deleteData);
-    if (deleteData?.code === 200) {
-      console.log("유져 검색 기록 삭제");
-    } else if (deleteData?.code === 204) {
-      addSearchTag([]);
-      console.log("로컬 검색 기록 삭제");
-    }
-  }, [deleteData, addSearchTag, userSearchTag]);
 
   return (
     <SearchMain>
