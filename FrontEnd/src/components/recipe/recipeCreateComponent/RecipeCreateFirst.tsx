@@ -86,8 +86,12 @@ const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
       ToastErrorMessage("레시피 미리보기 사진을 추가해주세요.");
     } else if (rcpName === "") {
       ToastErrorMessage("레시피 제목을 입력해주세요.");
+    } else if (rcpName.length > 20) {
+      ToastErrorMessage("제목의 최대 길이는 20자 입니다");
     } else if (rcpSimple === "") {
       ToastErrorMessage("레시피 간단 설명을 입력해주세요.");
+    } else if (rcpSimple.length > 50) {
+      ToastErrorMessage("한줄 설명의 최대 길이는 50자 입니다");
     } else {
       stepHandler("2");
     }
