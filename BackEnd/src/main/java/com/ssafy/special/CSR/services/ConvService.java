@@ -33,49 +33,22 @@ public class ConvService {
         Map<String, Object> response = new HashMap<>();
         response.put("banners", bannerService.findCorpBanner(PageRequest.of(0,5), corpType));
         response.put("bestProduct", findBestProduct(pageable, corpType, memberId));
-        response.put("newProduct", findNewProduct(pageable, corpType, memberId));
+        response.put("newProduct", memberId == null
+                                    ? productRepository.findNewProductRand(pageable, CorpType.ALL, corpType)
+                                    : productRepository.findNewProductRandByMemberId(pageable, CorpType.ALL, corpType, memberId));
         return response;
     }
 
-
     public Page<Map<String, Object>> findBestProduct(Pageable pageable, CorpType corpType, Long memberId){
-        if(memberId == null){
-            switch (corpType) {
-                case CU: return ResponseUtil.getPageProducts(productRepository.findCUBestProduct(pageable, CorpType.ALL, corpType));
-                case GS: return ResponseUtil.getPageProducts(productRepository.findGSBestProduct(pageable, CorpType.ALL, corpType));
-                case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENBestProduct(pageable, CorpType.ALL, corpType));
-                case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTBestProduct(pageable, CorpType.ALL, corpType));
-                default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
-            }
-        }else {
-            switch (corpType) {
-                case CU: return ResponseUtil.getPageProducts(productRepository.findCUBestProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case GS: return ResponseUtil.getPageProducts(productRepository.findGSBestProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENBestProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTBestProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
-            }
-        }
+        return memberId == null
+                ? ResponseUtil.getPageProducts(productRepository.findBestProduct(pageable, CorpType.ALL, corpType))
+                : ResponseUtil.getPageProducts(productRepository.findBestProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
     }
 
     public Page<Map<String, Object>> findNewProduct(Pageable pageable,CorpType corpType, Long memberId){
-        if(memberId == null){
-            switch (corpType) {
-                case CU: return ResponseUtil.getPageProducts(productRepository.findCUNewProduct(pageable, CorpType.ALL, corpType));
-                case GS: return ResponseUtil.getPageProducts(productRepository.findGSNewProduct(pageable, CorpType.ALL, corpType));
-                case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENNewProduct(pageable, CorpType.ALL, corpType));
-                case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTNewProduct(pageable, CorpType.ALL, corpType));
-                default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
-            }
-        }else{
-            switch (corpType) {
-                case CU: return ResponseUtil.getPageProducts(productRepository.findCUNewProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case GS: return ResponseUtil.getPageProducts(productRepository.findGSNewProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case SEVEN: return ResponseUtil.getPageProducts(productRepository.findSEVENNewProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                case EMART: return ResponseUtil.getPageProducts(productRepository.findEMARTNewProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
-                default: throw new CustomException(CustomErrorCode.CONV_DATA_NOT_FOUND);
-            }
-        }
+        return memberId == null
+                ? ResponseUtil.getPageProducts(productRepository.findNewProduct(pageable, CorpType.ALL, corpType))
+                : ResponseUtil.getPageProducts(productRepository.findNewProductByMemberId(pageable, CorpType.ALL, corpType, memberId));
     }
 
     public Page<Map<String, Object>> findEventProduct(Pageable pageable, CorpType corpType, Long memberId){
@@ -99,10 +72,9 @@ public class ConvService {
     }
 
     public Page<Map<String, Object>> findPbProduct(Pageable pageable, CorpType corpType, Long memberId){
-        return memberId != null
-                ? ResponseUtil.getPageProducts(productRepository.findPbProductByMemberId(pageable, corpType, memberId))
-                : ResponseUtil.getPageProducts(productRepository.findPbProduct(pageable, corpType));
-
+        return memberId == null
+                ? ResponseUtil.getPageProducts(productRepository.findPbProduct(pageable, corpType))
+                : ResponseUtil.getPageProducts(productRepository.findPbProductByMemberId(pageable, corpType, memberId));
     }
 
     public Page<Map<String,Object>> findProductByFilter(Pageable pageable, FilterDTO filter, Long memberId) {

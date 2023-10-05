@@ -31,8 +31,7 @@ public class MyPageController {
     private final ProductService productService;
     private final RecipeService recipeService;
     private final MemberService memberService;
-    private final RecipeReviewRepository recipeReviewRepository;
-    private final MemberPickRecipeRepository memberPickRecipeRepository;
+
 
     @GetMapping("")
     public DataResponse<?> getMemberData(HttpServletRequest request) {
