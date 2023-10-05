@@ -130,14 +130,14 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
       <SearchBar>
         <img className="w-[1.2rem] h-[1.2rem]" src="/img/btn/search-blue.png" alt="ggg" />
         <input
-          className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem]"
+          className="outline-none bg-common-back-color text-[1.125rem] ml-[0.5rem] w-[calc(100%-4.2rem)]"
           value={searchKeyword}
           onChange={inputChangeHandler}
           onKeyDown={searchBarEnterHandler}
           placeholder="제품이름을 입력하세요"
         />
         <div
-          className="w-[3rem] py-1 mr-2 font-light bg-common-text-color text-[0.8rem] text-center text-white rounded-[0.5rem]"
+          className="w-[3rem] py-1 mr-2 font-light bg-common-text-color text-[0.8rem] text-center text-white rounded-[0.3rem]"
           onClick={productSearchHandler}
         >
           검색
