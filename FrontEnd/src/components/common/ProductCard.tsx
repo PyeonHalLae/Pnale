@@ -2,7 +2,6 @@ import { ProductComp } from "@/model/commonType";
 import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { loadImage } from "@model/exportFucKDM";
-import { ToastContainer, toast } from "react-toastify";
 import axios from "axios";
 import { useState } from "react";
 import { ToastBackMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";

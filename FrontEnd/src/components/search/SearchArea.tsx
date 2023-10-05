@@ -21,12 +21,14 @@ const SearchArea = ({ search }: SearchAreaPros) => {
           <span className="text-2xl font-bold text-center text-common-peach">검색</span>
           <span className="text-2xl font-bold text-center text-common-text-color"> 상품</span>
         </div>
-        <button
-          className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-peach"
-          onClick={() => moveToMoreProduct()}
-        >
-          더보기
-        </button>
+        {search.content.length > 4 && (
+          <button
+            className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-peach"
+            onClick={() => moveToMoreProduct()}
+          >
+            더보기
+          </button>
+        )}
       </div>
       <div className="grid grid-cols-2 p-2 gap-y-3 gap-x-3">
         {search.content.slice(0, 4).map((info, index) => (

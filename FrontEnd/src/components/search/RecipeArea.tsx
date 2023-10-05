@@ -15,12 +15,14 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
           <span className="text-2xl font-bold text-center text-common-orange">관련</span>
           <span className="text-2xl font-bold text-center text-common-text-color"> 레시피</span>
         </div>
-        <button
-          className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-orange"
-          onClick={() => navigate("/search-recipe")}
-        >
-          더보기
-        </button>
+        {recipe.length > 0 && (
+          <button
+            className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-orange"
+            onClick={() => navigate("/search-recipe")}
+          >
+            더보기
+          </button>
+        )}
       </div>
       <div>
         {recipe.map((recipeItem) => (

@@ -32,7 +32,7 @@ const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
 
   // 업로드
   const imgUploadHandler = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf)$/;
+    const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf|JPG|JPEG|PNG|GIF|BMP|PDF)$/;
 
     // let fileSize: number;
 
@@ -112,6 +112,7 @@ const RecipeCreateFirst = ({ stepHandler, action }: Props) => {
           id="rcpThumbnail"
           onChange={imgUploadHandler}
           className="hidden"
+          accept="image/*"
         />
         <ImgBox
           src={rcpThumbnail == "" ? "/img/etc/empty-image.png" : rcpThumbnail}

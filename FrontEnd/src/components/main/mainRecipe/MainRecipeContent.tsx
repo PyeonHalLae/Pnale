@@ -9,6 +9,9 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
   const [ingrediendtsToShow, setIngrediendtsToShow] = useState<string[]>();
 
   useEffect(() => {
+    console.log(recipe.rcpName);
+    console.log(recipe);
+
     if (recipe.ingredients) {
       setRecipeId(recipe.rcpId);
       setIngrediendtsToShow(recipe.ingredients.slice(0, 2));
@@ -21,13 +24,11 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
         className="m-3 border-2 shadow-xl border-common-white-divider"
         onClick={() => navigate(`/recipe/${recipeId}`)}
       >
-        <img src="/img/test/recipeTest.png" alt="레시피 사진" className="h-[210px] w-full"></img>
+        <img src={recipe.rcpThumbnail} alt="레시피 사진" className="h-[210px] w-full"></img>
         {ingrediendtsToShow && (
           <TextBox>
             <div className="text-common-text-color">
-              <Title>
-                {recipe.rcpName} {recipe.rcpSimple}
-              </Title>
+              <Title>{recipe.rcpName}</Title>
               {ingrediendtsToShow.map((ingredient, index) => (
                 <Tag key={index}># {ingredient.slice(ingredient.indexOf(")") + 1)}</Tag>
               ))}

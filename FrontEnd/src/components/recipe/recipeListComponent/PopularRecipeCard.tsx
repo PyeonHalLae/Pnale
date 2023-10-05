@@ -110,11 +110,15 @@ const Title = styled.div`
 
 const Img = styled.img`
   grid-area: Img;
-  width: 12.75rem;
+  /* width: 12.75rem; */
   height: 10.5rem;
   margin: auto;
   src: ${(props) => props.src};
   border-radius: 0.9375rem;
+  object-fit: cover;
+  padding-left: 5px;
+  padding-right: 5px;
+  /* border-radius: 25px; */
 `;
 
 const Ingredients = styled.div`
