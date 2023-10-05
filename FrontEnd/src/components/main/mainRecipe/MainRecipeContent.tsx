@@ -28,9 +28,7 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
         {ingrediendtsToShow && (
           <TextBox>
             <div className="text-common-text-color">
-              <Title>
-                {recipe.rcpName} {recipe.rcpSimple}
-              </Title>
+              <Title>{recipe.rcpName}</Title>
               {ingrediendtsToShow.map((ingredient, index) => (
                 <Tag key={index}># {ingredient.slice(ingredient.indexOf(")") + 1)}</Tag>
               ))}

@@ -83,7 +83,7 @@ const MainPageContent = () => {
   return (
     <MainPage>
       <MainRecipe recipe={data.recipe} />
-      <img src="/img/etc/eventBanner.png" onClick={() => navigate("/pyenE/CU/EVENT")}></img>
+      <img src="/img/etc/eventBanner1.png" onClick={() => navigate("/pyenE/CU/EVENT")}></img>
       <MainProduct recommands={data.recommands} />
     </MainPage>
   );
