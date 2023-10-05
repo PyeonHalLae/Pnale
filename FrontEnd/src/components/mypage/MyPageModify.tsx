@@ -46,7 +46,17 @@ const MyPageModify = () => {
 
   //이미지 변경시 미리보기 이미지 변경 핸들러
   const changeImgHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const fileForm = /(.*?)\.(jpg|jpeg|png|gif|bmp|pdf|JPG|JPEG|PNG|GIF|BMP|PDF)$/;
+
+    const imgValue = e.target.value;
+
+    if (!imgValue.match(fileForm)) {
+      ToastErrorMessage("이미지 파일만 업로드 가능");
+      return;
+    }
+
     const imgFile = e.target.files[0];
+
     if (imgFile) {
       const render = new FileReader();
       render.readAsDataURL(imgFile);
@@ -113,7 +123,6 @@ const MyPageModify = () => {
 
   const UpdateUserInfo = async () => {
     const fileImg = inputFileRef.current;
-
     const options = {
       maxSizeMB: 0.2,
       maxWidthOrHeight: 1920,
@@ -201,7 +210,12 @@ const MyPageModify = () => {
             <Title>회원정보수정</Title>
             <ProfileImg>
               <img src={userImgSrc} />
-              <HiddenInput type="file" ref={inputFileRef} onChange={changeImgHandler} />
+              <HiddenInput
+                type="file"
+                ref={inputFileRef}
+                onChange={changeImgHandler}
+                accept="image/*"
+              />
               <ImgChangBtn onClick={imgChangBtnClickHandler} />
             </ProfileImg>
             <NameBox>
