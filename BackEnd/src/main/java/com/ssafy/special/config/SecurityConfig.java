@@ -45,6 +45,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/search/**").permitAll()
+                .antMatchers("/api/mylist/**").permitAll()
                 .antMatchers("/api/email/**").permitAll()
                 .antMatchers("/api/conv/filter/**").permitAll()
                 .antMatchers("/api/product/pick/**").authenticated()
