@@ -51,7 +51,7 @@ public class RedisService {
         // 20개 까지만 출력
         Set<String> sortedSet = zop.reverseRange(memberId+"search", 0, 19);
         // 나머지는 이틈에 삭제
-        zop.removeRange(memberId+"search", 0, -21);
+        zop.removeRange(memberId+"search", 20, -21);
 
         if(sortedSet == null || sortedSet.isEmpty()) return null;
         return new ArrayList<>(sortedSet);
