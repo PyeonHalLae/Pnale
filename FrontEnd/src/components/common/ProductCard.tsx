@@ -61,6 +61,8 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   };
 
   useEffect(() => {
+    console.log(product.userLike.likeStat);
+
     if (product.product.productImg) {
       loadImage(product.product.productImg, id);
     }
