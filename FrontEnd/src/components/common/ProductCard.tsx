@@ -11,7 +11,7 @@ export type ProductCardProps = {
 };
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
-  const [likeStat, setLikeStat] = useState(product.userLike.likeStat);
+  const [likeStat, setLikeStat] = useState(false);
 
   //좋아요 버튼
   const LikeClickHandler = () => {
@@ -22,7 +22,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          setLikeStat(!likeStat);
+          setLikeStat((pre) => !pre);
           ToastBackMessage(res.data.message);
         }
       })
@@ -37,7 +37,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
-                setLikeStat(!likeStat);
+                setLikeStat((pre) => !pre);
                 ToastBackMessage(res.data.message);
               }
             })
@@ -61,8 +61,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   };
 
   useEffect(() => {
-    loadImage(product.product.productImg, id);
-  }, [product.product.productImg, id]);
+    if (product.product.productImg) {
+      loadImage(product.product.productImg, id);
+    }
+    setLikeStat(product.userLike.likeStat);
+  }, [product, id]);
 
   return (
     <Card>
