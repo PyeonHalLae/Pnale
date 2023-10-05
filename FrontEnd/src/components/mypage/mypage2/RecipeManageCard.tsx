@@ -146,16 +146,17 @@ bg-white
 grid grid-cols-5 
 my-[.625rem] 
 items-center;
+shadow-[0px_0px_2px_rgba(0,0,0,0.2)]
 `;
 
 const RecipeImg = tw.img`
- max-w-[8.75rem] 
- max-h-[7.5rem] 
  w-[8rem] 
  h-[6.25rem] 
  rounded-[.3125rem] 
  m-auto 
  col-span-2
+ bg-common-back-color p-1
+ object-cover 
 `;
 
 const ContentBox = tw.div`
