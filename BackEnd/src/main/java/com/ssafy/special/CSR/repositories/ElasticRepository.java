@@ -1,6 +1,7 @@
 package com.ssafy.special.CSR.repositories;
 
 import com.ssafy.special.entity.Elastic;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
@@ -13,5 +14,5 @@ public interface ElasticRepository extends ElasticsearchRepository<Elastic, Stri
     // 추가 검색 메서드 정의 가능
     List<Elastic> findByNameAndCategory(Pageable pageable, String name, String category);
 
-    List<Elastic> findByCategory(Pageable pageable, String category);
+    Page<Elastic> findByCategory(Pageable pageable, String category);
 }
