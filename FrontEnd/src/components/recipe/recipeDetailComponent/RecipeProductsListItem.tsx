@@ -68,6 +68,12 @@ const RecipeProductsListItem = ({
           {ingredient.seventype !== null && (
             <StickerImg src={`/img/sticker/main/SEVEN-${ingredient.seventype}.png`}></StickerImg>
           )}
+          {ingredient.cutype === null &&
+            ingredient.emarttype === null &&
+            ingredient.gstype === null &&
+            ingredient.seventype === null && (
+              <StickerImg src={"/img/sticker/main/None-Event.png"}></StickerImg>
+            )}
         </div>
       </StickerBox>
     </Container>
