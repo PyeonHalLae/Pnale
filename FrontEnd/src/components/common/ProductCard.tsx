@@ -61,13 +61,14 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
   };
 
   useEffect(() => {
-    console.log(product.userLike.likeStat);
-
-    if (product.product.productImg) {
+    if (product?.product?.productImg) {
       loadImage(product.product.productImg, id);
     }
-    setLikeStat(product.userLike.likeStat);
-  }, [product, id]);
+  }, [product.product.productImg, id]);
+
+  useEffect(() => {
+    setLikeStat(product?.userLike?.likeStat);
+  }, [product?.userLike?.likeStat]);
 
   return (
     <Card>
