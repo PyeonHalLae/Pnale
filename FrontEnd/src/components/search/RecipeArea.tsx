@@ -10,11 +10,16 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
   const [newRecipeList, setNewRecipeList] = useState<recipeType[]>(null);
 
   useEffect(() => {
-    const rcpIds = recipe.map((recipeInfo) => recipeInfo.rcpId);
-    const rcpIdsSet = [...new Set(rcpIds)];
+    const newRecipes = [];
+    const seenRcpIds = new Set();
 
-    const newRecipes = recipe.filter((recipeInfo) => rcpIdsSet.includes(recipeInfo.rcpId));
-
+    recipe.forEach((recipeInfo) => {
+      if (!seenRcpIds.has(recipeInfo.rcpId)) {
+        seenRcpIds.add(recipeInfo.rcpId);
+        newRecipes.push(recipeInfo);
+      }
+    });
+    console.log(newRecipes);
     setNewRecipeList(newRecipes);
   }, [recipe]);
 
