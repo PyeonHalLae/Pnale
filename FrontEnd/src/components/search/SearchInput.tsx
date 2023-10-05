@@ -131,8 +131,7 @@ const SearchInput = () => {
       addSearchTag([]);
       console.log("로컬 검색 기록 삭제");
     }
-    /* eslint-disable-next-line */
-  }, [deleteData]);
+  }, [deleteData, addSearchTag, userSearchTag]);
 
   return (
     <SearchMain>
