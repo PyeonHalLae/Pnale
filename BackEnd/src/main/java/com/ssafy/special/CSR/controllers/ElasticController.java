@@ -63,7 +63,7 @@ public class ElasticController {
         Long memberId = (Long) request.getAttribute("memberId");
 
         try{
-            redisService.setSearchList(memberId, requestData.getKeyword());
+            if(memberId != null && requestData.getKeyword() != null) redisService.setSearchList(memberId, requestData.getKeyword());
         }catch(Exception e){
             throw new IllegalArgumentException("Redis문제");
         }finally{
