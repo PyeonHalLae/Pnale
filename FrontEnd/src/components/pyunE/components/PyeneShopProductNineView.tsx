@@ -172,10 +172,17 @@ export default PyeneShopProductNineView;
 
 const PaginateBox = tw.div`flex gap-3 justify-center w-[calc(100%-30px)] my-[30px]`;
 
-const FirstMoveBtn = tw.div``;
+const FirstMoveBtn = tw.div` w-[30px] h-[30px] text-center text-common-text-color leading-[30px]  `;
 
-const ListMoveBtn = tw.div``;
+const ListMoveBtn = tw.div` w-[30px] h-[30px] text-center text-common-text-color leading-[30px] `;
 
 const PageNumberBtn = styled.div<{ $currentPageState: boolean }>`
-  background-color: ${(props) => (props.$currentPageState ? "yellow" : "white")};
+  background-color: ${(props) => (props.$currentPageState ? "#1e2b4f" : "white")};
+  color: ${(props) => (props.$currentPageState ? "white" : "#1e2b4f")};
+
+  width: 30px;
+  height: 30px;
+  text-align: center;
+  line-height: 31px;
+  font-size: 15px;
 `;

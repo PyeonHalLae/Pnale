@@ -13,6 +13,7 @@ import {
   UserInfoExpires,
   UserNotLogin,
 } from "@/model/toastMessageJHM";
+import imageCompression from "browser-image-compression";
 
 interface UserInfoType {
   memberId: number;
@@ -110,12 +111,18 @@ const MyPageModify = () => {
       });
   }, []);
 
-  const UpdateUserInfo = () => {
+  const UpdateUserInfo = async () => {
     const fileImg = inputFileRef.current;
+
+    const options = {
+      maxSizeMB: 0.2,
+      maxWidthOrHeight: 1920,
+      useWebWorker: true,
+    };
 
     let redirectFile = null;
     if (fileImg && fileImg.files.length > 0) {
-      redirectFile = fileImg.files[0];
+      redirectFile = await imageCompression(fileImg.files[0], options);
     }
 
     const formData = new FormData();
