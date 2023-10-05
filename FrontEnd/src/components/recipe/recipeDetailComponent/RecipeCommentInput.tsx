@@ -15,6 +15,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
     row: 1,
     lineBreak: {},
   });
+  const [isLogined, setIsLogined] = useState<boolean>(false);
 
   useEffect(() => {
     // 유저이름 받아옴
@@ -29,6 +30,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
         setNickname(() => {
           return res.data.data.nickname;
         });
+        setIsLogined(() => true);
       });
   }, []);
 
@@ -94,29 +96,35 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
   };
 
   return (
-    <Container>
-      <NameBox>{nickname}</NameBox>
-      <InputBox
-        onChange={inputChangeHandler}
-        placeholder="내용을 입력하세요"
-        value={commentContent}
-        onInput={resizeTextareaHanlder}
-        onKeyDown={onKeyEnterHandler}
-        rows={textareaHeight.row}
-      />
-      <div className="flex flex-row-reverse">
-        <CreateBtn onClick={commentCreateHandler}>
-          <div>작성하기</div>
-        </CreateBtn>
-      </div>
-    </Container>
+    <>
+      {isLogined ? (
+        <Container>
+          <NameBox>{nickname}</NameBox>
+          <InputBox
+            onChange={inputChangeHandler}
+            placeholder="내용을 입력하세요"
+            value={commentContent}
+            onInput={resizeTextareaHanlder}
+            onKeyDown={onKeyEnterHandler}
+            rows={textareaHeight.row}
+          />
+          <div className="flex flex-row-reverse">
+            <CreateBtn onClick={commentCreateHandler}>
+              <div>작성하기</div>
+            </CreateBtn>
+          </div>
+        </Container>
+      ) : (
+        <Container>댓글이 없습니다</Container>
+      )}
+    </>
   );
 };
 
 export default RecipeCommentInput;
 
 const Container = tw.div`
-mx-[1.875rem] p-[0.5rem] pb-[3rem]
+mx-[1.875rem] p-[0.5rem] pb-[3rem] mb-[1.875rem]
 `;
 
 const NameBox = tw.div`
