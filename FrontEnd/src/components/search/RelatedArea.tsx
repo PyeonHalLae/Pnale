@@ -10,7 +10,7 @@ const RelatedArea = ({ relate }: SearchAreaPros) => {
   // console.log("relate", relate);
 
   return (
-    <div className="bg-white">
+    <div className="mt-2 bg-white">
       <div className="px-3.5 pt-3.5 relative ">
         <div className="inline-block ">
           <span className="text-2xl font-bold text-center text-common-orange">관련</span>

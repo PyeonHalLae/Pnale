@@ -8,7 +8,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { ToastErrorMessage, UserInfoExpires, UserNotLogin } from "@/model/toastMessageJHM";
 import axios from "axios";
-import CommentCardMemu from "./mypage2/CommentCardMemu";
+import CommentCardMenu from "./mypage2/CommentCardMenu";
 
 interface commentInfoType {
   rcpId: number;
@@ -19,11 +19,15 @@ interface commentInfoType {
 }
 
 const MyPageComment = () => {
-  const [CommentList, setCommentList] = useState<commentInfoType[]>([]);
+  const [commentList, setCommentList] = useState<commentInfoType[]>([]);
   const navigate = useNavigate();
   //하단 메뉴 상태
   const [bottomMenuState, setBottomMenuState] = useState<boolean>();
   const [selectCommentId, setSelectCommentId] = useState<number>();
+
+  //페이지를 위한 state
+  const [totalPage, setTotalPage] = useState<number>(null);
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   //하단 메뉴 출력 State 변경
   const BottomMenuStateHandler = (e: React.MouseEvent<HTMLDivElement>) => {
@@ -31,20 +35,29 @@ const MyPageComment = () => {
     setBottomMenuState(!bottomMenuState);
   };
 
-  //하단 메뉴 레시피아이디 변경
-  const SelectCommentIdHandler = (revId) => {
+  //하단 메뉴 댓글 아이디 변경
+  const SelectCommentIdHandler = (revId: number) => {
     setSelectCommentId(revId);
   };
 
-  useEffect(() => {
+  //댓글 삭제시 List에서 제거
+  const UpdateCommentList = (commentId: number) => {
+    const updatedCommentList = commentList.filter((comment) => comment.revId !== commentId);
+    console.log(updatedCommentList);
+    setCommentList([...updatedCommentList]);
+  };
+
+  const AxiosHandler = () => {
     axios
-      .get("/api/mypage/comment?page=0", {
+      .get("/api/mypage/comment?page=" + currentPage, {
         withCredentials: true,
       })
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          setCommentList(resData.data.content);
+          setCommentList([...commentList, ...resData.data.content]);
+          setCurrentPage((prev) => prev + 1);
+          setTotalPage(res.data.data.totalPages);
         }
         if (resData.code == 204) {
           setCommentList(null);
@@ -54,14 +67,16 @@ const MyPageComment = () => {
         if (err.response.status === 401) {
           //리프레시 토큰 재발급
           axios
-            .get("/api/auth/mypage/comment?page=0", {
+            .get("/api/auth/mypage/comment?page=" + currentPage, {
               withCredentials: true,
             })
             .then((res) => {
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
-                setCommentList(resData.data.content);
+                setCommentList([...commentList, ...resData.data.content]);
+                setCurrentPage((prev) => prev + 1);
+                setTotalPage(res.data.data.totalPages);
               }
               if (resData.code == 204) {
                 setCommentList(null);
@@ -87,15 +102,20 @@ const MyPageComment = () => {
           }
         }
       });
+  };
+
+  useEffect(() => {
+    AxiosHandler();
   }, []);
 
   return (
     <>
       <div className="relative">
         {bottomMenuState && (
-          <CommentCardMemu
+          <CommentCardMenu
             $selectCommentId={selectCommentId}
             BottomMenuStateHandler={BottomMenuStateHandler}
+            UpdateCommentList={UpdateCommentList}
           />
         )}
         <MyCommentHeader>
@@ -110,15 +130,27 @@ const MyPageComment = () => {
           </SideBtn>
         </MyCommentHeader>
         <MyCommentMain>
-          {CommentList &&
-            CommentList.map((commentItme, index) => (
+          {commentList &&
+            commentList.map((commentItme) => (
               <CommentCard
-                key={commentItme.revId + index}
+                key={commentItme.revId}
                 commentInfo={commentItme}
                 BottomMenuStateHandler={BottomMenuStateHandler}
                 SelectCommentIdHandler={SelectCommentIdHandler}
               />
             ))}
+
+          <CommentAddBox>
+            {totalPage > 1 && currentPage < totalPage && (
+              <AddBtn
+                onClick={() => {
+                  AxiosHandler();
+                }}
+              >
+                더보기
+              </AddBtn>
+            )}
+          </CommentAddBox>
         </MyCommentMain>
       </div>
     </>
@@ -172,3 +204,9 @@ const MyCommentMain = tw.div`
   h-[calc(100%-9.375rem)]
 
 `;
+
+const CommentAddBox = tw.div`
+  flex h-24
+`;
+
+const AddBtn = tw.div`mx-auto my-auto  text-common-text-gray-color  text-[20px]`;

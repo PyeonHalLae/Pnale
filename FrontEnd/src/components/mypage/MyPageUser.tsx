@@ -141,7 +141,7 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.memberImg} />
+              <UserImage src={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
                 <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
@@ -242,14 +242,10 @@ const SideButton = styled.div<{ $icon: string }>`
   }
 `;
 
-const UserImage = styled.div<{ $imgurl: string }>`
+const UserImage = styled.img`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-image: url(${(props) => props.$imgurl});
-  background-size: auto;
-  background-position: center;
-  background-repeat: no-repeat;
   margin: auto 1rem;
 `;
 

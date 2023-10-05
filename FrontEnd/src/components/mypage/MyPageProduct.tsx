@@ -9,43 +9,48 @@ import axios from "axios";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { UserInfoExpires } from "@/model/toastMessageJHM";
+import tw from "tailwind-styled-components";
 
 const MyProduct = () => {
   const navigate = useNavigate();
 
   const [helpState, setHelpState] = useState<boolean>(false);
   const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
-
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPage, setTotalPage] = useState<number>(0);
   const helpStateHandler = () => {
     setHelpState((prev) => {
       return !prev;
     });
   };
 
-  //유저 정보 만료
-  useEffect(() => {
+  const AxiosHandler = () => {
     axios
-      .get("/api/mypage/pick_prod?page=0", {
+      .get("/api/mypage/pick_prod?page=" + currentPage, {
         withCredentials: true,
       })
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          setProductInfo(resData.data.content);
+          setProductInfo([...productInfo, ...resData.data.content]);
+          setTotalPage(resData.data.totalPages);
+          setCurrentPage(currentPage + 1);
         }
       })
       .catch((err) => {
         if (err.code === 401) {
           //리프레시 토큰 재발급
           axios
-            .get("/api/auth/mypage/pick_prod?page=0", {
+            .get("/api/auth/mypage/pick_prod?page=" + currentPage, {
               withCredentials: true,
             })
             .then((res) => {
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
-                setProductInfo(resData.data.content);
+                setProductInfo([...productInfo, ...resData.data.content]);
+                setTotalPage(resData.data.totalPages);
+                setCurrentPage(currentPage + 1);
               }
             })
             .catch((err) => {
@@ -69,6 +74,11 @@ const MyProduct = () => {
           }
         }
       });
+  };
+
+  //유저 정보 만료
+  useEffect(() => {
+    AxiosHandler();
   }, []);
 
   return (
@@ -101,6 +111,18 @@ const MyProduct = () => {
           productInfo.map((value) => (
             <ProductInfo key={value.product.productId} $productInfo={value} />
           ))}
+
+        <ProductAddBox>
+          {totalPage > 1 && currentPage < totalPage && (
+            <AddBtn
+              onClick={() => {
+                AxiosHandler();
+              }}
+            >
+              더보기
+            </AddBtn>
+          )}
+        </ProductAddBox>
       </ProductInfos>
     </>
   );
@@ -149,3 +171,9 @@ const ProductInfos = styled.div`
   overflow: scroll;
   overflow-x: hidden;
 `;
+
+const ProductAddBox = tw.div`
+  flex h-24
+`;
+
+const AddBtn = tw.div`mx-auto my-auto  text-common-text-gray-color  text-[20px]`;

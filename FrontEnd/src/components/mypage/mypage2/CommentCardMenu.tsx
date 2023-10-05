@@ -12,15 +12,18 @@ import tw from "tailwind-styled-components";
 interface Props {
   $selectCommentId: number;
   BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  UpdateCommentList: (commentId: number) => void;
 }
 
-const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) => {
+const CommentCardMenu = ({
+  $selectCommentId,
+  BottomMenuStateHandler,
+  UpdateCommentList,
+}: Props) => {
   const navigate = useNavigate();
 
   // 삭제하기 클릭
   const deleteBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation();
-    console.log($selectCommentId);
     BottomMenuStateHandler(e);
     axios
       .delete("/api/recipe/review?revId=" + $selectCommentId, {
@@ -29,7 +32,8 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
       .then((res) => {
         const resData = res.data;
         if (resData.code == 200) {
-          ToastBackMessage(resData.message);
+          UpdateCommentList($selectCommentId);
+          ToastBackMessage("댓글을 삭제하였습니다");
         }
       })
       .catch((err) => {
@@ -41,7 +45,8 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
             .then((res) => {
               const resData = res.data;
               if (resData.code == 200) {
-                ToastBackMessage(resData.message);
+                UpdateCommentList($selectCommentId);
+                ToastBackMessage("댓글을 삭제하였습니다");
               }
             })
             .catch((err) => {
@@ -88,7 +93,7 @@ const CommentCardMemu = ({ $selectCommentId, BottomMenuStateHandler }: Props) =>
   );
 };
 
-export default CommentCardMemu;
+export default CommentCardMenu;
 
 const BackSize = tw.div`
     fixed

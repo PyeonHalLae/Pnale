@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import tw from "tailwind-styled-components";
 import { loadImage } from "@model/exportFucKDM";
 import { CompProduct } from "@/model/commonType";
+import styled from "styled-components";
 
 type RelatedCardProps = {
   product: CompProduct;
@@ -15,7 +16,7 @@ const RelatedCard: React.FC<RelatedCardProps> = ({ product, id }) => {
 
   return (
     <Card>
-      <div id={`${id}`} className="flex p-1.5 m-auto  max-h-44"></div>
+      <ImgBox id={`${id}`} className="flex p-1.5 m-auto  max-h-44"></ImgBox>
       <Text>{product.productName.slice(product.productName.indexOf(")") + 1)}</Text>
       <Price>{product.price}원</Price>
     </Card>
@@ -41,4 +42,11 @@ const Price = tw.p`
 text-center
 whitespace-normal
 text-lg
+`;
+
+const ImgBox = styled.div`
+  img {
+    height: 8rem;
+    margin: 0rem auto;
+  }
 `;
