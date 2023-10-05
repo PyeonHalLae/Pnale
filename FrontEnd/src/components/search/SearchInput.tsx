@@ -1,120 +1,143 @@
-// import { useNavigate } from "react-router-dom";
-import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { useEffect, useState } from "react";
-import { useQuery } from "react-query";
 import { useRecoilState, useRecoilValue } from "recoil";
 import tw from "tailwind-styled-components";
+import { useQuery } from "react-query";
+import { searchInputData, storedToSearchTag } from "@recoil/kdmRecoil";
 
 const SearchInput = () => {
-  // const navigate = useNavigate();
   const [name, setName] = useRecoilState(searchInputData);
   const getSearchTag = useRecoilValue(storedToSearchTag);
   const [loginState, setLoginState] = useState<boolean>(false);
   const [userSearchTag, setUserSearchTag] = useState<string[]>();
-  // const { data } = useQuery(
-  //   "getUserSearchTag",
-  //   async () => {
-  //     const response = await axios.get("/api/mylist/search", { withCredentials: true });
-  //     return response;
-  //   },
-  //   {
-  //     onSuccess: (res) => {
-  //       console.log("onSuccess");
-  //       console.log(res);
-  //     },
-  //     onError: (error) => {
-  //       console.log("onError");
-  //       console.log(error?.response?.status);
-  //     },
-  //     retry: 2,
-  //   }
-  // );
+  const [deleteBtn, setDeleteBtn] = useState(false);
 
-  // console.log("data", data);
-
-  const searchList = () => {
-    axios
-      .get("/api/mylist", {
+  //검색어 삭제
+  const { data: deleteData } = useQuery(
+    "deleteSearchTag",
+    async () => {
+      const res = await axios.delete("/api/mylist", {
         withCredentials: true,
-      })
-      .then((response) => {
-        if (response.data.code == 200) {
-          // response.data.code가 200일 경우 리스트 반환
-          setUserSearchTag(response.data.data);
-          console.log(response, "200"); // 데이터
-        } else if (response.data.code == 204) {
-          // response.data.code가 204일 경우
-          // localstorage에서 불러오세요
-          setLoginState(true);
-          console.log(response, "204"); // 데이터
-        }
-      })
-      .catch((error) => {
-        const code = error.response.status;
-        if (code === 401) {
-          axios
-            .get("/api/auth/mylist", {
-              withCredentials: true,
-            })
-            .then((response) => {
-              if (response.data.code == 200) {
-                // response.data.code가 200일 경우 리스트 반환
-                setUserSearchTag(response.data.data);
-                console.log(response.data.data, "401-200"); // 데이터
-              } else if (response.data.code == 204) {
-                // response.data.code가 204일 경우
-                // localstorage에서 불러오세요
-                console.log(response, "401-204"); // 데이터
-                setLoginState(true);
-              }
-            })
-            .catch((error) => {
-              console.log(error);
-            });
-        } else {
-          console.log(error);
-        }
       });
-  };
+      return res;
+    },
+    {
+      onError: (error: AxiosError) => {
+        console.log("error", error);
+        switch (error.response?.status) {
+          case 401:
+            axios
+              .delete("/api/auth/mylist", { withCredentials: true })
+              .then((res) => {
+                switch (res.data.code) {
+                  case 200:
+                    console.log("재로그인 - 삭제성공");
+                    break;
+                  case 204:
+                    console.log("로컬에서 삭제");
+                    break;
+                  default:
+                    console.log("auth 예외: ", res.data.code);
+                }
+              })
+              .catch((error) => {
+                console.log("401 예외:", error);
+              });
+        }
+      },
+      retry: 2,
+      enabled: deleteBtn,
+    }
+  );
+
+  // 최근 검색어 가져오기
+  const { data: recentSearchData, isLoading: recentSearchLoading } = useQuery(
+    "recentSearch",
+    async () => {
+      const response = await axios.get("/api/mylist", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    {
+      onError: (error: AxiosError) => {
+        // 오류 처리
+        console.error(error);
+        switch (error.response?.status) {
+          case 401:
+            // 401 오류 코드인 경우 다시 요청
+            axios
+              .get("/api/auth/mylist", {
+                withCredentials: true,
+              })
+              .then((response) => {
+                switch (response.data.code) {
+                  case 200:
+                    // 200일 경우 데이터 반환
+                    console.log("RE로그인");
+
+                    setUserSearchTag(response.data.data);
+                    break;
+                  case 204:
+                    // 204일 경우 로그인 상태로 변경
+                    console.log("로컬");
+                    setLoginState(true);
+                    break;
+                  default:
+                    console.error("response code:", response.data.code);
+                }
+              })
+              .catch((error) => {
+                console.error(error);
+              });
+            break;
+          default:
+            // 그 외의 오류 코드인 경우 콘솔에 출력
+            console.error("error status:", error.response?.status);
+        }
+      },
+      retry: 2,
+      staleTime: 0,
+      cacheTime: 0,
+    }
+  );
 
   useEffect(() => {
-    searchList();
-  }, []);
+    // 최근 검색어 데이터를 가져온 후 로그인 상태를 확인하고 유저 검색어 데이터를 가져오기
+    if (!recentSearchLoading) {
+      if (recentSearchData?.code === 200) {
+        console.log("로그인중");
+        setUserSearchTag(recentSearchData.data);
+      } else if (recentSearchData?.code === 204) {
+        console.log("로컬");
+        setLoginState(true);
+      }
+    }
+  }, [recentSearchLoading, recentSearchData]);
 
+  useEffect(() => {
+    console.log(deleteData);
+  });
   return (
     <SearchMain>
       <div className="flex items-end justify-between px-4 text-common-text-color">
         <p className="text-2xl font-bold">최근 검색어</p>
-        <button className="text-common-text-gray-color">전체삭제</button>
+        <button className="text-common-text-gray-color" onClick={() => setDeleteBtn(true)}>
+          전체삭제
+        </button>
       </div>
-      {loginState &&
-        getSearchTag.slice(0, 9).map((data, index) => (
-          <RecentTag key={index + "-" + data.length}>
-            <img
-              src="/img/icons/recentTag.png"
-              alt="지난 검색"
-              className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
-            />
-            <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
-              {data}
-            </p>
-          </RecentTag>
-        ))}
-      {userSearchTag &&
-        userSearchTag.length > 0 &&
-        userSearchTag.slice(0, 9).map((data, index) => (
-          <RecentTag key={index + "-" + data.length}>
-            <img
-              src="/img/icons/recentTag.png"
-              alt="지난 검색"
-              className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
-            />
-            <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
-              {data}
-            </p>
-          </RecentTag>
-        ))}
+      {(loginState ? getSearchTag : userSearchTag)?.slice(0, 9).map((data, index) => (
+        <RecentTag key={index + "-" + data.length}>
+          <img
+            src="/img/icons/recentTag.png"
+            alt="지난 검색"
+            className="p-1.5 mr-2 rounded-full w-7 bg-common-text-gray-color"
+          />
+          <p className="mt-1" onClick={() => setName({ ...name, input: data })}>
+            {data}
+          </p>
+        </RecentTag>
+      ))}
     </SearchMain>
   );
 };
