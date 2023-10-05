@@ -168,6 +168,7 @@ const SideTitle = styled.div<{ $pyeneColor: string }>`
     height: 37px;
     border-top: 3px solid ${(props) => props.$pyeneColor};
     padding-top: 5px;
+    max-width: 150px;
   }
   div {
     font-weight: bold;
