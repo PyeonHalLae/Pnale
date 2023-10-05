@@ -5,7 +5,7 @@ import "react-quill/dist/quill.snow.css";
 
 import { Dispatch, SetStateAction } from "react";
 import axios from "axios";
-import { imageCompression } from "browser-image-compression";
+import imageCompression from "browser-image-compression";
 
 interface Props {
   rcpDesc: string;
