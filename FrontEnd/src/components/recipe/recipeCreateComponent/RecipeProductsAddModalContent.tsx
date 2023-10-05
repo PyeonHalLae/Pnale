@@ -4,7 +4,6 @@ import tw from "tailwind-styled-components";
 // import { productFormType } from "../recipeCommonComponent/recipeFormType";
 import { recipeFormProduct } from "@/recoil/khiRecoil";
 import { useRecoilState } from "recoil";
-import { customAxios } from "./../../../api/customAxios";
 import axios from "axios";
 import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
@@ -90,7 +89,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
       const data = {
         name: searchKeyword,
       };
-      customAxios
+      axios
         .post("/api/search", data)
         .then((res) => {
           setProductList(res.data.data);
@@ -103,7 +102,7 @@ const RecipeProductsAddModalContent = ({ setModal }: Props) => {
         name: searchKeyword,
         category: selectedCategory,
       };
-      customAxios
+      axios
         .post("/api/search/recipe", data)
         .then((res) => {
           setProductList(res.data.data);
