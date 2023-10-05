@@ -76,7 +76,9 @@ const RecipeCommentBox = ({
         <div className="inline-block ml-[0.625rem] text-common-orange">{totalCommentNum}</div>
       </CommentBoxHeader>
 
-      {commentList.length != 0 &&
+      {commentList.length === 0 ? (
+        <div className=" pl-[1.94rem] py-[1.5rem]">현재 댓글이 없습니다</div>
+      ) : (
         commentList.map((commentItem) => (
           <RecipeCommentCard
             key={commentItem.revId}
@@ -84,7 +86,8 @@ const RecipeCommentBox = ({
             setRefresh={setRefresh}
             detailRefreshHandler={detailRefreshHandler}
           />
-        ))}
+        ))
+      )}
       {commentList.length !== totalCommentNum && (
         <ViewMoreBtnBox>
           <ViewMoreBtn onClick={viewMoreHanlder}>더보기</ViewMoreBtn>

@@ -115,7 +115,17 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
           </div>
         </Container>
       ) : (
-        <Container>댓글이 없습니다</Container>
+        <Container>
+          <NameBox>
+            <div>댓글 작성</div>
+            <InputBoxNoLogin>로그인이 필요합니다</InputBoxNoLogin>
+          </NameBox>
+          <div className="flex flex-row-reverse">
+            <CreateBtn>
+              <div>작성하기</div>
+            </CreateBtn>
+          </div>
+        </Container>
       )}
     </>
   );
@@ -144,6 +154,19 @@ border-[1px]
 border-common-bold-back-color
 outline-none 
 resize-none
+`;
+
+const InputBoxNoLogin = tw.div`
+block 
+w-[100%] 
+py-[0.875rem] 
+px-[0.8125rem] 
+my-[0.25rem] 
+items-center 
+text-common-bold-back-color
+bg-common-back-color 
+border-[1px] 
+border-common-bold-back-color
 `;
 const CreateBtn = tw.div`
 flex w-[3.875rem] h-[1.375rem] rounded-[0.3125rem] bg-common-text-color
