@@ -34,8 +34,8 @@ public class ConvService {
         response.put("banners", bannerService.findCorpBanner(PageRequest.of(0,5), corpType));
         response.put("bestProduct", findBestProduct(pageable, corpType, memberId));
         response.put("newProduct", memberId == null
-                                    ? productRepository.findNewProductRand(pageable, CorpType.ALL, corpType)
-                                    : productRepository.findNewProductRandByMemberId(pageable, CorpType.ALL, corpType, memberId));
+                                    ? ResponseUtil.getPageProducts(productRepository.findNewProductRand(pageable, CorpType.ALL, corpType))
+                                    : ResponseUtil.getPageProducts(productRepository.findNewProductRandByMemberId(pageable, CorpType.ALL, corpType, memberId)));
         return response;
     }
 
