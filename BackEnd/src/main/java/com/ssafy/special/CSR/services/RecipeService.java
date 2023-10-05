@@ -317,8 +317,9 @@ public class RecipeService {
                             .isDeleted(true)
                             .build();
                 });
-        System.out.println(like);
         like.toggleLike();
+        Recipe recipe = recipeRepository.findById(recipeId).orElseThrow();
+        recipe.likeChange(!like.isDeleted());
         memberPickRecipeRepository.save(like);
     }
 

@@ -20,8 +20,8 @@ public interface MemberPickProdRepository extends JpaRepository<MemberPickProd, 
             "FROM Product p " +
             "LEFT JOIN FETCH EventProduct ep ON p.productId = ep.product.productId " +
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
-            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true " +
-            "ORDER BY FUNCTION('RAND')" )
+            "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true "  +
+            " ORDER BY mpp.updatedAt DESC ")
     Page<Object[]> findByMember_MemberIdAndLikeStatTrue(@Param("memberId")Long memberId, Pageable pageable);
 
 //    SELECT p.productId, p.productImg, p.productName, ep.SEVENType, ep.GSType, ep.EMARTType, ep.CUType, mpp.likeStat, mpp.isReceived
@@ -31,6 +31,6 @@ public interface MemberPickProdRepository extends JpaRepository<MemberPickProd, 
             "LEFT JOIN FETCH MemberPickProd mpp ON p.productId = mpp.product.productId " +
             "WHERE mpp.member.memberId = :memberId AND mpp.likeStat = true AND mpp.isReceived = true " +
             " AND( ep.CUType IS NOT NULL OR ep.GSType IS NOT NULL OR ep.SEVENType IS NOT NULL OR ep.EMARTType IS NOT NULL ) " +
-            "ORDER BY FUNCTION('RAND')" )
+            " ORDER BY mpp.updatedAt DESC " )
     Optional<Page<EmailProductDto>> findByMember_MemberIdAndLikeStatTrueAndReceivedTrue(Pageable pageable, @Param("memberId")Long memberId);
 }

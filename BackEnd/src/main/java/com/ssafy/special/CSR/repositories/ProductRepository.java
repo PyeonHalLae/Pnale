@@ -53,177 +53,49 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
     @Query("UPDATE Product p SET p.hit = p.hit + 1 WHERE p.productId IN :productIds")
     int bulkUpdateProductHits(@Param("productIds") List<Long> productIds);
 
-    //============ CU =============
-    @Query(defaultQuery +
-            "  WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
-    Page<Object[]> findCUEventProduct(Pageable pageable,
-                                      @Param("all") CorpType all,
-                                      @Param("corp") CorpType corpType);
 
     @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findCUBestProduct(Pageable pageable,
-                                     @Param("all") CorpType all,
-                                     @Param("corp") CorpType corpType);
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true ")
+    Page<Object[]> findNewProduct(Pageable pageable,
+                                  @Param("all") CorpType all,
+                                  @Param("corp") CorpType corpType);
+    @Query(memberIdQeury +
+            " WHERE p.pb in ( :all, :corp) AND p.isNew = true  ")
+    Page<Object[]> findNewProductByMemberId(Pageable pageable,
+                                            @Param("all") CorpType all,
+                                            @Param("corp") CorpType corpType,
+                                            @Param("memberId") Long memberId);
 
+    //편의점 상품 정보 반환
+    //새상품 랜덤 =============================================
     @Query(defaultQuery +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findCUNewProduct(Pageable pageable,
-                                    @Param("all") CorpType all,
-                                    @Param("corp") CorpType corpType);
-
-
-    @Query(memberIdQeury +
-            "  WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
-    Page<Object[]> findCUEventProductByMemberId(Pageable pageable,
-                                                @Param("all") CorpType all,
-                                                @Param("corp") CorpType corpType,
-                                                @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findCUBestProductByMemberId(Pageable pageable,
-                                               @Param("all") CorpType all,
-                                               @Param("corp") CorpType corpType,
-                                               @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findCUNewProductByMemberId(Pageable pageable,
-                                              @Param("all") CorpType all,
-                                              @Param("corp") CorpType corpType,
-                                              @Param("memberId") Long memberId);
-
-
-    //============ GS =============
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND ep.GSType is not null ")
-    Page<Object[]> findGSEventProduct(Pageable pageable,
-                                      @Param("all") CorpType all,
-                                      @Param("corp") CorpType corpType);
-
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findGSBestProduct(Pageable pageable,
-                                     @Param("all") CorpType all,
-                                     @Param("corp") CorpType corpType);
-
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findGSNewProduct(Pageable pageable,
-                                    @Param("all") CorpType all,
-                                    @Param("corp") CorpType corpType);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND ep.GSType is not null ")
-    Page<Object[]> findGSEventProductByMemberId(Pageable pageable,
-                                                @Param("all") CorpType all,
-                                                @Param("corp") CorpType corpType,
-                                                @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findGSBestProductByMemberId(Pageable pageable,
-                                               @Param("all") CorpType all,
-                                               @Param("corp") CorpType corpType,
-                                               @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findGSNewProductByMemberId(Pageable pageable,
-                                              @Param("all") CorpType all,
-                                              @Param("corp") CorpType corpType,
-                                              @Param("memberId") Long memberId);
-
-    //============ SEVEN =============
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND ep.SEVENType is not null ")
-    Page<Object[]> findSEVENEventProduct(Pageable pageable,
-                                         @Param("all") CorpType all,
-                                         @Param("corp") CorpType corpType);
-
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findSEVENBestProduct(Pageable pageable,
+            " ORDER BY RAND('RAND') ")
+    Page<Object[]> findNewProductRand(Pageable pageable,
                                         @Param("all") CorpType all,
                                         @Param("corp") CorpType corpType);
 
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findSEVENNewProduct(Pageable pageable,
-                                       @Param("all") CorpType all,
-                                       @Param("corp") CorpType corpType);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND ep.SEVENType is not null ")
-    Page<Object[]> findSEVENEventProductByMemberId(Pageable pageable,
-                                                   @Param("all") CorpType all,
-                                                   @Param("corp") CorpType corpType,
-                                                   @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findSEVENBestProductByMemberId(Pageable pageable,
-                                                  @Param("all") CorpType all,
-                                                  @Param("corp") CorpType corpType,
-                                                  @Param("memberId") Long memberId);
-
     @Query(memberIdQeury +
             " WHERE p.pb in ( :all, :corp) AND p.isNew = true  " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findSEVENNewProductByMemberId(Pageable pageable,
-                                                 @Param("all") CorpType all,
-                                                 @Param("corp") CorpType corpType,
-                                                 @Param("memberId") Long memberId);
-
-    //============ EMART =============
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND ep.EMARTType is not null ")
-    Page<Object[]> findEMARTEventProduct(Pageable pageable,
-                                         @Param("all") CorpType all,
-                                         @Param("corp") CorpType corpType);
-
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findEMARTBestProduct(Pageable pageable,
-                                        @Param("all") CorpType all,
-                                        @Param("corp") CorpType corpType);
-
-    @Query(defaultQuery +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findEMARTNewProduct(Pageable pageable,
-                                       @Param("all") CorpType all,
-                                       @Param("corp") CorpType corpType);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND ep.EMARTType is not null ")
-    Page<Object[]> findEMARTEventProductByMemberId(Pageable pageable,
-                                                   @Param("all") CorpType all,
-                                                   @Param("corp") CorpType corpType,
-                                                   @Param("memberId") Long memberId);
-
-    @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
-    Page<Object[]> findEMARTBestProductByMemberId(Pageable pageable,
+            " ORDER BY RAND('RAND') ")
+    Page<Object[]> findNewProductRandByMemberId(Pageable pageable,
                                                   @Param("all") CorpType all,
                                                   @Param("corp") CorpType corpType,
                                                   @Param("memberId") Long memberId);
+    //Best 상품=============================================
+    @Query(defaultQuery +
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
+    Page<Object[]> findBestProduct(Pageable pageable,
+                                     @Param("all") CorpType all,
+                                     @Param("corp") CorpType corpType);
 
     @Query(memberIdQeury +
-            " WHERE p.pb in ( :all, :corp) AND p.isNew = true " +
-            " ORDER BY FUNCTION('RAND') ")
-    Page<Object[]> findEMARTNewProductByMemberId(Pageable pageable,
-                                                 @Param("all") CorpType all,
-                                                 @Param("corp") CorpType corpType,
-                                                 @Param("memberId") Long memberId);
-
-
+            " WHERE p.pb in ( :all, :corp) AND p.recommand > 0 ")
+    Page<Object[]> findBestProductByMemberId(Pageable pageable,
+                                               @Param("all") CorpType all,
+                                               @Param("corp") CorpType corpType,
+                                               @Param("memberId") Long memberId);
+    //PB 상품=============================================
     @Query(defaultQuery +
             " WHERE p.pb = :corpType ")
     Page<Object[]> findPbProduct(Pageable pageable,
@@ -235,6 +107,60 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
                                            @Param("corpType") CorpType corpType,
                                            @Param("memberId") Long memberId);
 
+
+    //============ CU =============
+    @Query(defaultQuery +
+            "  WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
+    Page<Object[]> findCUEventProduct(Pageable pageable,
+                                      @Param("all") CorpType all,
+                                      @Param("corp") CorpType corpType);
+
+    @Query(memberIdQeury +
+            "  WHERE p.pb in ( :all, :corp) AND ep.CUType is not null ")
+    Page<Object[]> findCUEventProductByMemberId(Pageable pageable,
+                                                @Param("all") CorpType all,
+                                                @Param("corp") CorpType corpType,
+                                                @Param("memberId") Long memberId);
+    //============ GS =============
+    @Query(defaultQuery +
+            " WHERE p.pb in ( :all, :corp) AND ep.GSType is not null ")
+    Page<Object[]> findGSEventProduct(Pageable pageable,
+                                      @Param("all") CorpType all,
+                                      @Param("corp") CorpType corpType);
+
+    @Query(memberIdQeury +
+            " WHERE p.pb in ( :all, :corp) AND ep.GSType is not null ")
+    Page<Object[]> findGSEventProductByMemberId(Pageable pageable,
+                                                @Param("all") CorpType all,
+                                                @Param("corp") CorpType corpType,
+                                                @Param("memberId") Long memberId);
+    //============ SEVEN =============
+    @Query(defaultQuery +
+            " WHERE p.pb in ( :all, :corp) AND ep.SEVENType is not null ")
+    Page<Object[]> findSEVENEventProduct(Pageable pageable,
+                                         @Param("all") CorpType all,
+                                         @Param("corp") CorpType corpType);
+
+    @Query(memberIdQeury +
+            " WHERE p.pb in ( :all, :corp) AND ep.SEVENType is not null ")
+    Page<Object[]> findSEVENEventProductByMemberId(Pageable pageable,
+                                                   @Param("all") CorpType all,
+                                                   @Param("corp") CorpType corpType,
+                                                   @Param("memberId") Long memberId);
+
+    //============ EMART =============
+    @Query(defaultQuery +
+            " WHERE p.pb in ( :all, :corp) AND ep.EMARTType is not null ")
+    Page<Object[]> findEMARTEventProduct(Pageable pageable,
+                                         @Param("all") CorpType all,
+                                         @Param("corp") CorpType corpType);
+
+    @Query(memberIdQeury +
+            " WHERE p.pb in ( :all, :corp) AND ep.EMARTType is not null ")
+    Page<Object[]> findEMARTEventProductByMemberId(Pageable pageable,
+                                                   @Param("all") CorpType all,
+                                                   @Param("corp") CorpType corpType,
+                                                   @Param("memberId") Long memberId);
     //============ 상품 검색
     @Query(defaultQuery +
             " WHERE p.productId in ( :productId) ")
