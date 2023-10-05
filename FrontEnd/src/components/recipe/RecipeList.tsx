@@ -17,7 +17,7 @@ import axios from "axios";
 const RecipeList = () => {
   const [popularRecipe, setPopularRecipe] = useState<popularRecipeType>();
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
-  const [listSortBy, setListSortBy] = useState<string>("latest");
+  const [listSortBy, setListSortBy] = useState<string>("recipeId,desc");
   const [loading, setLoading] = useState<boolean>(true);
   const [page, setPage] = useState<number>(1);
   const [totalRecipeNum, setTotalRecipeNum] = useState<number>(0);
@@ -33,6 +33,7 @@ const RecipeList = () => {
         params: {
           page: 0,
           size: 3,
+          sort: listSortBy,
         },
       })
       .then((res) => {
@@ -47,13 +48,13 @@ const RecipeList = () => {
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [listSortBy]);
 
   const viewMoreHandler = () => {
     axios
       .get(`/api/recipe/all`, {
         withCredentials: true,
-        params: { page: page, size: 3 },
+        params: { page: page, size: 3, sort: listSortBy },
       })
       .then((res) => {
         console.log(totalRecipeNum);
@@ -102,14 +103,16 @@ const RecipeList = () => {
             <SortSelectBox
               value={listSortBy}
               onChange={(e) => {
-                console.log(e.target.value);
+                setPage(() => 1);
                 setListSortBy(() => {
                   return e.target.value;
                 });
               }}
             >
-              <option value="latest">최신순</option>
-              <option value="popular">인기순</option>
+              <option value="recipeId,desc">최신순</option>
+              <option value="likeCnt,desc">인기순</option>
+              <option value="recipeId,asc">오래된순</option>
+              <option value="likeCnt,asc">인기역순</option>
             </SortSelectBox>
           </ContentTitle>
 
@@ -169,7 +172,7 @@ const TitleTextOrange = tw(TitleTextPeach)`
 // 여기고쳐야함
 const SortSelectBox = tw.select`
   absolute
-  w-[4.6875rem] h-[1.5rem] text-[1rem]
+  w-[5.625rem] h-[1.5rem] text-[1rem]
   bottom-[0.625rem] right-[1rem] outline-0 text-common-text-color
 `;
 
