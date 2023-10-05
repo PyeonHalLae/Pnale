@@ -102,7 +102,7 @@ w-[5rem] justify-start text-start
 const ChangeBtn = styled.div<{ $ischanged: boolean }>`
   width: 3.875rem;
   height: 1rem;
-  background-color: ${(props) => (props.$ischanged ? `#FA709A` : `#FB9B77`)};
+  background-color: ${(props) => (props.$ischanged ? `#FB9B77` : `#FA709A`)};
   border-radius: 0.3125rem;
   text-align: center;
   color: white;
