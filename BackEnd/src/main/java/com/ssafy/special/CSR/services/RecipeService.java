@@ -123,7 +123,11 @@ public class RecipeService {
     public RecipeRecommendDTO getRecommendData(Long memberId){
         // 가중치에 따라 레시피를 하나 불러옵니다.
 
-        Recipe recipe = recipeRepository.findRecipeByWeightedValue().get(0);
+        int index = 0;
+        List<Recipe> recipes = recipeRepository.findRecipeByWeightedValue();
+        if(recipes.size() >= 4) index = (int)(Math.random() * 4);
+
+        Recipe recipe = recipes.get(index);
 
         List<String> ingredients = recipeIngredientService.getIngredientNamesByRecipe(recipe.getRecipeId());
         boolean myLike =  memberPickRecipeRepository.findIsDeletedByMemberAndRecipe(memberId, recipe.getRecipeId())
@@ -331,7 +335,7 @@ public class RecipeService {
 
     @Transactional
     public Page<MyRecipeReviewDTO> myReviewList(Long memberId, Pageable pageable) {
-        Page<RecipeReview> lists = recipeReviewRepository.findByMemberMemberIdAndStatusNot(pageable, memberId, ReviewStatusType.DELETED);
+        Page<RecipeReview> lists = recipeReviewRepository.findByMemberMemberIdAndStatusNotAndRecipeIsDeletedFalse(pageable, memberId, ReviewStatusType.DELETED);
 
         List<MyRecipeReviewDTO> DTOlist = lists.stream()
                 .map(review -> {
