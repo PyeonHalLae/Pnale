@@ -11,13 +11,16 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
     .replace("https://youtu.be/", "https://www.youtube.com/embed/")
     .replace("https://www.youtube.com/watch?v=", "https://www.youtube.com/embed/");
 
+  const startUrl = "https://www.youtube.com/embed/";
   return (
-    <Container>
-      <Header>
-        관련 영상
-        <a
-          href={videoUrl}
-          className="w-[100%]
+    <>
+      {LinkUrl && LinkUrl.startsWith(startUrl) && (
+        <Container>
+          <Header>
+            관련 영상
+            <a
+              href={videoUrl}
+              className="w-[100%]
           h-[1.6875rem]
           text-[.75rem] 
           line-clamp-1 
@@ -28,12 +31,12 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
           rounded-[0.625rem]
           border-common-bold-back-color
           bg-common-back-color"
-        >
-          {videoUrl}테스트
-        </a>
-      </Header>
-      <VideoBox>
-        {/* <a rel="stylesheet" href={videoUrl}>
+            >
+              {videoUrl}
+            </a>
+          </Header>
+          <VideoBox>
+            {/* <a rel="stylesheet" href={videoUrl}>
           <img
             className="w-full"
             src={`https://img.youtube.com/vi/${ThuUrl}/mqdefault.jpg`}
@@ -41,9 +44,15 @@ const RecipeRelatedVideo = ({ videoUrl }: { videoUrl: string }) => {
           />
         </a> */}
 
-        <iframe className="w-[calc(100%)] h-[18.75rem]" src={LinkUrl} title="비디오화면"></iframe>
-      </VideoBox>
-    </Container>
+            <iframe
+              className="w-[calc(100%)] h-[18.75rem]"
+              src={LinkUrl}
+              title="비디오화면"
+            ></iframe>
+          </VideoBox>
+        </Container>
+      )}
+    </>
   );
 };
 
