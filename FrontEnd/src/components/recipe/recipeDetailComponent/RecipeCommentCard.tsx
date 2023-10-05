@@ -1,6 +1,6 @@
 import tw from "tailwind-styled-components";
 import { commentInfoType } from "./recipeDetailType";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 interface Props {
@@ -12,6 +12,18 @@ interface Props {
 const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Props) => {
   const [isModifying, setIsModifying] = useState<boolean>(false);
   const [modifyContent, setModifyContent] = useState<string>(commentInfo.content);
+  const [textareaHeight, setTextareaHeight] = useState({
+    row: 1,
+    lineBreak: {},
+  });
+  const contentRef = useRef(null);
+
+  let contentheight;
+
+  useEffect(() => {
+    const contentStyle = window.getComputedStyle(contentRef.current);
+    contentheight = contentStyle.height;
+  }, []);
 
   const commentDeleteHandler = () => {
     axios
@@ -42,6 +54,35 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
     setModifyContent(() => {
       return e.target.value;
     });
+  };
+
+  const resizeTextareaHanlder = (e) => {
+    const { scrollHeight, clientHeight, value } = e.target;
+
+    // 줄바꿈이 일어날 때
+    if (scrollHeight > clientHeight) {
+      setTextareaHeight((prev) => ({
+        row: prev.row + 1,
+        lineBreak: { ...prev.lineBreak, [value.length - 1]: true },
+      }));
+    }
+
+    // 텍스트 지워서 줄바꿈 지점에 도달했을 때
+    if (textareaHeight.lineBreak[value.length]) {
+      setTextareaHeight((prev) => ({
+        row: prev.row - 1,
+        lineBreak: { ...prev.lineBreak, [value.length]: false },
+      }));
+    }
+  };
+
+  const onKeyEnterHandler = (e) => {
+    if (e.code === "Enter") {
+      setTextareaHeight((prev) => ({
+        row: prev.row + 1,
+        lineBreak: { ...prev.lineBreak, [e.target.value.length]: true },
+      }));
+    }
   };
 
   const modifySubmitHandler = () => {
@@ -82,12 +123,27 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
             </div>
           )}
         </CommentNameBox>
-
+        {/* <div className="flex flex-row-reverse w-[calc(100%-8rem)]">
+          <CommentManageBtn onClick={commentDeleteHandler}>삭제</CommentManageBtn>
+          <CommentManageBtn onClick={commentModifyHandler}>수정</CommentManageBtn>
+          <div
+            onClick={() => {
+              console.log(contentheight);
+            }}
+          >
+            테스트
+          </div>
+        </div> */}
         {isModifying ? (
+          // 수정중일 경우 Textarea로 변경
           <CommentContentTextBox>
             <CommentContentBoxTextarea
               value={modifyContent}
               onChange={contentChangeHandler}
+              onKeyDown={onKeyEnterHandler}
+              onInput={resizeTextareaHanlder}
+              rows={textareaHeight.row}
+              contentheight={contentheight !== undefined ? contentheight : "20px"}
             ></CommentContentBoxTextarea>
             <div
               className="absolute bottom-[0.5rem] right-[0.5rem] w-[2rem] h-[1rem] bg-common-text-gray-color"
@@ -97,7 +153,7 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
             </div>
           </CommentContentTextBox>
         ) : (
-          <CommentContentBox>{commentInfo.content}</CommentContentBox>
+          <CommentContentBox ref={contentRef}>{commentInfo.content}</CommentContentBox>
         )}
 
         <div className="text-[0.625rem] text-common-text-gray-color font-medium">
@@ -130,16 +186,27 @@ const CommentNameBox = tw.div`
 flex text-[1rem] font-medium
 `;
 const CommentContentBox = tw.div`
-flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center
+flex w-[14.125rem] min-h-[1.875rem] text-[0.8rem] font-light items-center
 `;
 
 const CommentContentTextBox = tw.div`
-flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center relative
+flex 
+w-[14.125rem] 
+text-[0.8rem] 
+font-light 
+items-center 
+relative
 `;
 
-const CommentContentBoxTextarea = tw.textarea`
-flex w-[14.125rem] h-[1.875rem] text-[0.8rem] font-light items-center relative border bg-common-back-color
-`;
+const CommentContentBoxTextarea = tw.textarea<{ contentheight: string }>`
+flex
+w-[14.125rem]
+text-[0.8rem]
+font-light
+items-center
+relative
+border
+bg-common-back-color`;
 
 const CommentManageBtn = tw.div`
 mx-[0.8rem] text-[0.75rem] font-medium text-common-bold-back-color

@@ -118,7 +118,7 @@ const Container = tw.div`
 `;
 
 const RecipeImg = tw.img`
-  w-[7.5rem] h-[6.42rem] rounded-[.3125rem] m-auto col-span-2
+  w-[7.5rem] h-[6.42rem] rounded-[.3125rem] m-auto col-span-2 object-cover bg-common-back-color p-1
 `;
 
 const ContentBox = tw.div`

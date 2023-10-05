@@ -95,6 +95,8 @@ const RecipeDetailHeaderImg = styled.div<{ $mainImgUrl: string }>`
   position: relative;
   min-width: 22.5rem;
   min-height: 17.5rem;
+  margin: auto;
+  object-fit: cover;
   background-image: url(${(props) => props.$mainImgUrl});
   background-position: center;
   background-repeat: no-repeat;
