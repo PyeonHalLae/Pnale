@@ -21,9 +21,12 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
   return (
     <div className="bg-white border-2 border-white">
       <div
-        className="m-3 border-2 shadow-xl border-common-white-divider"
+        className="relative m-3 border-2 shadow-xl border-common-white-divider"
         onClick={() => navigate(`/recipe/${recipeId}`)}
       >
+        {recipe.influence && (
+          <img src="/img/sticker/recipe/inf.png" className="w-[100px] absolute right-0" />
+        )}
         <img src={recipe.rcpThumbnail} alt="레시피 사진" className="h-[13.125rem] w-full"></img>
         {ingrediendtsToShow && (
           <TextBox>
@@ -36,8 +39,17 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
               </TagBox>
             </div>
             <UserArea>
-              <Profile src={recipe.member.memberImg} alt="프로필사진" />
-              <div className="font-[G-sans-light] text-sm mt-2">{recipe.member.nickname}</div>
+              {recipe.influence ? (
+                <>
+                  <Profile src="/img/logo/logo-white.png" alt="인플루언서" />
+                  <div className="font-[G-sans-light] text-xs mt-2">편할래</div>
+                </>
+              ) : (
+                <>
+                  <Profile src={recipe.member.memberImg} alt="프로필사진" />
+                  <div className="font-[G-sans-light] text-xs mt-2">{recipe.member.nickname}</div>
+                </>
+              )}
             </UserArea>
           </TextBox>
         )}
@@ -53,6 +65,7 @@ mx-[0.375rem]
 my-2
 flex
 justify-between
+relative
 `;
 
 const Title = tw.div`
@@ -69,8 +82,8 @@ break-words
 `;
 
 const Profile = tw.img`
-w-12
-h-12
+w-11
+h-11
 mx-auto
 rounded-full
 shadow-[0px_0px_2px_rgba(0,0,0,0.2)]
