@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-
 import MainProduct from "./mainProduct/MainProduct";
 import MainRecipe from "./mainRecipe/MainRecipe";
 import tw from "tailwind-styled-components";
@@ -13,11 +12,13 @@ const MainPageContent = () => {
   // 리액트 쿼리를 활용한 axios 요청2
   const { data, isLoading, isError, error } = useQuery<RecipeAndRecommand, AxiosError>(
     "mainProduct",
+
     async () => {
       const response = await axios.get("/api/product/main");
 
       return response.data.data;
     },
+
     {
       // onSuccess: (res) => {
       //   console.log("onSuccess");
@@ -31,6 +32,7 @@ const MainPageContent = () => {
         // console.log("아무튼 Go!");
       },
       retry: 2,
+      cacheTime: 0,
     }
   );
 

@@ -27,7 +27,7 @@ const MyProduct = () => {
   const AxiosHandler = () => {
     axios
       .get("/api/mypage/pick_prod?page=" + currentPage, {
-        withCredentials: true,
+        // withCredentials: true,
       })
       .then((res) => {
         const resData = res.data;
@@ -42,7 +42,7 @@ const MyProduct = () => {
           //리프레시 토큰 재발급
           axios
             .get("/api/auth/mypage/pick_prod?page=" + currentPage, {
-              withCredentials: true,
+              // withCredentials: true,
             })
             .then((res) => {
               //재발급이 잘되서 정보를 받아온경우
