@@ -63,7 +63,7 @@ const RecipeModify = () => {
         } else {
           // 본인 게시물이 아닐경우
           ToastErrorMessage("작성자만 수정할 수 있습니다.");
-          navigate(-1);
+          navigate("/recipe");
         }
       })
       .catch((err) => {
