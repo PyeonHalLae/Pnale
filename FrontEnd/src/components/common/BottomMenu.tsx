@@ -32,7 +32,7 @@ const BottomMenu = ({
       .then((res) => {
         console.log(res);
         // 삭제성공시
-        if (res.data.code === "200") {
+        if (res.data.code === 200) {
           navigate("/recipe");
         }
       })
