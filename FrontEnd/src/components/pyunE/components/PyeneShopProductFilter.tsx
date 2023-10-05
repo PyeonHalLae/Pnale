@@ -6,19 +6,20 @@ import tw from "tailwind-styled-components";
 import * as pyeneRecoil from "@/recoil/pyeneRecoil";
 import { useRecoilState } from "recoil";
 
-interface ModalHandlerProps {
-  ModalHandler: () => void;
-}
-
 interface FilterType {
   name: string;
   state: boolean;
   engName: string;
 }
 
+interface Props {
+  ModalHandler: () => void;
+  $productViewType: string;
+}
+
 const SortFilterList = [{ name: "이름순" }, { name: "가격낮은순" }, { name: "가격높은순" }];
 
-const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
+const PyeneShopProductFilter = ({ ModalHandler, $productViewType }: Props) => {
   //recoil defult 받아오기 경우
   const [sortDefault, setSortDefault] = useRecoilState(pyeneRecoil.SortFilterDefault);
   const [eventDefault, setEventDefault] = useRecoilState(pyeneRecoil.EventFilterDefault);
@@ -192,30 +193,32 @@ const PyeneShopProductFilter = ({ ModalHandler }: ModalHandlerProps) => {
               ))}
             </SideMain>
           </SortBox>
-          <EventBox>
-            <SideHeader>
-              <div className="flex">
-                <SideTitle>행사선택</SideTitle>
-                <SideInfo>기본값 : 전체</SideInfo>
-              </div>
-              <AllMain onClick={AllEventHandler}>
-                <div className={eventAllFilter ? "active" : ""}>전체</div>
-              </AllMain>
-            </SideHeader>
-            <SideMain>
-              {eventFilter.map((value, index) => (
-                <div
-                  key={value.name + index}
-                  className={value.state ? "active" : ""}
-                  onClick={() => {
-                    EventIndexHandler(value, index);
-                  }}
-                >
-                  {value.name}
+          {$productViewType === "EVENT" && (
+            <EventBox>
+              <SideHeader>
+                <div className="flex">
+                  <SideTitle>행사선택</SideTitle>
+                  <SideInfo>기본값 : 전체</SideInfo>
                 </div>
-              ))}
-            </SideMain>
-          </EventBox>
+                <AllMain onClick={AllEventHandler}>
+                  <div className={eventAllFilter ? "active" : ""}>전체</div>
+                </AllMain>
+              </SideHeader>
+              <SideMain>
+                {eventFilter.map((value, index) => (
+                  <div
+                    key={value.name + index}
+                    className={value.state ? "active" : ""}
+                    onClick={() => {
+                      EventIndexHandler(value, index);
+                    }}
+                  >
+                    {value.name}
+                  </div>
+                ))}
+              </SideMain>
+            </EventBox>
+          )}
           <CategoryBox>
             <SideHeader>
               <div className="flex">
