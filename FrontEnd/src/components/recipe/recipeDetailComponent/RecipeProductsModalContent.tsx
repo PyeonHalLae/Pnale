@@ -5,8 +5,6 @@ import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { recipePrdInfoType } from "./recipeDetailType";
 import axios from "axios";
-import { useRecoilState } from "recoil";
-import { recipeFormProduct } from "@/recoil/khiRecoil";
 import { useInView } from "react-intersection-observer";
 import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
@@ -23,7 +21,6 @@ const RecipeProductsModalContent = ({
   index: number;
   setBoxIngredients: Dispatch<SetStateAction<recipePrdInfoType[]>>;
 }) => {
-  const [products, setProducts] = useRecoilState(recipeFormProduct);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [productList, setProductList] = useState<ProductInfoType[]>([]);
 
