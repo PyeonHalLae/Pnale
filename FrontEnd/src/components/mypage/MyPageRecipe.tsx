@@ -30,7 +30,7 @@ interface recipeInfoType {
 const MyPageRecipe = () => {
   const navigate = useNavigate();
 
-  const [myRecipeState, setMyRecipeState] = useState<boolean>(false);
+  const [myRecipeState, setMyRecipeState] = useState<boolean>(true);
   const [likeRecipeState, setLikeRecipeState] = useState<boolean>(false);
   const [recipeType, setRecipeType] = useState<string>("MYRECIPE");
   const [recipeList, setRecipeList] = useState<recipeInfoType[] | null>([]);
@@ -68,9 +68,6 @@ const MyPageRecipe = () => {
   };
 
   const MyRecipeAxiosHandler = () => {
-    console.log("===== MyRecipe =====");
-    console.log(currentPage, "currentPage");
-    console.log(totalPage, "totalPage");
     axios
       .get("/api/mypage/recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
@@ -115,9 +112,6 @@ const MyPageRecipe = () => {
   };
 
   const LikeAxiosHandler = () => {
-    console.log("===== Like =====");
-    console.log(currentPage, "currentPage");
-    console.log(totalPage, "totalPage");
     axios
       .get("/api/mypage/pick_recipe?page=" + currentPage, { withCredentials: true })
       .then((res) => {
