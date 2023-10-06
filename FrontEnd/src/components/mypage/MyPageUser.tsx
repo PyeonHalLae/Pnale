@@ -30,13 +30,11 @@ const MyPageUser = () => {
   const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
-    console.log("마이페이지 엑시오스 요청");
     axios
       .get("/api/mypage/", {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res, "처음 요청");
         //로그인 된경우
         const resData = res.data;
         if (resData.code == 200) {
@@ -48,13 +46,12 @@ const MyPageUser = () => {
         //로그인 실패 (엑세스 토큰이 존재하나 만료)
         if (err.response.status === 401) {
           //리프레시 토큰 재발급
-          console.log("리프레시 토큰을 통한 엑세스 토큰 재발급");
+
           axios
             .get("api/auth/mypage", {
               withCredentials: true,
             })
             .then((res) => {
-              console.log("리프레시로 요청");
               //재발급이 잘되서 정보를 받아온경우
               const resData = res.data;
               if (resData.code == 200) {
@@ -65,7 +62,7 @@ const MyPageUser = () => {
             .catch((err) => {
               if (err.response.status === 403) {
                 //제발급 실패! 재로그인 해주세요!!
-                console.log("로그인인 만료되어 재 로그인 해주세요!");
+
                 setUserInfo(null);
                 setProductInfo(null);
               } else {
@@ -93,7 +90,6 @@ const MyPageUser = () => {
     axios
       .post("/api/member/logout")
       .then((res) => {
-        console.log(res);
         if (res.data.code == 200) {
           setUserInfo(null);
           setProductInfo([]);

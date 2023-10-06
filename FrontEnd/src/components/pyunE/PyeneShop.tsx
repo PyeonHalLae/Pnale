@@ -54,12 +54,9 @@ const PyeneShop = () => {
         const response = res.data;
         if (response.code === 200) {
           const data = response.data;
-          console.log(data);
           setBannerList(data.banners);
           setBestList(data.bestProduct.content);
           setNewList(data.newProduct.content);
-          // setProductList(data.eventProduct.content);
-          // console.log(productList, "최상단");
         }
       });
     };

@@ -67,7 +67,6 @@ const PyeneProductCard = ({
 
   //좋아요 버튼
   const LikeClickHandler = () => {
-    console.log("test");
     axios
       .patch("/api/product/pick/" + $productInfo.product.productId, {
         withCredentials: true,
@@ -103,7 +102,6 @@ const PyeneProductCard = ({
               }
             });
         } else {
-          console.log(err);
           if (err.response.status === 403) {
             //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
             UserNotLogin();
