@@ -66,10 +66,6 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
     }
   }, [product.product.productImg, id]);
 
-  useEffect(() => {
-    setLikeStat(product?.userLike?.likeStat);
-  }, [product?.userLike?.likeStat, likeStat]);
-
   return (
     <Card>
       <ImageArea id={`${id}`}></ImageArea>
