@@ -1,12 +1,27 @@
 import { recipeType } from "@/model/commonType";
 import RecipeCard from "@components/common/RecipeCard";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
   const navigate = useNavigate();
 
   // const [popularRecipeList, setPopularRecipeList] = useState<RecipeInfo[]>([]);
-  // const [recipeList, setRecipeList] = useState<RecipeInfo[]>([]);
+  const [newRecipeList, setNewRecipeList] = useState<recipeType[]>(null);
+
+  useEffect(() => {
+    const newRecipes = [];
+    const seenRcpIds = new Set();
+
+    recipe.forEach((recipeInfo) => {
+      if (!seenRcpIds.has(recipeInfo.rcpId)) {
+        seenRcpIds.add(recipeInfo.rcpId);
+        newRecipes.push(recipeInfo);
+      }
+    });
+    console.log(newRecipes);
+    setNewRecipeList(newRecipes);
+  }, [recipe]);
 
   return (
     <div className="mt-2 bg-white">
@@ -25,12 +40,13 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
         )}
       </div>
       <div>
-        {recipe.map((recipeItem) => (
-          <RecipeCard
-            recipeInfo={recipeItem}
-            key={recipeItem.rcpId + "-" + recipeItem.member.memberId}
-          />
-        ))}
+        {newRecipeList &&
+          newRecipeList.map((recipeItem) => (
+            <RecipeCard
+              recipeInfo={recipeItem}
+              key={recipeItem.rcpId + "-" + recipeItem.member.memberId}
+            />
+          ))}
         {recipe.length === 0 && <div className="pb-5 text-center">관련 레시피가 없습니다</div>}
       </div>
     </div>

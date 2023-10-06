@@ -15,6 +15,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
     row: 1,
     lineBreak: {},
   });
+  const [isLogined, setIsLogined] = useState<boolean>(false);
 
   useEffect(() => {
     // 유저이름 받아옴
@@ -29,6 +30,7 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
         setNickname(() => {
           return res.data.data.nickname;
         });
+        setIsLogined(() => true);
       });
   }, []);
 
@@ -94,29 +96,45 @@ const RecipeCommentInput = ({ recipeId, setRefresh, detailRefreshHandler }: Prop
   };
 
   return (
-    <Container>
-      <NameBox>{nickname}</NameBox>
-      <InputBox
-        onChange={inputChangeHandler}
-        placeholder="내용을 입력하세요"
-        value={commentContent}
-        onInput={resizeTextareaHanlder}
-        onKeyDown={onKeyEnterHandler}
-        rows={textareaHeight.row}
-      />
-      <div className="flex flex-row-reverse">
-        <CreateBtn onClick={commentCreateHandler}>
-          <div>작성하기</div>
-        </CreateBtn>
-      </div>
-    </Container>
+    <>
+      {isLogined ? (
+        <Container>
+          <NameBox>{nickname}</NameBox>
+          <InputBox
+            onChange={inputChangeHandler}
+            placeholder="내용을 입력하세요"
+            value={commentContent}
+            onInput={resizeTextareaHanlder}
+            onKeyDown={onKeyEnterHandler}
+            rows={textareaHeight.row}
+          />
+          <div className="flex flex-row-reverse">
+            <CreateBtn onClick={commentCreateHandler}>
+              <div>작성하기</div>
+            </CreateBtn>
+          </div>
+        </Container>
+      ) : (
+        <Container>
+          <NameBox>
+            <div>댓글 작성</div>
+            <InputBoxNoLogin>로그인이 필요합니다</InputBoxNoLogin>
+          </NameBox>
+          <div className="flex flex-row-reverse">
+            <CreateBtn>
+              <div>작성하기</div>
+            </CreateBtn>
+          </div>
+        </Container>
+      )}
+    </>
   );
 };
 
 export default RecipeCommentInput;
 
 const Container = tw.div`
-mx-[1.875rem] p-[0.5rem] pb-[3rem]
+mx-[1.875rem] p-[0.5rem] pb-[3rem] mb-[1.875rem]
 `;
 
 const NameBox = tw.div`
@@ -136,6 +154,19 @@ border-[1px]
 border-common-bold-back-color
 outline-none 
 resize-none
+`;
+
+const InputBoxNoLogin = tw.div`
+block 
+w-[100%] 
+py-[0.875rem] 
+px-[0.8125rem] 
+my-[0.25rem] 
+items-center 
+text-common-bold-back-color
+bg-common-back-color 
+border-[1px] 
+border-common-bold-back-color
 `;
 const CreateBtn = tw.div`
 flex w-[3.875rem] h-[1.375rem] rounded-[0.3125rem] bg-common-text-color

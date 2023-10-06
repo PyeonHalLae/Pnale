@@ -12,8 +12,9 @@ const RecipeDetailContent = ({ content }: { content: string }) => {
 export default RecipeDetailContent;
 
 const Container = tw.div`
-pt-[1rem] px-[1.875rem] bg-white my-[.625rem]
+pt-[1rem] pb-[2rem] px-[1.875rem] bg-white my-[.625rem] min-h-[11rem] text-common-text-color 
 `;
+
 const Header = tw.div`
-text-[1.25rem] text-common-text-color
+text-[1.25rem] pb-[1rem]
 `;

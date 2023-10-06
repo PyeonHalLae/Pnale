@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import RecipeCreateFirst from "./recipeCreateComponent/RecipeCreateFirst";
 import RecipeCreateSecond from "./recipeCreateComponent/RecipeCreateSecond";
 import RecipeCreateThird from "./recipeCreateComponent/RecipeCreateThird";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { useSetRecoilState } from "recoil";
 import {
@@ -16,10 +16,12 @@ import {
 } from "@/recoil/khiRecoil";
 
 import axios from "axios";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 const RecipeModify = () => {
   const [step, setStep] = useState<string>("1");
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   const setRecipeForm = useSetRecoilState(recipeFormState);
   const setRecipeContents = useSetRecoilState(recipeFormContent);
@@ -28,7 +30,8 @@ const RecipeModify = () => {
 
   const { recipeId } = useParams();
 
-  useEffect(() => {
+  // 처음 디테일 정보 받아올 때
+  const loadDetailData = () => {
     axios
       .get("/api/recipe/detail", {
         params: {
@@ -40,28 +43,68 @@ const RecipeModify = () => {
       })
       .then((res) => {
         console.log(res.data.data);
+        if (res.data.data.myRecipe) {
+          const newPrd = res.data.data.ingredients.map((ingredient) => {
+            return {
+              prdId: ingredient.prdId,
+              prdName: ingredient.prdName,
+              changeable: ingredient.changeable,
+            };
+          });
 
-        const newPrd = res.data.data.ingredients.map((ingredient) => {
-          return {
-            prdId: ingredient.prdId,
-            prdName: ingredient.prdName,
-            changeable: ingredient.changeable,
-          };
-        });
-        setRecipeForm({
-          rcpName: res.data.data.rcpName,
-          rcpSimple: res.data.data.rcpSimple,
-          rcpVideo: res.data.data.rcpVideo,
-        });
-        setRecipeContents(res.data.data.rcpDesc);
-        setRecipeImg(res.data.data.rcpThumbnail);
-        setRecipeProducts(newPrd);
+          setRecipeForm({
+            rcpName: res.data.data.rcpName,
+            rcpSimple: res.data.data.rcpSimple,
+            rcpVideo: res.data.data.rcpVideo,
+          });
+          setRecipeContents(res.data.data.rcpDesc);
+          setRecipeImg(res.data.data.rcpThumbnail);
+          setRecipeProducts(newPrd);
+        } else {
+          // 본인 게시물이 아닐경우
+          ToastErrorMessage("작성자만 수정할 수 있습니다.");
+          navigate("/recipe");
+        }
       })
       .catch((err) => {
         console.log(err);
       })
       .finally(() => {
         setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    // 로그인 여부 체크
+    axios
+      .get("/api/member/login", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        loadDetailData();
+      })
+      .catch((error) => {
+        const code = error.response.status;
+        if (code === 401) {
+          // 액세스토큰이 있으나 유효하지 않은 경우
+          axios
+            .get("/api/auth/member/login", {
+              withCredentials: true,
+            })
+            .then(() => {
+              loadDetailData();
+            })
+            .catch(() => {
+              ToastErrorMessage("로그인이 필요합니다");
+              navigate("/sociallogin");
+            });
+        } else {
+          ToastErrorMessage("로그인이 필요합니다");
+          navigate("/sociallogin");
+        }
       });
   }, []);
 

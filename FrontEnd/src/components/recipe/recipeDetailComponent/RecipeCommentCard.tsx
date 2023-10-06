@@ -2,6 +2,7 @@ import tw from "tailwind-styled-components";
 import { commentInfoType } from "./recipeDetailType";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
 
 interface Props {
   commentInfo: commentInfoType;
@@ -16,14 +17,9 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
     row: 1,
     lineBreak: {},
   });
+
   const contentRef = useRef(null);
-
-  let contentheight;
-
-  useEffect(() => {
-    const contentStyle = window.getComputedStyle(contentRef.current);
-    contentheight = contentStyle.height;
-  }, []);
+  const [contentheight, setContentheight] = useState<string>(null);
 
   const commentDeleteHandler = () => {
     axios
@@ -46,9 +42,18 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
         console.log(err);
       });
   };
-  const commentModifyHandler = () => {
-    setIsModifying(true);
+  const commentModifyHandler = async () => {
+    const contentStyle = await window.getComputedStyle(contentRef.current);
+    const heightSize = await contentStyle.height;
+    setContentheight(heightSize);
   };
+
+  useEffect(() => {
+    if (contentheight != null) {
+      setIsModifying(true);
+      console.log(contentheight);
+    }
+  }, [contentheight]);
 
   const contentChangeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setModifyContent(() => {
@@ -143,7 +148,7 @@ const RecipeCommentCard = ({ commentInfo, setRefresh, detailRefreshHandler }: Pr
               onKeyDown={onKeyEnterHandler}
               onInput={resizeTextareaHanlder}
               rows={textareaHeight.row}
-              contentheight={contentheight !== undefined ? contentheight : "20px"}
+              $contentheight={contentheight}
             ></CommentContentBoxTextarea>
             <div
               className="absolute bottom-[0.5rem] right-[0.5rem] w-[2rem] h-[1rem] bg-common-text-gray-color"
@@ -198,15 +203,16 @@ items-center
 relative
 `;
 
-const CommentContentBoxTextarea = tw.textarea<{ contentheight: string }>`
-flex
-w-[14.125rem]
-text-[0.8rem]
-font-light
-items-center
-relative
-border
-bg-common-back-color`;
+//#f7f7f7;
+const CommentContentBoxTextarea = styled.textarea<{ $contentheight: string }>`
+  display: flex;
+  border: 1px solid black;
+  width: 14.125rem;
+  font-size: 0.8rem;
+  position: relative;
+  align-items: center;
+  height: ${(props) => props.$contentheight};
+`;
 
 const CommentManageBtn = tw.div`
 mx-[0.8rem] text-[0.75rem] font-medium text-common-bold-back-color

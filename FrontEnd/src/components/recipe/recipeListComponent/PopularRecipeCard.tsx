@@ -31,7 +31,6 @@ const PopularRecipeCard = ({ popularRecipe }: { popularRecipe: popularRecipeType
               return <Ingredients key={index}># {prd}</Ingredients>;
             }
           })}
-
         <div>
           <IconImg src="/img/icons/like-icon-pink.png" /> 좋아요 {popularRecipe.likeCnt}개
         </div>
@@ -45,7 +44,7 @@ const PopularRecipeCard = ({ popularRecipe }: { popularRecipe: popularRecipeType
 
       <Intro>{popularRecipe.rcpSimple}</Intro>
       {/* 인플루언서 게시물일때 태그 다르게 */}
-      {popularRecipe.member.memberId === 1 ? (
+      {popularRecipe.influence ? (
         <Tag src="/img/sticker/recipe/hot&inf.png" />
       ) : (
         <Tag src="/img/sticker/recipe/hot.png" />
@@ -82,7 +81,7 @@ const Container = styled.div`
   grid-auto-columns: 1fr;
   grid-auto-rows: 1fr;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: 1fr 3fr 1fr;
+  grid-template-rows: 1fr 6fr 1fr;
   grid-template-areas:
     "Title Title"
     "Img Content"
@@ -91,16 +90,18 @@ const Container = styled.div`
 
 const Title = styled.div`
   grid-area: Title;
-  font-size: 1.625rem;
+  font-size: 1.6875rem;
   font-style: normal;
   font-weight: 500;
   color: #1e2b4f;
   align-items: center;
   width: 70%;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
   margin-top: 0.5rem;
   margin-left: 1.125rem;
   margin-right: 0.625rem;
-  /* height: 4rem; */
+  height: 2.5rem;
   word-wrap: break-word;
   overflow: clip;
   display: -webkit-box; // webkit-box
@@ -112,6 +113,7 @@ const Img = styled.img`
   grid-area: Img;
   /* width: 12.75rem; */
   height: 10.5rem;
+  max-width: 12rem;
   margin: auto;
   src: ${(props) => props.src};
   border-radius: 0.9375rem;
@@ -152,9 +154,9 @@ const Content = styled.div`
 `;
 
 const Intro = styled.div`
-  height: 2.8rem;
+  max-height: 2.4rem;
   padding-top: 0.5rem;
-  padding-bottom: 0.5rem;
+  padding-bottom: 2.5rem;
   color: rgb(174 176 182);
   font-size: 0.75rem;
   font-weight: lighter;
