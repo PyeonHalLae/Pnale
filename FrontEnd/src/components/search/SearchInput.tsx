@@ -24,7 +24,6 @@ const SearchInput = () => {
     },
     {
       onError: (error: AxiosError) => {
-        console.log("error", error);
         switch (error.response?.status) {
           case 401:
             axios
@@ -32,11 +31,9 @@ const SearchInput = () => {
               .then((res) => {
                 switch (res.data.code) {
                   case 200:
-                    console.log("재로그인 - 삭제성공");
                     queryClient.refetchQueries("recentSearch");
                     break;
                   case 204:
-                    console.log("로컬에서 삭제");
                     addSearchTag([]);
                     setDeleteBtn(false);
                     break;
@@ -84,12 +81,10 @@ const SearchInput = () => {
                 switch (response.data.code) {
                   case 200:
                     // 200일 경우 데이터 반환
-                    console.log("RE로그인");
                     setUserSearchTag(response.data.data);
                     break;
                   case 204:
                     // 204일 경우 로그인 상태로 변경
-                    console.log("로컬");
                     setLoginState(true);
                     break;
                   default:
@@ -118,18 +113,14 @@ const SearchInput = () => {
     // 최근 검색어 데이터를 가져온 후 로그인 상태를 확인하고 유저 검색어 데이터를 가져오기
     if (!recentSearchLoading) {
       if (recentSearchData?.code === 200) {
-        console.log("로그인중");
-
         setUserSearchTag(recentSearchData.data);
       } else if (recentSearchData?.code === 204) {
-        console.log("로컬");
         setLoginState(true);
       }
     }
   }, [recentSearchLoading, recentSearchData]);
 
   useEffect(() => {
-    console.log(deleteData);
     if (deleteData?.code === 200) {
       console.log("유져 검색 기록 삭제");
       queryClient.refetchQueries("recentSearch");

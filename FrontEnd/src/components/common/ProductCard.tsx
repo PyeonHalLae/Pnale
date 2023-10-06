@@ -68,7 +68,7 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, id }) => {
 
   useEffect(() => {
     setLikeStat(product?.userLike?.likeStat);
-  }, [product?.userLike?.likeStat]);
+  }, [product?.userLike?.likeStat, likeStat]);
 
   return (
     <Card>

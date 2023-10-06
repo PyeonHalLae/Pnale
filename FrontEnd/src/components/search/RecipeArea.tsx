@@ -19,7 +19,6 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
         newRecipes.push(recipeInfo);
       }
     });
-    console.log(newRecipes);
     setNewRecipeList(newRecipes);
   }, [recipe]);
 
@@ -33,7 +32,7 @@ const RecipeArea = ({ recipe }: { recipe: recipeType[] }) => {
         {recipe.length > 0 && (
           <button
             className="absolute right-0 inline-block pr-5 font-bold bottom-4 text-common-orange"
-            onClick={() => navigate("/search-recipe")}
+            onClick={() => navigate("/search-recipe", { state: { responseData: recipe } })}
           >
             더보기
           </button>

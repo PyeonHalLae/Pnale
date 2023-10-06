@@ -25,11 +25,7 @@ const MainPageContent = () => {
       //   console.log(res);
       // },
       onError: (error) => {
-        console.log("onError");
-        console.log(error?.response?.status);
-      },
-      onSettled: () => {
-        // console.log("아무튼 Go!");
+        console.log(error);
       },
       retry: 2,
       cacheTime: 0,

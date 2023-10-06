@@ -7,7 +7,6 @@ import { useRecoilValue } from "recoil";
 
 const SearchProduct = () => {
   const idsArray = useRecoilValue(searchIdsArray);
-  console.log("************", idsArray);
 
   // const [searchData, setSearchData] = useState<ProductComp[]>([]);
 
@@ -31,7 +30,6 @@ const SearchProduct = () => {
     {
       getNextPageParam: (lastPage, allPages) => {
         if (lastPage?.data.data.content.last === true) {
-          console.log("더이상 불러올 페이지가 없습니다");
           return undefined;
         }
         return allPages.length;
@@ -65,9 +63,9 @@ const SearchProduct = () => {
           ))
         )}
         {status === "error" ? (
-          <div className="col-span-2 text-center my-4">더이상 불러올 페이지가 없습니다</div>
+          <div className="col-span-2 my-4 text-center">더이상 불러올 페이지가 없습니다</div>
         ) : (
-          <button className="col-span-2 text-center my-4" onClick={() => fetchNextPage()}>
+          <button className="col-span-2 my-4 text-center" onClick={() => fetchNextPage()}>
             더보기
           </button>
         )}
