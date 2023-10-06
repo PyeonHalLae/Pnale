@@ -34,6 +34,15 @@ export default {
           g: "#636569",
         },
       },
+      keyframes: {
+        moveToRight: {
+          "0%": { transform: `translateX(-500px)` },
+          "100%": { transform: `translateX(0)` },
+        },
+      },
+      animation: {
+        moveToRight: "moveToRight 0.3s ease-out",
+      },
     },
   },
 };

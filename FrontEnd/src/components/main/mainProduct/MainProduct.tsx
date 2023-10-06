@@ -1,16 +1,15 @@
+import MainProductContent from "./MainProductContent";
 import MainProductHeader from "./MainProductHeader";
+import { ProductComp } from "@/model/commonType";
 
-const MainProduct = () => {
+type MainProductContentPros = {
+  recommands: ProductComp[];
+};
+const MainProduct: React.FC<MainProductContentPros> = ({ recommands }) => {
   return (
     <div>
       <MainProductHeader />
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>MainProduct</div>
-      <div>asd</div>
+      <MainProductContent recommands={recommands} />
     </div>
   );
 };

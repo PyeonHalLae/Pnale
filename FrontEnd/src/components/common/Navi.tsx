@@ -1,6 +1,9 @@
 import { useState, useEffect } from "react";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import tw from "tailwind-styled-components";
+import NaviPE from "./NaviPE";
+
+import { ToastContainer } from "react-toastify";
 
 interface IconState {
   home: "blue" | "gray";
@@ -36,10 +39,12 @@ export default function Navi() {
   const toggleIconColor = (iconName: keyof IconState) => {
     setIconState((prevState) => ({
       ...prevState,
-      [iconName]: "gray",
+      [iconName]: "blue",
     }));
     if (iconName === "home") {
       navigate("/");
+    } else if (iconName === "search") {
+      navigate("/search/what");
     } else {
       navigate(`/${iconName}`);
     }
@@ -47,49 +52,65 @@ export default function Navi() {
 
   return (
     <>
+      <ToastContainer position="top-center" />
       <div style={{ height: "calc(100vh - 60px)" }} className="overflow-y-scroll ">
         <Outlet />
       </div>
-      <NaviParent>
-        <NaviDiv $isActive={location.pathname === "/"}>
+      <NaviParent className="z-30">
+        <NaviDiv $isActive={iconState.home === "blue"}>
           <NaviIcon
             src={`/img/navi/home-${iconState.home}.png`}
             alt=""
             onClick={() => toggleIconColor("home")}
           />
-          <NaviText $isActive={location.pathname === "/"}>홈</NaviText>
+          <NaviText $isActive={iconState.home === "blue"} onClick={() => toggleIconColor("home")}>
+            홈
+          </NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/search")}>
+
+        <NaviDiv $isActive={iconState.search === "blue"}>
           <NaviIcon
             src={`/img/navi/search-${iconState.search}.png`}
             alt=""
             onClick={() => toggleIconColor("search")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/search")}>검색</NaviText>
+          <NaviText
+            $isActive={iconState.search === "blue"}
+            onClick={() => toggleIconColor("search")}
+          >
+            검색
+          </NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/pyenE")}>
-          <NaviIcon
-            src={`/img/navi/pyenE-${iconState.pyenE}.png`}
-            alt=""
-            onClick={() => toggleIconColor("pyenE")}
-          />
-          <NaviText $isActive={location.pathname.startsWith("/pyenE")}>편의점</NaviText>
-        </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/recipe")}>
+
+        {/* 편의점 메인 버튼 */}
+        <NaviPE iconState={iconState.pyenE} />
+        {/* 편의점 메인 버튼 */}
+        <NaviDiv $isActive={iconState.recipe === "blue"}>
           <NaviIcon
             src={`/img/navi/recipe-${iconState.recipe}.png`}
             alt=""
             onClick={() => toggleIconColor("recipe")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/recipe")}>레시피</NaviText>
+          <NaviText
+            $isActive={iconState.recipe === "blue"}
+            onClick={() => toggleIconColor("recipe")}
+          >
+            레시피
+          </NaviText>
         </NaviDiv>
-        <NaviDiv $isActive={location.pathname.startsWith("/mypage")}>
+
+        <NaviDiv $isActive={iconState.mypage === "blue"}>
           <NaviIcon
             src={`/img/navi/user-${iconState.mypage}.png`}
             alt=""
             onClick={() => toggleIconColor("mypage")}
           />
-          <NaviText $isActive={location.pathname.startsWith("/mypage")}>마이</NaviText>
+          <NaviText
+            $isActive={iconState.mypage === "blue"}
+            onClick={() => toggleIconColor("mypage")}
+          >
+            마이
+          </NaviText>
         </NaviDiv>
       </NaviParent>
     </>
@@ -99,11 +120,12 @@ export default function Navi() {
 const NaviParent = tw.div`
   flex
   h-[60px]
-  min-w-[360px]
+  max-w-[450px]
+  min-w-[350px]
   w-full
   justify-center
   gap-[2em]
-  sticky
+  fixed
   bottom-0
   bg-white
 `;

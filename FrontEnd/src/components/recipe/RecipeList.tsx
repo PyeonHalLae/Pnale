@@ -1,144 +1,191 @@
 import { useEffect, useState } from "react";
 
 import RecipeCard from "@components/common/RecipeCard";
-import PopularRecipeRoller from "./PopularRecipeRoller";
+
+// 레시피 카드
+import { recipeType } from "@/model/commonType";
+
 import tw from "tailwind-styled-components";
 import { useNavigate } from "react-router-dom";
+import RecipeListHeaderBar from "./recipeListComponent/RecipeListHeaderBar";
+import { popularRecipeType } from "./recipeListComponent/recipeListType";
+import PopularRecipeCard from "./recipeListComponent/PopularRecipeCard";
+import axios from "axios";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
 // 제목, 대표사진, 조회수, 좋아요, 댓글수, 작성자닉네임, 작성자이미지, 작성일, 레시피 아이디
 
 const RecipeList = () => {
-  const [popularRecipeList, setPopularRecipeList] = useState<recipeType[]>([]);
+  const [popularRecipe, setPopularRecipe] = useState<popularRecipeType>();
   const [recipeList, setRecipeList] = useState<recipeType[]>([]);
-  const [listSortBy, setListSortBy] = useState<string>("latest");
+  const [listSortBy, setListSortBy] = useState<string>("recipeId,desc");
+  const [loading, setLoading] = useState<boolean>(true);
+  const [page, setPage] = useState<number>(1);
+  const [totalRecipeNum, setTotalRecipeNum] = useState<number>(0);
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    setRecipeList([
-      {
-        recipeTitle:
-          "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-    setPopularRecipeList([
-      {
-        recipeTitle: "두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목두줄제목",
-        recipeImg: "/img/test/너굴맨레시피.jpg",
-        viewCnt: 1000,
-        likeCnt: 1000,
-        commentCnt: 1000,
-        userName: "정현모",
-        userImg: "/img/test/너굴맨레시피.jpg",
-        createdDate: "2020.20.20",
-        recipeId: 1,
-        // recipeId 도 받아와야함
-      },
-    ]);
-  }, []);
+    axios
+      .get("/api/recipe", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        params: {
+          page: 0,
+          size: 3,
+          sort: listSortBy,
+        },
+      })
+      .then((res) => {
+        console.log(res);
+        // 인기레시피
+        setPopularRecipe(res.data.data.best);
+        // 그냥 레시피 리스트
+        setRecipeList(res.data.data.recipes.content);
+        setTotalRecipeNum(res.data.data.recipes.totalElements);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, [listSortBy]);
+
+  const viewMoreHandler = () => {
+    axios
+      .get(`/api/recipe/all`, {
+        withCredentials: true,
+        params: { page: page, size: 3, sort: listSortBy },
+      })
+      .then((res) => {
+        console.log(totalRecipeNum);
+        if (res.data.code === 200) {
+          setRecipeList((recipeList) => {
+            return [...recipeList, ...res.data.data.content];
+          });
+          setPage((prev) => {
+            return prev + 1;
+          });
+        }
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const createBtnClickHandler = () => {
+    axios
+      .get("/api/member/login", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      })
+      .then(() => {
+        navigate("/recipe/create"); // 데이터
+      })
+      .catch((error) => {
+        const code = error.response.status;
+        if (code === 401) {
+          // 액세스토큰이 있으나 유효하지 않은 경우
+          axios
+            .get("/api/auth/member/login", {
+              withCredentials: true,
+            })
+            .then(() => {
+              navigate("/recipe/create");
+            })
+            .catch(() => {
+              ToastErrorMessage("로그인이 필요합니다");
+              navigate("/sociallogin");
+            });
+        } else {
+          ToastErrorMessage("로그인이 필요합니다");
+          navigate("/sociallogin");
+        }
+      });
+  };
 
   return (
-    <div className="relative">
-      <div>로고</div>
-      <div>서치바</div>
-      <div>
-        <ContentTitle>
-          <TitleTextPeach>인기</TitleTextPeach>
-          <TitleText>레시피</TitleText>
-        </ContentTitle>
-        {/* 인기 레시피 컨테이너 */}
-        <PopularRecipeRoller popularRecipeList={popularRecipeList} />
-      </div>
+    <>
+      {loading ? (
+        <></>
+      ) : (
+        <Container>
+          {/* 서치바포함된 헤더 누르면 레시피 서치 페이지로 이동해야함 */}
+          <RecipeListHeaderBar />
 
-      {/* 전체 레시피 컨테이너 */}
-      <div>
-        <ContentTitle>
-          <TitleTextOrange>전체 </TitleTextOrange>
-          <TitleText>레시피</TitleText>
+          <ContentTitle>
+            <TitleTextPeach>인기</TitleTextPeach>
+            <TitleText>레시피</TitleText>
+          </ContentTitle>
 
-          <SortSelectBox
-            value={listSortBy}
-            onChange={(e) => {
-              console.log(e.target.value);
-              setListSortBy(() => {
-                return e.target.value;
-              });
-            }}
-          >
-            <option value="latest">최신순</option>
-            <option value="popular">인기순</option>
-          </SortSelectBox>
-        </ContentTitle>
-        <div>
+          {/* 인기 레시피 컨테이너 */}
+          {popularRecipe ? (
+            <PopularRecipeCard popularRecipe={popularRecipe} />
+          ) : (
+            <PopularRecipeContainer>앗 인기레시피가 없어요!</PopularRecipeContainer>
+          )}
+
+          {/* 전체 레시피 컨테이너 */}
+
+          <ContentTitle>
+            <TitleTextOrange>전체 </TitleTextOrange>
+            <TitleText>레시피</TitleText>
+
+            <SortSelectBox
+              value={listSortBy}
+              onChange={(e) => {
+                setPage(() => 1);
+                setListSortBy(() => {
+                  return e.target.value;
+                });
+              }}
+            >
+              <option value="recipeId,desc">최신순</option>
+              <option value="likeCnt,desc">인기순</option>
+              <option value="recipeId,asc">오래된순</option>
+              <option value="likeCnt,asc">인기역순</option>
+            </SortSelectBox>
+          </ContentTitle>
+
           {/* 5개씩 늘어날 것. */}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard
-              // onClick={navigateHandler(recipeItem.recipeId)}
-              key={recipeItem.recipeTitle + index}
-              recipeInfo={recipeItem}
-            />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-          {recipeList.map((recipeItem, index) => (
-            <RecipeCard key={recipeItem.recipeTitle + index} recipeInfo={recipeItem} />
-          ))}
-        </div>
-      </div>
-      {/* 새 레시피 등록 버튼 */}
-      <ViewMoreBtnBox>
-        <ViewMoreBtn
-          onClick={() => {
-            console.log("ㅎㅎ");
-          }}
-        >
-          더보기
-        </ViewMoreBtn>
-      </ViewMoreBtnBox>
-      <CreateBtn
-        onClick={() => {
-          navigate("/recipe/create");
-        }}
-        src="/public/img/btn/create-recipe.png"
-      />
-    </div>
+          {recipeList &&
+            recipeList.map((recipeItem, index) => (
+              <RecipeCard
+                // onClick={navigateHandler(recipeItem.recipeId)}
+                key={recipeItem.rcpName + index}
+                recipeInfo={recipeItem}
+              />
+            ))}
+
+          {recipeList.length !== totalRecipeNum && (
+            <ViewMoreBtnBox>
+              <ViewMoreBtn onClick={viewMoreHandler}>더보기</ViewMoreBtn>
+            </ViewMoreBtnBox>
+          )}
+
+          <CreateBtn onClick={createBtnClickHandler} src="/img/btn/create-recipe.png" />
+        </Container>
+      )}
+    </>
   );
 };
 
 export default RecipeList;
 
+const Container = tw.div`
+relative 
+min-w-[22.5rem] 
+max-w-[28.125rem]
+`;
+
 const ContentTitle = tw.div`
 relative
   min-w-[22.5rem] max-w-[28.125rem] h-[3.75rem] 
   pt-[1rem] pb-[.625rem] pl-[1.125rem] 
-  my-[.625rem] bg-white 
+  mb-[.625rem] bg-white 
 `;
 
 const TitleText = tw.div`
@@ -154,8 +201,8 @@ const TitleTextOrange = tw(TitleTextPeach)`
 // 여기고쳐야함
 const SortSelectBox = tw.select`
   absolute
-  w-[4.6875rem] h-[1.5rem] text-[1rem]
-  bottom-[0.625rem] right-[1rem] outline-0
+  w-[5.625rem] h-[1.5rem] text-[1rem]
+  bottom-[0.625rem] right-[1rem] outline-0 text-common-text-color
 `;
 
 const ViewMoreBtnBox = tw.div`
@@ -167,5 +214,17 @@ const ViewMoreBtn = tw.button`
 `;
 
 const CreateBtn = tw.img`
-  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[1.75rem]
+  w-[4.6875rem] h-[4.6875rem] rounded-[4.6875rem] fixed z-[2] bottom-[5rem] right-[calc(50%-11rem)]
 `;
+
+const PopularRecipeContainer = tw.div`  
+relatvie
+bg-white
+min-w-[22.5rem]
+max-w-[28.125rem]
+h-[18.125rem]
+mt-[0.62rem]
+mb-[0.625rem]
+position: relative;
+text-center
+py-24`;

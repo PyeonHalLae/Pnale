@@ -2,89 +2,111 @@
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
-
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
-  likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
-  recipeId: number;
-}
+import { recipeType } from "@/model/commonType";
+import { useState, useRef, useEffect } from "react";
+import BottomMenu from "./BottomMenu";
 
 const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  // useEffect(() => {
-  //   setIsAdmin(false);
-  // }, []);
+  const [bottomMenuState, setBottomMenuState] = useState<boolean>(false);
   const navigate = useNavigate();
+  const [titleStyleState, setTitleStyleState] = useState<boolean>(false);
+  const titleRef = useRef(null);
+  //높이 설정
 
+  useEffect(() => {
+    const titleStyle = window.getComputedStyle(titleRef.current);
+    const titleHeight = parseFloat(titleStyle.height);
+    //한줄이라면
+    if (titleHeight < 40) {
+      setTitleStyleState(true);
+    } else {
+      setTitleStyleState(false);
+    }
+  }, []);
   // 카드 눌렀을 시 레시피 디테일로 이동
   const navigateHandler = (recipeId: number) => {
-    navigate(`${recipeId}`);
+    navigate(`/recipe/${recipeId}`);
   };
 
-  recipeInfo = {
-    recipeTitle:
-      "두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다두줄제목입니다입니다입니다입니다",
-    recipeImg: "/img/test/너굴맨레시피.jpg",
-    viewCnt: 1000,
-    likeCnt: 1000,
-    commentCnt: 1000,
-    userName: "정현모",
-    userImg: "/img/test/너굴맨레시피.jpg",
-    createdDate: "2020.20.20",
-    recipeId: 1,
+  const BottomMenuStateHandler = () => {
+    setBottomMenuState(!bottomMenuState);
   };
+
+  const manageBtnHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    e.stopPropagation();
+    BottomMenuStateHandler();
+  };
+
   return (
     <Container
       onClick={() => {
-        navigateHandler(recipeInfo.recipeId);
+        navigateHandler(recipeInfo.rcpId);
       }}
     >
       {/* 레시피 이미지 */}
-      <RecipeImg src={recipeInfo.recipeImg} alt="레시피이미지" />
+      <RecipeImg src={recipeInfo.rcpThumbnail} alt="레시피이미지" />
 
       {/* 이미지 외의 영역 */}
       <ContentBox>
         {/* 조회수박스 */}
         <ViewCountBox>
           <ViewIcon src="/img/icons/view-icon-gray.png" alt="조회" />
-          {recipeInfo.viewCnt}
+          <div className="inline h-[100%] py-1">{recipeInfo.viewCnt}</div>
         </ViewCountBox>
+        {/* 
+        {recipeInfo.myRecipe && (
+          <div
+            className="absolute
+          top-0
+          right-2
+          w-[3rem]"
+            onClick={manageBtnHandler}
+          >
+            <ManageBtn src="/img/btn/menu-btn.png" />
+          </div>
+        )} */}
 
         {/* 레시피 제목 */}
-        <RecipeTitleBox>{recipeInfo.recipeTitle}</RecipeTitleBox>
+        <RecipeTitleBox
+          ref={titleRef}
+          className={titleStyleState && "mt-[0.9375rem] mb-[0.3125rem]"}
+        >
+          {recipeInfo.rcpName}
+        </RecipeTitleBox>
 
         {/* 유저 닉네임, 유저 이미지 */}
         <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top text-aling">
-          by {recipeInfo.userName}
+          by {recipeInfo.member.nickname}
           <img
             className="w-[1.5rem] h-[1.5rem] rounded-[0.8rem] ml-2 inline-block"
-            src={recipeInfo.userImg}
+            src={recipeInfo.member.memberImg}
             alt="유저이미지"
           />
         </div>
 
         {/* 작성일 */}
-        <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {recipeInfo.createdDate}
+        <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color mt-[0.2rem]">
+          {recipeInfo.createdAt.substring(0, 10)} {recipeInfo.createdAt.substring(11, 16)}
         </div>
       </ContentBox>
 
       {/* 관리자 게시물일경우만 우상단 인플루언서 태그*/}
-      {recipeInfo.userName === "운영자" && <InfluencerBox>인플루언서</InfluencerBox>}
+      {recipeInfo.influence && <InfluencerBox src="/img/sticker/recipe/inf.png" />}
 
       {/* 좋아요 댓글 우하단 박스 */}
       <LikeCommentBox>
         <LikeCommentIcon src="/img/icons/like-icon-pink.png" alt="좋아요" />
         {recipeInfo.likeCnt}
         <LikeCommentIcon src="/img/icons/comment-icon-pink.png" alt="댓글" />
-        {recipeInfo.commentCnt}
+        {recipeInfo.replyCnt}
       </LikeCommentBox>
+
+      {bottomMenuState && (
+        <BottomMenu
+          $selectRecipeId={recipeInfo.rcpId}
+          BottomMenuStateHandler={manageBtnHandler}
+        ></BottomMenu>
+      )}
     </Container>
   );
 };
@@ -92,31 +114,46 @@ const RecipeCard = ({ recipeInfo }: { recipeInfo: recipeType }) => {
 export default RecipeCard;
 
 const Container = tw.div`
-  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.5rem] bg-white grid grid-cols-5 my-[.625rem] items-center;
+  relative min-w-[22.5rem] max-w-[28.125rem] min-h-[7.8125rem] bg-white grid grid-cols-5 my-[.625rem] items-center ;
 `;
 
 const RecipeImg = tw.img`
-  max-w-[8.75rem] max-h-[7.5rem] w-[8rem] h-[6.25rem] rounded-[.3125rem] m-auto col-span-2
+  w-[7.5rem] h-[6.42rem] rounded-[.3125rem] m-auto col-span-2 object-cover bg-common-back-color p-1
 `;
 
 const ContentBox = tw.div`
-  h-[6.25rem] col-span-3 my-[0.5rem]
+  relative 
+  h-[6.25rem] 
+  col-span-3 
+  my-[0.5rem]
 `;
 
 const ViewCountBox = tw.div`
-relative top-0 text-[0.6rem]  text-common-text-gray-color
+text-[0.6rem]  
+text-common-text-gray-color
 `;
+
+// const ManageBtn = tw.img`
+// absolute
+// top-0
+// right-2
+// w-[1rem]
+// inline-block
+// `;
 
 const RecipeTitleBox = styled.div`
-  font-size: 1.1rem;
-  overflow: clip;
-  display: -webkit-box; // webkit-box
-  -webkit-line-clamp: 2; // 2줄까지
-  -webkit-box-orient: vertical; //...
+  color: #1e2b4f;
+  font-size: 1rem;
+  width: 13.75rem;
+  word-wrap: break-word;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 `;
 
-const InfluencerBox = tw.div`
- absolute top-0 right-0 w-3.75rem h-0.9rem bg-fa709a text-center text-white text-xs
+const InfluencerBox = tw.img`
+ absolute top-0 right-0 w-[4.4rem] h-[1.16rem]
 `;
 
 const LikeCommentBox = tw.div`
@@ -124,7 +161,7 @@ const LikeCommentBox = tw.div`
 `;
 
 const ViewIcon = tw.img`
-  w-[0.75rem] h-[0.75rem] inline-block mr-[0.3rem]
+  w-[0.7rem] h-[0.7rem] inline-block mr-[0.3rem] ml-[0.1rem]
 `;
 
 const LikeCommentIcon = tw(ViewIcon)`

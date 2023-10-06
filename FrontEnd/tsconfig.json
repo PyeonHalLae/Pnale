@@ -25,7 +25,9 @@
     "paths": {
       "@components/*": ["src/components/*"],
       "@/*": ["src/*"],
-      "@public/*": ["public/*"]
+      "@public/*": ["public/*"],
+      "@model/*": ["src/model/*"],
+      "@recoil/*": ["src/recoil/*"]
     }
   },
   "include": ["src", "**/*.ts", "**/*.tsx"],

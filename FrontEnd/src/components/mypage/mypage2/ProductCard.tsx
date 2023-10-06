@@ -2,10 +2,14 @@
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 import { useEffect, useState } from "react";
+import { ProductComp } from "@/model/commonType";
+import axios from "axios";
+
+import "react-toastify/dist/ReactToastify.css";
+import { UserInfoExpires, UserNotLogin, ToastBackMessage } from "@/model/toastMessageJHM";
 
 interface EventType {
-  state: boolean; //행사중이냐 아니냐
-  type: string; //편의저명
+  pyeneType: string; //편의저명
   eventType: string; //행사중일때 해당하는 행사 ( 1+1 2+1)
 }
 
@@ -13,40 +17,28 @@ interface EventImg {
   imgurl: string;
 }
 
-interface ProductType {
-  name: string;
-  price: number;
-  img: string;
-  category: string;
-  mailState: boolean;
-}
+const pyeneList = ["cu", "seven", "gs", "emart"];
 
-const EventState: EventType[] = [
-  { state: true, type: "CU", eventType: "TPO" },
-  { state: false, type: "EMART", eventType: "" },
-  { state: true, type: "GS", eventType: "DISC" },
-  { state: true, type: "SEVEN", eventType: "MORE" },
-];
-
-const productData: ProductType = {
-  name: " 오리온) 포카칩 오리지널 66g 두줄테스트 응애 ㅇㅁㄴㄹㄴㅇㄹ",
-  price: 2000,
-  img: "/img/test/image61.png",
-  category: "스낵",
-  mailState: true,
-};
-
-const ProductCard = () => {
+const ProductCard = ({ $productInfo }: { $productInfo: ProductComp }) => {
   const [eventUrl, setEventUrl] = useState<EventImg[]>([]);
+  const [productData, setProductData] = useState<ProductComp>();
 
-  const eventImgCheck = async (eventState) => {
+  useEffect(() => {
+    setProductData($productInfo);
+  }, [$productInfo]);
+
+  //이벤트 이미지 세팅
+  const eventImgCheck = async () => {
+    const eventList = pyeneList.map((value) => ({
+      pyeneType: value.toUpperCase(),
+      eventType:
+        $productInfo.event[value + "type"] === null ? "NONE" : $productInfo.event[value + "type"],
+    }));
+
     const eventImgInfo: EventImg[] = [];
-
-    eventState.map((eventInfo: EventType) => {
-      const { state, type, eventType } = eventInfo;
-      const eventImgUrl = state
-        ? `/img/event/${type}-${eventType}.png`
-        : `/img/event/${type}-NONE.png`;
+    await eventList.map((eventInfo: EventType) => {
+      const { pyeneType, eventType } = eventInfo;
+      const eventImgUrl = `/img/sticker/event/${pyeneType}-${eventType}.png`;
 
       eventImgInfo.push({ imgurl: eventImgUrl });
     });
@@ -54,42 +46,165 @@ const ProductCard = () => {
     await setEventUrl([...eventImgInfo]);
   };
 
+  const ProductReceiveHandler = () => {
+    setProductData((prevProductData) => ({
+      ...prevProductData,
+      userLike: {
+        ...prevProductData.userLike,
+        received: !prevProductData.userLike.received,
+      },
+    }));
+  };
+
+  const ProductLikeHandler = () => {
+    setProductData(null);
+  };
+
+  //메일 체크
+  const MailClickHandler = () => {
+    axios
+      .patch("/api/product/receive/" + $productInfo.product.productId, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          ProductReceiveHandler();
+          ToastBackMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .patch("/api/auth/product/receive/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                ProductReceiveHandler();
+                ToastBackMessage(res.data.message);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
+  };
+
+  //좋아요 해제
+  const LikeClickHandler = () => {
+    axios
+      .patch("/api/product/pick/" + $productInfo.product.productId, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const resData = res.data;
+        if (resData.code == 200) {
+          ProductLikeHandler();
+          ToastBackMessage(res.data.message);
+        }
+      })
+      .catch((err) => {
+        if (err.response.status === 401) {
+          //리프레시 토큰 재발급
+          axios
+            .patch("/api/auth/product/pick/" + $productInfo.product.productId, {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                ProductLikeHandler();
+                ToastBackMessage(res.data.message);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+                UserInfoExpires();
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            UserNotLogin();
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
+  };
+
   useEffect(() => {
-    eventImgCheck(EventState);
-  }, []);
+    eventImgCheck();
+  }, [$productInfo]);
 
   return (
     <>
-      <BackSize>
-        <Card>
-          <ImageBox $imgurl="/img/test/image61.png" />
-          <InfoBox>
-            <ProductInfo>
-              <ProductTitle>{productData.name}</ProductTitle>
-              <div className="flex">
-                <Price> {productData.price}원</Price>
-                <Like />
-              </div>
-              <Category> {productData.category}</Category>
-              <MailBox>
-                메일 알림 받기
-                <MailBtn
-                  $mailState={
-                    productData.mailState
-                      ? "/img/btn/checkbox-true.png"
-                      : "/img/btn/checkbox-false.png"
-                  }
-                />
-              </MailBox>
-            </ProductInfo>
-            <EventInfo>
-              {eventUrl.map((value, index) => (
-                <EventImg key={index} $imgurl={value.imgurl} />
-              ))}
-            </EventInfo>
-          </InfoBox>
-        </Card>
-      </BackSize>
+      {productData && (
+        <BackSize>
+          <Card>
+            <ImageBox $imgurl={productData.product.productImg} />
+            <InfoBox>
+              <ProductInfo>
+                <ProductTitle>{productData.product.productName}</ProductTitle>
+                <div className="flex mt-1">
+                  <Price>
+                    {" "}
+                    {productData.product.price}
+                    <PriceText>원</PriceText>
+                  </Price>
+                  <Like
+                    onClick={() => {
+                      LikeClickHandler();
+                    }}
+                  />
+                </div>
+                <Category>{productData.product.category}</Category>
+                <MailBox>
+                  메일 알림 받기
+                  <MailBtn
+                    onClick={() => {
+                      MailClickHandler();
+                    }}
+                    $mailState={
+                      productData.userLike.received
+                        ? "/img/btn/checkbox-true.png"
+                        : "/img/btn/checkbox-false.png"
+                    }
+                  />
+                </MailBox>
+              </ProductInfo>
+              <EventInfo>
+                {eventUrl.map((value, index) => (
+                  <EventImg key={index} $imgurl={value.imgurl} />
+                ))}
+              </EventInfo>
+            </InfoBox>
+          </Card>
+        </BackSize>
+      )}
     </>
   );
 };
@@ -97,112 +212,121 @@ const ProductCard = () => {
 export default ProductCard;
 
 const BackSize = tw.div` 
-    w-full h-[120px]
+    w-full h-[7.5rem]
     bg-white
-    my-[10px]
+    my-[0.625rem]
     mx-auto
 `;
 
-const Card = styled.div`
-  display: flex;
-  height: 100%;
-  width: 350px;
-  margin: 0px auto;
+const Card = tw.div`
+  flex
+  h-full
+  w-[21.875rem]
+  mx-auto
 `;
 
 const ImageBox = styled.div<{ $imgurl: string }>`
-  width: 110px;
-  height: 115px;
-  margin: auto 5px;
+  width: 6.875rem;
+  height: 7.1875rem;
+  margin: auto 0.3125rem;
   background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
 `;
 
-const InfoBox = styled.div`
-  display: flex;
-  margin-left: 10px;
-  width: calc(100% - 120px);
-  height: 100%;
+const InfoBox = tw.div`
+  flex
+  ml-[0.625rem]
+  w-[calc(100%-7.5rem)]
+  h-full
 `;
 
-const ProductInfo = styled.div`
-  width: 75%;
-  height: 85%;
-  margin: auto 0px;
+const ProductInfo = tw.div`
+  w-[75%]
+  h-[85%]
+  my-auto
 `;
 
 const ProductTitle = styled.div`
-  font-size: 10px;
-  width: 136px;
-  font-weight: normal;
+  font-size: 13px;
+  width: 8.5rem;
+  height: 2.125rem;
+  font-weight: bold;
+  color: #1e2b4f;
   word-wrap: break-word;
   overflow: hidden; //숨기는거고
   display: -webkit-box; // webkit-box다
   -webkit-line-clamp: 2; //둘줄까지만보여라
-  -webkit-box-orient: vertical; //... 해주는거
+  -webkit-box-orient: vertical; //... 해주는거 - tw 할경우 "line-clamp-2" 로 4줄생략가능
 `;
 
 const Price = tw.div`
-  text-[15px] mx-[2px]
-  w-[79px]
+  text-[1rem] mx-[0.125rem]
+  w-[5.625rem]
+`;
+
+const PriceText = tw.span`
+  ml-[2px]  
+  text-[11px]
+  text-common-text-color
 `;
 
 const Like = styled.div`
-  width: 15px;
-  height: 20px;
+  width: 0.9375rem;
+  height: 1.25rem;
   background-image: url("/img/btn/like-true.png");
   background-position: center;
-  background-size: 15px 15px;
+  background-size: 0.9375rem 0.9375rem;
   background-repeat: no-repeat;
 `;
 
 const Category = styled.span`
   display: inline-block;
-  margin: 2px 0px;
-  min-width: 41px;
-  max-width: 130px;
+  margin: 0.0625rem 0rem 0px 0px;
+  min-width: 2.5625rem;
+  max-width: 8.125rem;
   overflow: hidden;
   word-break: break-all;
-  padding: 1px 5px;
-  height: 18px;
-  font-size: 10px;
+  padding: 0.0625rem 0.3125rem;
+  height: 1.125rem;
+  line-height: 1.125rem;
+  font-size: 0.625rem;
   text-align: center;
-  border: 1px solid #1e2b4f;
-  border-radius: 3px;
+  border: 0.0625rem solid #1e2b4f;
+  border-radius: 0.1875rem;
   color: #1e2b4f;
 `;
 
-const MailBox = styled.div`
-  font-size: 10px;
-  line-height: 18px;
-  height: 15px;
-  color: #aeb0b6;
-  display: flex;
+const MailBox = tw.div`
+  flex
+  text-[0.625rem]
+  leading-[1rem]
+  h-[0.9375rem]
+  text-[#aeb0b6]
 `;
 
 const MailBtn = styled.div<{ $mailState: string }>`
-  width: 15px;
-  height: 15px;
-  margin-left: 4px;
+  width: 0.875rem;
+  height: 0.875rem;
+  margin-left: 0.25rem;
   background-image: url(${(props) => props.$mailState});
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
 `;
 
-const EventInfo = styled.div`
-  width: 35%;
-  margin: auto 0px;
+const EventInfo = tw.div`
+  w-[35%]
+  my-auto
 `;
 
 const EventImg = styled.div<{ $imgurl: string }>`
-  width: 65px;
-  height: 22px;
-  margin: 4px 0px;
+  width: 4.0625rem;
+  height: 1.375rem;
+  margin: 0.25rem 0rem;
   background-image: url(${(props) => props.$imgurl});
   background-position: center;
-  background-size: 65px 22px;
+  background-size: 4.0625rem 1.375rem;
   background-repeat: no-repeat;
 `;

@@ -1,20 +1,34 @@
-import { useNavigate } from "react-router-dom";
+import SearchArea from "./SearchArea";
+import RelatedArea from "./RelatedArea";
+import RecipeArea from "./RecipeArea";
+import { useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { searchData } from "@/model/searchType";
+import { useRecoilValue } from "recoil";
+import { searchIdsArray } from "@/recoil/kdmRecoil";
 
 const SearchMain = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchData, setSearchData] = useState<searchData>();
+  const IdsArray = useRecoilValue(searchIdsArray);
+
+  useEffect(() => {
+    if (location.state) {
+      const searchData = location.state.responseData;
+      setSearchData(searchData);
+    }
+  }, [location.state, IdsArray]);
 
   return (
-    <>
-      <button style={{ backgroundColor: "orange" }} onClick={() => navigate("/search-product")}>
-        검색상품 더보기
-      </button>
-      <button style={{ backgroundColor: "gray" }} onClick={() => navigate("/search-related")}>
-        관련상품 더보기
-      </button>
-      <button style={{ backgroundColor: "olive" }} onClick={() => navigate("/search-recipe")}>
-        레시피 더보기
-      </button>
-    </>
+    <div className="grid-cols-3 gird bg-common-back-color">
+      {searchData && (
+        <>
+          <SearchArea search={searchData.search} ids={IdsArray} />
+          <RelatedArea relate={searchData.relate} />
+          <RecipeArea recipe={searchData.recipes.content} />
+        </>
+      )}
+    </div>
   );
 };
 

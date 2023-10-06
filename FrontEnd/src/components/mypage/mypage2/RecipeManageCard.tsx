@@ -1,89 +1,135 @@
 // import { useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import tw from "tailwind-styled-components";
 
-interface recipeType {
-  recipeTitle: string;
-  recipeImg: string;
-  viewCnt: number;
+interface recipeMemberType {
+  memberId: number;
+  nickname: string;
+  memberImg: string;
+}
+interface recipeInfoType {
+  rcpId: number;
+  rcpName: string;
+  member: recipeMemberType;
+  rcpSimple: string;
+  rcpThumbnail: string;
+  createdAt: string;
   likeCnt: number;
-  commentCnt: number;
-  userName: string;
-  userImg: string;
-  createdDate: string;
+  replyCnt: number;
+  viewCnt: number;
+  like: boolean;
+  myRecipe: boolean;
+  influence: boolean;
+}
+
+interface Props {
+  $recipeInfo: recipeInfoType;
+  myRecipeType: string;
+  BottomMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
+  SelectRecipeIdHandler: (repid: number) => void;
+  LikeMenuStateHandler: (e: React.MouseEvent<HTMLDivElement>) => void;
 }
 
 const RecipeManageCard = ({
-  recipeInfo,
+  $recipeInfo,
   myRecipeType,
-}: {
-  recipeInfo: recipeType;
-  myRecipeType: string;
-}) => {
-  // const [isAdmin, setIsAdmin] = useState<boolean>();
-  // useEffect(() => {
-  //   setIsAdmin(false);
-  // }, []);
+  BottomMenuStateHandler,
+  SelectRecipeIdHandler,
+  LikeMenuStateHandler,
+}: Props) => {
+  const navigate = useNavigate();
 
-  recipeInfo = {
-    recipeTitle: "두줄제목입니다입니다asdasdasd입sdas니asdfasdf다safdsdaasdfsdfsdf입니다",
-    recipeImg: "/public/img/test/너굴맨레시피.jpg",
-    viewCnt: 1000,
-    likeCnt: 1000,
-    commentCnt: 1000,
-    userName: "운영자",
-    userImg: "/public/img/test/너굴맨레시피.jpg",
-    createdDate: "2020.20.20",
+  const MenuBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    SelectRecipeIdHandler($recipeInfo.rcpId);
+    BottomMenuStateHandler(e);
   };
+
+  const LikeBtnClickHandler = (e: React.MouseEvent<HTMLDivElement>) => {
+    SelectRecipeIdHandler($recipeInfo.rcpId);
+    LikeMenuStateHandler(e);
+  };
+
+  const recipeImgRef = useRef(null);
+  const titleRef = useRef(null);
+  const [titleStyleState, setTitleStyleState] = useState<boolean>(false);
+  const ImageErrorHandler = () => {
+    recipeImgRef.current.src = "/img/sticker/noimage.jpg";
+  };
+
+  //높이 설정
+  useEffect(() => {
+    const titleStyle = window.getComputedStyle(titleRef.current);
+    const titleHeight = parseFloat(titleStyle.height);
+    //한줄이라면
+    if (titleHeight < 40) {
+      setTitleStyleState(true);
+    } else {
+      setTitleStyleState(false);
+    }
+  }, []);
+
   return (
-    <Container>
+    <Container
+      onClick={() => {
+        navigate("/recipe/" + $recipeInfo.rcpId);
+      }}
+    >
       {/* 레시피 이미지 */}
-      <RecipeImg src={recipeInfo.recipeImg} alt="레시피이미지" />
+      <RecipeImg
+        src={$recipeInfo.rcpThumbnail}
+        alt="레시피이미지"
+        onError={ImageErrorHandler}
+        ref={recipeImgRef}
+      />
 
       {/* 이미지 외의 영역 */}
       <ContentBox>
         {/* 관리 버튼 */}
         {myRecipeType === "MYRECIPE" ? (
-          <MenuBtn $imgurl={"/img/btn/menu-btn.png"} />
+          <MenuBtn $imgurl={"/img/btn/menu-btn.png"} onClick={MenuBtnClickHandler} />
         ) : (
-          <MenuBtn $imgurl={"/img/btn/close-btn.png"} />
+          <MenuBtn $imgurl={"/img/btn/close-btn.png"} onClick={LikeBtnClickHandler} />
         )}
         {/* 조회수박스 */}
         <ViewCountBox>
           <ViewIcon src="/img/icons/view-icon-gray.png" alt="조회" />
-          {recipeInfo.viewCnt}
+          {$recipeInfo.viewCnt}
         </ViewCountBox>
 
         {/* 레시피 제목 */}
-        <Title>{recipeInfo.recipeTitle}</Title>
+        <Title ref={titleRef} className={titleStyleState && "mt-[0.9375rem] mb-[0.3125rem]"}>
+          {$recipeInfo.rcpName}
+        </Title>
 
         {/* 유저 닉네임, 유저 이미지 */}
-        {recipeInfo.userName === "운영자" ? (
+        {$recipeInfo.influence === true ? (
           <div className="inline-block text-[0.8rem] text-white bg-common-peach justify-center px-1 my-auto h-[1rem]">
             인플루언서
           </div>
         ) : (
           <div className="text-[0.8rem] text-common-text-gray-color justify-center align-top">
-            by {recipeInfo.userName}
+            by {$recipeInfo.member.nickname}
             <img
               className="w-[1.5rem] h-[1.5rem] rounded-[0.8rem] ml-2 inline-block"
-              src={recipeInfo.userImg}
+              src={$recipeInfo.member.memberImg}
               alt="유저이미지"
             />
           </div>
         )}
         {/* 작성일 */}
         <div className="relative text-[0.6rem] bottom-70  text-common-text-gray-color">
-          {recipeInfo.createdDate}
+          {$recipeInfo.createdAt.substring(0, $recipeInfo.createdAt.indexOf("T"))}
         </div>
       </ContentBox>
 
       {/* 좋아요 댓글 우하단 박스 */}
       <LikeCommentBox>
         <LikeCommentIcon src="/img/icons/like-icon-pink.png" alt="좋아요" />
-        {recipeInfo.likeCnt}
+        {$recipeInfo.likeCnt}
         <LikeCommentIcon src="/img/icons/comment-icon-pink.png" alt="댓글" />
-        {recipeInfo.commentCnt}
+        {$recipeInfo.replyCnt}
       </LikeCommentBox>
     </Container>
   );
@@ -100,16 +146,17 @@ bg-white
 grid grid-cols-5 
 my-[.625rem] 
 items-center;
+shadow-[0px_0px_2px_rgba(0,0,0,0.2)]
 `;
 
 const RecipeImg = tw.img`
- max-w-[8.75rem] 
- max-h-[7.5rem] 
  w-[8rem] 
  h-[6.25rem] 
  rounded-[.3125rem] 
  m-auto 
  col-span-2
+ bg-common-back-color p-1
+ object-cover 
 `;
 
 const ContentBox = tw.div`
@@ -122,6 +169,7 @@ const ViewCountBox = tw.div`
 relative 
 top-0 text-[0.6rem]  
 text-common-text-gray-color
+w-[6.25rem]
 `;
 
 const LikeCommentBox = tw.div`
@@ -138,7 +186,7 @@ const LikeCommentIcon = tw(ViewIcon)`
 
 const Title = styled.div`
   font-size: 1rem;
-  width: 220px;
+  width: 13.75rem;
   word-wrap: break-word;
   overflow: hidden;
   display: -webkit-box;
@@ -148,10 +196,10 @@ const Title = styled.div`
 
 const MenuBtn = styled.div<{ $imgurl: string }>`
   float: right;
-  margin-right: 10px;
-  margin-top: -2px;
-  width: 15px;
-  height: 15px;
+  margin-right: 0.625rem;
+  margin-top: -0.125rem;
+  width: 1.25rem;
+  height: 1.25rem;
   background-image: url(${(props) => props.$imgurl});
   background-position: center;
   background-size: contain;

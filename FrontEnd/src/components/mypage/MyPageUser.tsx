@@ -2,57 +2,110 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import tw from "tailwind-styled-components";
+import axios from "axios";
+import { ProductComp } from "@/model/commonType";
+
+import "react-toastify/dist/ReactToastify.css";
+import { UserNotLogin } from "@/model/toastMessageJHM";
 
 const myPageType = [
   { icon: "/img/btn/recipe.png", text: "레시피관리", url: "recipe" },
-  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "error" },
-  { icon: "/img/btn/user.png", text: "정보 수정", url: "error" },
+  { icon: "/img/btn/comment.png", text: "댓글 관리", url: "comment" },
+  { icon: "/img/btn/user.png", text: "정보 수정", url: "modify" },
 ];
 
-interface userInfoType {
-  userName: string;
-  userImage: string;
+interface UserInfoType {
+  memberId: number;
+  nickname: string;
+  socialType: string;
+  memberImg: string;
+  email: string;
+  usrEmail: boolean;
+  mailReceive: boolean;
 }
-
-interface productInfoType {
-  productImage: string;
-  productName: string;
-}
-
-const userInfos = {
-  userName: "정현모",
-  userImage: "/img/logo/logo-pink.png",
-};
 
 const MyPageUser = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState<userInfoType>({ userName: "", userImage: "" });
-  const [productInfo, setProductInfo] = useState<productInfoType[]>([]);
+  const [productInfo, setProductInfo] = useState<ProductComp[]>([]);
+  const [userInfo, setUserInfo] = useState<UserInfoType>(null);
 
   useEffect(() => {
-    setProductInfo([
-      { productImage: "/img/test/image61.png", productName: "농심) 포테토칩 오리지널 120g" },
-      {
-        productImage: "/img/test/image61.png",
-        productName: "농심) 포테토칩 오리지널 120g입니다용효ㅗㅗ호호",
-      },
-      { productImage: "/img/test/image61.png", productName: "!333" },
-      { productImage: "/img/test/image61.png", productName: "!444" },
-      { productImage: "/img/test/image61.png", productName: "!555" },
-      { productImage: "/img/test/image61.png", productName: "!666" },
-    ]);
+    axios
+      .get("/api/mypage/", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        //로그인 된경우
+        const resData = res.data;
+        if (resData.code == 200) {
+          setUserInfo(resData.data.member);
+          setProductInfo(resData.data.memberPick.content);
+        }
+      })
+      .catch((err) => {
+        //로그인 실패 (엑세스 토큰이 존재하나 만료)
+        if (err.response.status === 401) {
+          //리프레시 토큰 재발급
+
+          axios
+            .get("api/auth/mypage", {
+              withCredentials: true,
+            })
+            .then((res) => {
+              //재발급이 잘되서 정보를 받아온경우
+              const resData = res.data;
+              if (resData.code == 200) {
+                setUserInfo(resData.data.member);
+                setProductInfo(resData.data.memberPick.content);
+              }
+            })
+            .catch((err) => {
+              if (err.response.status === 403) {
+                //제발급 실패! 재로그인 해주세요!!
+
+                setUserInfo(null);
+                setProductInfo(null);
+              } else {
+                console.log("서버 오류 발생");
+              }
+            });
+        } else {
+          if (err.response.status === 403) {
+            //처음부터 토큰이 없는경우 ! 로그인화면 보여준다
+            setUserInfo(null);
+            setProductInfo(null);
+          } else {
+            //그외 서버 오류
+            console.log("서버 오류 발생");
+          }
+        }
+      });
   }, []);
 
-  useEffect(() => {
-    setUserInfo(userInfos);
-  }, []);
+  const LoginPageMoveHandler = () => {
+    navigate("/sociallogin");
+  };
+
+  const LogoutHandler = () => {
+    axios
+      .post("/api/member/logout")
+      .then((res) => {
+        if (res.data.code == 200) {
+          setUserInfo(null);
+          setProductInfo([]);
+        }
+      })
+      .catch((err) => {
+        console.log("로그아웃 실패", err);
+      });
+  };
 
   return (
     <>
-      {userInfo.userName === null || userInfo.userName === "" ? (
+      {userInfo === null ? (
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
-            <UserBox>
+            <UserBox onClick={LoginPageMoveHandler}>
               <div className="mt-20 ml-4">
                 <span className="text-[35px] text-[#AEB0B6] h-[35px]">
                   <span className="text-[#1E2B4F]">로그인</span>을 해주세요
@@ -62,7 +115,13 @@ const MyPageUser = () => {
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
               {myPageType.map((value, index) => (
-                <SideButton key={value.text + index} $icon={value.icon}>
+                <SideButton
+                  key={value.text + index}
+                  $icon={value.icon}
+                  onClick={() => {
+                    UserNotLogin();
+                  }}
+                >
                   <div /> <p>{value.text}</p>
                 </SideButton>
               ))}
@@ -78,11 +137,18 @@ const MyPageUser = () => {
         <div className="h-[calc(100vh-60px)] bg-white">
           <MyPageHeader>
             <UserBox>
-              <UserImage $imgurl={userInfo.userImage} />
+              <UserImage src={userInfo.memberImg} />
               <div className="text-2xl text-[#AEB0B6] mt-11">
-                <span className="text-[#1E2B4F]">{userInfo.userName}</span>님<br />
+                <span className="text-[#1E2B4F]">{userInfo.nickname}</span>님<br />
                 반갑습니다!
-                <div className="text-sm">로그아웃</div>
+                <div
+                  className="text-sm"
+                  onClick={() => {
+                    LogoutHandler();
+                  }}
+                >
+                  로그아웃
+                </div>
               </div>
             </UserBox>
             <div className="flex justify-around w-full mx-auto ">
@@ -113,12 +179,13 @@ const MyPageUser = () => {
             </div>
             <div className="mx-auto w-[calc(100%-1rem)]">
               <Products>
-                {productInfo.map((value, index) => (
-                  <Product key={value.productName + index}>
-                    <ProductImage $imgurl={value.productImage} />
-                    <ProductName>{value.productName}</ProductName>
-                  </Product>
-                ))}
+                {productInfo &&
+                  productInfo.map((value, index) => (
+                    <Product key={value.product.productId + index}>
+                      <ProductImage $imgurl={value.product.productImg} />
+                      <ProductName>{value.product.productName}</ProductName>
+                    </Product>
+                  ))}
               </Products>
             </div>
           </LikeProduct>
@@ -131,11 +198,11 @@ const MyPageUser = () => {
 export default MyPageUser;
 
 const MyPageHeader = tw.div`
-bg-white h-[300px]
+bg-white h-[18.75rem]
 `;
 
 const UserBox = tw.div`
-flex h-40 mx-auto w-[360px]
+flex h-40 mx-auto w-[22.5rem]
 `;
 
 const LoginBtnImage = styled.span`
@@ -171,16 +238,11 @@ const SideButton = styled.div<{ $icon: string }>`
   }
 `;
 
-const UserImage = styled.div<{ $imgurl: string }>`
+const UserImage = styled.img`
   width: 5rem;
   height: 5rem;
   border-radius: 50%;
-  background-image: url(${(props) => props.$imgurl});
-  background-size: 4.5rem 4.5rem;
-  background-position: center;
-  background-repeat: no-repeat;
   margin: auto 1rem;
-  border: 0.0313rem solid rgba(0, 0, 0, 0.25);
 `;
 
 const LikeProduct = styled.div`

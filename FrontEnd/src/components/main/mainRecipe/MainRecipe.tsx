@@ -1,17 +1,13 @@
 import MainRecipeHeader from "./MainRecipeHeader";
+import MainRecipeContent from "./MainRecipeContent";
+import { RecipeInfo } from "@/model/commonType";
 
-const MainRecipe = () => {
+const MainRecipe = ({ recipe }: { recipe: RecipeInfo }) => {
   return (
-    <div>
+    <>
       <MainRecipeHeader />
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-      <div>MainRecipe</div>
-    </div>
+      <MainRecipeContent recipe={recipe} />
+    </>
   );
 };
 
