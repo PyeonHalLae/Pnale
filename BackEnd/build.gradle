@@ -1,3 +1,4 @@
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.14'
@@ -29,9 +30,13 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    //mail
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
     //JPA
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
 
     //Spring Security
     implementation 'com.auth0:java-jwt:4.2.1'
@@ -44,8 +49,11 @@ dependencies {
     implementation 'com.amazonaws:aws-java-sdk-bom:1.11.228'
     implementation 'com.amazonaws:aws-java-sdk-s3'
 
-    // ModelMapper
-    implementation 'org.modelmapper:modelmapper:2.4.2'
+    //REDIS
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // 웹 통신 관련
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
 }
 
 tasks.named('test') {

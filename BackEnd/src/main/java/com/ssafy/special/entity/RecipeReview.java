@@ -1,11 +1,18 @@
 package com.ssafy.special.entity;
 
-import lombok.Getter;
+import com.ssafy.special.enums.CorpType;
+import com.ssafy.special.enums.ReviewStatusType;
+import lombok.*;
+import net.bytebuddy.asm.Advice;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
-@Getter
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class RecipeReview {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,10 +22,31 @@ public class RecipeReview {
     String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "recipe_id", nullable = false)
     private Recipe recipe;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime createdAt;
+
+    @Column(columnDefinition = "TIMESTAMP")
+    LocalDateTime updatedAt;
+
+    @Enumerated(EnumType.STRING)
+    ReviewStatusType status;
+
+    public void updateReview(String content){
+        this.content = content;
+        this.updatedAt = LocalDateTime.now();
+
+    }
+
+    public void deleteReview(){
+        this.updatedAt = LocalDateTime.now();
+        this.status = ReviewStatusType.DELETED;
+
+    }
 }
