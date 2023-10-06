@@ -7,6 +7,7 @@ import { searchInputData, searchIdsArray, storedToSearchTag } from "@recoil/kdmR
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
 import { toast } from "react-toastify";
+import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -37,12 +38,14 @@ const Header = () => {
       addSearchTag((prev) => [name.input, ...prev]);
       // addSearchTag([]);
       navigate("/search", { state: { responseData: response.data.data } });
-    } else if (response.data.code === 1004 || name.input.trim.length === 0) {
-      toast.error("검색어를 입력하세요", {
-        position: "top-center", // 원하는 포지션 설정
-        autoClose: 1000, // 메시지를 자동으로 닫을 시간 (밀리초)
-        hideProgressBar: true,
-      });
+    } else if (response.data.code === 1004 && name.input.length > 0) {
+      console.log(name.input);
+      console.log("길ㅇ", name.input.length);
+      ToastErrorMessage("해당 검색어에 대한 상품이 존재하지 않습니다");
+    } else if (response.data.code === 1004 && name.input.trim.length === 0) {
+      console.log(name.input);
+      console.log("길이", name.input.trim.length);
+      ToastErrorMessage("검색어를 입력하세요");
     }
     reset();
   };
