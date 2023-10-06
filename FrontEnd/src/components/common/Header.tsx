@@ -6,7 +6,6 @@ import { useRecoilState, useSetRecoilState } from "recoil";
 import { searchInputData, searchIdsArray, storedToSearchTag } from "@recoil/kdmRecoil";
 import { useQuery } from "react-query";
 import { SearchResponseToRecommand } from "@/model/commonType";
-import { toast } from "react-toastify";
 import { ToastErrorMessage } from "@/model/toastMessageJHM";
 
 const Header = () => {
@@ -32,19 +31,14 @@ const Header = () => {
       ids: idsArray,
       keyword: name.input,
     });
-    console.log(response);
 
     if (response.data.code !== 1004) {
       addSearchTag((prev) => [name.input, ...prev]);
       // addSearchTag([]);
       navigate("/search", { state: { responseData: response.data.data } });
     } else if (response.data.code === 1004 && name.input.length > 0) {
-      console.log(name.input);
-      console.log("길ㅇ", name.input.length);
-      ToastErrorMessage("해당 검색어에 대한 상품이 존재하지 않습니다");
+      ToastErrorMessage("해당 상품이 존재하지 않습니다");
     } else if (response.data.code === 1004 && name.input.trim.length === 0) {
-      console.log(name.input);
-      console.log("길이", name.input.trim.length);
       ToastErrorMessage("검색어를 입력하세요");
     }
     reset();

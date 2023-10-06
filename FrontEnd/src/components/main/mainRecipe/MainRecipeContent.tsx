@@ -9,9 +9,6 @@ const MainRecipeContent = ({ recipe }: { recipe: RecipeInfo }) => {
   const [ingrediendtsToShow, setIngrediendtsToShow] = useState<string[]>();
 
   useEffect(() => {
-    console.log(recipe.rcpName);
-    console.log(recipe);
-
     if (recipe.ingredients) {
       setRecipeId(recipe.rcpId);
       setIngrediendtsToShow(recipe.ingredients.slice(0, 2));
