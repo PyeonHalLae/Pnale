@@ -43,7 +43,6 @@ const MyPageComment = () => {
   //댓글 삭제시 List에서 제거
   const UpdateCommentList = (commentId: number) => {
     const updatedCommentList = commentList.filter((comment) => comment.revId !== commentId);
-    console.log(updatedCommentList);
     setCommentList([...updatedCommentList]);
   };
 

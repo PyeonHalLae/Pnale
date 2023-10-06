@@ -59,10 +59,7 @@ const PyeneShopProductNineView = ({
 
   // 엑시오스 요청
   const AxiosHandler = () => {
-    // console.log("===============================");
-    console.log(getFilterInfo);
     if ($productViewType === "EVENT") {
-      console.log($pyenType + " EVENT 정보 요청 " + currentPage);
       axios
         .post("/api/conv/filter?page=" + (currentPage - 1), {
           sort: getFilterInfo.sort,
@@ -72,15 +69,12 @@ const PyeneShopProductNineView = ({
           category: getFilterInfo.category,
         })
         .then((res) => {
-          console.log("EVENT 서버 호출 ", currentPage, $pyenType);
-          // console.log(res);
           const data = res.data.data;
           setTotalPage(data.totalPages);
           setProductList(data.content);
           PageNationSettion();
         });
     } else if ($productViewType === "MONOPOLY") {
-      console.log($pyenType + " 독점 정보 요청 " + currentPage);
       axios
         .post("/api/conv/filter?page=" + (currentPage - 1), {
           sort: getFilterInfo.sort,
@@ -90,9 +84,8 @@ const PyeneShopProductNineView = ({
           category: getFilterInfo.category,
         })
         .then((res) => {
-          console.log("독점 서버 호출 ", currentPage, $pyenType);
           const data = res.data.data;
-          console.log(data);
+
           setTotalPage(data.totalPages);
           setProductList(data.content);
           PageNationSettion();
@@ -109,7 +102,6 @@ const PyeneShopProductNineView = ({
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log("fetchData", currentPage, prevProductListType.current, $productViewType);
       if (currentPage === 0) return;
       if (prevProductListType.current !== $productViewType) {
         prevProductListType.current = await $productViewType;
@@ -123,7 +115,7 @@ const PyeneShopProductNineView = ({
           prevFilterInfo.current = getFilterInfo;
           return;
         }
-        // console.log(getFilterInfo, "필터정보");
+
         //엑시오스 요청
         AxiosHandler();
       }

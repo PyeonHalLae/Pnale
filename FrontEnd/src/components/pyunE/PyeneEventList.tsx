@@ -34,7 +34,6 @@ const PyeneEventList = () => {
 
   useEffect(() => {
     axios.get("/api/banner/" + pyenType + "?page=" + 0).then((res) => {
-      console.log(res.data);
       setEventList(res.data.data);
     });
   }, [pyenType]);
