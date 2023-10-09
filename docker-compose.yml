@@ -76,7 +76,7 @@ services: #컨테이너를 정의하는 것
     restart: always
     expose:
       - "9999"
-      -
+
   special_be_green:
     image: minyumanyu/special_be:latest # 도커 허브에 올리면 그것을 그대로 이용해도 된다.
     container_name: special_be_green
