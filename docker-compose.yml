@@ -18,7 +18,8 @@ services: #컨테이너를 정의하는 것
     container_name : external_nginx
     # 도커 내부 네트워크
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.1
     # 호스트와 컨테이너의 데이터를 바인딩한다(볼륨 바인딩)
     # jenkins에 의해 compose가 실행되므로 var/jenkins_home하위 디렉토리에서 데이터를 가져온다.
     volumes:
@@ -49,7 +50,8 @@ services: #컨테이너를 정의하는 것
     image: certbot/certbot:latest
     container_name: special_certbot
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.2
     volumes:
       - /home/ubuntu/special_config/data/certbot/conf:/etc/letsencrypt #nginx
       - /home/ubuntu/special_config/data/certbot/www:/var/www/certbot
@@ -64,7 +66,8 @@ services: #컨테이너를 정의하는 것
     image: minyumanyu/special_be:latest # 도커 허브에 올리면 그것을 그대로 이용해도 된다.
     container_name: special_be_blue
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.3
     environment:
       - TZ=Asia/Seoul
     build:
@@ -73,11 +76,13 @@ services: #컨테이너를 정의하는 것
     restart: always
     expose:
       - "9999"
+      -
   special_be_green:
     image: minyumanyu/special_be:latest # 도커 허브에 올리면 그것을 그대로 이용해도 된다.
     container_name: special_be_green
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.4
     environment:
       - TZ=Asia/Seoul
     build:
@@ -94,7 +99,8 @@ services: #컨테이너를 정의하는 것
     image: minyumanyu/special_fe:latest
     container_name: special_fe
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.5
     environment:
       - TZ=Asia/Seoul
     build:
@@ -113,7 +119,8 @@ services: #컨테이너를 정의하는 것
     image: mysql:8.0.34
     container_name: special_mysql
     networks:
-      - special_network
+      special_network:
+        ipv4_address: 192.168.128.6
     ports:
       - "4906:3306"
     expose:
