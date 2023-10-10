@@ -24,7 +24,7 @@ services: #컨테이너를 정의하는 것
     # jenkins에 의해 compose가 실행되므로 var/jenkins_home하위 디렉토리에서 데이터를 가져온다.
     volumes:
       - /home/ubuntu/special_config/data/nginx/external_nginx.conf:/etc/nginx/conf.d/default.conf
-      - /home/ubuntu/special_config/data/nginx/bluegreen_resource.inc:/etc/nginx/conf.d/resource-url.inc
+      - /home/ubuntu/special_config/data/nginx/url_resource.inc:/etc/nginx/conf.d/url_resource.inc
       #- /home/ubuntu/special_config/data/nginx:/etc/nginx/conf.d
       - /home/ubuntu/special_config/data/certbot/conf:/etc/letsencrypt #nginx
       - /home/ubuntu/special_config/data/certbot/www:/var/www/certbot
