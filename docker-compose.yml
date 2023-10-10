@@ -19,7 +19,7 @@ services: #컨테이너를 정의하는 것
     # 도커 내부 네트워크
     networks:
       special_network:
-        ipv4_address: 192.168.128.1
+        ipv4_address: 192.168.128.254
     # 호스트와 컨테이너의 데이터를 바인딩한다(볼륨 바인딩)
     # jenkins에 의해 compose가 실행되므로 var/jenkins_home하위 디렉토리에서 데이터를 가져온다.
     volumes:
