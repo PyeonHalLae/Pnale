@@ -78,7 +78,7 @@ SSAFY 9기 2학기 특화 프로젝트
 
 ### Infra
 
-- 이현욱 : S3, ...
+- 이현욱 : S3, CI/CD (젠킨스/도커/엔진엑스) 무중단 배포
 
 <br/><br/>
 
@@ -114,57 +114,134 @@ SSAFY 9기 2학기 특화 프로젝트
 
 > 로그인 및 회원가입
 
+소셜 로그인 ( 카카오톡 / 구글 )
+<br/>
+
+<img src="./docs/pagegif/login.gif" style="height:600px">
+
 </br>
 
 > 메인화면
+
+행사중인 상품 추천 / 관심상품 등록 및 해제/ 편의점 추천 레시피
+<br/>
+
+<img src="./docs/pagegif/mainpage.gif" style="height:600px">
 
 </br>
 
 > 편의점
 
+편의점별 BEST 상품 / NEW 상품 / 행사 상품 / 독점 상품 / EVENT
+<br/>
+
+<img src="./docs/pagegif/market.gif" style="height:600px">
+
 </br>
 
 > 편의점 - 필터
+
+행사 상품 / 독점 상품 - 필터 : 정렬 / 행사 선택 / 카테고리
+<br/>
+
+<img src="./docs/pagegif/market_filter.gif" style="height:600px">
 
 </br>
 
 > 편의점 - 행사
 
+편의점 별 진행중인 행사 정보
+<br/>
+
+<img src="./docs/pagegif/market_event.gif" style="height:600px">
+
 </br>
 
 > 상품 검색
+
+최근 검색어 / 검색 자동완성 / 검색된 상품 / 관련 상품 / 검색어가 들어간 레시피 (관련 레시피)
+<br/>
+
+<img src="./docs/pagegif/search.gif" style="height:600px">
 
 </br>
 
 > 레시피
 
+인기 레시피 / 전체 레시피 ( 인기순 / 비 인기순 / 최신순 / 오래된 순 )
+<br/>
+
+<img src="./docs/pagegif/recipe.gif" style="height:600px">
+
 </br>
 
 > 레시피 - 작성
 
+메인 이미지(미리보기) / 관련영상 / 재료 등록 / 재료 검색 / 본문 내용 작성
+<br/>
+
+<img src="./docs/pagegif/recipe_create.gif" style="height:600px">
+
 </br>
 
-> 레시피 - 디테일 / 수정
+> 레시피 - 디테일 및 수정
+
+레시피 내용 / 레시피 좋아요 해제 및 등록 / 댓글 작성 / 재료 리스트 수정 및 초기화
+</br>
+
+<img src="./docs/pagegif/recipe_detail_modify.gif" style="height:600px">
 
 </br>
 
 > 마이페이지
 
+로그인 / 로그아웃 / 관심상품 미리보기
+<br/>
+
+<img src="./docs/pagegif/mypage.gif" style="height:600px">
+
 </br>
 
 > 마이페이지 - 레시피 관리
+
+내가 작성한 레시피 리스트 및 관리 (수정/삭제) / 좋아요한 레시피 리스트 (좋아요 해제)
+<br/>
+
+<img src="./docs/pagegif/mypage_recipe.gif" style="height:600px">
 
 </br>
 
 > 마이페이지 - 댓글 관리
 
+내가 작성한 댓글 리스트 및 삭제 <br/>
+
+<img src="./docs/pagegif/mypage_comment.gif" style="height:600px">
+
 </br>
 
 > 마이페이지 - 회원 정보 수정
 
+회원 정보 수정 ( 이름/ 메일 전송 수신 동의 / 프로필 이미지 ) <br/>
+
+<img src="./docs/pagegif/mypage_user_modify.gif" style="height:600px">
+
+</br>
+
+> 마이페이지 - 관심상품
+
+관심상품 해제 / 상품별 메일 수신동의 여부 / 행사여부
+<br/>
+
+<img src="./docs/pagegif/mypage_like_product.gif" style="height:600px">
+
 </br>
 
 > 메일
+
+관심 등록하였고 전체 메일 수신동의 와 상품별 수신동의한 상품이 할인할경우 메일알림 서비스
+<br/>
+
+<img src="./docs/pagegif/email.PNG">
 
 <br/><br/><br/>
 
