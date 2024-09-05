@@ -54,9 +54,9 @@
 
 |            <img src="docs/img/Leeh.png" width="150">             |          <img src="docs/img/Yeo.png" width="150">           |         <img src="docs/img/Lees.png" width="150">          |
 | :--------------------------------------------------------------: | :---------------------------------------------------------: | :--------------------------------------------------------: |
-| [이현욱](https://github.com/Devwooki)</br>팀장 : BE 개발 및 배포 | [여현빈](https://github.com/godzz733) </br> BE 개발 및 분산 | [이세훈](http://github.com/Kimzegal) </br> BE 개발 및 분산 |
+| [이OO](https://github.com/Devwooki)</br>팀장 : BE 개발 및 배포 | [여OO](https://github.com/godzz733) </br> BE 개발 및 분산 | [이OO](http://github.com/Kimzegal) </br> BE 개발 및 분산 |
 |            <img src="docs/img/Kimh.png" width="150">             |          <img src="docs/img/Jung.png" width="150">          |         <img src="docs/img/Kimd.png" width="150">          |
-|       [김효인](https://github.com/kimnioyh) </br> FE 개발        |    [정현모](https://github.com/wjdgusaho) </br> FE 개발     | [김동민](https://github.com/DongMinE) </br> FE 개발 및 UCC |
+|       [김OO](https://github.com/kimnioyh) </br> FE 개발        |    [정OO](https://github.com/wjdgusaho) </br> FE 개발     | [김OO](https://github.com/DongMinE) </br> FE 개발 및 UCC |
 
 <br/>
 
@@ -64,21 +64,21 @@
 
 ### FrontEnd
 
-- 김효인 : UI/UX, 레시피 관련 로직 및 디자인
-- 정현모 : UI/UX, 마이페이지 관련 로직 및 디자인 , 편의점 관련 페이지 로직 및 디자인 ,
-- 김동민 : UI/UX, 메인화면 및 검색 관련 로직 및 디자인
+- 김OO : UI/UX, 레시피 관련 로직 및 디자인
+- 정OO : UI/UX, 마이페이지 관련 로직 및 디자인 , 편의점 관련 페이지 로직 및 디자인 ,
+- 김OO : UI/UX, 메인화면 및 검색 관련 로직 및 디자인
   <br/>
 
 ### BackEnd
 
-- 이현욱 : 팀장, 스케줄러, Custom Response(exception),
-- 여현빈 : 크롤링, Elastic search,
-- 이세훈 : 시큐리티 (Oath2 - 소셜 로그인 HTTP ONLY), Radis
-- 정현모 : SMTP 메일 로직, 편의점 데이터 크롤링
+- 이OO : 팀장, 스케줄러, Custom Response(exception),
+- 여OO : 크롤링, Elastic search,
+- 이OO : 시큐리티 (Oath2 - 소셜 로그인 HTTP ONLY), Radis
+- 정OO : SMTP 메일 로직, 편의점 데이터 크롤링
 
 ### Infra
 
-- 이현욱 : S3, CI/CD (젠킨스/도커/엔진엑스) 무중단 배포
+- 이OO : S3, CI/CD (젠킨스/도커/엔진엑스) 무중단 배포
 
 <br/><br/>
 
